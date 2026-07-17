@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getPostUrl } from "@/utils/getPostPaths";
+import { getReadingTime } from "@/utils/getReadingTime";
+import { toTransitionName } from "@/utils/toTransitionName";
+import Datetime from "./Datetime.astro";
+import config from "@/config";
+
+type Props = {
+  variant?: "h2" | "h3";
+} & CollectionEntry<"posts">;
+
+const { variant: Heading = "h2", id, data, filePath, body } = Astro.props;
+
+const {
+  title,
+  description,
+  ogImage,
+  tags,
+  pubDatetime,
+  modDatetime,
+  timezone,
+} = data;
+
+const postUrl = getPostUrl(id, filePath, Astro.currentLocale);
+const readingTime = getReadingTime(body);
+
+// Card thumbnail: explicit ogImage frontmatter, else the auto-generated
+// per-post OG image so no post ever needs a hand-made thumbnail.
+let thumbnail: string | undefined;
+if (typeof ogImage === "string") {
+  thumbnail = ogImage;
+} else if (ogImage?.src) {
+  thumbnail = ogImage.src;
+} else if (config.features.dynamicOgImage) {
+  thumbnail = `${postUrl.replace(/\/+$/, "")}/index.png`;
+}
+---
+
+<li class="my-6 list-none">
+  <a
+    href={postUrl}
+    class:list={[
+      "group border-border flex flex-col-reverse gap-4 rounded-lg border border-dashed p-4",
+      "hover:border-accent/70 transition-colors hover:border-solid",
+      "focus-visible:border-accent focus-visible:outline-none",
+      "sm:flex-row sm:items-center sm:gap-6 sm:p-5",
+    ]}
+  >
+    <div class="min-w-0 flex-1">
+      {
+        tags.length > 0 && (
+          <div class="text-accent mb-1.5 flex flex-wrap gap-x-3 font-mono text-xs font-semibold tracking-wider uppercase">
+            {tags.slice(0, 3).map(tag => (
+              <span>#{tag}</span>
+            ))}
+          </div>
+        )
+      }
+      <Heading
+        transition:name={toTransitionName(title)}
+        class="group-hover:text-accent text-lg font-semibold transition-colors sm:text-xl"
+      >
+        {title}
+      </Heading>
+      <p class="text-muted-foreground mt-1 line-clamp-2">{description}</p>
+      <div
+        class="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-2 font-mono"
+      >
+        <Datetime {pubDatetime} {modDatetime} {timezone} />
+        <span aria-hidden="true">·</span>
+        <span class="text-sm">{readingTime}</span>
+      </div>
+    </div>
+    {
+      thumbnail && (
+        <img
+          src={thumbnail}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="border-border h-44 w-full rounded-md border object-cover sm:h-28 sm:w-48 sm:shrink-0"
+        />
+      )
+    }
+  </a>
+</li>

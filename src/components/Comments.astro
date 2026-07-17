@@ -1,0 +1,70 @@
+---
+import config from "@/config";
+
+const { giscus } = config;
+
+const enabled = Boolean(
+  giscus.enabled && giscus.repo && giscus.repoId && giscus.categoryId
+);
+---
+
+{
+  enabled && (
+    <section id="comments" class="mt-8" data-pagefind-ignore>
+      <script
+        is:inline
+        src="https://giscus.app/client.js"
+        data-repo={giscus.repo}
+        data-repo-id={giscus.repoId}
+        data-category={giscus.category ?? "Announcements"}
+        data-category-id={giscus.categoryId}
+        data-mapping={giscus.mapping ?? "pathname"}
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang={giscus.lang ?? "en"}
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      />
+    </section>
+  )
+}
+
+<!-- Keeps the giscus iframe theme in sync with the site's light/dark toggle.
+     No-op when comments are disabled (no iframe present). -->
+<script is:inline data-astro-rerun>
+  (function () {
+    if (window.__giscusThemeSyncBound) return;
+    window.__giscusThemeSyncBound = true;
+
+    function currentTheme() {
+      return document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "light";
+    }
+
+    function syncGiscusTheme() {
+      const iframe = document.querySelector("iframe.giscus-frame");
+      if (!iframe || !iframe.contentWindow) return;
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: currentTheme() } } },
+        "https://giscus.app"
+      );
+    }
+
+    const observer = new MutationObserver(syncGiscusTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    // giscus posts a message when it finishes loading — sync initial theme then.
+    window.addEventListener("message", event => {
+      if (event.origin !== "https://giscus.app") return;
+      syncGiscusTheme();
+    });
+  })();
+</script>

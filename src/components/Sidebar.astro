@@ -1,0 +1,105 @@
+---
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getUniqueTags } from "@/utils/getUniqueTags";
+import { postFilter } from "@/utils/postFilter";
+import { slugifyStr } from "@/utils/slugify";
+import { stripBase, stripLocale } from "@/utils/withBase";
+import config from "@/config";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const published = posts.filter(postFilter);
+const tags = getUniqueTags(posts);
+
+const counts = new Map<string, number>();
+for (const post of published) {
+  for (const tagName of post.data.tags) {
+    const slug = slugifyStr(tagName);
+    counts.set(slug, (counts.get(slug) ?? 0) + 1);
+  }
+}
+
+// Groups = pinned tags from config; the rest are listed under "Tags".
+const groups = config.nav.pinnedTags.map(tagName => ({
+  tag: slugifyStr(tagName),
+  tagName,
+}));
+const groupSlugs = new Set(groups.map(g => g.tag));
+const otherTags = tags.filter(t => !groupSlugs.has(t.tag));
+
+const currentPath = stripLocale(stripBase(Astro.url.pathname), locale).replace(
+  /\/+$/,
+  ""
+);
+
+const tagUrl = (slug: string) => getRelativeLocaleUrl(locale, `tags/${slug}/`);
+const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
+---
+
+<aside
+  class:list={[
+    "fixed top-28 left-[calc(50%-39rem)] hidden w-52 xl:block",
+    "max-h-[calc(100dvh-9rem)] overflow-y-auto pb-8",
+  ]}
+  aria-label="Tags and pages"
+>
+  <nav class="flex flex-col gap-6">
+    {
+      groups.length > 0 && (
+        <section>
+          <h2 class="text-muted-foreground font-mono text-xs font-semibold tracking-widest uppercase">
+            Groups
+          </h2>
+          <ul class="mt-2 flex flex-col gap-1">
+            {groups.map(({ tag, tagName }) => (
+              <li>
+                <a
+                  href={tagUrl(tag)}
+                  class:list={[
+                    "hover:text-accent flex items-baseline justify-between gap-2 py-1 font-medium",
+                    isTagActive(tag) ? "text-accent" : "text-foreground",
+                  ]}
+                >
+                  <span>{tagName}</span>
+                  <span class="text-muted-foreground font-mono text-xs">
+                    {counts.get(tag) ?? 0}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      otherTags.length > 0 && (
+        <section>
+          <h2 class="text-muted-foreground font-mono text-xs font-semibold tracking-widest uppercase">
+            Tags
+          </h2>
+          <ul class="mt-2 flex flex-col gap-1">
+            {otherTags.map(({ tag, tagName }) => (
+              <li>
+                <a
+                  href={tagUrl(tag)}
+                  class:list={[
+                    "hover:text-accent flex items-baseline justify-between gap-2 py-1",
+                    isTagActive(tag)
+                      ? "text-accent"
+                      : "text-muted-foreground hover:text-accent",
+                  ]}
+                >
+                  <span class="truncate">#{tagName}</span>
+                  <span class="font-mono text-xs">{counts.get(tag) ?? 0}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </nav>
+</aside>

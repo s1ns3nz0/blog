@@ -1,0 +1,71 @@
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+@import "tailwindcss";
+@import "./theme.css";
+@import "./typography.css";
+@import "rehype-callouts/theme/obsidian";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@layer base {
+  * {
+    @apply border-border outline-accent/75;
+    scrollbar-width: auto;
+    scrollbar-color: var(--color-muted) transparent;
+  }
+  a,
+  button {
+    @apply outline-accent outline-offset-1 focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-dashed;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
+}
+
+@utility max-w-app {
+  @apply max-w-3xl;
+}
+
+@utility app-layout {
+  @apply max-w-app mx-auto w-full px-4;
+}
+
+@utility active-nav {
+  @apply underline decoration-dashed decoration-2 underline-offset-8;
+}
+
+/*
+ * Signature: "solid = known, dashed/hollow = unknown".
+ * Hollow display text that fills with ink on hover/focus.
+ */
+@utility text-hollow {
+  @supports (-webkit-text-stroke: 2px black) {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--foreground);
+    transition:
+      color 0.4s ease,
+      -webkit-text-stroke-color 0.4s ease;
+  }
+}
+
+.hollow-fill:hover .text-hollow,
+.hollow-fill:focus-within .text-hollow {
+  color: var(--accent);
+  -webkit-text-stroke-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-hollow {
+    transition: none;
+  }
+}
+
+:target {
+  scroll-margin-block: 1rem;
+}
