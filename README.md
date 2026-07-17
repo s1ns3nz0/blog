@@ -1,6 +1,6 @@
 # Known Unknowns
 
-Personal tech blog of **s1ns3nz0**, inspired by [junsong.xyz](https://junsong.xyz/).
+Personal tech blog of **s1ns3nz0**.
 
 Built with [Astro](https://astro.build/) on the [AstroPaper](https://github.com/satnaing/astro-paper) theme (MIT), customized with:
 
