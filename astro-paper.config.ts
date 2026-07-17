@@ -2,8 +2,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 
 export default defineAstroPaperConfig({
   site: {
-    // Update when attaching a custom domain.
-    url: "https://blog-psi-opal-13.vercel.app/",
+    url: "https://miata.cloud/",
     title: "s1ns3nz0 | Known Unknowns",
     description: "Tech articles by s1ns3nz0 — writing down the known unknowns.",
     author: "s1ns3nz0",
@@ -45,7 +44,7 @@ export default defineAstroPaperConfig({
   },
   socials: [
     { name: "github", url: "https://github.com/s1ns3nz0" },
-    { name: "mail", url: "mailto:fjybjinsu2388@gmail.com" },
+    { name: "mail", url: "mailto:s1ns3nz0@gmail.com" },
   ],
   shareLinks: [
     { name: "x", url: "https://x.com/intent/post?url=" },
