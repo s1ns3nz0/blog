@@ -2,8 +2,8 @@ import { defineAstroPaperConfig } from "./src/types/config";
 
 export default defineAstroPaperConfig({
   site: {
-    // Update after connecting the repo to Vercel (or when attaching a custom domain).
-    url: "https://blog-s1ns3nz0.vercel.app/",
+    // Update when attaching a custom domain.
+    url: "https://blog-psi-opal-13.vercel.app/",
     title: "s1ns3nz0 | Known Unknowns",
     description: "Tech articles by s1ns3nz0 — writing down the known unknowns.",
     author: "s1ns3nz0",
