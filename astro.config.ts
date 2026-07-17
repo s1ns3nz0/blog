@@ -17,6 +17,7 @@ import {
   transformerNotationWordHighlight,
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
+import { remarkMermaid } from "./src/utils/remark/remarkMermaid";
 import config from "./astro-paper.config";
 
 export default defineConfig({
@@ -38,6 +39,7 @@ export default defineConfig({
   markdown: {
     processor: unified({
       remarkPlugins: [
+        remarkMermaid,
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],
       ],
