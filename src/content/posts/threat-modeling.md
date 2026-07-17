@@ -18,7 +18,7 @@ When you know your services will run on AWS, How can you incorporate AWS specifi
 - [paranav1hivarekar's gitub and blog posts](https://github.com/pranav1hivarekar/threat-modeling): api, web-app examples
 - [DRATA - Using the STRIDE Threat Model: Tutorial&Best Practices](https://drata.com/learn/risk/stride-threat-model): Tutorial and Best Practices 
 - [Descryption Digest - Threate Modeling Guide](https://www.decryptiondigest.com/blog/threat-modeling-guide): Introduce each threat modeling methodology
-- [Vlad Spades - Threat Modeling an Application 'Moodle' Using STRIDE](https://cyberspades.medium.com/threat-modeling-an-application-moodle-using-stride-6758d9fe4951): Appling STRIDE to specific application example
+- [Vlad Spades - Threat Modeling an Application Moodle Using STRIDE](https://cyberspades.medium.com/threat-modeling-an-application-moodle-using-stride-6758d9fe4951): Appling STRIDE to specific application example
 
 
 ## STRIDE per Element
@@ -72,7 +72,7 @@ As you can see in the post above, it is highly recommended to calculate a risk s
 These days, DREAD is highly controversial since it is too subjective to use - its results depend heavily on the person conducting the threat modeling. It's no longer used at Microsoft, even though Microsoft itself developed this method.
 
 ## Conclusion
-I believe a threat modeling process should follow this sequence: STRIDE, Attack Tree, and Prioritization. Another point-I used to confuse calculating the risk score with risk assessment. Risk assessment is a broader concept for the entire organization, consdiering business impact, whereas the risk calculation at the last stage of threat modeling is meant to communicate identified threats to stakeholders early in the SDLC, in order to mitigate risk.
+I believe a threat modeling process should follow this sequence: STRIDE, Attack Tree, and Prioritization. Another point-I used to confuse calculating the risk score with risk assessment. Risk assessment is a broader concept for the entire organization, considering business impact, whereas the risk calculation at the last stage of threat modeling is meant to communicate identified threats to stakeholders early in the SDLC, in order to mitigate risk.
 
 I believe that if you can successfully intergrate a risk assessment step into your CI process, conducting risk assessment directly after threat modeling would be a good option for DevSecOps, since threat modeling reulsts flow into risk assessment as input.
 
