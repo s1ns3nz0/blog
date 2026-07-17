@@ -50,6 +50,10 @@ export default defineAstroPaperConfig({
         name: "Meta",
         tags: ["meta", "dev"],
       },
+      {
+        name: "Red Teaming",
+        tags: ["F3EAD", "Red Team", "AI", "Army FM 3-60"],
+      },
     ],
   },
   giscus: {
