@@ -22,7 +22,13 @@ Requires Node ≥ 22.12.
 
 ## Writing a post
 
-Create a markdown (or `.mdx`) file in `src/content/posts/`:
+```sh
+pnpm new-post "My Post Title"
+```
+
+Copies `hello-world.md` as a template into `src/content/posts/my-post-title.md`, swapping in the title you passed and `pubDatetime` set to the current time (KST, `+09:00`). Everything else (`description`, `tags`, `featured`, body) is copied as-is — edit it to fit the new post.
+
+Or create the file manually:
 
 ```md
 ---
