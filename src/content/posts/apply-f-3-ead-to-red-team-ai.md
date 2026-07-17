@@ -44,8 +44,12 @@ Exploitation serves four goals: force protection, enabling follow-on targeting, 
 ### The training objective itself required a closed loop.
 The value of red team training isn't in a single successful attack-it's in both sides improving through repeated engagement. F3EAD was designed from the outset so that the outcome of hunting one target becomes the intelligence for hunting the next, which is structurally isomorphic to the goal of closed loop red/blue training.
 
+## Structure of Red Team Cycle
 ```mermaid
 flowchart LR
   R1[recon] --> R2[plan/synth] --> R3[HITL+exec] --> R4[validate/report]
   R4 -.->|"detection-gap / rule-candidate feedback"| R1
 ```
+
+## References
+- [The Targeting Process(FM 3-60)](https://www.globalsecurity.org/military/library/policy/army/fm/3-60/fm3-60.pdf)
