@@ -18,7 +18,7 @@ One mandatory, federal-facing stack runs from statue down through policy to the 
 ## Table of contents
 
 ## Connection Diagram
-[Risk Diagram](../../assets/images/risk-diagram.png)
+![Risk Diagram](../../assets/images/risk-diagram.png)
 
 
 ## Foundational & statute
