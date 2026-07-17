@@ -36,6 +36,7 @@ const config: ResolvedAstroPaperConfig = {
   },
   nav: {
     pinnedTags: userConfig.nav?.pinnedTags ?? [],
+    tagGroups: userConfig.nav?.tagGroups ?? [],
   },
   giscus: userConfig.giscus ?? { enabled: false },
   socials: userConfig.socials ?? [],

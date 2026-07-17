@@ -26,9 +26,31 @@ export default defineAstroPaperConfig({
     search: "pagefind",
   },
   nav: {
-    // Pinned tags appear as "Groups" at the top of the left sidebar,
-    // acting as top-level post sections, e.g. ["dev", "retrospect"].
-    pinnedTags: ["meta"],
+    // Tag groups render as an accordion under "Groups" at the top of the
+    // left sidebar. Tags not listed here fall through to the plain "Tags" list.
+    tagGroups: [
+      {
+        name: "NIST & Risk",
+        tags: [
+          "NIST",
+          "NIST SP 800-37(RMF)",
+          "NIST SP 800-39",
+          "NIST SP 800-30",
+          "NIST SP 800-53",
+          "FIPS 199&200",
+          "Risk",
+          "Risk Assessment",
+        ],
+      },
+      {
+        name: "Threat Modeling",
+        tags: ["threat-modeling", "STRIDE"],
+      },
+      {
+        name: "Meta",
+        tags: ["meta", "dev"],
+      },
+    ],
   },
   giscus: {
     // To enable comments: make the GitHub repo public, turn on Discussions,

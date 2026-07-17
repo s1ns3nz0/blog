@@ -21,12 +21,19 @@ for (const post of published) {
   }
 }
 
-// Groups = pinned tags from config; the rest are listed under "Tags".
-const groups = config.nav.pinnedTags.map(tagName => ({
-  tag: slugifyStr(tagName),
-  tagName,
+// Groups = named tag groups from config; the rest are listed under "Tags".
+const groups = config.nav.tagGroups.map(group => ({
+  name: group.name,
+  tags: group.tags.map(tagName => ({ tag: slugifyStr(tagName), tagName })),
 }));
-const groupSlugs = new Set(groups.map(g => g.tag));
+// Legacy single-tag pins still act as one-tag groups.
+for (const tagName of config.nav.pinnedTags) {
+  groups.push({
+    name: tagName,
+    tags: [{ tag: slugifyStr(tagName), tagName }],
+  });
+}
+const groupSlugs = new Set(groups.flatMap(g => g.tags.map(t => t.tag)));
 const otherTags = tags.filter(t => !groupSlugs.has(t.tag));
 
 const currentPath = stripLocale(stripBase(Astro.url.pathname), locale).replace(
@@ -52,24 +59,46 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
           <h2 class="text-muted-foreground font-mono text-xs font-semibold tracking-widest uppercase">
             Groups
           </h2>
-          <ul class="mt-2 flex flex-col gap-1">
-            {groups.map(({ tag, tagName }) => (
-              <li>
-                <a
-                  href={tagUrl(tag)}
-                  class:list={[
-                    "hover:text-accent flex items-baseline justify-between gap-2 py-1 font-medium",
-                    isTagActive(tag) ? "text-accent" : "text-foreground",
-                  ]}
-                >
-                  <span>{tagName}</span>
-                  <span class="text-muted-foreground font-mono text-xs">
-                    {counts.get(tag) ?? 0}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div class="mt-2 flex flex-col">
+            {groups.map(group => {
+              const groupActive = group.tags.some(t => isTagActive(t.tag));
+              return (
+                <details class="group/accordion" open={groupActive}>
+                  <summary
+                    class:list={[
+                      "hover:text-accent marker:text-muted-foreground flex cursor-pointer items-center justify-between gap-2 py-1 font-medium",
+                      groupActive ? "text-accent" : "text-foreground",
+                    ]}
+                  >
+                    <span>{group.name}</span>
+                    <span class="text-muted-foreground font-mono text-xs transition-transform group-open/accordion:rotate-90">
+                      ›
+                    </span>
+                  </summary>
+                  <ul class="mt-1 mb-2 flex flex-col gap-1 ps-3">
+                    {group.tags.map(({ tag, tagName }) => (
+                      <li>
+                        <a
+                          href={tagUrl(tag)}
+                          class:list={[
+                            "hover:text-accent flex items-baseline justify-between gap-2 py-1",
+                            isTagActive(tag)
+                              ? "text-accent"
+                              : "text-muted-foreground hover:text-accent",
+                          ]}
+                        >
+                          <span class="truncate">{tagName}</span>
+                          <span class="font-mono text-xs">
+                            {counts.get(tag) ?? 0}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              );
+            })}
+          </div>
         </section>
       )
     }

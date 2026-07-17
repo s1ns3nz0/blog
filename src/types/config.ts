@@ -92,13 +92,31 @@ interface ShareLink {
   linkTitle?: string;
 }
 
+interface NavTagGroup {
+  /** Group heading shown in the sidebar accordion. */
+  name: string;
+  /**
+   * Tag names belonging to this group. Each renders as a link to
+   * /tags/<tag>/ inside the group's expandable panel.
+   * Use the tag name exactly as written in post frontmatter.
+   */
+  tags: string[];
+}
+
 interface NavConfig {
   /**
    * Tags pinned in the header nav, acting as top-level post groups
    * (replaces a sidebar post list). Each entry links to /tags/<tag>/.
    * Use the tag name exactly as written in post frontmatter.
+   * @deprecated Prefer `tagGroups` for multi-tag groupings.
    */
   pinnedTags?: string[];
+  /**
+   * Named groups of tags shown as an accordion under "Groups" in the
+   * sidebar. Each group expands/collapses to reveal its member tags.
+   * Tags not listed in any group fall through to the plain "Tags" list.
+   */
+  tagGroups?: NavTagGroup[];
 }
 
 interface GiscusConfig {
