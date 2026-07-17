@@ -45,6 +45,10 @@ export default defineAstroPaperConfig({
   socials: [
     { name: "github", url: "https://github.com/s1ns3nz0" },
     { name: "mail", url: "mailto:s1ns3nz0@gmail.com" },
+    {
+      name: "linkedin",
+      url: "https://www.linkedin.com/in/jinsoo-yang-devsecops",
+    },
   ],
   shareLinks: [
     { name: "x", url: "https://x.com/intent/post?url=" },
