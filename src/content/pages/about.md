@@ -9,5 +9,6 @@ Posts are organized purely by tags. Check the [tags page](/tags/) to browse by t
 
 - GitHub: [github.com/s1ns3nz0](https://github.com/s1ns3nz0)
 - Mail: s1ns3nz0@gmail.com
+- LinkedIn: www.linkedin.com/in/jinsoo-yang-devsecops
 
-Built with [Astro](https://astro.build/) + [AstroPaper](https://github.com/satnaing/astro-paper), hosted on Vercel.
+
