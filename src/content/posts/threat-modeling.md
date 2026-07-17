@@ -63,7 +63,7 @@ GOAL: Compromise Admin Account
           └─ (AND) Identify an employee with admin access
                   + Offer payment or leverage / pressure
 ```
-- [Vlad Spades - Threat Modeling an Application 'Moodle' Using STRIDE](https://cyberspades.medium.com/threat-modeling-    an-application-moodle-using-stride-6758d9fe4951): A good example of attack tree
+- [Vlad Spades - Threat Modeling an Application 'Moodle' Using STRIDE](https://cyberspades.medium.com/threat-modeling-an-application-moodle-using-stride-6758d9fe4951): A good example of attack tree
 
 ## Calculate Priority
 As you can see in the post above, it is highly recommended to calculate a risk score using DREAD, or severity using a CVSS calculator. The purpose of this stage is to prioritize which threats to mitigate and to communicate that prioritization to stakeholders such as developers.
