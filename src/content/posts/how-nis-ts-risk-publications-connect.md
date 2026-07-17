@@ -40,9 +40,9 @@ SP 800-171 takes a subset of 800-53's moderate baseline and re-scopes it for non
 These aren't mandated by FISMA and are usable by any organization, federal or not. **NIST CSF 2.0** organizes risk around six functions-Govern, Identify, Protect, Detect, Respond, Recover-as a communication and prioritization tool; NIST's informative refrences map every CSP subcategory to specific SP 800-53 controls. The **NIST Privacy Framework** shares CSF's Core/Function structure, applied to privacy risk, and is a sibling to the privacy controls folded into SP 800-53 Rev.5. **AI RMF(NIST AI 100-1)** applies the same risk logic to AI systems through its own functions - Govern, Map, Measure, Manage - and is built to interoperatewith CSF and RMF rather than replace them
 
 ## References
-[NIST Risk Management Framework Project Page](https://csrc.nist.gov/projects/risk-management)
-[NIST SP 800-37, Risk Management Framework](https://csrc.nist.gov/pubs/sp/800/37/r2/final)
-[NIST SP 800-53, Security and Privacy Controls for Information Systems and Organizations](https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final)
-[NIST SP 800-39, Managing Information Security Risk](https://csrc.nist.gov/pubs/sp/800/39/final)
-[NIST Cybersecurity Framework Project Page](https://www.nist.gov/cyberframework)]
-[NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST Risk Management Framework Project Page](https://csrc.nist.gov/projects/risk-management)
+- [NIST SP 800-37, Risk Management Framework](https://csrc.nist.gov/pubs/sp/800/37/r2/final)
+- [NIST SP 800-53, Security and Privacy Controls for Information Systems and Organizations](https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final)
+- [NIST SP 800-39, Managing Information Security Risk](https://csrc.nist.gov/pubs/sp/800/39/final)
+- [NIST Cybersecurity Framework Project Page](https://www.nist.gov/cyberframework)]
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
