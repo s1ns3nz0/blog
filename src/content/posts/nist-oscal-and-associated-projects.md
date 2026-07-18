@@ -1,6 +1,6 @@
 ---
 title: NIST OSCAL and associated projects
-description: 
+description: An introduction to NIST OSCAL and its associated CNCF projects for compliance as code.
 pubDatetime: 2026-07-18T14:17:16+09:00
 tags:
   - NIST
