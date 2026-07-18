@@ -7,6 +7,7 @@ tags:
   - OSCAL
   - CNCF
   - OSCAL Compass
+  - Contribution
 featured: true
 ---
 As a cybersecurity consultant, I've engaged in many compliance projects. I started this job in March 2024, just as LLMs such as ChatGPT and Gemini were gaining significant attention. I discovered that they were capable of performing a wide range of tasks-creating videos, generating images, writing code, and much more. However compliance work was still confined to PDF documents. As a result, I began looking for an appropriate method to manage compliance as code, inspired by the concept of infrastructure as Code. NIST's OSCAL(Open Security Controls Assessment Language) follows this same philosophy. In this article, I will introduce what OSCAL is and its associated projects within the CNCF(Cloud Native Computing Foundation).
