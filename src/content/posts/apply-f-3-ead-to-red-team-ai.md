@@ -1,6 +1,6 @@
 ---
 title: The F3EAD Targeting Cycle Implementation to UAV AI Red Team
-description: .
+description: Why did I implemented F3EAD,U.S military target process,to UAV AI Red team for Hackathon 
 pubDatetime: 2026-07-18T00:59:14+09:00
 tags:
   - F3EAD
