@@ -1,4 +1,5 @@
 import { defineAstroPaperConfig } from "./src/types/config";
+import { TAG_GROUPS } from "./src/utils/tagGroups";
 
 export default defineAstroPaperConfig({
   site: {
@@ -28,33 +29,7 @@ export default defineAstroPaperConfig({
   nav: {
     // Tag groups render as an accordion under "Groups" at the top of the
     // left sidebar. Tags not listed here fall through to the plain "Tags" list.
-    tagGroups: [
-      {
-        name: "NIST & Risk",
-        tags: [
-          "NIST",
-          "NIST SP 800-37(RMF)",
-          "NIST SP 800-39",
-          "NIST SP 800-30",
-          "NIST SP 800-53",
-          "FIPS 199&200",
-          "Risk",
-          "Risk Assessment",
-        ],
-      },
-      {
-        name: "Threat Modeling",
-        tags: ["threat-modeling", "STRIDE"],
-      },
-      {
-        name: "Meta",
-        tags: ["meta", "dev"],
-      },
-      {
-        name: "Red Teaming",
-        tags: ["F3EAD", "Red Team", "AI", "Army FM 3-60"],
-      },
-    ],
+    tagGroups: TAG_GROUPS,
   },
   giscus: {
     // To enable comments: make the GitHub repo public, turn on Discussions,
