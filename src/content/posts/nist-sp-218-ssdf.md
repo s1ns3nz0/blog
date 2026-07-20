@@ -608,3 +608,5 @@ During the initial adoption phase, organizations should not attempt to implement
 
 The ultimate goal of secure software development is not to produce a scan report with zero findings. It is to reduce the likelihood that vulnerabilities enter the software, quickly determine the impact when new issues are discovered, and build a development system that prevents the same failures from recurring.
 
+## References
+- [NIST SP 800-218(SSDF)](https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-218.pdf)

@@ -1,4 +1,3 @@
----
 title: Relationship Between NIST SP 800-218 and SP 800-204D
 description: Review the relationship between NISTP SP 800-218 and SP 800-204D. Walk through how the SSDF specifically focuses on cloud-native application CI/CD pipelines
 pubDatetime: 2026-07-20T19:20:32+09:00
@@ -319,3 +318,6 @@ By implementing the secure development principles of SSDF through the pipeline c
 
 It can establish a software supply chain in which it is possible to explain and verify **which source code and components were used, where and how an artifact was built, which security checks were performed, and how the artifact was approved for production deployment**.
 
+## References
+- [NIST SP 800-218(SSDF)](https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-218.pdf)
+- [NIST SP 800-204D](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-204D.pdf)
