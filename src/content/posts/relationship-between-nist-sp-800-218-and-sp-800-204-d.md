@@ -1,3 +1,4 @@
+---
 title: Relationship Between NIST SP 800-218 and SP 800-204D
 description: Review the relationship between NISTP SP 800-218 and SP 800-204D. Walk through how the SSDF specifically focuses on cloud-native application CI/CD pipelines
 pubDatetime: 2026-07-20T19:20:32+09:00
