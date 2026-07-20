@@ -1,0 +1,58 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/components/Main.astro";
+import Card from "@/components/Card.astro";
+import Footer from "@/components/Footer.astro";
+import Pagination from "@/components/Pagination.astro";
+import type { PaginationInfo } from "@/components/Pagination.astro";
+import { getRecentPosts } from "@/utils/getRecentPosts";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getCollection("posts");
+  const recentPosts = getRecentPosts(posts);
+  // Drop the first page — it's served at "/" by index.astro, not here.
+  return paginate(recentPosts, { pageSize: config.posts.perIndex }).slice(1);
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const pageInfo: PaginationInfo = {
+  currentPage: page.currentPage,
+  lastPage: page.lastPage,
+  url: {
+    // Astro's paginate() thinks page 1 lives at "/page" (this directory's
+    // own base) since it doesn't know page 1 actually lives at "/".
+    prev:
+      page.currentPage === 2
+        ? getRelativeLocaleUrl(locale, "")
+        : (page.url.prev ?? undefined),
+    next: page.url.next ?? undefined,
+  },
+};
+---
+
+<Layout title={`${t.home.recentPosts} | ${config.site.title}`}>
+  <Header />
+
+  <Breadcrumb />
+
+  <Main pageTitle={t.home.recentPosts}>
+    <ul>
+      {page.data.map(data => <Card variant="h3" {...data} />)}
+    </ul>
+  </Main>
+
+  <Pagination page={pageInfo} />
+
+  <Footer noMarginTop={pageInfo.lastPage > 1} />
+</Layout>
