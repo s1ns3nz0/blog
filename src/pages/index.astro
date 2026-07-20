@@ -9,7 +9,10 @@ import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
+import Pagination from "@/components/Pagination.astro";
+import type { PaginationInfo } from "@/components/Pagination.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getRecentPosts } from "@/utils/getRecentPosts";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -21,8 +24,19 @@ const t = useTranslations(locale);
 const posts = await getCollection("posts");
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const recentPosts = getRecentPosts(posts);
 const homePath = getRelativeLocaleUrl(locale, "");
+
+const recentPageInfo: PaginationInfo = {
+  currentPage: 1,
+  lastPage: Math.max(1, Math.ceil(recentPosts.length / postsConfig.perIndex)),
+  url: {
+    next:
+      recentPosts.length > postsConfig.perIndex
+        ? getRelativeLocaleUrl(locale, "page/2")
+        : undefined,
+  },
+};
 ---
 
 <Layout>
@@ -116,6 +130,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
               <Card variant="h3" {...data} />
             ))}
           </ul>
+          <Pagination page={recentPageInfo} />
         </section>
       )
     }
