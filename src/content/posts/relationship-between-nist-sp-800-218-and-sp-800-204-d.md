@@ -8,7 +8,7 @@ tags:
   - NIST SP 800-204D
   - SSDF
   - DevSecOps
-  - CI/CD 
+  - CI/CD
   - CI/CD Security
 featured: true
 ---
