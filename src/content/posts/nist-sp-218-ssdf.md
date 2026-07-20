@@ -1,9 +1,12 @@
 ---
 title: NIST SP 800-218(SSDF)
-description: .
+description: Secure Software Development Framework enhanced by Software Supply Chain Attack.
 pubDatetime: 2026-07-20T18:08:24+09:00
 tags:
-  - meta
+  - SSDF
+  - NIST
+  - NIST SP 800-218
+  - DevSecOps
 featured: true
 ---
 
