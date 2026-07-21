@@ -4,7 +4,7 @@ description: How this blog is built, and how posts are grouped with tags.
 pubDatetime: 2026-07-17T09:00:00+09:00
 tags:
   - meta
-featured: true
+featured: false
 ---
 
 First post. This blog is built with [Astro](https://astro.build/) on the [AstroPaper](https://github.com/satnaing/astro-paper) theme, customized with an image-card post feed and tag-driven navigation.

@@ -5,7 +5,7 @@ pubDatetime: 2026-07-17T11:00:00+09:00
 tags:
   - threat-modeling
   - STRIDE
-featured: true
+featured: false
 ---
 
 When I first applied the STRIDE threat modeling methodology to my application, I got confused about how to handle specific technological frameworks and assets, such as EC2, apache, nodejs, and so on. Many posts and examples demonstrate threat modeling using only a conceptual description of the application, just drawing a DFD with generic elements like Process and Data Store, rather than addressing specific technical architecture
