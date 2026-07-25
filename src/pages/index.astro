@@ -1,42 +1,19 @@
 ---
-import { getCollection } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
-import Card from "@/components/Card.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import Pagination from "@/components/Pagination.astro";
-import type { PaginationInfo } from "@/components/Pagination.astro";
-import { getSortedPosts } from "@/utils/getSortedPosts";
-import { getRecentPosts } from "@/utils/getRecentPosts";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
-const { socials, posts: postsConfig } = config;
+const { socials } = config;
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
-const posts = await getCollection("posts");
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = getRecentPosts(posts);
 const homePath = getRelativeLocaleUrl(locale, "");
-
-const recentPageInfo: PaginationInfo = {
-  currentPage: 1,
-  lastPage: Math.max(1, Math.ceil(recentPosts.length / postsConfig.perIndex)),
-  url: {
-    next:
-      recentPosts.length > postsConfig.perIndex
-        ? getRelativeLocaleUrl(locale, "page/2")
-        : undefined,
-  },
-};
 ---
 
 <Layout>
@@ -47,7 +24,7 @@ const recentPageInfo: PaginationInfo = {
     data-home-path={homePath}
     class="app-layout"
   >
-    <section id="hero" class="border-border border-b pt-10 pb-8">
+    <section id="hero" class="pt-10 pb-8">
       <div class="flex items-center gap-3">
         <p class="text-muted-foreground font-mono text-sm tracking-wide">
           s1ns3nz0 / field notes
@@ -75,16 +52,10 @@ const recentPageInfo: PaginationInfo = {
       </h1>
 
       <p>
-        Every day, brand-new technologies, open-source tools, and skills come out. Whenever I work with my AI agents, I feel that my understanding and knowledge are the bottleneck. A second brain, knowledge graphs, and other ontologies are effective, but I still run into the issue that my 'first brain' can't keep up with what 'we' have created. So I've decided to use this blog to organize both the information I thought I already knew and any new material I encounter along the way.
-      </p>
-      <p class="mt-4">
-        Please feel free to explore and find what interests you:{" "}
-        <LinkButton
-          class="hover:text-accent underline decoration-dashed underline-offset-4"
-          href={getRelativeLocaleUrl(locale, "tags")}
-        >
-          tags page
-        </LinkButton>
+        Hi, I'm <strong>s1ns3nz0</strong>. New tools and techniques come out
+        faster than I can absorb them, so this blog is where I write down the
+        known unknowns — things I'm learning, debugging stories, and notes I
+        wish I'd found earlier.
       </p>
       {
         socials.length > 0 && (
@@ -97,50 +68,6 @@ const recentPageInfo: PaginationInfo = {
         )
       }
     </section>
-
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-border border-b": recentPosts.length > 0 },
-          ]}
-        >
-          <h2 class="text-2xl font-semibold tracking-wide">
-            {t.home.featured}
-          </h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
-
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">
-            {t.home.recentPosts}
-          </h2>
-          <ul>
-            {recentPosts.slice(0, postsConfig.perIndex).map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-          <Pagination page={recentPageInfo} />
-        </section>
-      )
-    }
-
-    <div class="my-8 text-center">
-      <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>
-        {t.home.allPosts}
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
   </main>
   <Footer />
 </Layout>
