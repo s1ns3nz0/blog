@@ -6,6 +6,7 @@ import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
 import Sidebar from "@/components/Sidebar.astro";
 import config from "@/config";
+import Analytics from "@vercel/analytics/astro";
 import "@/styles/global.css";
 
 type Props = {
@@ -99,6 +100,9 @@ const rssHref = getRelativeLocaleUrl(
         />
       )
     }
+
+    <!-- Vercel Web Analytics -->
+    <Analytics />
 
     <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
