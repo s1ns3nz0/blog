@@ -42,16 +42,6 @@ if (breadcrumbList[0] === "posts") {
   );
 }
 
-// if breadcrumb is Home > Page > [N]
-// replace Page > [N] with localized "Recent Posts (page number)"
-if (breadcrumbList[0] === "page") {
-  breadcrumbList.splice(
-    0,
-    2,
-    `${t.home.recentPosts} (${t.pagination.page.toLowerCase()} ${breadcrumbList[1] || 1})`
-  );
-}
-
 // if breadcrumb is Home > Tags > [tag] > [page] <etc>
 // replace [tag] > [page] with localized [tag] (page number)
 if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
