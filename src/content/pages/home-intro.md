@@ -3,7 +3,7 @@ title: "Home Intro"
 description: "Landing page bio paragraph."
 ---
 
-Hello, I'm s1ns3nz0.
+👋 Hello, I'm s1ns3nz0.
 
  I'm interested in pioneering new technologies and domains I haven't yet explored. These days, I'm studying AI (with a focus on AI for security) and Web3.
 
