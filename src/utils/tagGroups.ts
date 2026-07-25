@@ -10,43 +10,42 @@ export type TagGroupConfig = {
  */
 export const TAG_GROUPS: TagGroupConfig[] = [
   {
-    name: "NIST & Compliance",
+    name: "NIST",
     tags: [
       "NIST",
       "NIST SP 800-30",
       "NIST SP 800-37(RMF)",
       "NIST SP 800-39",
       "NIST SP 800-53",
-      "FIPS 199&200",
-      "OSCAL",
-      "OSCAL Compass",
-      "Risk",
-      "Contribution",
     ],
   },
   {
-    name: "Software Supply Chain & DevSecOps",
-    tags: [
-      "DevSecOps",
-      "CNCF",
-      "SSDF",
-      "NIST SP 800-218",
-      "NIST SP 800-204",
-      "NIST SP 800-204D",
-      "Microservices",
-      "CI/CD",
-      "CI/CD Security",
-    ],
+    name: "Compliance",
+    tags: ["FIPS 199&200", "OSCAL", "OSCAL Compass", "Risk", "Contribution"],
   },
   {
-    name: "DoD & Military",
-    tags: ["DoD", "DoDD 3000.09", "Army FM 3-60"],
+    name: "Software Supply Chain",
+    tags: ["SSDF", "NIST SP 800-218", "NIST SP 800-204D", "CI/CD Security"],
   },
   {
-    name: "AI & Threat Ops",
+    name: "DevSecOps",
+    tags: ["DevSecOps", "CNCF", "NIST SP 800-204", "Microservices", "CI/CD"],
+  },
+  {
+    name: "DoD",
+    tags: ["DoD", "DoDD 3000.09"],
+  },
+  {
+    name: "Military",
+    tags: ["Army FM 3-60"],
+  },
+  {
+    name: "AI",
+    tags: ["AI", "AI SOC"],
+  },
+  {
+    name: "Threat Ops",
     tags: [
-      "AI",
-      "AI SOC",
       "SOC",
       "Red Team",
       "F3EAD",
