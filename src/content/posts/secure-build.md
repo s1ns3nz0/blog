@@ -266,6 +266,7 @@ The following tasks are required to obtain SSC security assurance in the build p
 		opa exec --decision main/deny --bundle policy/ .github/workflows/*.yml
 	- Policy should be verified through spereate workflow
 	```
+	```YAML
 	# .github/workflows/policy-check.yml
 
 	name: Workflow policy check
