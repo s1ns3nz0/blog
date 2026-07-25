@@ -1,4 +1,5 @@
 ---
+import { getEntry, render } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconRss from "@/assets/icons/IconRss.svg";
 import Layout from "@/layouts/Layout.astro";
@@ -14,6 +15,16 @@ const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
 const homePath = getRelativeLocaleUrl(locale, "");
+
+const homeIntro = await getEntry("pages", "home-intro");
+
+if (!homeIntro) {
+  throw new Error(
+    "Missing content entry: `home-intro.md` or `home-intro.mdx` in `src/content/pages/`"
+  );
+}
+
+const { Content: HomeIntro } = await render(homeIntro);
 ---
 
 <Layout>
@@ -51,12 +62,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
         <span class="text-hollow block">Unknowns</span>
       </h1>
 
-      <p>
-        Hi, I'm <strong>s1ns3nz0</strong>. New tools and techniques come out
-        faster than I can absorb them, so this blog is where I write down the
-        known unknowns — things I'm learning, debugging stories, and notes I
-        wish I'd found earlier.
-      </p>
+      <HomeIntro />
       {
         socials.length > 0 && (
           <div class="mt-1 flex max-sm:flex-col sm:items-center">
