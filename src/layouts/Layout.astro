@@ -7,6 +7,7 @@ import { getAssetPath } from "@/utils/withBase";
 import Sidebar from "@/components/Sidebar.astro";
 import config from "@/config";
 import "@/styles/global.css";
+import Analytics from "@vercel/analytics/astro";
 
 type Props = {
   title?: string;
@@ -120,6 +121,7 @@ const rssHref = getRelativeLocaleUrl(
     </script>
 
     <ClientRouter />
+    <Analytics />
   </head>
   <body
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
