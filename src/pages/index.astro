@@ -57,7 +57,13 @@ const { Content: HomeIntro } = await render(homeIntro);
           <span class="sr-only">RSS Feed</span>
         </a>
       </div>
-      <div class="my-4 flex items-center gap-4 sm:my-6">
+      <div class="my-4 flex items-center justify-between gap-4 sm:my-6">
+        <h1
+          class="hollow-fill text-6xl leading-[0.95] font-extrabold tracking-tight sm:text-8xl"
+        >
+          <span class="block">Known</span>
+          <span class="text-hollow block">Unknowns</span>
+        </h1>
         <Image
           src={avatar}
           alt="s1ns3nz0"
@@ -65,12 +71,6 @@ const { Content: HomeIntro } = await render(homeIntro);
           height={96}
           class="border-border h-16 w-16 shrink-0 rounded-full border object-cover sm:h-24 sm:w-24"
         />
-        <h1
-          class="hollow-fill text-6xl leading-[0.95] font-extrabold tracking-tight sm:text-8xl"
-        >
-          <span class="block">Known</span>
-          <span class="text-hollow block">Unknowns</span>
-        </h1>
       </div>
 
       <div class="space-y-2 [&_p]:indent-4">
