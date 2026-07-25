@@ -17,26 +17,29 @@ We covered how to secure the build process through the CI pipeline in the previo
 
 ## Two Forms of Checks: Two Forms of Checks
 - The type of authentication required for developers authorized to perform the PULL-PUSH operations. The request made by the developer must be consistent with their role. Developers with "merge approval" permissions cannot approve their own merges
-	* Summary
-	| Requirement                                                      | GitHub Implementation                                      |
-	| ---------------------------------------------------------------- | ---------------------------------------------------------- |
-	| Authenticate developers performing pull/push operations          | Enterprise SSO + MFA                                       |
-	| Ensure a unique identity for each user                           | Individual GitHub or Enterprise Managed User account       |
-	| Verify push identity                                             | Require signed commits                                     |
-	| Grant pull access                                                | Repository `Read` permission or higher                     |
-	| Grant push access                                                | Repository `Write` permission or higher                    |
-	| Ensure requests are consistent with the developer’s role         | IdP group → GitHub Team → GitHub Actions role-policy check |
-	| Require approval for changes to specific paths                   | `CODEOWNERS`                                               |
-	| Prevent direct pushes to `main`                                  | Require pull requests through a ruleset                    |
-	| Prevent authors from approving their own pull requests           | GitHub’s built-in pull request review behavior             |
-	| Prevent the most recent pusher from providing the final approval | Require approval of the most recent reviewable push        |
-	| Invalidate approvals after new commits are pushed                | Dismiss stale pull request approvals                       |
-	| Prevent administrative bypass                                    | Minimize and tightly control the ruleset bypass list       |
-	* These details were already touched in the 'Secure Build' article
-	* Integrate 'Github Teams' with [Repository roles](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization?utm_source=chatgpt.com)
-	* However, Using repository roles only can't meet the direcory based control requirements so that combine protected branch ruleset, CODEOWNERS, required status check and so on.
-	* [Managing repository settings](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings)
-	* [Available rules for rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets?utm_source=chatgpt.com)
+
+**Summary**
+
+| Requirement                                                      | GitHub Implementation                                      |
+| ---------------------------------------------------------------- | ---------------------------------------------------------- |
+| Authenticate developers performing pull/push operations          | Enterprise SSO + MFA                                       |
+| Ensure a unique identity for each user                           | Individual GitHub or Enterprise Managed User account       |
+| Verify push identity                                             | Require signed commits                                     |
+| Grant pull access                                                | Repository `Read` permission or higher                     |
+| Grant push access                                                | Repository `Write` permission or higher                    |
+| Ensure requests are consistent with the developer’s role         | IdP group → GitHub Team → GitHub Actions role-policy check |
+| Require approval for changes to specific paths                   | `CODEOWNERS`                                               |
+| Prevent direct pushes to `main`                                  | Require pull requests through a ruleset                    |
+| Prevent authors from approving their own pull requests           | GitHub’s built-in pull request review behavior             |
+| Prevent the most recent pusher from providing the final approval | Require approval of the most recent reviewable push        |
+| Invalidate approvals after new commits are pushed                | Dismiss stale pull request approvals                       |
+| Prevent administrative bypass                                    | Minimize and tightly control the ruleset bypass list       |
+
+- These details were already touched in the ‘Secure Build’ article
+- Integrate ‘Github Teams’ with [Repository roles](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization?utm_source=chatgpt.com)
+- However, Using repository roles only can’t meet the direcory based control requirements so that combine protected branch ruleset, CODEOWNERS, required status check and so on.
+- [Managing repository settings](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings)
+- [Available rules for rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets?utm_source=chatgpt.com)
 - The integrity of the code in the repository can be trusted such that it can be used for further updates.
 	+ Only commits reachable from an approved protected branch or protected release tag shall be treated as trusted source baselines
 		* Trusted: refs/heads/main, refs/heads/release/*, other protected branches
