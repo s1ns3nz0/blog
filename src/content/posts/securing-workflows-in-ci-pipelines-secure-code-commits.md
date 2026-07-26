@@ -15,6 +15,8 @@ featured: true
 Considering DevSecOps principles such as Shift Left, code commits should be properly reviewed and tested
 
 ## Table of contents
+
+## Overview
 - SAST and DAST tools (covering all languages used in development) should be run in CI/CD pipelines with code coverage reports being provided to developers and security personnel. 
 - If open-source modules and libraries are used, dependencies must be enumerated,understood, and evaluated for policy (potentially using appropriate SCA tools). 
 - The security conditions that they should meet for their inclusion must also be tested. 
@@ -40,3 +42,14 @@ Considering DevSecOps principles such as Shift Left, code commits should be prop
 - Revoke and rotate credentials 
 	+ PAT, API key, Cloud Credentials, SSH Key, Certificate Private Key, Database Password
 - Additional scanning could be conducted in CI stages
+
+### COMMIT-REQ-2
+- Push protection features should be enabled for all repositories assigned to an administrator. Such protection should include the verification of developer identity/authorization, the enforcement of developer signing of code commits, and file name verification
+- [Configuring GitHub Secret Protection](https://docs.github.com/en/code-security/how-tos/secure-at-scale/configure-organization-security/configure-specific-tools/protect-your-secrets?utm_source=chatgpt.com)
+	+ Github organization security configuration allows secret scanning and push protection to be enabled across many repositories
+- Push protection can scan for secrets, SSO and Github accounts are responsible for authentication
+	+ Individual identities, SSO and MFA should be incorporated, shared accounts, PAT, SSH private key, and build-user account are not applicable
+- Whether push access is available to developers is managed by repository roles.
+- [Enforce code commit sign by using branch rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets?utm_source=chatgpt.com#require-signed-commits)
+- [File name rule](https://docs.github.com/en/organizations/managing-organization-settings/creating-rulesets-for-repositories-in-your-organization?utm_source=chatgpt.com#using-fnmatch-syntax) should be applied for preventing shell code injection, path traversal, and so on
+	* Considering using OPA to enforce file name management
