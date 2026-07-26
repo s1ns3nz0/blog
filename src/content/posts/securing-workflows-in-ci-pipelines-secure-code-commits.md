@@ -1,0 +1,42 @@
+---
+title: Securing Workflows in CI Pipelines - Secure Code Commits
+description: Appropriate forms of testing should be performed before code commits
+pubDatetime: 2026-07-26T10:04:28+09:00
+tags:
+  - NIST SP 800-204D
+  - CI/CD
+  - CI/CD Security
+  - GitHub Action
+  - Supply Chain Security
+  - Code Commits
+featured: true
+---
+
+Considering DevSecOps principles such as Shift Left, code commits should be properly reviewed and tested
+
+## Table of contents
+- SAST and DAST tools (covering all languages used in development) should be run in CI/CD pipelines with code coverage reports being provided to developers and security personnel. 
+- If open-source modules and libraries are used, dependencies must be enumerated,understood, and evaluated for policy (potentially using appropriate SCA tools). 
+- The security conditions that they should meet for their inclusion must also be tested. 
+- Dependency file detectors should detect all dependencies, including transitive dependencies with preferably no limit to the depth of nested or transitive dependencies that are to be analyzed
+
+### COMMIT-REQ-1
+#### Activate Secret Scanning and Push Protection
+- Organization -> Settings -> Advanced Security/Code Security -> Configurations -> Secret Scanning: Enabled -> Push Protection: Enabled
+- [About secret scanning alerts](https://docs.github.com/en/code-security/concepts/secret-security/about-alerts?utm_source=chatgpt.com)
+- [Leverage Custom Pattern](https://chatgpt.com/c/6a61977a-ee78-83ee-9fd7-0de4f7741ffc)
+#### Bypass Must be reviewed
+- [Delegated bypass for push protection](https://docs.github.com/en/code-security/concepts/secret-security/delegated-bypass?utm_source=chatgpt.com)
+- [Enabling delegated bypass for push protection](https://docs.github.com/en/code-security/how-tos/secure-your-secrets/manage-bypass-requests/enable-delegated-bypass?utm_source=chatgpt.com)
+- Grant exemptions to select actors, skipping push protection entirely for all of their commits
+- Exemptions should be granted to trusted automation like migration bots or service accounts that need to push frequent commits with minimal friction
+#### Monitor and Alert Security Dashboard
+- When  push protection is bypassed or secrets are pushed into repositories, Users can monitor these at the below features
+	+ Repository -> Security and quality -> Security Scanning
+	+ Organization -> Security and quality -> security Overview -> Secret Scanning
+- Create an alert in the `Security and quality` tab of the repository, organization, and enterprise, resulting that sends an email alert to personal account, organization, and enterprise owners, security managers, and respository administrators who are watching the repository, with a link to the secret and the reason it was allowed
+
+#### Remediation Process
+- Revoke and rotate credentials 
+	+ PAT, API key, Cloud Credentials, SSH Key, Certificate Private Key, Database Password
+- Additional scanning could be conducted in CI stages
