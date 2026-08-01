@@ -28,7 +28,7 @@ architect needs before implementation begins:
 > A service-specific, compliance-backed security contract that states what the
 > proposed architecture and its future implementation must satisfy.
 
-That is the problem addressed by `security-requirements`, a Claude Code plugin
+That is the problem addressed by [`security-requirements`](https://github.com/s1ns3nz0/security-requirements), a Claude Code plugin
 for design-stage requirements derivation. It can start with either a proposed
 architecture description or an existing repository. It combines that technical
 evidence with business facts that code cannot reveal, derives an impact and
@@ -90,7 +90,7 @@ they treat as their source of truth and what they deliver.
 | [`appsec-advisor`](https://github.com/matthiasrohr/appsec-advisor) | Repository code and configuration | Repository-grounded threat model, findings, mitigation plans, and requirements-audit results | Architecture and implementation review |
 | [`tachi`](https://github.com/davidmatousek/tachi) | Architecture description, optionally generated from a repository | STRIDE and AI threat findings, risk scores, attack paths, compensating-control analysis, and reports | Threat modeling and vulnerability assessment |
 | [Claude Code Security Review](https://github.com/anthropics/claude-code-security-review) | Code changes | Vulnerability findings | Implementation and pull-request review |
-| `security-requirements` | Proposed design or repository evidence, plus confirmed owner intent | Tailored, traceable, verifiable security requirements | Requirements and design stage |
+| [`security-requirements`](https://github.com/s1ns3nz0/security-requirements) | Proposed design or repository evidence, plus confirmed owner intent | Tailored, traceable, verifiable security requirements | Requirements and design stage |
 
 ### The closest overlap: `appsec-advisor`
 

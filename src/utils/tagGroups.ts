@@ -21,11 +21,29 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "Compliance",
-    tags: ["FIPS 199&200", "OSCAL", "OSCAL Compass", "Risk", "Contribution"],
+    tags: [
+      "Compliance",
+      "FIPS 199&200",
+      "OSCAL",
+      "OSCAL Compass",
+      "Risk",
+      "Contribution",
+    ],
   },
   {
     name: "Software Supply Chain",
-    tags: ["SSDF", "NIST SP 800-218", "NIST SP 800-204D", "CI/CD Security"],
+    tags: [
+      "SSDF",
+      "NIST SP 800-218",
+      "NIST SP 800-204D",
+      "CI/CD Security",
+      "Supply Chain Security",
+      "Build",
+      "Pull-Push",
+      "Code Commits",
+      "CD",
+      "GitHub Action",
+    ],
   },
   {
     name: "DevSecOps",
@@ -41,7 +59,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "AI",
-    tags: ["AI", "AI SOC"],
+    tags: ["AI", "AI SOC", "Plugin", "Security Design", "Security Requirements"],
   },
   {
     name: "Threat Ops",
