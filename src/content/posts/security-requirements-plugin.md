@@ -15,6 +15,8 @@ featured: true
 
 # Security Before Source Code: What a Requirements-Derivation Plugin Does Differently
 
+Repository: [github.com/s1ns3nz0/security-requirements](https://github.com/s1ns3nz0/security-requirements)
+
 Security architects are rarely short of findings.
 
 Static analyzers find unsafe data flows. Infrastructure scanners find exposed
@@ -90,7 +92,7 @@ they treat as their source of truth and what they deliver.
 | [`appsec-advisor`](https://github.com/matthiasrohr/appsec-advisor) | Repository code and configuration | Repository-grounded threat model, findings, mitigation plans, and requirements-audit results | Architecture and implementation review |
 | [`tachi`](https://github.com/davidmatousek/tachi) | Architecture description, optionally generated from a repository | STRIDE and AI threat findings, risk scores, attack paths, compensating-control analysis, and reports | Threat modeling and vulnerability assessment |
 | [Claude Code Security Review](https://github.com/anthropics/claude-code-security-review) | Code changes | Vulnerability findings | Implementation and pull-request review |
-| [`security-requirements`](https://github.com/s1ns3nz0/security-requirements) | Proposed design or repository evidence, plus confirmed owner intent | Tailored, traceable, verifiable security requirements | Requirements and design stage |
+| `security-requirements` | Proposed design or repository evidence, plus confirmed owner intent | Tailored, traceable, verifiable security requirements | Requirements and design stage |
 
 ### The closest overlap: `appsec-advisor`
 
