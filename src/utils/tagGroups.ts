@@ -43,6 +43,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "Code Commits",
       "CD",
       "GitHub Action",
+      "Malware",
     ],
   },
   {
@@ -59,7 +60,16 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "AI",
-    tags: ["AI", "AI SOC", "Plugin", "Security Design", "Security Requirements"],
+    tags: [
+      "AI",
+      "AI SOC",
+      "Plugin",
+      "Security Design",
+      "Security Requirements",
+      "AI Supply Chain",
+      "MCP",
+      "Slopsquatting",
+    ],
   },
   {
     name: "Threat Ops",
