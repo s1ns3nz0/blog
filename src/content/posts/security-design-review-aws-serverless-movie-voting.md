@@ -1,5 +1,5 @@
 ---
-title: Security Design Review - AWS Serverless App(Movie voting)
+title: "Security Design Review: AWS Serverless Movie Voting App (1) - Service Analysis"
 description: How the security-requirements plugin builds a confirmed service profile from an AWS serverless movie-rating sample, before any control or threat is derived.
 pubDatetime: 2026-08-13T11:00:00+09:00
 tags:

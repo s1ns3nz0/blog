@@ -59,17 +59,12 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     tags: ["Army FM 3-60"],
   },
   {
+    name: "Security Design",
+    tags: ["Security Design", "Security Requirements"],
+  },
+  {
     name: "AI",
-    tags: [
-      "AI",
-      "AI SOC",
-      "Plugin",
-      "Security Design",
-      "Security Requirements",
-      "AI Supply Chain",
-      "MCP",
-      "Slopsquatting",
-    ],
+    tags: ["AI", "AI SOC", "Plugin", "AI Supply Chain", "MCP", "Slopsquatting"],
   },
   {
     name: "Threat Ops",
