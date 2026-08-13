@@ -48,7 +48,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "DevSecOps",
-    tags: ["DevSecOps", "CNCF", "NIST SP 800-204", "Microservices", "CI/CD"],
+    tags: ["DevSecOps", "CNCF", "NIST SP 800-204", "Microservices", "CI/CD", "AWS"],
   },
   {
     name: "DoD",
