@@ -4,7 +4,6 @@ import { getPostUrl } from "@/utils/getPostPaths";
 import { getReadingTime } from "@/utils/getReadingTime";
 import { toTransitionName } from "@/utils/toTransitionName";
 import Datetime from "./Datetime.astro";
-import config from "@/config";
 
 type Props = {
   variant?: "h2" | "h3";
@@ -12,29 +11,10 @@ type Props = {
 
 const { variant: Heading = "h2", id, data, filePath, body } = Astro.props;
 
-const {
-  title,
-  description,
-  ogImage,
-  tags,
-  pubDatetime,
-  modDatetime,
-  timezone,
-} = data;
+const { title, description, tags, pubDatetime, modDatetime, timezone } = data;
 
 const postUrl = getPostUrl(id, filePath, Astro.currentLocale);
 const readingTime = getReadingTime(body);
-
-// Card thumbnail: explicit ogImage frontmatter, else the auto-generated
-// per-post OG image so no post ever needs a hand-made thumbnail.
-let thumbnail: string | undefined;
-if (typeof ogImage === "string") {
-  thumbnail = ogImage;
-} else if (ogImage?.src) {
-  thumbnail = ogImage.src;
-} else if (config.features.dynamicOgImage) {
-  thumbnail = `${postUrl.replace(/\/+$/, "")}/index.png`;
-}
 ---
 
 <li class="my-6 list-none">
@@ -72,16 +52,5 @@ if (typeof ogImage === "string") {
         <span class="text-sm">{readingTime}</span>
       </div>
     </div>
-    {
-      thumbnail && (
-        <img
-          src={thumbnail}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          class="border-border h-44 w-full rounded-md border object-cover sm:h-28 sm:w-48 sm:shrink-0"
-        />
-      )
-    }
   </a>
 </li>
