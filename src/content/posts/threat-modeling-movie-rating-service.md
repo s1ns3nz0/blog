@@ -10,7 +10,7 @@ tags:
 featured: true
 ---
 
-I wanted to build a small service where users could browse movie information and submit ratings. I started with AWS's public [`aws-serverless-crud-sample`](https://github.com/aws-samples/aws-serverless-crud-sample/tree/e974c2cce7b5c4774e0fbd18a9ba3c0208c3a37f) repository.
+While studying system design security reviews and requirements elicitation, I came across AWS's public [`aws-serverless-crud-sample`](https://github.com/aws-samples/aws-serverless-crud-sample/tree/e974c2cce7b5c4774e0fbd18a9ba3c0208c3a37f) architecture repository. I decided to run a threat model against it, using a Claude plugin I'd built earlier for exactly this.
 
 The design is straightforward. Amazon API Gateway receives HTTP requests, and a single Node.js Lambda function selects the requested operation. Movie titles, release years, descriptions, and ratings are stored in a DynamoDB table named `Movies`.
 
