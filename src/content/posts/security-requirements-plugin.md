@@ -1,6 +1,6 @@
 ---
-title: security requirements plugin
-description: Claude plugin to deerive security requirements of descriptions and review security design 
+title: "Security Requirements Plugin: First Security Activity"
+description: Claude plugin that derives security requirements from service descriptions and reviews security design.
 pubDatetime: 2026-08-02T02:59:17+09:00
 tags:
   - Security Design
