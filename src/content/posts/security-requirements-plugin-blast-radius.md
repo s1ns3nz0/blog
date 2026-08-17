@@ -1,7 +1,7 @@
 ---
 title: "Security Requirements Plugin: New Feature - Blast Radius"
 description: How the security-requirements plugin's blast-radius stage scopes each threat across tenant, data, runtime, control, and recovery dimensions to prioritize requirements and review work.
-pubDatetime: 2026-08-18T10:00:00+09:00
+pubDatetime: 2026-08-17T23:59:00+09:00
 tags:
   - Security Design
   - Security Requirements
