@@ -1,7 +1,7 @@
 ---
 title: "Security Design Review: AWS Serverless Movie Voting App (6) - Refresh and Lifecycle"
 description: How the security-requirements plugin re-derives a security contract as a service changes, without losing prior approvals, exceptions, or audit history.
-pubDatetime: 2026-08-17T14:00:00+09:00
+pubDatetime: 2026-08-17T11:01:00+09:00
 tags:
   - Security Design
   - Security Requirements

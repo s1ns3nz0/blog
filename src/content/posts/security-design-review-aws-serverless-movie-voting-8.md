@@ -1,7 +1,7 @@
 ---
 title: "Security Design Review: AWS Serverless Movie Voting App (8) - Regulatory Overlays"
 description: Applying ISMS-P and GDPR overlays on top of the NIST baseline once the movie service adds accounts, an analytics provider, and Korean and EU users.
-pubDatetime: 2026-08-17T16:00:00+09:00
+pubDatetime: 2026-08-17T11:03:00+09:00
 tags:
   - Security Design
   - Security Requirements

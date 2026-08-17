@@ -1,7 +1,7 @@
 ---
 title: "Security Design Review: AWS Serverless Movie Voting App (7) - Evidence and Review"
 description: Why a written security requirement is a criterion, not proof, and how the security-requirements plugin ties each requirement to evidence-based status.
-pubDatetime: 2026-08-17T15:00:00+09:00
+pubDatetime: 2026-08-17T11:02:00+09:00
 tags:
   - Security Design
   - Security Requirements

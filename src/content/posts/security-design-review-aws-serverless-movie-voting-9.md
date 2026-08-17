@@ -1,7 +1,7 @@
 ---
 title: "Security Design Review: AWS Serverless Movie Voting App (9) - CI/CD Verification"
 description: Turning each requirement's verification metadata into a dispatchable CI/CD check, from IAM policy inspection to sentinel-based log scanning.
-pubDatetime: 2026-08-17T17:00:00+09:00
+pubDatetime: 2026-08-17T11:04:00+09:00
 tags:
   - Security Design
   - Security Requirements
