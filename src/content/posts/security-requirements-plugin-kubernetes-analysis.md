@@ -10,6 +10,8 @@ tags:
 featured: true
 ---
 
+Repository: [github.com/s1ns3nz0/security-requirements](https://github.com/s1ns3nz0/security-requirements)
+
 The original plugin focused on analyzing AWS-based applications and deriving security requirements and threats from the service design and operating environment. That approach works well for understanding application data flows and AWS resource relationships, but it is incomplete when the application runs on Kubernetes.
 
 In Kubernetes, application code can be secure while the deployment remains exposed because of an overprivileged ServiceAccount, an overly broad ClusterRoleBinding, or an absent NetworkPolicy. A compromised container may also have access to an AWS IAM role, which can extend an incident from the cluster into the cloud account.
