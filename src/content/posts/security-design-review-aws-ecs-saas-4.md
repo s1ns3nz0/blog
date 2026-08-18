@@ -1,5 +1,5 @@
 ---
-title: "Security Design Review: AWS ECS SaaS (2) - Blast Radius"
+title: "Security Design Review: AWS ECS SaaS (4) - Blast Radius"
 description: Calculating blast radius for the AWS ECS SaaS reference architecture, tracing which tenants, data, and control-plane components a threat path could reach.
 pubDatetime: 2026-08-17T23:59:30+09:00
 tags:
