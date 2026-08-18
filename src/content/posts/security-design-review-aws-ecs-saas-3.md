@@ -1,7 +1,7 @@
 ---
 title: "Security Design Review: AWS ECS SaaS (3) - Threat Analysis"
 description: A STRIDE threat model across nine trust boundaries of the AWS ECS SaaS reference architecture, from tenant claim spoofing to a deployment role that can reach every tenant.
-pubDatetime: 2026-08-17T23:58:40+09:00
+pubDatetime: 2026-08-18T00:04:00+09:00
 tags:
   - Security Design
   - Security Requirements

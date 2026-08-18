@@ -1,7 +1,7 @@
 ---
 title: "Security Design Review: AWS ECS SaaS (2) - CIA Impact and Baseline"
 description: Calculating confidentiality, integrity, and availability impact for the AWS ECS SaaS reference architecture, and why holding customer data pulls in a privacy baseline and a regulatory overlay.
-pubDatetime: 2026-08-17T23:58:20+09:00
+pubDatetime: 2026-08-18T00:03:00+09:00
 tags:
   - Security Design
   - Security Requirements
