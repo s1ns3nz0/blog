@@ -10,13 +10,28 @@ import { getSortedPosts } from "@/utils/getSortedPosts";
 import { getUniqueTags } from "@/utils/getUniqueTags";
 import { groupTags } from "@/utils/groupTags";
 import { TAG_GROUPS } from "@/utils/tagGroups";
+import { slugifyAll } from "@/utils/slugify";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
+
+// Tags used on only one post add noise without adding filtering power
+// (selecting one just points back at the post you already found it on).
+const MIN_FILTERABLE_TAG_COUNT = 2;
 
 const allPosts = await getCollection("posts", ({ data }) => !data.draft);
 const posts = getSortedPosts(allPosts);
 const tags = getUniqueTags(allPosts);
-const tagGroups = groupTags(tags, TAG_GROUPS);
+
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of slugifyAll(post.data.tags)) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+const filterableTags = tags.filter(
+  ({ tag }) => (tagCounts.get(tag) ?? 0) >= MIN_FILTERABLE_TAG_COUNT
+);
+const tagGroups = groupTags(filterableTags, TAG_GROUPS);
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
