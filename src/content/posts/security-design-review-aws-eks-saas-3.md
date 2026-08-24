@@ -6,6 +6,8 @@ tags:
   - Security Design
   - Security Requirements
   - AWS
+  - EKS
+  - SaaS
   - Plugin
   - Kubernetes
   - threat-modeling

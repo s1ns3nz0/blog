@@ -6,6 +6,8 @@ tags:
   - Security Design
   - Security Requirements
   - AWS
+  - ECS
+  - SaaS
   - Plugin
   - threat-modeling
   - STRIDE

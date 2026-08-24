@@ -56,6 +56,9 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "CI/CD",
       "AWS",
       "Kubernetes",
+      "ECS",
+      "EKS",
+      "SaaS",
     ],
   },
   {
