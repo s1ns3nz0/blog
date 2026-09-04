@@ -38,6 +38,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "NIST SP 800-204D",
       "CI/CD Security",
       "Supply Chain Security",
+      "Policy as Code",
       "Build",
       "Pull-Push",
       "Code Commits",
