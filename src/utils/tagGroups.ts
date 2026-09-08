@@ -39,8 +39,6 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "CI/CD Security",
       "Supply Chain Security",
       "Policy as Code",
-      "Dependency Confusion",
-      "Package Registry",
       "Build",
       "Pull-Push",
       "Code Commits",

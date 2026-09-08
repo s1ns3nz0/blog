@@ -5,9 +5,9 @@ pubDatetime: 2026-09-07T22:50:00+09:00
 tags:
   - Contribution
   - Supply Chain Security
-  - Dependency Confusion
-  - Package Registry
-  - Malware
+  - NIST SP 800-204
+  - CI/CD
+  - DevSecOps
 featured: true
 ---
 
