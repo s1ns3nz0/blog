@@ -23,6 +23,7 @@ const t = useTranslations(locale);
   <Breadcrumb />
 
   <Main pageTitle={t.pages.postsTitle} pageDesc={t.pages.postsDesc}>
+    <p class="text-muted-foreground mb-4 text-sm">{t.pages.tagFilterHint}</p>
     <div data-selected-tags class="mb-6 hidden flex-wrap gap-2"></div>
     <ul data-post-list>
       {posts.map(data => <Card {...data} />)}

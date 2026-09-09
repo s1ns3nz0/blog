@@ -46,6 +46,8 @@ export default {
 
     postsTitle: "Posts",
     postsDesc: "All the articles I've posted.",
+    tagFilterHint:
+      "Selecting more than one tag in the sidebar shows only posts that have every selected tag.",
 
     archivesTitle: "Archives",
     archivesDesc: "All the articles I've archived.",
