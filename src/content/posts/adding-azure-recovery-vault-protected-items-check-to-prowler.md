@@ -2,19 +2,46 @@
 title: Adding an Azure Recovery Vault Protected Items Check to Prowler
 description: How Prowler identifies Azure Recovery Services Vaults with no protected backup items.
 pubDatetime: 2026-09-09T17:35:00+09:00
-tags: [Azure, Backup, Recovery, Prowler, Contribution, CSPM, CloudSecurity, Cloud, DisasterRecovery]
+tags:
+  - Azure
+  - Backup
+  - Recovery
+  - Prowler
+  - Contribution
+  - CSPM
+  - CloudSecurity
+  - Cloud
+  - DisasterRecovery
 featured: true
 ---
 
-Creating a Recovery Services Vault does not protect anything by itself. A vault with no registered protected items can indicate unfinished backup onboarding, a misconfiguration, or unnecessary cost. [Prowler PR #11048](https://github.com/prowler-cloud/prowler/pull/11048) adds `recovery_vault_has_protected_items` to find those vaults.
+Creating a Recovery Services Vault does not protect any workload by itself. A vault with no registered protected items can indicate unfinished backup onboarding, a misconfiguration, or unnecessary platform cost.
 
-## What the check evaluates
+[Prowler PR #11048](https://github.com/prowler-cloud/prowler/pull/11048) adds `recovery_vault_has_protected_items`, which identifies Azure Recovery Services Vaults that do not contain a protected item.
 
-The check reports `PASS` when a vault has at least one protected item and `FAIL` when it has none. It provides a simple way to distinguish an operating backup vault from an unused resource.
+## Why protected-item evidence matters
 
-## Investigate the finding in context
+Backup intent is not the same as backup coverage. A team may create a vault and policy during environment provisioning, then never attach virtual machines, databases, or other supported workloads. The resource looks ready, but no recovery point is being created.
 
-An empty vault may be intentional during a planned migration or after a controlled decommission. Confirm its owner and intended purpose. If it should protect workloads, register the items, apply appropriate policies, and test recovery. If it is no longer needed, follow the approved decommissioning process.
+Tracking protected items helps security and platform teams distinguish operating backup services from empty vaults that need action.
+
+## What the new check does
+
+The check evaluates each Recovery Services Vault.
+
+- It reports `PASS` when the vault contains at least one protected item.
+- It reports `FAIL` when the vault has none.
+- It creates a finding per vault so the owner can review its purpose and actual use.
+
+An empty vault is not automatically an error. It may be part of an approved migration or decommissioning process, but it should not remain unexplained.
+
+## Complete or retire the backup design
+
+For a vault intended to protect workloads, register the relevant items, apply the appropriate policy, and confirm successful backup jobs. For an intentionally empty vault, document its short-term purpose and remove it through the approved process when it is no longer needed.
+
+## Verify recoverability, not only enrollment
+
+Protected-item count proves that a backup relationship exists. Teams should also monitor backup success, review policy retention, protect the vault from unauthorized deletion, and perform recovery tests that validate the full service path.
 
 `recovery_vault_has_protected_items` closes the gap between backup intent and evidence of actual protection.
 

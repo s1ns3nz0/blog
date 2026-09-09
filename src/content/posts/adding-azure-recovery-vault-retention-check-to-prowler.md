@@ -2,19 +2,46 @@
 title: Adding an Azure Recovery Vault Retention Check to Prowler
 description: How Prowler identifies Recovery Services Vault backup policies with insufficient retention.
 pubDatetime: 2026-09-09T17:30:00+09:00
-tags: [Azure, Backup, Recovery, Prowler, Contribution, CSPM, CloudSecurity, Cloud, DisasterRecovery]
+tags:
+  - Azure
+  - Backup
+  - Recovery
+  - Prowler
+  - Contribution
+  - CSPM
+  - CloudSecurity
+  - Cloud
+  - DisasterRecovery
 featured: true
 ---
 
-Backups that expire before an incident is detected cannot support recovery. [Prowler PR #11047](https://github.com/prowler-cloud/prowler/pull/11047) adds `recovery_vault_backup_policy_retention_adequate`, a check for Azure Recovery Services Vault policy retention.
+Backups that expire before an incident is discovered cannot support recovery. A short retention period can leave an organization without a usable recovery point after ransomware, silent corruption, or a delayed investigation.
 
-## What the check evaluates
+[Prowler PR #11047](https://github.com/prowler-cloud/prowler/pull/11047) adds `recovery_vault_backup_policy_retention_adequate`, which checks Azure Recovery Services Vault backup policies for adequate retention.
 
-By default, Prowler reports `FAIL` when backup retention is shorter than 30 days and `PASS` when it meets or exceeds that threshold. The check helps expose policies that may be inadequate for incidents, ransomware investigations, or delayed discovery.
+## Why retention is a security control
 
-## Set retention from recovery objectives
+Recovery depends on having a clean copy that predates the incident. The longer an intrusion or data issue remains undetected, the more likely that short-lived backups will be overwritten or removed before responders can use them.
 
-Thirty days is a useful baseline, but each workload should have documented retention requirements tied to business, legal, and threat scenarios. Review daily, weekly, monthly, and yearly recovery points; test recovery from older copies; and protect vault access from accidental or malicious deletion.
+Retention must also balance operational, legal, and cost requirements. The right policy is based on recovery objectives and data obligations, not a single universal number.
+
+## What the new check does
+
+By default, Prowler evaluates daily backup retention against a 30-day baseline.
+
+- It reports `PASS` when the policy meets or exceeds 30 days.
+- It reports `FAIL` when retention is shorter than the configured baseline.
+- It produces evidence per policy so teams can find gaps across Recovery Services Vaults.
+
+The threshold gives a practical minimum for review; critical workloads may require considerably longer retention and multiple recovery tiers.
+
+## Design retention around recovery objectives
+
+Document the required recovery point, the plausible detection delay, and the recovery copies required for daily, weekly, monthly, and yearly needs. Apply the policy to the correct protected items and keep deletion permissions tightly controlled.
+
+## Validate older recovery points
+
+Test restores from more than the most recent backup. Confirm that application owners can recover data, validate integrity, and operate the restored workload. These exercises identify retention gaps that configuration review alone cannot expose.
 
 `recovery_vault_backup_policy_retention_adequate` asks a practical question of every policy: *will a usable recovery point still exist when the organization needs it?*
 
