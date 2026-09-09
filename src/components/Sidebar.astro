@@ -78,7 +78,7 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
                       ›
                     </span>
                   </summary>
-                  <ul class="mt-1 mb-2 flex flex-col gap-1 ps-3">
+                  <ul class="mt-1 mb-2 hidden flex-col gap-1 ps-3 group-open/accordion:flex">
                     {group.tags.map(({ tag, tagName }) => (
                       <li>
                         <a
