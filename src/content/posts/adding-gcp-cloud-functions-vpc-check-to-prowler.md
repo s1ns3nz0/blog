@@ -10,6 +10,7 @@ tags:
   - CloudSecurity
   - Cloud
   - GoogleCloud
+  - CloudFunction
 featured: true
 ---
 
@@ -78,4 +79,4 @@ A connector is a useful baseline, but it is only one part of the design. Teams s
 
 This new Prowler check automates a simple but valuable question: *is this Cloud Function connected to the private network boundary it depends on?* From there, teams can continue with a deeper review of egress routing, firewall rules, and least-privilege network access.
 
-#GCP #Prowler #Contribution #CSPM #CloudSecurity #Cloud #GoogleCloud
+#GCP #Prowler #Contribution #CSPM #CloudSecurity #Cloud #GoogleCloud #CloudFunction
