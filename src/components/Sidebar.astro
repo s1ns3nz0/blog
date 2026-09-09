@@ -46,6 +46,7 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
 ---
 
 <aside
+  transition:persist
   class:list={[
     "fixed top-28 left-[calc(50%-39rem)] hidden w-52 xl:block",
     "max-h-[calc(100dvh-9rem)] overflow-y-auto pb-8",
@@ -80,8 +81,11 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
                       <li>
                         <a
                           href={tagUrl(tag)}
+                          data-tag={tag}
+                          aria-pressed="false"
                           class:list={[
                             "hover:text-accent flex items-baseline justify-between gap-2 py-1",
+                            "aria-pressed:text-accent aria-pressed:font-semibold",
                             isTagActive(tag)
                               ? "text-accent"
                               : "text-muted-foreground hover:text-accent",
@@ -114,8 +118,11 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
               <li>
                 <a
                   href={tagUrl(tag)}
+                  data-tag={tag}
+                  aria-pressed="false"
                   class:list={[
                     "hover:text-accent flex items-baseline justify-between gap-2 py-1",
+                    "aria-pressed:text-accent aria-pressed:font-semibold",
                     isTagActive(tag)
                       ? "text-accent"
                       : "text-muted-foreground hover:text-accent",
@@ -132,3 +139,82 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
     }
   </nav>
 </aside>
+
+<script>
+  // Multi-tag AND filter, driven from the sidebar. Selection persists in
+  // sessionStorage across soft navigations. A click only filters in place
+  // when the current page already renders a post list ([data-post-list]);
+  // otherwise it falls through to the tag's own /tags/{slug}/ page.
+  const STORAGE_KEY = "sidebar-selected-tags";
+
+  function getSelected(): Set<string> {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return new Set(raw ? (JSON.parse(raw) as string[]) : []);
+    } catch {
+      return new Set();
+    }
+  }
+
+  function setSelected(selected: Set<string>) {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify([...selected]));
+  }
+
+  function markSelected(selected: Set<string>) {
+    document
+      .querySelectorAll<HTMLAnchorElement>("aside a[data-tag]")
+      .forEach(link => {
+        const tag = link.dataset.tag;
+        link.setAttribute("aria-pressed", String(!!tag && selected.has(tag)));
+      });
+  }
+
+  function applyFilter(selected: Set<string>) {
+    const list = document.querySelector<HTMLElement>("[data-post-list]");
+    if (!list) return;
+
+    const items = list.querySelectorAll<HTMLLIElement>("li[data-tags]");
+    let visibleCount = 0;
+    items.forEach(item => {
+      const itemTags = (item.dataset.tags ?? "").split(",");
+      const matches =
+        selected.size === 0 ||
+        [...selected].every(tag => itemTags.includes(tag));
+      item.classList.toggle("hidden", !matches);
+      if (matches) visibleCount++;
+    });
+
+    document
+      .querySelector("[data-post-list-empty]")
+      ?.classList.toggle("hidden", visibleCount > 0 || items.length === 0);
+  }
+
+  function initSidebarTagFilter() {
+    const selected = getSelected();
+    markSelected(selected);
+    applyFilter(selected);
+
+    document
+      .querySelectorAll<HTMLAnchorElement>("aside a[data-tag]")
+      .forEach(link => {
+        if (link.dataset.filterBound) return;
+        link.dataset.filterBound = "true";
+
+        link.addEventListener("click", event => {
+          const tag = link.dataset.tag;
+          if (!tag) return;
+          if (!document.querySelector("[data-post-list]")) return; // let it navigate
+
+          event.preventDefault();
+          const current = getSelected();
+          if (current.has(tag)) current.delete(tag);
+          else current.add(tag);
+          setSelected(current);
+          markSelected(current);
+          applyFilter(current);
+        });
+      });
+  }
+
+  document.addEventListener("astro:page-load", initSidebarTagFilter);
+</script>

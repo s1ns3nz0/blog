@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { getPostUrl } from "@/utils/getPostPaths";
 import { getReadingTime } from "@/utils/getReadingTime";
 import { toTransitionName } from "@/utils/toTransitionName";
+import { slugifyAll } from "@/utils/slugify";
 import Datetime from "./Datetime.astro";
 
 type Props = {
@@ -17,7 +18,7 @@ const postUrl = getPostUrl(id, filePath, Astro.currentLocale);
 const readingTime = getReadingTime(body);
 ---
 
-<li class="my-6 list-none">
+<li class="my-6 list-none" data-tags={slugifyAll(tags).join(",")}>
   <a
     href={postUrl}
     class:list={[
