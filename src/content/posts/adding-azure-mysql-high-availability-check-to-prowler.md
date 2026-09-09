@@ -39,6 +39,30 @@ The check does not decide whether every development workload needs HA. It shows 
 
 Classify databases by business impact, downtime tolerance, and dependency criticality. Configure the appropriate HA mode for services that need continuity, and pair it with geo-redundant backups because failover and restore protect against different failures.
 
+Enable Zone-Redundant HA on an eligible existing server through the Azure CLI:
+
+```bash
+az mysql flexible-server update \
+  --name <server-name> \
+  --resource-group <resource-group> \
+  --high-availability ZoneRedundant
+```
+
+The same policy can be declared in Terraform. High availability requires a supported service tier.
+
+```hcl
+resource "azurerm_mysql_flexible_server" "example" {
+  name                = "example-mysql"
+  resource_group_name = "example-rg"
+  location            = "eastus"
+  sku_name            = "GP_Standard_D2ds_v4"
+
+  high_availability {
+    mode = "ZoneRedundant"
+  }
+}
+```
+
 ## Verify application failover behavior
 
 Exercise failover in a controlled environment. Validate client retry behavior, connection pooling, timeouts, monitoring alerts, and the runbook used by application and database operators.

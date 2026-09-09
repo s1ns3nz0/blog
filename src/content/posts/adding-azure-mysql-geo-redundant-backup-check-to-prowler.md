@@ -39,6 +39,27 @@ The strict evaluation prevents an unknown setting from being treated as evidence
 
 Enable geo-redundant backup for workloads whose recovery objectives require it, then document the recovery point and recovery-time objectives it supports. Pair the control with a retention policy that preserves recovery points long enough to detect and investigate an incident.
 
+Geo-redundant backup is set at server creation. The Azure CLI configuration is therefore part of a new-server deployment:
+
+```bash
+az mysql flexible-server create \
+  --name <server-name> \
+  --resource-group <resource-group> \
+  --location <region> \
+  --geo-redundant-backup Enabled
+```
+
+Terraform can make the requirement reviewable in infrastructure as code:
+
+```hcl
+resource "azurerm_mysql_flexible_server" "example" {
+  name                         = "example-mysql"
+  resource_group_name          = "example-rg"
+  location                     = "eastus"
+  geo_redundant_backup_enabled = true
+}
+```
+
 ## Test the complete recovery path
 
 Run restore exercises into an isolated environment. Validate database integrity, application configuration, credentials, network access, and the ownership process for approving and operating a recovered workload.

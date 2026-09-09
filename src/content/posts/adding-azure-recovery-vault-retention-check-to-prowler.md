@@ -39,6 +39,18 @@ The threshold gives a practical minimum for review; critical workloads may requi
 
 Document the required recovery point, the plausible detection delay, and the recovery copies required for daily, weekly, monthly, and yearly needs. Apply the policy to the correct protected items and keep deletion permissions tightly controlled.
 
+After defining a policy JSON file with daily retention of at least 30 days, apply it with the Azure CLI:
+
+```bash
+az backup policy set \
+  --resource-group <resource-group> \
+  --vault-name <vault-name> \
+  --name <policy-name> \
+  --policy @policy.json
+```
+
+The PR metadata provides no Terraform or Bicep remediation for this policy. Manage the policy JSON through the team's version-controlled infrastructure workflow when one is available.
+
 ## Validate older recovery points
 
 Test restores from more than the most recent backup. Confirm that application owners can recover data, validate integrity, and operate the restored workload. These exercises identify retention gaps that configuration review alone cannot expose.

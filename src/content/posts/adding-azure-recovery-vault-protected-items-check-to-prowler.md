@@ -39,6 +39,18 @@ An empty vault is not automatically an error. It may be part of an approved migr
 
 For a vault intended to protect workloads, register the relevant items, apply the appropriate policy, and confirm successful backup jobs. For an intentionally empty vault, document its short-term purpose and remove it through the approved process when it is no longer needed.
 
+For example, enable protection for a virtual machine with the Azure CLI:
+
+```bash
+az backup protection enable-for-vm \
+  --resource-group <resource-group> \
+  --vault-name <vault-name> \
+  --vm <vm-id> \
+  --policy-name DefaultPolicy
+```
+
+The remediation metadata for this check does not provide Terraform or Bicep. Use the Azure Backup workflow appropriate to each protected workload and maintain the resulting policy configuration as controlled operational evidence.
+
 ## Verify recoverability, not only enrollment
 
 Protected-item count proves that a backup relationship exists. Teams should also monitor backup success, review policy retention, protect the vault from unauthorized deletion, and perform recovery tests that validate the full service path.

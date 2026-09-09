@@ -36,6 +36,35 @@ The check evaluates the DDoS protection configuration for each virtual network.
 
 Identify VNets that host public entry points or critical services with public IP exposure. Enable protection there, assign ownership for alerts and incident response, and document why private-only VNets do not require the control.
 
+Create a DDoS protection plan and associate it with the VNet through the Azure CLI:
+
+```bash
+az network ddos-protection create \
+  --resource-group <resource-group> \
+  --name <plan-name>
+
+az network vnet update \
+  --resource-group <resource-group> \
+  --name <vnet-name> \
+  --ddos-protection-plan <plan-id>
+```
+
+Terraform can declare the association as part of the virtual-network definition:
+
+```hcl
+resource "azurerm_virtual_network" "example" {
+  name                = "example-vnet"
+  location            = "eastus"
+  resource_group_name = "example-rg"
+  address_space       = ["10.0.0.0/16"]
+
+  ddos_protection_plan {
+    id     = azurerm_network_ddos_protection_plan.example.id
+    enable = true
+  }
+}
+```
+
 ## Test the incident response path
 
 Confirm monitoring signals, alert routing, escalation contacts, edge controls, and application rate-limiting behavior. Review the DDoS runbook during exercises so teams know how to distinguish an attack from an ordinary traffic spike.

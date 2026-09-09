@@ -39,6 +39,30 @@ The finding is a policy signal. Development or temporary systems may have differ
 
 Use HA to reduce service interruption and geo-redundant backups to recover from data loss or a wider regional event. Both are needed for a complete database resilience design. Include standby cost, capacity, and ownership in the service plan.
 
+Enable Zone-Redundant HA on an eligible existing PostgreSQL server:
+
+```bash
+az postgres flexible-server update \
+  --name <server-name> \
+  --resource-group <resource-group> \
+  --high-availability ZoneRedundant
+```
+
+The same configuration can be declared with Terraform. High availability requires a supported service tier.
+
+```hcl
+resource "azurerm_postgresql_flexible_server" "example" {
+  name                = "example-postgresql"
+  resource_group_name = "example-rg"
+  location            = "eastus"
+  sku_name            = "GP_Standard_D2ds_v4"
+
+  high_availability {
+    mode = "ZoneRedundant"
+  }
+}
+```
+
 ## Exercise the application path
 
 Test a planned failover with the application. Confirm retries, connection pooling, timeout handling, monitoring, and escalation procedures. A successful database failover does not guarantee uninterrupted service if clients cannot reconnect.

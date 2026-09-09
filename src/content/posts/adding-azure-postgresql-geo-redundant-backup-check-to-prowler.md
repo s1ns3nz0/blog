@@ -39,6 +39,27 @@ This strict result avoids treating an unavailable setting as proof of regional r
 
 Set recovery point and recovery-time objectives for each PostgreSQL workload before choosing backup settings. Production systems that must recover from a regional outage should have geo-redundancy, an appropriate retention schedule, and clear ownership for initiating and validating a restore.
 
+Geo-redundant backup is selected when creating a Flexible Server:
+
+```bash
+az postgres flexible-server create \
+  --name <server-name> \
+  --resource-group <resource-group> \
+  --location <region> \
+  --geo-redundant-backup Enabled
+```
+
+Terraform records the creation-time requirement with the server resource:
+
+```hcl
+resource "azurerm_postgresql_flexible_server" "example" {
+  name                         = "example-postgresql"
+  resource_group_name          = "example-rg"
+  location                     = "eastus"
+  geo_redundant_backup_enabled = true
+}
+```
+
 ## Practice a restoration
 
 Restore a representative backup into an isolated environment. Verify PostgreSQL data integrity, application connection details, identity and secret access, network controls, and the operational steps needed to return a service to users.

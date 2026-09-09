@@ -36,6 +36,25 @@ Prowler evaluates each subnet discovered in an Azure virtual network.
 
 Associate each application subnet with an NSG and define only the inbound and outbound paths the workload needs. Review service tags, private endpoints, and dependencies before enforcing deny rules; an overly broad rule is not a useful boundary, while an overly restrictive one can break essential services.
 
+Associate an existing NSG with a subnet through the Azure CLI:
+
+```bash
+az network vnet subnet update \
+  --resource-group <resource-group> \
+  --vnet-name <vnet-name> \
+  --name <subnet-name> \
+  --network-security-group <nsg-name>
+```
+
+Terraform can keep the association separate from the subnet and NSG resource definitions:
+
+```hcl
+resource "azurerm_subnet_network_security_group_association" "example" {
+  subnet_id                 = azurerm_subnet.example.id
+  network_security_group_id = azurerm_network_security_group.example.id
+}
+```
+
 ## Review the whole network path
 
 Review effective security rules, route tables, peering, and firewall policies together. A subnet's posture depends on the combination of these controls, while Prowler makes the absence of the NSG baseline visible.
