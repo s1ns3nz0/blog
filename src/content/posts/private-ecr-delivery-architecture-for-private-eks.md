@@ -13,6 +13,10 @@ tags:
   - Security
 ---
 
+I use a private container-image repository for the Hoodi Node Validator. To implement defense in depth, I considered multiple security controls. Because I run this validator on AWS, I fully leverage AWS services such as CodeBuild and ECR.
+
+You can use other solutions to host private repositories. Cost, availability within your network, and integration with your existing security controls are useful evaluation criteria.
+
 ## 1. Security Context
 
 This EKS environment is designed as a private operating environment. Its purpose is not merely to hide workloads from the Internet. It is to minimize external access points across the full path from source selection to a running Kubernetes container.
