@@ -114,51 +114,63 @@ The first identifies specific content. The second names a tag, which is a label 
 ## 4. Integrated Delivery Workflow
 
 ```mermaid
-flowchart LR
-  subgraph Source["External source boundary"]
-    Dev["Developer change"]
-    Upstream["Approved upstream image<br/>SHA-256 digest"]
+flowchart TB
+
+  subgraph External["External trust boundary"]
+    Dev["Human or Git repository"]
+    Upstream["Upstream container registry"]
   end
 
   subgraph GitHub["GitHub control plane"]
     Review["Pull request review"]
-    CI["CI checks<br/>policy and scan evidence"]
-    OIDC["Short-lived OIDC token"]
+    Actions["GitHub Actions"]
+    Oidc["OIDC token"]
   end
 
-  subgraph AWS["Private AWS delivery boundary"]
-    IAM["Scoped IAM role"]
-    Build["CodeBuild<br/>sign or verify"]
-    Vault["Vault Transit<br/>key custody"]
-    S3["Encrypted, versioned<br/>S3 evidence"]
-    ECR["Private ECR<br/>immutable artifact"]
+  subgraph Aws["Private AWS environment"]
+    Iam["IAM OIDC role"]
+    CodeBuild["CodeBuild project"]
+    Vault["Vault Transit"]
+    S3["Versioned encrypted S3 artifacts"]
+    Ecr["Private Amazon ECR"]
+    Scan["ECR and CI image scan"]
+    Endpoints["ECR and S3 VPC endpoints"]
   end
 
-  subgraph EKS["Private EKS runtime boundary"]
-    Endpoints["ECR and S3<br/>VPC endpoints"]
-    Kubelet["Node IAM + kubelet<br/>pulls image by digest"]
-    Admission["Kyverno admission<br/>private ECR + digest"]
-    Pod["Hardened workload Pod"]
+  subgraph Eks["Private EKS cluster"]
+    KubeApi["Kubernetes API"]
+    Kyverno["Kyverno admission policy"]
+    Kubelet["EKS node kubelet"]
+    Pod["Running workload Pod"]
   end
 
-  Dev --> Review --> CI
-  Upstream -->|"source digest"| CI
-  CI -->|"approved mirror"| ECR
-  CI --> OIDC --> IAM
-  IAM -->|"scoped authority"| Build
-  Build <-->|"sign or verify"| Vault
-  Build -->|"evidence"| S3
-  Build -->|"approved release"| ECR
-  ECR -->|"scan on push"| CI
-  ECR --> Endpoints --> Kubelet
-  Kubelet -->|"requested image"| Admission -->|"allow"| Pod
+  Dev -->|"1. Proposes source digest or change"| Review
+  Upstream -->|"2. Supplies immutable source image"| Actions
+  Review -->|"3. Approves workflow and source"| Actions
 
-  classDef gate fill:#e8f4fd,stroke:#1a73a8,color:#0b3954
-  classDef store fill:#eef7e8,stroke:#4f7c3f,color:#1f4d1b
-  classDef runtime fill:#fff3e0,stroke:#b26a00,color:#6b3d00
-  class Review,CI,OIDC,IAM,Admission gate
-  class Vault,S3,ECR store
-  class Endpoints,Kubelet,Pod runtime
+  Actions -->|"4. Requests short-lived identity"| Oidc
+  Oidc -->|"5. IAM validates claims"| Iam
+
+  Iam -->|"6. Grants scoped ECR publish authority"| Ecr
+  Iam -->|"7. Starts private signing or build task"| CodeBuild
+
+  Actions -->|"8. Mirrors image and compares digests"| Ecr
+  Actions -->|"9. Runs configured scan and evidence steps"| Scan
+  Scan -->|"10. Blocks required failed gate"| Actions
+
+  CodeBuild -->|"11. Downloads versioned input"| S3
+  CodeBuild -->|"12. Authenticates to Vault with AWS identity"| Vault
+  Vault -->|"13. Signs or verifies without exporting private key"| CodeBuild
+  CodeBuild -->|"14. Stores signed evidence"| S3
+  CodeBuild -->|"15. Publishes approved artifact"| Ecr
+
+  Ecr -->|"16. Scan on push"| Scan
+  Ecr -->|"17. Private image-pull path"| Endpoints
+  Endpoints -->|"18. Node IAM authenticates and pulls digest"| Kubelet
+
+  KubeApi -->|"19. Requests admission decision"| Kyverno
+  Kyverno -->|"20. Allows or rejects Pod"| KubeApi
+  Kubelet -->|"21. Unpacks image and starts container"| Pod
 ```
 
 The workflow contains different resource types:
