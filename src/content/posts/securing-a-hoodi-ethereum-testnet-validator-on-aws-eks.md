@@ -1,7 +1,7 @@
 ---
 title: "Private EKS Security Design Review"
 description: "A confidentiality-focused security design review of a private EKS environment."
-pubDatetime: 2026-09-10T00:00:00+09:00
+pubDatetime: 2026-09-10T11:37:24+09:00
 tags:
   - Ethereum
   - Hoodi

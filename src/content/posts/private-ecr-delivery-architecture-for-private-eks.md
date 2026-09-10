@@ -1,7 +1,8 @@
 ---
 title: "Private ECR Delivery Architecture for Private EKS"
 description: "A defense-in-depth design for delivering approved private ECR artifacts to private EKS workloads."
-pubDatetime: 2026-09-10T00:00:00+09:00
+pubDatetime: 2026-09-10T18:59:21+09:00
+modDatetime: 2026-09-10T19:11:52+09:00
 tags:
   - AWS
   - ECR

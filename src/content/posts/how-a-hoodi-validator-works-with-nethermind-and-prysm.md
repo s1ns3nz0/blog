@@ -1,7 +1,7 @@
 ---
 title: "How a Hoodi Validator Works with Nethermind and Prysm"
 description: "An explanation of how Nethermind, Prysm, a remote signer, and slashing protection work together in a Hoodi validator."
-pubDatetime: 2026-09-10T00:00:00+09:00
+pubDatetime: 2026-09-10T20:08:37+09:00
 tags:
   - Ethereum
   - Hoodi
