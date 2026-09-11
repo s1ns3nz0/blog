@@ -30,6 +30,8 @@ The primary environment is located in the Seoul Region, `ap-northeast-2`. The AW
 
 A secondary Region holds a replica of selected audit records. This provides a regional recovery copy without making the secondary Region an active validator environment.
 
+According to AWS security best practices, I would normally design this architecture around a multi-account model. In that model, logging and audit resources should operate in a separate account within the same AWS Organization. However, I did not implement this control because this is a small portfolio project intended to demonstrate both my blockchain workload and AWS security design experience.
+
 The architecture is intentionally private-first. Public-facing application load balancers and a public Kubernetes API are outside the intended design.
 
 ## Network Model
