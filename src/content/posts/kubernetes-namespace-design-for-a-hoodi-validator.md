@@ -20,7 +20,9 @@ The practical test is:
 
 A namespace groups resources that should be administered under a common set of permissions and policies. It provides a scope for controls; creating a namespace does not automatically isolate its workloads. [Kubernetes: Multi-tenancy](https://kubernetes.io/docs/concepts/security/multi-tenancy/)
 
-Your architecture applies this principle by separating blockchain-node operation, validator signing, observability, and Vault administration. The following examples describe the declared configuration, including templates that require activation.
+My architecture applies this principle by separating blockchain-node operation, validator signing, observability, and Vault administration. The following examples describe the declared configuration, including templates that require activation.
+
+![Namespaces, components, and data flow](/images/kubernetes-namespace-design-for-hoodi-validator.png)
 
 ## 1. Group Resources With Common Ownership
 
