@@ -13,7 +13,11 @@ draft: false
 
 # Hoodi Validator Use Cases and Data Flows
 
+![Namespaces, components, and data flow](/images/hoodi-validator-use-cases-and-data-flows.png)
+
 The platform separates validator operations into four Kubernetes namespaces. This article follows the data flows between them, from node synchronization to the safe signing and broadcast of validator duties.
+
+Refer to this diagram and [Kubernetes Namespace Design for a Hoodi Validator](https://miata.cloud/posts/kubernetes-namespace-design-for-a-hoodi-validator/) to see how I implemented the validator components in Kubernetes.
 
 ```text
 node-operator
