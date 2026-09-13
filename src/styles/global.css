@@ -33,7 +33,7 @@
 }
 
 @utility app-layout {
-  @apply max-w-app mx-auto w-full px-4;
+  @apply max-w-app mx-auto w-full px-4 xl:mr-0 xl:ml-[calc(50%-24rem)];
 }
 
 @utility active-nav {
