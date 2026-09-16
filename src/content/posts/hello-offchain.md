@@ -39,8 +39,8 @@ I built an OSCAL-based dashboard that manages security controls, policy referenc
 
 ![Compliance Ops dashboard](/images/hello-offchain-compliance-ops-dashboard.png)
 
-- Github: https://github.com/s1ns3nz0/compliance-ops
-- Live: http://193.122.146.187/
+- [GitHub](https://github.com/s1ns3nz0/compliance-ops)
+- <a href="http://193.122.146.187/" target="_blank" rel="noopener noreferrer">Live demo</a>
   <Token: hello-offchain-nWUsxtVTrgYhAc4cTxpXQkyl9nK34z50pmhvbXMIMQ>
 
 
@@ -65,31 +65,31 @@ Rather than simply getting a validator running, I treated the project as a secur
 - How should roles and responsibilities be designed within Kubernetes?
 - How can operational requirements and security requirements coexist in a cloud-native environment?
 
-I wrote up the architecture and the security controls behind it
-- CI/CD Pipeline Security (https://miata.cloud/posts/ci-cd-security-controls-implemented-in-the-pipeline-design/)
-- AWS Infrastructure Overview (https://miata.cloud/posts/hoodi-node-validator-aws-architecture-overview/)
-- Kubernetes Namespace Design (https://miata.cloud/posts/kubernetes-namespace-design-for-a-hoodi-validator/)
-- Private EKS Security Design Review (https://miata.cloud/posts/securing-a-hoodi-ethereum-testnet-validator-on-aws-eks/)
-- Vault Secret Management for Hoodi Validator (https://miata.cloud/posts/vault-secret-management-for-hoodi-validator/)
-- Cert-manager and Vault Operation (https://miata.cloud/posts/cert-manager-and-vault-roles-scope-and-collaboration/)
+I wrote up the architecture and the security controls behind it:
+- [CI/CD Pipeline Security](https://miata.cloud/posts/ci-cd-security-controls-implemented-in-the-pipeline-design/)
+- [AWS Infrastructure Overview](https://miata.cloud/posts/hoodi-node-validator-aws-architecture-overview/)
+- [Kubernetes Namespace Design](https://miata.cloud/posts/kubernetes-namespace-design-for-a-hoodi-validator/)
+- [Private EKS Security Design Review](https://miata.cloud/posts/securing-a-hoodi-ethereum-testnet-validator-on-aws-eks/)
+- [Vault Secret Management for Hoodi Validator](https://miata.cloud/posts/vault-secret-management-for-hoodi-validator/)
+- [Cert-manager and Vault Operation](https://miata.cloud/posts/cert-manager-and-vault-roles-scope-and-collaboration/)
 
 Building the environment myself helped me better understand not only Ethereum infrastructure, but also the operational realities and security trade-offs involved in running decentralized systems. A theoretically perfect security control is not necessarily a good control if it is too expensive, too difficult to operate, or creates excessive friction for engineers. Good security requires risk-based prioritization, automation, cost awareness, and an understanding of how engineers actually work.
-- What happend and I Learned? https://miata.cloud/posts/prioritizing-security-controls-hoodi-validator-lessons/
+- [What happened and what I learned](https://miata.cloud/posts/prioritizing-security-controls-hoodi-validator-lessons/)
 
 ## From Consulting to Engineering
-I am aware of a stereotype sometimes associated with consultants: that they understand frameworks and produce presentations and documents, but lack hands-on engineering experience. I have deliberately worked to close that gap. Outside of my professional responsibilities, I have continued developing my engineering skills through certifications, hands-on labs, personal projects, and open-source contributions.
+I am aware of a stereotype sometimes associated with consultants that they understand frameworks and produce presentations and documents, but lack hands-on engineering experience. I have deliberately worked to close that gap. Outside of my professional responsibilities, I have continued developing my engineering skills through certifications, hands-on labs, personal projects, and open-source contributions.
 
 ### Certifications
-- Official Kubestronaut: https://www.cncf.io/training/kubestronaut/?_sf_s=Jinsoo%20Yang
-- AWS: SCS, SAP, CloudOps Engineer
+- [Official Kubestronaut](https://www.cncf.io/training/kubestronaut/?_sf_s=Jinsoo%20Yang) (CKA, CKAD, CKS, KCNA, KCSA)
+- AWS: Certified Security – Specialty, Certified Solutions Architect – Professional, Certified CloudOps Engineer – Associate
 
 ### Mini Projects
-- Security Requirements AI Plugin (https://github.com/s1ns3nz0/security-requirements)
+- [Security Requirements AI Plugin](https://github.com/s1ns3nz0/security-requirements)
   + Generic security requirements often miss the unique context of each service.
   + Analyze service characteristics, environments, users, and compliance obligations.
   + Derive **service-specific security requirements** tailored to each system.
 
-- Compliance Ops Dashboard and MCP (https://github.com/s1ns3nz0/compliance-ops/tree/master)
+- [Compliance Ops Dashboard and MCP](https://github.com/s1ns3nz0/compliance-ops/tree/master)
   + Built a Compliance as Code platform that structures security controls, policies, ownership, and evidence using OSCAL.
   + Automated compliance evidence collection and updates by integrating enterprise tools such as Slack and Jira through MCP.
   + Designed the system to enable continuous audit readiness and reduce manual effort in control validation, evidence gathering, and compliance operations.
@@ -101,13 +101,13 @@ Open-source contribution is another important part of how I learn. I enjoy readi
 ### Open Source Contribution
 - Prowler: Open Cloud Security Platform
   + Added 28 security checks across Azure and GCP services.
-  + View contributions(https://github.com/prowler-cloud/prowler/pulls?q=is%3Apr+state%3Aclosed+involves%3As1ns3nz0)
+  + [View contributions](https://github.com/prowler-cloud/prowler/pulls?q=is%3Apr+state%3Aclosed+involves%3As1ns3nz0)
 - SEAL Framework (Security Alliance Framework): Open-source blockchain security framework
   + Contributed guidance on Policy as Code, private registries, and package mirrors.
-  + View contributions (https://github.com/security-alliance/frameworks/pulls?q=is%3Apr+involves%3As1ns3nz0)
+  + [View contributions](https://github.com/security-alliance/frameworks/pulls?q=is%3Apr+involves%3As1ns3nz0)
 - OSCAL Compass: Open-source Compliance as Code project backed by NIST and CNCF
   + Contributed a GitHub Actions integration for Compliance-to-Policy workflows and resolved a Trestle KeyError bug.
-  + View contributions (https://github.com/oscal-compass/compliance-trestle/pull/2222)
+  + [View contributions](https://github.com/oscal-compass/compliance-trestle/pull/2222)
 
 ## Security Is Also About People
 
