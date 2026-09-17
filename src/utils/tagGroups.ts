@@ -47,8 +47,8 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     tags: [
       "Security", "Security Design", "Security Requirements", "CIA", "Defense-In-Depth",
       "Compliance", "Risk", "NIST", "NIST SP 800-30", "NIST SP 800-37(RMF)",
-      "NIST SP 800-39", "NIST SP 800-53", "FIPS 199&200", "OSCAL", "OSCAL Compass",
-      "Contribution",
+      "NIST SP 800-39", "NIST SP 800-53", "NIST SP 800-57", "NIST SP 800-131A",
+      "FIPS 199&200", "OSCAL", "OSCAL Compass", "Key Management", "Contribution",
     ],
   },
   {
