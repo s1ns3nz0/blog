@@ -1,5 +1,5 @@
 ---
-title: "Hoodi Node Validator AWS Architecture Overview"
+title: "Hoodi Node Validator AWS Infrastructure Overview"
 description: "An overview of the private AWS infrastructure supporting Hoodi execution and consensus workloads on Amazon EKS."
 pubDatetime: 2026-09-11T00:00:00+09:00
 tags:
