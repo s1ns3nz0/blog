@@ -1,5 +1,5 @@
 ---
-title: "Hello, Offchain!!"
+title: "Hello, Offchain"
 description: "Why I want to join Offchain: compliance as code, policy as code, and what building a Hoodi validator taught me about securing decentralized infrastructure."
 pubDatetime: 2026-09-16T22:10:00+09:00
 tags:
@@ -43,6 +43,8 @@ I built an OSCAL-based dashboard that manages security controls, policy referenc
 - <a href="http://193.122.146.187/" target="_blank" rel="noopener noreferrer">Live demo</a>
   <Token: hello-offchain-nWUsxtVTrgYhAc4cTxpXQkyl9nK34z50pmhvbXMIMQ>
 
+This token is provided solely for Offchain employees reviewing this article.
+The environment does not handle any critical application data or personally identifiable information (PII) and exists only to demonstrate my work for the Offchain application process. The token will be revoked once the application process is complete.
 
 I also implemented an MCP interface for the system so that AI systems can retrieve and update relevant information from platforms such as Slack, Jira, and other enterprise tools.
 
@@ -53,12 +55,15 @@ At Offchain, I would like to expand this approach in two directions:
 
 This approach can reduce the time engineers and control owners spend on interviews and evidence collection, automate portions of audit preparation, reduce dependency on external consulting, and most importantly, transform security policies from documents into mechanisms that actually influence how systems are built and operated.
 
-At Deloitte, I was primarily responsible for auditing PKI-based digital signature systems. This experience gave me a practical understanding of how compliance requirements can be translated into technical controls and embedded into day-to-day operations.
+At Deloitte, I was primarily responsible for auditing PKI-based digital signature systems. This experience gave me a practical understanding of how compliance requirements can be translated into technical controls and embedded into day-to-day operations. Also, I participated in developing the Digital Signature System Audit Assessment Guide v1.4.0, based on WebTrust criteria widely used for auditing PKI-based digital signature systems.
+- [DigitalSignature Audit Assessment Guide](https://www.deloitte.com/kr/ko/services/consulting/perspectives/crisis-management-article-20201230.html)
 
 ## Learning Blockchain Infrastructure by Building It
 
 I have also been developing hands-on experience with blockchain infrastructure.
 Most recently, I deployed an Ethereum Hoodi testnet validator environment on AWS using **Prysm, Nethermind, and Amazon EKS**.
+- [Node Validator Repository](https://github.com/s1ns3nz0/node-operator-public)
+
 Rather than simply getting a validator running, I treated the project as a security engineering exercise.
 - How should components be separated?
 - What permissions should each component have?
@@ -70,8 +75,20 @@ I wrote up the architecture and the security controls behind it:
 - [AWS Infrastructure Overview](https://miata.cloud/posts/hoodi-node-validator-aws-architecture-overview/)
 - [Kubernetes Namespace Design](https://miata.cloud/posts/kubernetes-namespace-design-for-a-hoodi-validator/)
 - [Private EKS Security Design Review](https://miata.cloud/posts/securing-a-hoodi-ethereum-testnet-validator-on-aws-eks/)
+
+I also paid particular attention to secret and key management within the validator environment. I reviewed guidance from NIST SP 800-57 and SP 800-130 and used it to draft a simple key management policy for the validator infrastructure. On this page, you can find concrete examples of the practices and controls I derived from those standards and chose to implement. I also integrated this policy into my Compliance Ops dashboard. Since the policy includes organization-level activities as well as validator-specific controls, many of the requirements are currently shown as partially implemented.
+- [Writing Key Management Policy for Node Validator based on NIST SP](https://miata.cloud/posts/nist-sp-800-57-and-sp-800-131a-in-the-web3-key-management-policy/)
+- [Key Types and Key Management Policy](https://miata.cloud/posts/validator-key-types-and-key-management-policy-for-a-hoodi-validator/)
+- [Web3 Key Mangement Policy OSCAL](https://miata.cloud/posts/converting-the-web3-key-management-policy-to-oscal/)
+
+I implemented key management using HashiCorp Vault, AWS KMS, and Kubernetes cert-manager. Each component has a clearly defined role based on the key management policy. AWS KMS is used to automatically unseal Vault, while Vault securely stores sensitive data, including authentication tokens used between components. Vault Agents are injected into pods through the Helm deployment so applications can retrieve secrets securely without hardcoding them into the workload. For communication security, Kubernetes cert-manager manages TLS certificates and private keys and rotates them automatically. The related key material is also centrally managed through Vault.
+
 - [Vault Secret Management for Hoodi Validator](https://miata.cloud/posts/vault-secret-management-for-hoodi-validator/)
 - [Cert-manager and Vault Operation](https://miata.cloud/posts/cert-manager-and-vault-roles-scope-and-collaboration/)
+- [Identiy Management for Vault](https://miata.cloud/posts/identity-management-in-this-project/)
+
+In addition to, Vault is used to remotely sign the private images such as Container Images and Helm Charts through Vault transit
+- [Private ECR Delivery Architecture](https://miata.cloud/posts/private-ecr-delivery-architecture-for-private-eks/)
 
 Building the environment myself helped me better understand not only Ethereum infrastructure, but also the operational realities and security trade-offs involved in running decentralized systems. A theoretically perfect security control is not necessarily a good control if it is too expensive, too difficult to operate, or creates excessive friction for engineers. Good security requires risk-based prioritization, automation, cost awareness, and an understanding of how engineers actually work.
 - [What happened and what I learned](https://miata.cloud/posts/prioritizing-security-controls-hoodi-validator-lessons/)

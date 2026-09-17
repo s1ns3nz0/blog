@@ -56,19 +56,6 @@ Section 17, "Web3-Specific Key Management Principles," is explicitly carved out 
 
 Validator signing safety, slashing-protection state, threshold/MPC/multisig design, and protocol-mandated cryptography have no NIST equivalent. NIST SP 800-57 was not written with proof-of-stake validators or on-chain authority in mind, so extending it there by implication would misrepresent the source. The OSCAL catalog encodes this as a distinct `source-classification` value, `web3-specific`, rather than folding it into the NIST-derived category.
 
-## The mapping is intentionally incomplete right now
-
-Section 18 also requires the Company to "maintain a mapping that identifies every material control as NIST Direct, NIST-derived, Web3-specific, Organization-specific, Protocol-mandated, or No clear basis." Looking at the actual OSCAL catalog, that mapping hasn't happened at the clause level yet:
-
-```text
-pending-control-mapping   168 controls
-web3-specific               16 controls
-```
-
-Every control outside Section 17 currently carries `source-classification: pending-control-mapping`. The catalog's own metadata is honest about this: `control-mapping-status: pending-clause-level-NIST-mapping`. The document-level relationship (which SP governs which section) is settled and stated in Section 18. The clause-level relationship (which specific NIST paragraph a given numbered requirement derives from) is not yet assigned, and the OSCAL README is explicit that `pending-control-mapping` "must be replaced only after the clause is mapped to a specific source and revision."
-
-That is the honest current state: alignment at the policy-section level, open work at the individual-control level. The next piece of this project is doing that clause-by-clause pass against SP 800-57 Part 1 and SP 800-131A rather than leaving 168 controls in a placeholder state.
-
 ## References
 
 - [kms-policy repository](https://github.com/s1ns3nz0/kms-policy)
