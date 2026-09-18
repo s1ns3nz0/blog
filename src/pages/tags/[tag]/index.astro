@@ -19,7 +19,9 @@ export const getStaticPaths = (async () => {
 
   return tags.map(({ tag, tagName }) => {
     const tagPosts = getSortedPosts(
-      posts.filter(({ data }) => slugifyAll(data.tags).includes(tag))
+      posts.filter(
+        ({ data }) => slugifyAll(data.tags).includes(tag) && !data.unlisted
+      )
     );
 
     return { params: { tag }, props: { tagName, tagPosts } };

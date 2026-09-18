@@ -11,6 +11,7 @@ tags:
   - Contribution
   - AI
 featured: true
+unlisted: true
 ---
 
 Sun Tzu, an ancient Chinese military strategist and the author of *The Art of War*, wrote:

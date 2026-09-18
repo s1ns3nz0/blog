@@ -11,12 +11,14 @@ type Tag = {
  * Builds a de-duplicated, sorted tag list from posts.
  *
  * - Drafts and scheduled posts are excluded via `postFilter()`
+ * - Unlisted posts are excluded too, so they contribute no visible tag pages
  * - `tag` is the slug used in URLs; `tagName` is the original label for display
  * - Uniqueness is based on the slug (so differently-cased labels collapse)
  */
 export function getUniqueTags(posts: CollectionEntry<"posts">[]) {
   const tags: Tag[] = posts
     .filter(postFilter)
+    .filter(post => !post.data.unlisted)
     .flatMap(post => post.data.tags)
     .map(tag => ({ tag: slugifyStr(tag), tagName: tag }))
     .filter(

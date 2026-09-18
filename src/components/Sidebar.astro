@@ -9,7 +9,7 @@ import config from "@/config";
 const locale = Astro.currentLocale ?? config.site.lang;
 
 const posts = await getCollection("posts", ({ data }) => !data.draft);
-const published = posts.filter(postFilter);
+const published = posts.filter(postFilter).filter(({ data }) => !data.unlisted);
 
 const counts = new Map<string, number>();
 for (const post of published) {

@@ -20,30 +20,39 @@ import config from "@/config";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
+  // Every post that should build and be reachable by direct URL, including
+  // unlisted ones. Prev/next navigation, though, is computed from the
+  // listed-only subset below so an unlisted post never surfaces as a link
+  // on another page (and doesn't link out to neighbors on its own page).
   const sortedPosts = getSortedPosts(posts);
+  const listedPosts = sortedPosts.filter(post => !post.data.unlisted);
 
-  return sortedPosts.map((post, index) => ({
-    params: { slug: getPostSlug(post.id, post.filePath) },
-    props: {
-      post,
-      prevPost:
-        index > 0
-          ? {
-              id: sortedPosts[index - 1].id,
-              title: sortedPosts[index - 1].data.title,
-              filePath: sortedPosts[index - 1].filePath,
-            }
-          : null,
-      nextPost:
-        index < sortedPosts.length - 1
-          ? {
-              id: sortedPosts[index + 1].id,
-              title: sortedPosts[index + 1].data.title,
-              filePath: sortedPosts[index + 1].filePath,
-            }
-          : null,
-    },
-  }));
+  return sortedPosts.map(post => {
+    const listedIndex = listedPosts.findIndex(p => p.id === post.id);
+
+    return {
+      params: { slug: getPostSlug(post.id, post.filePath) },
+      props: {
+        post,
+        prevPost:
+          listedIndex > 0
+            ? {
+                id: listedPosts[listedIndex - 1].id,
+                title: listedPosts[listedIndex - 1].data.title,
+                filePath: listedPosts[listedIndex - 1].filePath,
+              }
+            : null,
+        nextPost:
+          listedIndex >= 0 && listedIndex < listedPosts.length - 1
+            ? {
+                id: listedPosts[listedIndex + 1].id,
+                title: listedPosts[listedIndex + 1].data.title,
+                filePath: listedPosts[listedIndex + 1].filePath,
+              }
+            : null,
+      },
+    };
+  });
 }
 
 type AdjacentPost = {
@@ -71,6 +80,7 @@ const {
   timezone,
   tags,
   hideEditPost,
+  unlisted,
 } = post.data;
 
 const { Content } = await render(post);
@@ -113,7 +123,7 @@ const ogImage = ogImageUrl
   <main
     id="main-content"
     class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
-    data-pagefind-body
+    {...(!unlisted && { "data-pagefind-body": true })}
   >
     <h1
       style={{ viewTransitionName: toTransitionName(title) }}
