@@ -11,7 +11,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   {
     name: "Blockchain",
     tags: [
-      "Hoodi", "Validator", "Ethereum", "Nethermind", "Prysm", "Vault",
+      "Blockchain", "Hoodi", "Validator", "Ethereum", "Vault",
       "Secrets Management", "PKI", "PostgreSQL", "Architecture",
       "Lightning Network", "lnd", "Aperture", "Lightning Labs", "L402",
     ],
@@ -20,7 +20,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     name: "Kubernetes & AWS Platform",
     tags: [
       "AWS", "AWS IAM", "AWS KMS", "EKS", "ECS", "Kubernetes", "Cloud",
-      "CNCF", "SaaS", "ECR", "Private Repository",
+      "CNCF", "SaaS", "ECR", "Private Repository", "CloudTrail", "CloudWatch",
     ],
   },
   {
@@ -40,16 +40,17 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "SecretManager", "MicrosoftDefender", "EntraID", "Identity", "Identity Management",
       "MFA", "CredentialManagement", "PostureManagement", "NetworkSecurity", "NSG", "DDoS",
       "PrivateEndpoint", "NoPublicIP", "Encryption", "TLS", "HA", "Backup", "Recovery",
-      "DisasterRecovery", "AccessReview", "Rotation", "Prometheus",
+      "DisasterRecovery", "AccessReview", "Rotation", "Prometheus", "Logging",
     ],
   },
   {
     name: "Security Architecture & Compliance",
     tags: [
-      "Security", "Security Design", "Security Requirements", "CIA", "Defense-In-Depth",
-      "Compliance", "Risk", "NIST", "NIST SP 800-30", "NIST SP 800-37(RMF)",
-      "NIST SP 800-39", "NIST SP 800-53", "NIST SP 800-57", "NIST SP 800-131A",
-      "FIPS 199&200", "OSCAL", "OSCAL Compass", "Key Management", "Contribution",
+      "Security", "Security Design", "Security Architecture", "Security Requirements",
+      "CIA", "Defense-In-Depth", "Compliance", "Audit", "Risk", "NIST", "NIST SP 800-30",
+      "NIST SP 800-37(RMF)", "NIST SP 800-39", "NIST SP 800-53", "NIST SP 800-57",
+      "NIST SP 800-131A", "FIPS 199&200", "OSCAL", "OSCAL Compass", "Key Management",
+      "Contribution",
     ],
   },
   {
@@ -66,6 +67,6 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "DoW",
-    tags: ["DoD", "DoDD 3000.09", "Army FM 3-60", "meta", "dev"],
+    tags: ["DoD", "DoDD 3000.09", "Army FM 3-60", "meta"],
   },
 ];
