@@ -13,6 +13,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     tags: [
       "Hoodi", "Validator", "Ethereum", "Nethermind", "Prysm", "Vault",
       "Secrets Management", "PKI", "PostgreSQL", "Architecture",
+      "Lightning Network", "lnd", "Aperture", "Lightning Labs", "L402",
     ],
   },
   {
