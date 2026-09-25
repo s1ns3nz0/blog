@@ -17,11 +17,15 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     ],
   },
   {
-    name: "Kubernetes & AWS Platform",
+    name: "AWS",
     tags: [
-      "AWS", "AWS IAM", "AWS KMS", "EKS", "ECS", "Kubernetes", "Cloud",
-      "CNCF", "SaaS", "ECR", "Private Repository", "CloudTrail", "CloudWatch",
+      "AWS", "AWS IAM", "AWS KMS", "EKS", "ECS", "ECR", "Private Repository",
+      "CloudTrail", "CloudWatch", "SaaS",
     ],
+  },
+  {
+    name: "Kubernetes",
+    tags: ["Kubernetes", "CNCF"],
   },
   {
     name: "DevSecOps",
@@ -33,24 +37,35 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     ],
   },
   {
-    name: "Cloud Security & Resilience",
+    name: "Cloud Security",
     tags: [
-      "Prowler", "CSPM", "CloudSecurity", "Azure", "GCP", "GoogleCloud", "AKS",
+      "Prowler", "CSPM", "CloudSecurity", "Cloud", "Azure", "GCP", "GoogleCloud", "AKS",
       "AzureMonitor", "CosmosDB", "Databricks", "MySQL", "CloudFunction", "CloudSQL",
       "SecretManager", "MicrosoftDefender", "EntraID", "Identity", "Identity Management",
       "MFA", "CredentialManagement", "PostureManagement", "NetworkSecurity", "NSG", "DDoS",
-      "PrivateEndpoint", "NoPublicIP", "Encryption", "TLS", "HA", "Backup", "Recovery",
-      "DisasterRecovery", "AccessReview", "Rotation", "Prometheus", "Logging",
+      "PrivateEndpoint", "NoPublicIP", "Encryption", "TLS",
     ],
   },
   {
-    name: "Security Architecture & Compliance",
+    name: "Resilience",
+    tags: [
+      "HA", "Backup", "Recovery", "DisasterRecovery", "AccessReview", "Rotation",
+      "Prometheus", "Logging",
+    ],
+  },
+  {
+    name: "Security Architecture",
     tags: [
       "Security", "Security Design", "Security Architecture", "Security Requirements",
-      "CIA", "Defense-In-Depth", "Compliance", "Audit", "Risk", "NIST", "NIST SP 800-30",
-      "NIST SP 800-37(RMF)", "NIST SP 800-39", "NIST SP 800-53", "NIST SP 800-57",
-      "NIST SP 800-131A", "FIPS 199&200", "OSCAL", "OSCAL Compass", "Key Management",
-      "Contribution",
+      "CIA", "Defense-In-Depth", "Key Management",
+    ],
+  },
+  {
+    name: "Compliance",
+    tags: [
+      "Compliance", "Audit", "Risk", "NIST", "NIST SP 800-30", "NIST SP 800-37(RMF)",
+      "NIST SP 800-39", "NIST SP 800-53", "NIST SP 800-57", "NIST SP 800-131A",
+      "FIPS 199&200", "OSCAL", "OSCAL Compass", "Contribution",
     ],
   },
   {
@@ -62,8 +77,12 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     ],
   },
   {
-    name: "AI & Tools",
-    tags: ["AI", "AI SOC", "Plugin", "AI Supply Chain", "MCP", "Slopsquatting"],
+    name: "AI",
+    tags: ["AI", "AI SOC", "AI Supply Chain", "Slopsquatting"],
+  },
+  {
+    name: "Tools",
+    tags: ["Plugin", "MCP"],
   },
   {
     name: "DoW",
