@@ -33,7 +33,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "DevSecOps", "CI/CD", "CI/CD Security", "GitHub Action", "GitHub Actions",
       "Code Commits", "Pull-Push", "Build", "CD", "Policy as Code", "SSDF",
       "Supply Chain Security", "NIST SP 800-204", "NIST SP 800-218", "NIST SP 800-204D",
-      "Microservices", "Malware",
+      "Microservices", "Malware", "Fuzzing", "Gosentry",
     ],
   },
   {
