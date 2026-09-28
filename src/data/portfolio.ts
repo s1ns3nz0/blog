@@ -407,7 +407,7 @@ export const career = [
     period: "Nov 2024 – Sep 2026",
     role: "Cybersecurity Consultant",
     keywords: ["EU CRA", "OT security", "ISMS-P"],
-    org: "IBM",
+    org: "IBM Consulting Korea",
     logo: "ibm",
     bullets: [
       "Led a product security maturity assessment and roadmap aligned with the EU Cyber Resilience Act, presented to C-level leadership",
