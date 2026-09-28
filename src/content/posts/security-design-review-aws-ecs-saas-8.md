@@ -4,6 +4,7 @@ description: Why an ECS SaaS requirement is a criterion rather than proof, and h
 pubDatetime: 2026-08-19T09:48:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

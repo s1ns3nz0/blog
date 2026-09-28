@@ -4,6 +4,7 @@ description: Why an EKS SaaS requirement is a criterion rather than proof, and h
 pubDatetime: 2026-08-21T15:05:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS

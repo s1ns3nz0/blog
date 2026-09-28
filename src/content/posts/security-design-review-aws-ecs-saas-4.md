@@ -4,6 +4,7 @@ description: Calculating blast radius for the AWS ECS SaaS reference architectur
 pubDatetime: 2026-08-18T00:05:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

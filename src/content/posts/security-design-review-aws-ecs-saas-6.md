@@ -4,6 +4,7 @@ description: Turning the ECS SaaS work queue into atomic, verifiable requirement
 pubDatetime: 2026-08-19T09:40:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

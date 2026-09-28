@@ -4,6 +4,7 @@ description: Calculating confidentiality, integrity, and availability impact for
 pubDatetime: 2026-08-18T00:03:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

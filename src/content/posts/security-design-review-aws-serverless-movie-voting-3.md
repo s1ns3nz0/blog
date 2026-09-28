@@ -4,6 +4,7 @@ description: Applying STRIDE at each trust boundary of the AWS serverless movie-
 pubDatetime: 2026-08-14T10:00:00+09:00
 tags:
   - Security Design
+  - Serverless
   - Security Requirements
   - AWS
   - Plugin

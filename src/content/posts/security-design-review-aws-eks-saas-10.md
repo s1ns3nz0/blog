@@ -4,6 +4,7 @@ description: Applying PIPA/ISMS-P and customer contractual obligations on top of
 pubDatetime: 2026-08-21T15:15:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS

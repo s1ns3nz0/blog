@@ -4,6 +4,7 @@ description: Applying PIPA/ISMS-P and customer contractual obligations on top of
 pubDatetime: 2026-08-19T09:52:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

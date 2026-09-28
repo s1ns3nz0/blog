@@ -4,6 +4,7 @@ description: Calculating blast radius across the AWS EKS SaaS reference architec
 pubDatetime: 2026-08-20T15:38:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS

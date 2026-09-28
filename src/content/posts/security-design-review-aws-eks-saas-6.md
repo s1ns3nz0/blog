@@ -4,6 +4,7 @@ description: Writing atomic, verifiable EKS SaaS requirements for tenant identit
 pubDatetime: 2026-08-21T14:25:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS

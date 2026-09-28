@@ -4,6 +4,7 @@ description: How the security-requirements plugin turns a confirmed service prof
 pubDatetime: 2026-08-13T12:00:00+09:00
 tags:
   - Security Design
+  - Serverless
   - Security Requirements
   - AWS
   - Plugin

@@ -5,7 +5,7 @@
  * See docs/portfolio-spec.md.
  */
 
-export type StageId = "build" | "ship" | "operate";
+export type StageId = "design" | "build" | "ship" | "operate";
 
 /** Where the work came from; each stage shows one lane per zone. */
 export type ZoneId = "field" | "test" | "oss";
@@ -35,6 +35,9 @@ export type Card = {
 
 export type Stage = {
   id: StageId;
+  /** Rocket state while this stage is on screen, when it differs from id
+      (Design flies with the rocket exactly as in Build). */
+  rocketStage?: StageId;
   /** Telemetry label shown in the HUD and section header. */
   event: string;
   name: string;
@@ -77,8 +80,22 @@ export const fairingTextLength = (label: string) =>
 
 export const stages: Stage[] = [
   {
+    id: "design",
+    rocketStage: "build",
+    event: "T-00:10  DESIGN REVIEW",
+    name: "Design",
+    governing: "I put security into the design before anything gets built.",
+    support:
+      "Threat models, blast-radius maps, and requirements for three AWS reference architectures, plus IDMZ and OT network design for industrial sites at IBM.",
+    flightRules: [
+      { label: "STRIDE", slug: "threat-modeling" },
+      { label: "NIST SP 800-53" },
+      { label: "OWASP ASVS" },
+    ],
+  },
+  {
     id: "build",
-    event: "T-00:10  PAD CHECKS",
+    event: "T-00:05  PAD CHECKS",
     name: "Build",
     governing: "I build platforms that are secure before the first workload ships.",
     support:
@@ -171,6 +188,57 @@ export const anomalies: Anomaly[] = [
 const GH = "https://github.com/s1ns3nz0";
 
 export const cards: Card[] = [
+  // ---------- Design ----------
+  {
+    id: "ibm-ot-design",
+    stage: "design",
+    zone: "field",
+    title: "OT security design at IBM",
+    summary:
+      "Designed and built IDMZs between IT and OT networks, reworked network segmentation, and ran risk assessments for a global heavy-equipment maker, a nuclear power company, and a semiconductor manufacturer.",
+    evidence: [],
+  },
+  {
+    id: "security-requirements",
+    stage: "design",
+    zone: "test",
+    title: "Security Requirements plugin",
+    summary:
+      "An AI plugin that derives service-specific security requirements from a service's context, users, and compliance obligations, with Kubernetes analysis and blast-radius mapping.",
+    evidence: [
+      { label: "security-requirements on GitHub", url: `${GH}/security-requirements` },
+      "security-requirements-plugin",
+      "security-requirements-plugin-kubernetes-analysis",
+      "security-requirements-plugin-blast-radius",
+    ],
+  },
+  {
+    id: "review-ecs-saas",
+    stage: "design",
+    zone: "test",
+    title: "Security Design Review - ECS SaaS",
+    summary:
+      "STRIDE across nine trust boundaries, blast radius per tenant, and requirements gated in CI/CD.",
+    evidence: [{ label: "ECS SaaS series", url: "/tags/ecs-saas/" }],
+  },
+  {
+    id: "review-eks-saas",
+    stage: "design",
+    zone: "test",
+    title: "Security Design Review - EKS SaaS",
+    summary:
+      "Namespace-per-tenant isolation, IRSA, and a shared control plane, worked through from threat model to CI/CD gates.",
+    evidence: [{ label: "EKS SaaS series", url: "/tags/eks-saas/" }],
+  },
+  {
+    id: "review-serverless",
+    stage: "design",
+    zone: "test",
+    title: "Security Design Review - Serverless",
+    summary: "A movie-voting sample taken from service profile to ISMS-P and GDPR overlays.",
+    evidence: [{ label: "Serverless series", url: "/tags/serverless/" }],
+  },
+
   // ---------- Build ----------
   {
     id: "deloitte-pki",
@@ -256,20 +324,6 @@ export const cards: Card[] = [
     flightRules: [
       { label: "NIST SP 800-218 (SSDF)", slug: "nist-sp-218-ssdf" },
       { label: "NIST SP 800-204D", slug: "relationship-between-nist-sp-800-218-and-sp-800-204-d" },
-    ],
-  },
-  {
-    id: "security-requirements",
-    stage: "ship",
-    zone: "test",
-    title: "Security Requirements plugin",
-    summary:
-      "An AI plugin that derives service-specific security requirements from a service's context, users, and compliance obligations, with Kubernetes analysis and blast-radius mapping.",
-    evidence: [
-      { label: "security-requirements on GitHub", url: `${GH}/security-requirements` },
-      "security-requirements-plugin",
-      "security-requirements-plugin-kubernetes-analysis",
-      "security-requirements-plugin-blast-radius",
     ],
   },
   {
@@ -411,7 +465,7 @@ export const career = [
     logo: "ibm",
     bullets: [
       "Led a product security maturity assessment and roadmap aligned with the EU Cyber Resilience Act, presented to C-level leadership",
-      "Designed and deployed iDMZ and OT security across nuclear, semiconductor, and automotive sites",
+      "Designed and deployed iDMZ and OT security across heavy-equipment, nuclear, and semiconductor sites",
       "Built detection logic and monitoring use cases with IBM's global OT SOC",
       "Assessed AWS environments against ISMS-P",
     ],

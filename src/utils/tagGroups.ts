@@ -57,6 +57,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     name: "Security Architecture",
     tags: [
       "Security", "Security Design", "Security Architecture", "Security Requirements",
+      "ECS SaaS", "EKS SaaS", "Serverless",
       "CIA", "Defense-In-Depth", "Key Management",
     ],
   },

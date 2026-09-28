@@ -4,6 +4,7 @@ description: Refreshing the ECS SaaS security contract as isolation tiers, tenan
 pubDatetime: 2026-08-19T09:45:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

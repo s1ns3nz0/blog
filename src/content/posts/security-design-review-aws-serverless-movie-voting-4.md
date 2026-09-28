@@ -4,6 +4,7 @@ description: Assigning AWS/team/org responsibility for the selected controls and
 pubDatetime: 2026-08-17T10:00:00+09:00
 tags:
   - Security Design
+  - Serverless
   - Security Requirements
   - AWS
   - Plugin

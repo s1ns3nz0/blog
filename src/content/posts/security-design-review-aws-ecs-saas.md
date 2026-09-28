@@ -4,6 +4,7 @@ description: Building a confirmed service profile for AWS's ECS SaaS reference a
 pubDatetime: 2026-08-18T00:02:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

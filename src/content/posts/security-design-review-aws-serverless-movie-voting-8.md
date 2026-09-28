@@ -4,6 +4,7 @@ description: Applying ISMS-P and GDPR overlays on top of the NIST baseline once 
 pubDatetime: 2026-08-17T11:03:00+09:00
 tags:
   - Security Design
+  - Serverless
   - Security Requirements
   - AWS
   - Plugin

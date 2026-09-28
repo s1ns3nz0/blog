@@ -4,6 +4,7 @@ description: Splitting EKS SaaS work across AWS, the platform team, product team
 pubDatetime: 2026-08-20T15:58:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS

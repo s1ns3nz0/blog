@@ -4,6 +4,7 @@ description: Calculating CIA impact for the AWS EKS SaaS reference architecture,
 pubDatetime: 2026-08-20T15:10:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS

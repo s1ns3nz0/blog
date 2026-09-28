@@ -4,6 +4,7 @@ description: Turning each requirement's verification metadata into a dispatchabl
 pubDatetime: 2026-08-17T11:04:00+09:00
 tags:
   - Security Design
+  - Serverless
   - Security Requirements
   - AWS
   - Plugin

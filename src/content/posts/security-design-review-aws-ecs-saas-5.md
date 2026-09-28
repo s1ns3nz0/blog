@@ -4,6 +4,7 @@ description: Turning the ECS SaaS baseline, threats, and blast-radius results in
 pubDatetime: 2026-08-19T09:35:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

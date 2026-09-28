@@ -4,6 +4,7 @@ description: Turning a prioritized work list into stable, atomic, verifiable sec
 pubDatetime: 2026-08-17T11:00:00+09:00
 tags:
   - Security Design
+  - Serverless
   - Security Requirements
   - AWS
   - Plugin

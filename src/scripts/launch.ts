@@ -53,12 +53,12 @@ function update() {
     : 1;
   const progress = orbitAt > 0 ? clamp(window.scrollY / orbitAt) : 0;
 
-  // Current stage: the last stage whose heading has reached mid-screen, so
-  // a stage "arrives" only after the transit gap before it.
+  // Current stage: the last stage whose title has risen to the rocket's
+  // nose, so a stage "arrives" (and separates) only once its fault clears.
+  const arriveAt = rocketTop(vh);
   let current = sections[0];
   for (const s of sections) {
-    const head = s.querySelector<HTMLElement>("[data-stage-head]") ?? s;
-    if (head.getBoundingClientRect().top < vh * 0.5) current = s;
+    if (stageTitle(s).getBoundingClientRect().top < arriveAt) current = s;
   }
   const stage = current?.dataset.stage ?? "build";
   root.dataset.stage = stage;
@@ -97,8 +97,20 @@ function update() {
   }
 }
 
-// In-flight anomalies: a fault is active while its transit gap spans
-// mid-screen, and resolves once scrolled past. The callout beside the
+/** Top of the rocket's nose in the viewport (layout box, ignores shake). */
+const rocketEl = document.querySelector<HTMLElement>(".rocket");
+function rocketTop(vh: number) {
+  return rocketEl ? vh * 0.5 - rocketEl.offsetHeight / 2 : vh * 0.5;
+}
+/** A stage's title (Build, Deploy...), falling back to its head or section. */
+function stageTitle(el: HTMLElement) {
+  const head = el.querySelector<HTMLElement>("[data-stage-head]") ?? el;
+  return head.querySelector<HTMLElement>("h2") ?? head;
+}
+
+// In-flight anomalies: a fault is active from the moment its transit gap
+// reaches mid-screen until the next stage's title rises to the rocket's
+// nose, then it resolves. The callout beside the
 // rocket shows the caution, then briefly the resolution.
 const transits = Array.from(document.querySelectorAll<HTMLElement>("[data-transit]"));
 const callout = document.querySelector<HTMLElement>("[data-callout]");
@@ -119,12 +131,14 @@ function showCallout(state: "caution" | "resolved" | "idle", title = "", text = 
 
 function updateAnomalies(vh: number) {
   const mid = vh * 0.5;
+  const nose = rocketTop(vh);
   let active: HTMLElement | undefined;
   for (const t of transits) {
-    const { top, bottom } = t.getBoundingClientRect();
+    const top = t.getBoundingClientRect().top;
+    const title = stageTitle(t.parentElement ?? t).getBoundingClientRect().top;
     const id = t.dataset.transit ?? "";
-    if (top < mid && bottom > mid) active = t;
-    const isPast = bottom <= mid;
+    const isPast = title <= nose;
+    if (top < mid && !isPast) active = t;
     if (isPast && !passed.has(id)) {
       passed.add(id);
       if (!anomaliesPrimed) continue;

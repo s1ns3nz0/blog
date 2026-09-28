@@ -4,6 +4,7 @@ description: How the security-requirements plugin re-derives a security contract
 pubDatetime: 2026-08-17T11:01:00+09:00
 tags:
   - Security Design
+  - Serverless
   - Security Requirements
   - AWS
   - Plugin

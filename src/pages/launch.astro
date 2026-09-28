@@ -15,6 +15,7 @@ import IconLinkedIn from "@/assets/icons/brands/linkedin.svg";
 import IconGmail from "@/assets/icons/brands/gmail.svg";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { getPostUrl } from "@/utils/getPostPaths";
+import { slugifyStr } from "@/utils/slugify";
 import config from "@/config";
 import {
   identity,
@@ -54,6 +55,13 @@ function post(slug: string) {
   }
   return { title: p.data.title, url: getPostUrl(p.id, p.filePath) };
 }
+// Internal tag pages (a post series) must list at least one post.
+function tagPage(url: string) {
+  const slug = url.match(/^\/tags\/([^/]+)\/$/)?.[1];
+  const n = slug ? posts.filter(p => p.data.tags.some(t => slugifyStr(t) === slug)).length : 0;
+  if (!n) throw new Error(`portfolio: "${url}" is not a tag page with posts (src/data/portfolio.ts)`);
+  return n;
+}
 
 const cardIds = new Set(cards.map(c => c.id));
 if (cardIds.size !== cards.length) throw new Error("portfolio: duplicate card id");
@@ -67,13 +75,15 @@ for (const a of audiences) {
 
 const resolveEvidence = (e: Evidence) =>
   typeof e === "string"
-    ? { ...post(e), external: false }
-    : { title: e.label, url: e.url, external: true };
+    ? { ...post(e), external: false, series: 0 }
+    : e.url.startsWith("/tags/")
+      ? { title: `${e.label}: ${tagPage(e.url)} posts`, url: e.url, external: false, series: tagPage(e.url) }
+      : { title: e.label, url: e.url, external: true, series: 0 };
 const resolveRules = (rules: FlightRule[] = []) =>
   rules.map(r => ({ label: r.label, url: r.slug ? post(r.slug).url : undefined }));
 // Collapsed-row meta parts, e.g. ["5 posts", "GitHub ↗"].
-function evidenceMeta(links: { url: string; external: boolean }[]) {
-  const posts = links.filter(l => !l.external).length;
+function evidenceMeta(links: { url: string; external: boolean; series: number }[]) {
+  const posts = links.reduce((n, l) => n + (l.external ? 0 : l.series || 1), 0);
   const external = links.filter(l => l.external);
   const parts = [];
   if (posts) parts.push(`${posts} post${posts > 1 ? "s" : ""}`);
@@ -315,7 +325,7 @@ const smokePuffs: [number, number][] = [
       stages.map((stage, i) => (
         <section
           id={stage.id}
-          data-stage={stage.id}
+          data-stage={stage.rocketStage ?? stage.id}
           data-label={stage.name}
           class="flex min-h-[130vh] flex-col justify-center gap-6 py-24"
         >
@@ -367,7 +377,7 @@ const smokePuffs: [number, number][] = [
                 {stageRules[stage.id].map((r, i) => (
                   <>
                     {i > 0 && ", "}
-                    <a href={r.url}>{r.label}</a>
+                    {r.url ? <a href={r.url}>{r.label}</a> : r.label}
                   </>
                 ))}
               </p>

@@ -4,6 +4,7 @@ description: Gating EKS SaaS deployments on requirement IDs, from rendering Helm
 pubDatetime: 2026-08-21T15:10:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS

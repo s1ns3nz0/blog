@@ -4,6 +4,7 @@ description: Five deterministic gates that connect ECS SaaS requirements to CI/C
 pubDatetime: 2026-08-19T09:50:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

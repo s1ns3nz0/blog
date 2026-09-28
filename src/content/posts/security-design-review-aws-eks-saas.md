@@ -4,6 +4,7 @@ description: Building a confirmed service profile for AWS's EKS SaaS reference a
 pubDatetime: 2026-08-20T10:50:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS

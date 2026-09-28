@@ -4,6 +4,7 @@ description: Why a written security requirement is a criterion, not proof, and h
 pubDatetime: 2026-08-17T11:02:00+09:00
 tags:
   - Security Design
+  - Serverless
   - Security Requirements
   - AWS
   - Plugin

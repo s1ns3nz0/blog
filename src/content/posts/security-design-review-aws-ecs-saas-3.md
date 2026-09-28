@@ -4,6 +4,7 @@ description: A STRIDE threat model across nine trust boundaries of the AWS ECS S
 pubDatetime: 2026-08-18T00:04:00+09:00
 tags:
   - Security Design
+  - ECS SaaS
   - Security Requirements
   - AWS
   - ECS

@@ -4,6 +4,7 @@ description: A ten-threat model across the AWS EKS SaaS reference architecture's
 pubDatetime: 2026-08-20T15:35:00+09:00
 tags:
   - Security Design
+  - EKS SaaS
   - Security Requirements
   - AWS
   - EKS
