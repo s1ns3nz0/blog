@@ -486,6 +486,28 @@ export const tiles: { id: TileId; title: string; stat: string; label: string }[]
   { id: "credentials", title: "Credentials", stat: "", label: "Credentials" },
 ];
 
+/** "How I work" lines under the stat cards; "{oss}" is the computed open-source total. */
+export const traits = [
+  {
+    name: "Proactive",
+    line: "I get to security problems before they ship.",
+    proof:
+      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 2 vulnerability reports sent upstream.",
+  },
+  {
+    name: "Fast learner",
+    line: "I learn a new stack by running something real on it.",
+    proof:
+      "To learn Web3 infrastructure, I built and ran an Ethereum testnet validator on EKS. Picked up 12+ credentials along the way, Kubestronaut included.",
+  },
+  {
+    name: "Problem solver",
+    line: "I turn slow, manual work into code.",
+    proof:
+      "Compliance used to live in documents. I moved it into OSCAL: controls, policies, evidence, and owners in one dashboard the team can query from Slack and Jira.",
+  },
+];
+
 /** Resume highlights (kept for the assistant context; teasers carry them on the page). */
 export const highlights = [
   { title: "Kubestronaut", detail: "3 hands-on and 2 knowledge-based Kubernetes certifications." },
@@ -577,7 +599,7 @@ export const openSource: OpenSourceEntry[] = [
     name: "SEAL Frameworks",
     about: "Security Alliance's open-source security framework for blockchain teams.",
     url: "https://github.com/security-alliance/frameworks",
-    did: "Wrote the Policy as Code and private registries sections, both merged. An endpoint compromise runbook is in review.",
+    did: "Maintainer of the Supply Chain section. Wrote the Policy as Code and private registries sections, both merged. An endpoint compromise runbook is in review.",
     headline: "Policy as Code & supply-chain guidance",
     kind: ["Blockchain", "Security"],
     tags: ["Policy as Code", "Supply chain", "Incident response"],

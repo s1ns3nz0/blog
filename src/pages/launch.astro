@@ -23,6 +23,7 @@ import {
   career,
   education,
   highlights,
+  traits,
   certifications,
   openSource,
   audiences,
@@ -150,6 +151,7 @@ const tileList = tiles.map(t =>
       ? { ...t, stat: `${certCount}+` } // "+": not every credential is listed
       : t
 );
+const traitList = traits.map(t => ({ ...t, proof: t.proof.replace("{oss}", String(ossTotal)) }));
 const highlightList = highlights.map(h => ({ ...h, detail: h.detail.replace("{oss}", String(ossTotal)) }));
 
 const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
@@ -423,7 +425,7 @@ const smokePuffs: [number, number][] = [
       id="summary"
       data-stage="orbit"
       data-label="Orbit"
-      class="orbit flex min-h-screen flex-col justify-center gap-10 py-28"
+      class="orbit flex min-h-screen flex-col justify-center gap-10 pt-12 pb-28"
     >
       {
         anomalyBefore("orbit") && (
@@ -444,13 +446,23 @@ const smokePuffs: [number, number][] = [
         <p class="claim">{identity.claim}</p>
         <div class="stat-cards">
           {tileList.map(t => (
-            <button type="button" class="stat-card" data-open-dialog={`dlg-${t.id}`}>
+            <button type="button" class="stat-card" data-reveal data-open-dialog={`dlg-${t.id}`}>
               <span class="stat-num display">{t.stat}</span>
               <span class="stat-label">{t.label}</span>
               <span class="stat-open">View ▸</span>
             </button>
           ))}
         </div>
+        <section class="traits" aria-labelledby="traits-title">
+          <h3 id="traits-title" class="meta">How I work</h3>
+          {traitList.map(t => (
+            <div class="trait" data-reveal>
+              <p class="trait-name">{t.name}</p>
+              <p class="trait-line">{t.line}</p>
+              <p class="trait-proof">{t.proof}</p>
+            </div>
+          ))}
+        </section>
         {hasResume && (
           <a class="resume-link" href={RESUME_PATH} target="_blank" rel="noopener">
             Resume (PDF) ↗

@@ -246,6 +246,32 @@ function setupAssistant(audienceId: string | undefined) {
   }
 }
 
+// Summary cards and "How I work" lines rise into place once, staggered per group.
+function setupReveal() {
+  const items = document.querySelectorAll<HTMLElement>("[data-reveal]");
+  if (reduceMotion.matches || !("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver(
+    entries => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        const el = e.target as HTMLElement;
+        el.setAttribute("data-reveal", "in");
+        io.unobserve(el);
+        // Hand transitions back to the element's own styles (card hover).
+        el.addEventListener("transitionend", () => el.removeAttribute("data-reveal"), { once: true });
+      }
+    },
+    { rootMargin: "0px 0px -10% 0px" }
+  );
+  items.forEach(el => {
+    const i = Array.from(el.parentElement?.querySelectorAll(":scope > [data-reveal]") ?? []).indexOf(el);
+    el.style.setProperty("--reveal-delay", `${i * 0.1}s`);
+    el.setAttribute("data-reveal", "out");
+    io.observe(el);
+  });
+}
+
+setupReveal();
 setupAssistant(applyAudience());
 setupDetailDialogs();
 update();

@@ -63,6 +63,7 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 - Space: Earth's limb with an atmosphere glow rises from the bottom after stage 2 separation.
 - Rocket labels tell the DevSecOps story: stage 1 `PLATFORM`, stage 2 `PIPELINE`, fairing `PRODUCT` (`?for=` swaps in the company name). Each booster falls away once its job is done; only the product reaches orbit.
 - Orbit arrival: the fairing splits clamshell-style, a folded satellite emerges and deploys its solar panels, then parks top-right with a blinking beacon. The satellite is the product: the AI assistant about me (v2). The sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
+- Summary: the claim scrolls normally; the stat cards and three "How I work" lines (from `traits` in portfolio.ts) fade up 24px once as they enter, staggered 0.1s. Reduced motion or no JS: shown as is.
 - HUD: one line top-left (clock, altitude, stage). No readouts row.
 - In-flight anomalies: a transit gap before each stage plays a fault (Cost overrun: PLATFORM overheats; Insecure CI/CD: flame sputters and the rocket sags; Anomaly detected: wobble; AI over-reliance: fairing alarm). While a fault is active the failing stage glows red, sparks fly from it, the shake is stronger, the screen edges pulse red, and a blinking red `MASTER CAUTION` callout sits beside the rocket. Arriving at the stage clears it with a green recovery pulse and turns the callout into a green `RESOLVED` line that hides after 1.8s. Reduced motion keeps only the callout text. Stages switch on their heading, so separations happen after the fix.
 - Upper-stage nozzles stay hidden inside the stage below and slide out after separation.
@@ -116,6 +117,7 @@ English only.
 | v1.14 | Stages renamed Build / Deploy / Operate |
 | v1.15 | Security disclosures block on top of open source, uniform link chips, Detection rule optimizer highlight removed |
 | v1.16 | One-line HUD; readouts and anomaly log removed; caution callout, red glow, sparks, vignette, stronger shake |
+| v1.17 | Summary: "How I work" (Proactive, Fast learner, Problem solver) under the stat cards; cards and lines rise in once on scroll; SEAL maintainer role |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |
