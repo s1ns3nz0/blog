@@ -20,8 +20,8 @@ Agreed 2026-09-28. Source of truth for the portfolio build.
 | Stage | Visual | Theme | Evidence |
 |---|---|---|---|
 | Pad | ground, dawn | Build: IaC, private EKS, Vault/KMS, network design | Hoodi infra posts, key management posts |
-| Stage 1 separation | sky | Ship: CI/CD security, supply chain, fuzzing, OSS, vulnerability reports | CI/CD posts, gosentry, Aperture, Prowler |
-| Stage 2 separation | space | Operate & Defend: observability, audit logging, SOC, detection, response | Aperture metrics/events, audit and logging, SOC posts |
+| Stage 1 separation | sky | Deploy: CI/CD security, supply chain, fuzzing, OSS, vulnerability reports | CI/CD posts, gosentry, Aperture, Prowler |
+| Stage 2 separation | space | Operate: observability, audit logging, SOC, detection, response | Aperture metrics/events, audit and logging, SOC posts |
 | Orbit | screen brightens | Summary, career, certifications, AI assistant | resume |
 
 Compliance (NIST, OSCAL) appears as "flight rule" badges on cards, not as its own stage.
@@ -31,8 +31,8 @@ Each stage opens with a first-person governing message (what I do, tied to one s
 | Stage | Governing message |
 |---|---|
 | Build | I build platforms that are secure before the first workload ships. |
-| Ship | I make pipelines prove their own integrity, and I fix what I find upstream. |
-| Operate & Defend | I make running systems observable, and cheap enough to keep defending. |
+| Deploy | I make pipelines prove their own integrity, and I fix what I find upstream. |
+| Operate | I make running systems observable, and cheap enough to keep defending. |
 
 Inside each stage, entries sit in one log panel, grouped by zone in this order (empty zones are hidden). Each entry is a two-line row (title + meta, one-line summary) that expands in place to show its links:
 
@@ -57,12 +57,13 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 - Mission-control telemetry UI (T+ clock, altitude, stage log), monospace type.
 - Ignores the blog light/dark toggle; the flight itself is the theme.
 - Type (launch page only): Orbitron for the hero, stage names, and big numbers; Space Grotesk for titles and body; Space Mono for labels, meta, and the HUD.
+- Lists are spaced or chipped, not joined with middle dots.
 - One accent: orange marks only the current state (meter, active chip) and primary buttons. Red and green appear only in the HUD caution panel. Zones use icons, not colours. One hairline style; no dashed borders or dashed underlines.
 - Launch pad: line-art lattice tower with a crane, two umbilical arms that swing away at ignition, a pad platform with a `PAD 01` label, and ignition smoke.
 - Space: Earth's limb with an atmosphere glow rises from the bottom after stage 2 separation.
 - Rocket labels tell the DevSecOps story: stage 1 `PLATFORM`, stage 2 `PIPELINE`, fairing `PRODUCT` (`?for=` swaps in the company name). Each booster falls away once its job is done; only the product reaches orbit.
 - Orbit arrival: the fairing splits clamshell-style, a folded satellite emerges and deploys its solar panels, then parks top-right with a blinking beacon. The satellite is the product: the AI assistant about me (v2). The sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
-- HUD systems line: per-stage readouts taken from posts (Build: public API 0, namespaces 4, Vault+KMS; Ship: 24 pipeline controls, 12 threat areas, SHA-pinned actions; Operate: L402 outcomes 6+10, 4 audit sources, immutable archive). Each links to its source post.
+- HUD systems line: per-stage readouts taken from posts (Build: public API 0, namespaces 4, Vault+KMS; Deploy: 24 pipeline controls, 12 threat areas, SHA-pinned actions; Operate: L402 outcomes 6+10, 4 audit sources, immutable archive). Each links to its source post.
 - In-flight anomalies: a transit gap before each stage plays a fault (Cost overrun: PLATFORM overheats; Insecure CI/CD: flame sputters and the rocket sags; Anomaly detected: wobble; AI over-reliance: fairing alarm). Arriving at the stage clears it with a green recovery pulse, and the HUD log keeps a linked "Resolved" entry. Stages switch on their heading, so separations happen after the fix.
 - Upper-stage nozzles stay hidden inside the stage below and slide out after separation.
 - All brightness changes follow scroll position. Reduced motion drops smoke, bloom, and arm/satellite transitions; states still change.
@@ -70,10 +71,10 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 ## Summary page
 
 1. One claim, the biggest thing on the screen: "I turn security frameworks and compliance into platform code." Name and roles sit above it, small.
-2. One line of proof under it: 5+ yrs in security · N open-source contributions (computed from the data, disclosures included) · Kubestronaut + 3 AWS certifications. Then three quiet links (Career / Open source / Credentials) and "Resume (PDF) ↗", which renders only when `public/resume/Jinsoo_Yang_Resume.pdf` exists (publish a copy without the phone number).
-3. Each link opens a detail dialog, content as tidy bullet lists (light; centered on desktop, bottom sheet on phones; Esc, backdrop, and ✕ close):
+2. Three stat cards under it, each opening its dialog: 5+ Years in security, N Open-source contributions (computed, disclosures included), N+ Credentials (computed from the list; "+" because not every credential is listed). "Resume (PDF) ↗" renders only when `public/resume/Jinsoo_Yang_Resume.pdf` exists (publish a copy without the phone number).
+3. Each card opens a detail dialog, content as tidy bullet lists (light; centered on desktop, bottom sheet on phones; Esc, backdrop, and ✕ close):
    - Career: full timeline, newest first, period / logo + organization / role with three keywords / detail.
-   - Open source: collapsed cards (keyword headline, tags, status summary) that expand to per-contribution statuses checked against GitHub (Merged / Open PR / Proposed / Reported / Fixed upstream / Under embargo). Open items stay open, never rounded up. Unpublished vulnerability reports appear only as a vendor-level "Coordinated disclosure" card: no product, date, severity, or link until fixes ship and disclosure is agreed.
+   - Open source: one full-width row per project: name with domain badges (Cloud, Security, Blockchain, Compliance), line 1 what the project is, line 2 what I contributed (copy reviewed with avoid-ai-writing), then status badges with counts. Rows expand to per-contribution bullets and links. Earlier layout: collapsed cards (keyword headline, tags, status summary) that expand to per-contribution statuses checked against GitHub (Merged / Open PR / Proposed / Reported / Fixed upstream / Under embargo). Open items stay open, never rounded up. Unpublished vulnerability reports appear only as a vendor-level "Coordinated disclosure" card: no product, date, severity, or link until fixes ship and disclosure is agreed.
    - Credentials: certifications, education, highlights.
 4. The AI assistant opens only from the parked satellite. In orbit the anomaly log and altitude meter fade out (and leave the tab order); the HUD dims.
 5. Contact marks: official GitHub, Gmail, and LinkedIn glyphs (Simple Icons, CC0) plus a blog link. No phone number or address. Organization logos: IBM (Simple Icons, CC0); Deloitte, KITRI, and the ROK Army emblem from Wikimedia Commons, marked public domain.
@@ -111,6 +112,8 @@ English only.
 | v1.10 | Smaller logos; collapsible timeline rows; open-source cards with keyword headlines, tags, and status summaries; vendor-level coordinated-disclosure card |
 | v1.11 | Summary rebuilt as three teaser tiles with detail dialogs (Career / Open source / Credentials) |
 | v1.12 | Summary rebuilt around one claim, one proof line, and quiet detail links; instruments fold away in orbit |
+| v1.13 | Stat cards (5+ / 40 / 12+), full-width open-source rows with domain and status badges, 4 Korean certifications, no middle dots |
+| v1.14 | Stages renamed Build / Deploy / Operate |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

@@ -1009,50 +1009,158 @@ html[data-bright] .meter a::before {
   line-height: 1.12;
   letter-spacing: -0.01em;
 }
-.proof {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  margin: 0;
-  color: #475569;
-  font-size: 16px;
+/* three stat cards under the claim; each opens its detail dialog */
+.stat-cards {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
 }
-.proof b {
+@media (min-width: 768px) {
+  .stat-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 22px;
+  border: 1px solid rgb(15 23 42 / 0.1);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.85);
   color: #0f172a;
+  text-align: left;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgb(15 23 42 / 0.25);
+  box-shadow: 0 10px 24px rgb(15 23 42 / 0.1);
+}
+.stat-num {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 700;
+  line-height: 1;
 }
-.proof-sep {
-  color: #cbd5e1;
+.stat-label {
+  color: #334155;
+  font-size: 15px;
+  font-weight: 600;
 }
-@media (max-width: 767px) {
-  .proof {
-    flex-direction: column;
-  }
-  .proof-sep {
-    display: none;
-  }
+.stat-open {
+  margin-top: 10px;
+  color: #64748b;
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
-.summary-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 24px;
-  margin-top: 18px;
-}
-.summary-links button,
-.summary-links a {
-  padding: 0;
-  border: 0;
-  background: none;
+.stat-card:hover .stat-open {
   color: #0f172a;
+}
+.resume-link {
+  align-self: flex-start;
+  margin-top: 6px;
   font-weight: 600;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: rgb(15 23 42 / 0.3);
   text-underline-offset: 4px;
 }
-.summary-links button:hover,
-.summary-links a:hover {
-  text-decoration-color: currentColor;
+
+/* open-source dialog: one full-width row per project */
+.oss-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.oss-row {
+  border: 1px solid rgb(15 23 42 / 0.1);
+  border-radius: 10px;
+  background: #fff;
+}
+.oss-row summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 40px 14px 18px;
+  position: relative;
+  cursor: pointer;
+  list-style: none;
+}
+.oss-row summary::-webkit-details-marker {
+  display: none;
+}
+.oss-row summary::after {
+  content: "▸";
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+.oss-row details[open] summary::after {
+  transform: rotate(90deg);
+}
+.oss-row-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+.oss-row-name {
+  font-size: 17px;
+  font-weight: 700;
+}
+.kind-badges,
+.status-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.kind-badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 500;
+}
+.oss-row-about {
+  color: #64748b;
+  font-size: 14px;
+}
+.oss-row-did {
+  color: #0f172a;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.status-badges {
+  margin-top: 6px;
+}
+.status-badge {
+  padding: 1px 7px;
+  border: 1px solid rgb(15 23 42 / 0.2);
+  border-radius: 4px;
+  color: #475569;
+  font: 400 10px var(--font-space-mono), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bullets.oss-row-body {
+  margin: 0;
+  padding: 12px 18px 16px 38px;
+  border-top: 1px solid rgb(15 23 42 / 0.08);
+}
+.oss-repo {
+  list-style: none;
+  margin-left: -1.1em;
+  font-size: 13px;
 }
 
 /* the flight is over: fold away the instruments, keep the satellite */
@@ -1072,6 +1180,35 @@ html[data-stage="orbit"] .hud-systems {
 }
 html[data-stage="orbit"] .hud-wrap {
   opacity: 0.55;
+}
+
+/* lists spaced apart instead of joined with middle dots */
+.spaced,
+.row-meta,
+.pad-label {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.1em;
+}
+.oss-links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 14px;
+}
+.chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: 1px;
+}
+.chip-sm {
+  padding: 0 6px;
+  border: 1px solid rgb(15 23 42 / 0.15);
+  border-radius: 4px;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 500;
 }
 
 /* tidy bullet lists inside the detail dialogs */
@@ -1098,7 +1235,9 @@ html[data-stage="orbit"] .hud-wrap {
   vertical-align: 1px;
 }
 .bullets .oss-links {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 14px;
   margin-top: 2px;
   font-size: 13px;
 }

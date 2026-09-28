@@ -69,7 +69,7 @@ const resolveEvidence = (e: Evidence) =>
     : { title: e.label, url: e.url, external: true };
 const resolveRules = (rules: FlightRule[] = []) =>
   rules.map(r => ({ label: r.label, url: r.slug ? post(r.slug).url : undefined }));
-// Collapsed-row meta, e.g. "5 posts · GitHub ↗".
+// Collapsed-row meta parts, e.g. ["5 posts", "GitHub ↗"].
 function evidenceMeta(links: { url: string; external: boolean }[]) {
   const posts = links.filter(l => !l.external).length;
   const external = links.filter(l => l.external);
@@ -77,7 +77,7 @@ function evidenceMeta(links: { url: string; external: boolean }[]) {
   if (posts) parts.push(`${posts} post${posts > 1 ? "s" : ""}`);
   if (external.some(l => l.url.includes("github.com"))) parts.push("GitHub ↗");
   if (external.some(l => !l.url.includes("github.com"))) parts.push("Link ↗");
-  return parts.join(" · ");
+  return parts;
 }
 const resolveCard = (c: Card) => {
   const evidenceLinks = c.evidence.map(resolveEvidence);
@@ -100,16 +100,14 @@ const lanesByStage = Object.fromEntries(
       .filter(l => l.cards.length > 0),
   ])
 );
-// "Merged" for one contribution, "2 merged · 1 open PR" for several.
-function statusSummary(statuses: (keyof typeof statusLabel)[]) {
-  const counts = new Map<string, number>();
-  for (const st of statuses) counts.set(st, (counts.get(st) ?? 0) + 1);
-  if (statuses.length === 1) return statusLabel[statuses[0]];
-  return [...counts].map(([st, n]) => `${n} ${statusLabel[st as keyof typeof statusLabel]}`).join(" · ");
+function statusBadges(contribs: { status: keyof typeof statusLabel; count?: number }[]) {
+  const counts = new Map<keyof typeof statusLabel, number>();
+  for (const c of contribs) counts.set(c.status, (counts.get(c.status) ?? 0) + (c.count ?? 1));
+  return [...counts].map(([st, n]) => `${n} ${statusLabel[st]}`);
 }
 const ossEntries = openSource.map(o => ({
   ...o,
-  summary: statusSummary(o.contributions.map(c => c.status)),
+  badges: statusBadges(o.contributions),
   contributions: o.contributions.map(c => ({ ...c, links: c.links.map(resolveEvidence) })),
 }));
 const ossIds = new Set(openSource.map(o => o.id));
@@ -129,7 +127,15 @@ const ossTotal = allContribs.reduce((n, c) => n + countOf(c), 0);
 const RESUME_PATH = "/resume/Jinsoo_Yang_Resume.pdf";
 const hasResume = existsSync(join(process.cwd(), "public", RESUME_PATH));
 
-const tileList = tiles.map(t => (t.id === "oss" ? { ...t, stat: String(ossTotal) } : t));
+const certCount = certifications.reduce((n, c) => n + c.count, 0);
+const tileList = tiles.map(t =>
+  t.id === "oss"
+    ? { ...t, stat: String(ossTotal) }
+    : t.id === "credentials"
+      ? { ...t, stat: `${certCount}+` } // "+": not every credential is listed
+      : t
+);
+const highlightList = highlights.map(h => ({ ...h, detail: h.detail.replace("{oss}", String(ossTotal)) }));
 
 const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
 
@@ -230,7 +236,7 @@ const smokePuffs: [number, number][] = [
         <rect class="arm" x="91" y="103" width="43" height="5" />
         <rect class="arm" x="91" y="223" width="43" height="5" />
       </svg>
-      <p class="pad-label">PAD 01<span class="pad-handle"> · {identity.handle.toUpperCase()}</span></p>
+      <p class="pad-label"><span>PAD 01</span><span class="pad-handle">{identity.handle.toUpperCase()}</span></p>
       {
         smokePuffs.map(([dx, scale]) => (
           <div class="smoke" style={`--dx: calc(${dx} * var(--u)); --s: ${scale}`} />
@@ -277,9 +283,9 @@ const smokePuffs: [number, number][] = [
     {
       anomalyLog.map(a => (
         <li data-anomaly={a.id} data-state="pending">
-          <span class="log-caution">⚠ Caution · {a.caution}</span>
+          <span class="log-caution">⚠ Caution: {a.caution}</span>
           <a class="log-resolved" href={a.url} title={a.resolution}>
-            ✓ {a.caution} · {a.fix}
+            ✓ {a.caution} → {a.fix}
           </a>
         </li>
       ))
@@ -309,7 +315,7 @@ const smokePuffs: [number, number][] = [
         >
           {i === 0 && (
             <header class="mb-16 flex min-h-[70vh] flex-col justify-center gap-5">
-              <p class="telemetry">Mission {identity.handle} · T-00:10</p>
+              <p class="telemetry spaced"><span>Mission {identity.handle}</span><span>T-00:10</span></p>
               <p class="telemetry" data-audience-label hidden />
               <h1 class="display text-4xl leading-tight font-bold text-white sm:text-6xl">
                 {identity.headline}
@@ -342,10 +348,10 @@ const smokePuffs: [number, number][] = [
             <p class="support">{stage.support}</p>
             {stageRules[stage.id].length > 0 && (
               <p class="meta rules">
-                Rules
-                {stageRules[stage.id].map(r => (
+                Rules:{" "}
+                {stageRules[stage.id].map((r, i) => (
                   <>
-                    {" · "}
+                    {i > 0 && ", "}
                     <a href={r.url}>{r.label}</a>
                   </>
                 ))}
@@ -372,7 +378,7 @@ const smokePuffs: [number, number][] = [
                           <summary>
                             <span class="row-top">
                               <span class="row-title">{card.title}</span>
-                              <span class="row-meta">{card.meta}</span>
+                              <span class="row-meta">{card.meta.map(m => <span>{m}</span>)}</span>
                             </span>
                             <span class="row-summary">{card.summary}</span>
                           </summary>
@@ -386,10 +392,10 @@ const smokePuffs: [number, number][] = [
                             </ul>
                             {card.rules.length > 0 && (
                               <p class="meta rules">
-                                Rules
-                                {card.rules.map(r => (
+                                Rules:{" "}
+                                {card.rules.map((r, i) => (
                                   <>
-                                    {" · "}
+                                    {i > 0 && ", "}
                                     {r.url ? <a href={r.url}>{r.label}</a> : r.label}
                                   </>
                                 ))}
@@ -432,32 +438,24 @@ const smokePuffs: [number, number][] = [
         )
       }
       <header class="summary-head" data-stage-head>
-        <p class="meta">T+09:00 · Orbit achieved</p>
+        <p class="meta spaced"><span>T+09:00</span><span>Orbit achieved</span></p>
         <h2 class="display text-2xl font-bold">{identity.name}</h2>
-        <p class="meta">{identity.roles.join(" · ")}</p>
+        <p class="meta spaced">{identity.roles.map(r => <span>{r}</span>)}</p>
         <p class="claim">{identity.claim}</p>
-        <p class="proof">
-          {tileList.map((t, i) => (
-            <>
-              {i > 0 && <span class="proof-sep" aria-hidden="true">·</span>}
-              <span>
-                <b>{t.stat}</b> {t.label}
-              </span>
-            </>
-          ))}
-        </p>
-        <nav class="summary-links" aria-label="Details">
+        <div class="stat-cards">
           {tileList.map(t => (
-            <button type="button" data-open-dialog={`dlg-${t.id}`}>
-              {t.title} ▸
+            <button type="button" class="stat-card" data-open-dialog={`dlg-${t.id}`}>
+              <span class="stat-num display">{t.stat}</span>
+              <span class="stat-label">{t.label}</span>
+              <span class="stat-open">View ▸</span>
             </button>
           ))}
-          {hasResume && (
-            <a href={RESUME_PATH} target="_blank" rel="noopener">
-              Resume (PDF) ↗
-            </a>
-          )}
-        </nav>
+        </div>
+        {hasResume && (
+          <a class="resume-link" href={RESUME_PATH} target="_blank" rel="noopener">
+            Resume (PDF) ↗
+          </a>
+        )}
       </header>
 
       <dialog id="dlg-career" class="sheet" aria-labelledby="dlg-career-title">
@@ -477,7 +475,7 @@ const smokePuffs: [number, number][] = [
                   </p>
                   <p class="tl-role">
                     {c.role}
-                    <span class="tl-keywords"> · {c.keywords.join(" · ")}</span>
+                    <span class="chips">{c.keywords.map(k => <span class="chip-sm">{k}</span>)}</span>
                   </p>
                   <ul class="bullets">
                     {c.bullets.map(b => <li>{b}</li>)}
@@ -495,46 +493,44 @@ const smokePuffs: [number, number][] = [
             <h3 id="dlg-oss-title" class="display text-2xl font-bold">Open source</h3>
             <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
           </header>
-          <ul class="oss-grid">
+          <ul class="oss-rows">
             {
               ossEntries.map(o => (
-                <li class="oss-entry" data-oss-id={o.id}>
+                <li class="oss-row" data-oss-id={o.id}>
                   <details>
                     <summary>
-                      <span class="oss-name">{o.name}</span>
-                      <span class="oss-headline">{o.headline}</span>
-                      <span class="oss-tags">{o.tags.join(" · ")}</span>
-                      <span class="oss-summary">{o.summary}</span>
+                      <span class="oss-row-top">
+                        <span class="oss-row-name">{o.name}</span>
+                        <span class="kind-badges">
+                          {o.kind.map(k => <span class="kind-badge">{k}</span>)}
+                        </span>
+                      </span>
+                      <span class="oss-row-about">{o.about}</span>
+                      <span class="oss-row-did">{o.did}</span>
+                      <span class="status-badges">
+                        {o.badges.map(b => <span class="status-badge">{b}</span>)}
+                      </span>
                     </summary>
-                    <div class="oss-body">
-                      <p class="oss-about">
-                        {o.about}
-                        {o.url && (
-                          <>
-                            {" · "}
-                            <a href={o.url} target="_blank" rel="noopener noreferrer">repo ↗</a>
-                          </>
-                        )}
-                      </p>
-                      <ul class="bullets">
-                        {o.contributions.map(c => (
-                          <li>
-                            <span class="oss-status">{statusLabel[c.status]}</span>{" "}
-                            {c.what}
-                            {c.links.length > 0 && (
-                              <span class="oss-links">
-                                {c.links.map((l, i) => (
-                                  <>
-                                    {i > 0 && " · "}
-                                    <EvidenceLink {...l} />
-                                  </>
-                                ))}
-                              </span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    <ul class="bullets oss-row-body">
+                      {o.contributions.map(c => (
+                        <li>
+                          <span class="oss-status">{statusLabel[c.status]}</span>{" "}
+                          {c.what}
+                          {c.links.length > 0 && (
+                            <span class="oss-links">
+                              {c.links.map(l => (
+                                <EvidenceLink {...l} />
+                              ))}
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                      {o.url && (
+                        <li class="oss-repo">
+                          <a href={o.url} target="_blank" rel="noopener noreferrer">Repository ↗</a>
+                        </li>
+                      )}
+                    </ul>
                   </details>
                 </li>
               ))
@@ -567,7 +563,7 @@ const smokePuffs: [number, number][] = [
           <h4 class="meta mt-6 mb-3">Highlights</h4>
           <ul class="bullets">
             {
-              highlights.map(h => (
+              highlightList.map(h => (
                 <li>
                   <span class="font-semibold">{h.title}</span>: {h.detail}
                 </li>
@@ -594,7 +590,7 @@ const smokePuffs: [number, number][] = [
     <div class="assistant-inner">
       <header class="flex items-start justify-between gap-4">
         <div>
-          <p class="telemetry">Payload online · v2</p>
+          <p class="telemetry">Payload online</p>
           <h2 id="assistant-title" class="display text-xl font-bold">Ask the satellite</h2>
           <p class="mt-1 text-sm text-slate-300">
             The product this page launched: an assistant that answers questions

@@ -102,7 +102,7 @@ export const stages: Stage[] = [
       { label: "Actions", value: "SHA-pinned", source: "ci-cd-security-controls-implemented-in-the-pipeline-design" },
     ],
     event: "T+01:12  STAGE 1 SEP",
-    name: "Ship",
+    name: "Deploy",
     governing: "I make pipelines prove their own integrity, and I fix what I find upstream.",
     support:
       "24 controls mapped to 12 threat areas in my own CI/CD, plus contributions to SEAL and OSCAL Compass, and a fuzzer bug in Trail of Bits' gosentry fixed the same day.",
@@ -115,7 +115,7 @@ export const stages: Stage[] = [
       { label: "Archive", value: "Immutable", source: "audit-and-logging-architecture-for-hoodi-node-validator" },
     ],
     event: "T+04:38  STAGE 2 SEP",
-    name: "Operate & Defend",
+    name: "Operate",
     governing: "I make running systems observable, and cheap enough to keep defending.",
     support:
       "Per-outcome L402 metrics for Lightning Labs' Aperture, a tamper-evident audit trail, and controls I cut when they cost more than they protected.",
@@ -258,7 +258,7 @@ export const cards: Card[] = [
     ],
   },
 
-  // ---------- Ship ----------
+  // ---------- Deploy ----------
   {
     id: "pipeline-controls",
     stage: "ship",
@@ -348,7 +348,7 @@ export const cards: Card[] = [
     evidence: [{ label: "Issue #11211", url: "https://github.com/lightningnetwork/lnd/issues/11211" }],
   },
 
-  // ---------- Operate & Defend ----------
+  // ---------- Operate ----------
   {
     id: "army-automation",
     stage: "operate",
@@ -500,16 +500,17 @@ export const education = [
 export type TileId = "career" | "oss" | "credentials";
 
 export const tiles: { id: TileId; title: string; stat: string; label: string }[] = [
-  { id: "career", title: "Career", stat: "5+ yrs", label: "in security" },
-  // stat is computed from openSource in the page
-  { id: "oss", title: "Open source", stat: "", label: "open-source contributions" },
-  { id: "credentials", title: "Credentials", stat: "Kubestronaut", label: "+ 3 AWS certifications" },
+  { id: "career", title: "Career", stat: "5+", label: "Years in security" },
+  // oss and credentials stats are computed in the page
+  { id: "oss", title: "Open source", stat: "", label: "Open-source contributions" },
+  { id: "credentials", title: "Credentials", stat: "", label: "Credentials" },
 ];
 
 /** Resume highlights (kept for the assistant context; teasers carry them on the page). */
 export const highlights = [
   { title: "Kubestronaut", detail: "3 hands-on and 2 knowledge-based Kubernetes certifications." },
-  { title: "Open-source contributor", detail: "30+ contributions to cloud, compliance, and security tooling." },
+  // "{oss}" is replaced with the computed open-source total in the page
+  { title: "Open-source contributor", detail: "{oss} contributions to cloud, compliance, security, and blockchain tooling." },
   { title: "Detection rule optimizer", detail: "Better detection accuracy through Splunk and QRadar rule tuning." },
   { title: "Top signal platoon leader", detail: "#1 of 24 signal platoons in a corps-level readiness evaluation." },
 ];
@@ -519,6 +520,10 @@ export const certifications = [
   { name: "AWS Certified Security - Specialty", count: 1 },
   { name: "AWS Certified Solutions Architect - Professional", count: 1 },
   { name: "AWS Certified CloudOps Engineer - Associate", count: 1 },
+  { name: "Engineer Information Security (정보보안기사)", count: 1 },
+  { name: "Engineer Information Processing (정보처리기사)", count: 1 },
+  { name: "Engineer Information & Communication (정보통신기사)", count: 1 },
+  { name: "Certified Privacy Protection General, CPPG (개인정보관리사)", count: 1 },
 ];
 
 /** Open-source work, one entry per project, shown in the summary. */
@@ -550,8 +555,12 @@ export type OpenSourceEntry = {
   url?: string;
   /** Bold one-line summary of what I did, shown collapsed. */
   headline: string;
+  /** Row line 2: what I contributed (line 1 is `about`). Reviewed for AI tells. */
+  did: string;
   /** 2-3 technology keywords recruiters can match against a JD. */
   tags: string[];
+  /** Broad domain badges shown on the row, e.g. Cloud, Security, Blockchain. */
+  kind: string[];
   contributions: Contribution[];
 };
 
@@ -562,9 +571,11 @@ export const openSource: OpenSourceEntry[] = [
   {
     id: "prowler",
     name: "Prowler",
-    about: "Open cloud security platform",
+    about: "Open-source cloud security platform that scans AWS, Azure, and GCP for misconfigurations.",
     url: "https://github.com/prowler-cloud/prowler",
+    did: "Added 28 checks for Azure and GCP services, including AKS, Cosmos DB, Entra ID, and Secret Manager. All merged.",
     headline: "28 cloud security checks",
+    kind: ["Cloud", "Security"],
     tags: ["Azure", "GCP", "CSPM"],
     contributions: [
       {
@@ -585,9 +596,11 @@ export const openSource: OpenSourceEntry[] = [
   {
     id: "seal",
     name: "SEAL Frameworks",
-    about: "Security Alliance's open-source blockchain security framework",
+    about: "Security Alliance's open-source security framework for blockchain teams.",
     url: "https://github.com/security-alliance/frameworks",
+    did: "Wrote the Policy as Code and private registries sections, both merged. An endpoint compromise runbook is in review.",
     headline: "Policy as Code & supply-chain guidance",
+    kind: ["Blockchain", "Security"],
     tags: ["Policy as Code", "Supply chain", "Incident response"],
     contributions: [
       {
@@ -610,9 +623,11 @@ export const openSource: OpenSourceEntry[] = [
   {
     id: "oscal-compass",
     name: "OSCAL Compass",
-    about: "Compliance as Code, backed by NIST and CNCF",
+    about: "CNCF project that turns NIST's OSCAL format into compliance-as-code tooling.",
     url: "https://github.com/oscal-compass",
+    did: "Fixed a KeyError in compliance-trestle's SSP generation (merged). Opened a GitHub Actions plugin for compliance-to-policy.",
     headline: "Compliance-as-Code fix & CI plugin",
+    kind: ["Compliance"],
     tags: ["OSCAL", "Compliance as Code", "CI/CD"],
     contributions: [
       {
@@ -630,9 +645,11 @@ export const openSource: OpenSourceEntry[] = [
   {
     id: "lnd",
     name: "lnd",
-    about: "Lightning Network Daemon",
+    about: "Lightning Labs' implementation of a Lightning Network node.",
     url: "https://github.com/lightningnetwork/lnd",
+    did: "Reported that the fixed-width decoders for node announcement addresses accept short reads.",
     headline: "Short-read bug in address decoders",
+    kind: ["Blockchain"],
     tags: ["Lightning", "Go", "Input validation"],
     contributions: [
       {
@@ -645,9 +662,11 @@ export const openSource: OpenSourceEntry[] = [
   {
     id: "aperture",
     name: "Aperture",
-    about: "Lightning Labs' L402 reverse proxy",
+    about: "Lightning Labs' reverse proxy that gates APIs behind L402 payments.",
     url: "https://github.com/lightninglabs/aperture",
+    did: "Proposed per-outcome Prometheus metrics and a dedicated security event log. Opened a fix for a flaky test.",
     headline: "L402 metrics & security events",
+    kind: ["Blockchain"],
     tags: ["Lightning", "L402", "Observability"],
     contributions: [
       {
@@ -672,8 +691,10 @@ export const openSource: OpenSourceEntry[] = [
     // until fixes ship and disclosure is agreed.
     id: "disclosure",
     name: "Coordinated disclosure",
-    about: "Private vulnerability reports",
+    about: "Private reports to Lightning Labs, held until fixes ship.",
+    did: "Reported two vulnerabilities. Product names and details stay private until disclosure.",
     headline: "2 vulnerabilities reported to Lightning Labs",
+    kind: ["Blockchain", "Security"],
     tags: ["Responsible disclosure", "Lightning"],
     contributions: [
       {
@@ -687,9 +708,11 @@ export const openSource: OpenSourceEntry[] = [
   {
     id: "gosentry",
     name: "gosentry",
-    about: "Trail of Bits' security-oriented Go toolchain",
+    about: "Trail of Bits' security-focused Go toolchain for fuzzing.",
     url: "https://github.com/trailofbits/gosentry",
+    did: "Found a LibAFL bug that stopped fuzzing while go test still passed. Fixed upstream the same day.",
     headline: "Silent fuzzer failure, fixed upstream",
+    kind: ["Security"],
     tags: ["Fuzzing", "Go", "LibAFL"],
     contributions: [
       {
