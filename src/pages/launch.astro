@@ -24,6 +24,7 @@ import {
   education,
   highlights,
   traits,
+  stack,
   certifications,
   openSource,
   audiences,
@@ -328,11 +329,18 @@ const smokePuffs: [number, number][] = [
               <p class="text-base text-slate-200 sm:text-lg" data-subline>
                 {identity.subline}
               </p>
-              <ul class="flex flex-wrap gap-2 text-xs">
-                {identity.roles.map(r => (
-                  <li class="panel px-3 py-1">{r}</li>
+              <dl class="stack" aria-label="Tech stack">
+                {stack.map(row => (
+                  <div class="stack-row">
+                    <dt>{row.area}</dt>
+                    <dd>
+                      {row.items.map(i => (
+                        <span class="stack-item">{i}</span>
+                      ))}
+                    </dd>
+                  </div>
                 ))}
-              </ul>
+              </dl>
               <p class="telemetry mt-6 text-slate-300">Scroll to launch ↓</p>
             </header>
           )}

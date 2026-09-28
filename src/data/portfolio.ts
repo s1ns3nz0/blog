@@ -486,6 +486,18 @@ export const tiles: { id: TileId; title: string; stat: string; label: string }[]
   { id: "credentials", title: "Credentials", stat: "", label: "Credentials" },
 ];
 
+/** Hero tech stack, one row per area. */
+export const stack = [
+  { area: "Cloud", items: ["AWS", "Azure", "GCP"] },
+  { area: "Container", items: ["Kubernetes (EKS)", "Helm", "Docker"] },
+  { area: "CI/CD", items: ["GitHub Actions", "ArgoCD", "FluxCD"] },
+  { area: "IaC", items: ["Terraform"] },
+  { area: "Supply chain", items: ["Sigstore/Cosign", "SBOM", "Trivy"] },
+  { area: "Policy", items: ["OPA", "Kyverno", "OSCAL"] },
+  { area: "Secrets", items: ["Vault", "AWS KMS"] },
+  { area: "Observability", items: ["Prometheus", "Grafana", "Loki", "OpenTelemetry", "Fluent Bit"] },
+];
+
 /** "How I work" lines under the stat cards; "{oss}" is the computed open-source total. */
 export const traits = [
   {
