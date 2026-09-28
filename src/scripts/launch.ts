@@ -41,13 +41,15 @@ function formatT(seconds: number): string {
   return `T${sign}${mm}:${ss}`;
 }
 
-const summary = document.getElementById("summary");
+const orbitHead = document.querySelector<HTMLElement>("#summary [data-stage-head]");
 
 function update() {
   const vh = window.innerHeight;
   // Flight progress runs from the pad (0) to orbit insertion (1), reached
-  // when the summary's top crosses mid-screen.
-  const orbitAt = summary ? summary.offsetTop - vh * 0.5 : 1;
+  // when the summary heading crosses mid-screen.
+  const orbitAt = orbitHead
+    ? orbitHead.getBoundingClientRect().top + window.scrollY - vh * 0.5
+    : 1;
   const progress = orbitAt > 0 ? clamp(window.scrollY / orbitAt) : 0;
 
   // Current stage: the last stage whose heading has reached mid-screen, so

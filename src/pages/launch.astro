@@ -196,19 +196,20 @@ const smokePuffs: [number, number][] = [
         ))
       }
     </div>
-    <ol class="hud-log" aria-label="Anomaly log" aria-live="polite">
-      {
-        anomalyLog.map(a => (
-          <li data-anomaly={a.id} data-state="pending">
-            <span class="log-caution">⚠ Master caution · {a.caution}</span>
-            <a class="log-resolved" href={a.url}>
-              ✓ Resolved · {a.caution} → {a.resolution}
-            </a>
-          </li>
-        ))
-      }
-    </ol>
   </div>
+
+  <ol class="hud-log" aria-label="Anomaly log" aria-live="polite">
+    {
+      anomalyLog.map(a => (
+        <li data-anomaly={a.id} data-state="pending">
+          <span class="log-caution">⚠ Caution · {a.caution}</span>
+          <a class="log-resolved" href={a.url} title={a.resolution}>
+            ✓ {a.caution} · {a.fix}
+          </a>
+        </li>
+      ))
+    }
+  </ol>
 
   <nav class="meter" aria-label="Flight stages">
     {

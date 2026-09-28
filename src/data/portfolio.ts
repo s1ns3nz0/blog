@@ -101,6 +101,8 @@ export type Anomaly = {
   id: string;
   resolvesAt: StageId | "orbit";
   caution: string;
+  /** Short HUD form; `resolution` is the full sentence (tooltip). */
+  fix: string;
   resolution: string;
   motion: "overheat" | "sputter" | "wobble" | "fairing";
   source: string;
@@ -114,6 +116,7 @@ export const anomalies: Anomaly[] = [
     id: "cost-overrun",
     resolvesAt: "build",
     caution: "Cost overrun",
+    fix: "Simplified",
     resolution: "Architecture simplified",
     motion: "overheat",
     source: LESSONS,
@@ -123,6 +126,7 @@ export const anomalies: Anomaly[] = [
     id: "insecure-cicd",
     resolvesAt: "ship",
     caution: "Insecure CI/CD",
+    fix: "Hardened",
     resolution: "Pipeline hardened: 24 controls",
     motion: "sputter",
     source: "ci-cd-security-controls-implemented-in-the-pipeline-design",
@@ -132,6 +136,7 @@ export const anomalies: Anomaly[] = [
     id: "anomaly-detected",
     resolvesAt: "operate",
     caution: "Anomaly detected",
+    fix: "Contained",
     resolution: "Triaged with ADS, contained",
     motion: "wobble",
     source: "palantir-ads",
@@ -140,6 +145,7 @@ export const anomalies: Anomaly[] = [
     id: "ai-over-reliance",
     resolvesAt: "orbit",
     caution: "AI over-reliance",
+    fix: "Human-reviewed",
     resolution: "Answers human-reviewed",
     motion: "fairing",
     source: LESSONS,

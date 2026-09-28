@@ -13,6 +13,8 @@
   --sat-x: calc(100vw - 58px); /* satellite centre in orbit */
   --sat-y: 36px;
   --sat-scale: 1.2;
+  /* left edge of the content column (clears the rocket and tower) */
+  --col: calc(var(--rx) + 154 * var(--u) + 10px);
   --ink: #e6edf7;
   --panel: rgb(8 12 28 / 0.72);
   --panel-line: rgb(255 255 255 / 0.14);
@@ -40,6 +42,7 @@
     --sat-x: calc(100vw - 150px);
     --sat-y: 118px;
     --sat-scale: 1.3;
+    --col: calc(var(--rx) + var(--rh) * 0.24 + 7vw);
   }
 }
 
@@ -386,6 +389,16 @@ html[data-stage="orbit"] .rocket {
   gap: 6px;
   max-width: calc(100vw - 150px);
 }
+/* desktop: the HUD stays inside the left column, above the rocket */
+@media (min-width: 768px) {
+  .hud-wrap {
+    max-width: calc(var(--col) - 24px);
+  }
+  .hud {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+}
 .hud {
   display: flex;
   gap: 14px;
@@ -497,13 +510,11 @@ html[data-bright] .meter a::before {
 .flight {
   position: relative;
   z-index: 2;
-  /* clear the launch tower's right rail (pad viewBox x=174) */
-  padding-left: calc(var(--rx) + 154 * var(--u) + 10px);
+  padding-left: var(--col);
   padding-right: 36px;
 }
 @media (min-width: 768px) {
   .flight {
-    padding-left: calc(var(--rx) + var(--rh) * 0.24 + 7vw);
     padding-right: 160px;
   }
 }
@@ -603,14 +614,28 @@ html[data-stage="operate"] .hud-systems [data-for-stage="operate"] {
   color: #fff;
 }
 
+/* Caution & warning panel: bottom-left, below the rocket. */
 .hud-log {
+  position: fixed;
+  z-index: 3;
+  left: 12px;
+  bottom: 14px;
   display: flex;
   flex-direction: column;
   gap: 3px;
+  max-width: calc(100vw - 190px);
   margin: 0;
   padding: 0;
   list-style: none;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
   font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@media (min-width: 768px) {
+  .hud-log {
+    max-width: calc(var(--col) - 24px);
+  }
 }
 .hud-log li[data-state="pending"],
 .hud-log li:not([data-state="active"]) .log-caution,
