@@ -1,0 +1,33 @@
+---
+/**
+ * Line-art rocket for /launch. Parts are grouped so launch.css can detach
+ * them per flight stage (html[data-stage]); purely decorative.
+ */
+---
+
+<div class="rocket" aria-hidden="true">
+  <svg viewBox="0 0 100 440" xmlns="http://www.w3.org/2000/svg">
+    <g class="r-stage1">
+      <rect x="30" y="200" width="40" height="150" rx="2" />
+      <line x1="30" y1="230" x2="70" y2="230" />
+      <line x1="30" y1="320" x2="70" y2="320" />
+      <path d="M30 300 L10 352 L30 346 Z" />
+      <path d="M70 300 L90 352 L70 346 Z" />
+      <path d="M38 350 L34 364 L66 364 L62 350 Z" />
+      <path class="r-flame r-flame1" d="M36 366 Q50 440 64 366 Z" />
+    </g>
+    <g class="r-stage2">
+      <rect x="32" y="96" width="36" height="104" rx="2" />
+      <line x1="32" y1="120" x2="68" y2="120" />
+      <text x="50" y="165" text-anchor="middle">S2</text>
+      <path d="M41 200 L38 210 L62 210 L59 200 Z" />
+      <path class="r-flame r-flame2" d="M39 212 Q50 270 61 212 Z" />
+    </g>
+    <g class="r-payload">
+      <path d="M50 6 C34 36 32 62 32 96 L68 96 C68 62 66 36 50 6 Z" />
+      <circle cx="50" cy="62" r="8" />
+      <path d="M44 96 L42 104 L58 104 L56 96 Z" />
+      <path class="r-flame r-flame3" d="M43 106 Q50 140 57 106 Z" />
+    </g>
+  </svg>
+</div>

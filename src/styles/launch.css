@@ -1,0 +1,395 @@
+/*
+ * /launch scene. Scroll state comes from src/scripts/launch.ts:
+ *   html[data-stage]   build | ship | operate | orbit
+ *   html[data-launched] present once the visitor starts scrolling
+ *   --day / --space / --light  0..1 layer fades
+ *   --y                 scrollY in px (parallax; unset under reduced motion)
+ */
+
+.launch-body {
+  --rh: 34vh; /* rocket height */
+  --rx: 8px; /* rocket left edge */
+  --ink: #e6edf7;
+  --panel: rgb(8 12 28 / 0.72);
+  --panel-line: rgb(255 255 255 / 0.14);
+  --accent-hot: #ff8a3d;
+  margin: 0;
+  min-height: 100svh;
+  color: var(--ink);
+  background: #0b1020;
+  font-family: var(--font-google-sans-code), ui-monospace, monospace;
+}
+
+@media (min-width: 768px) {
+  .launch-body {
+    --rh: min(62vh, 520px);
+    --rx: max(24px, 7vw);
+  }
+}
+
+/* ---------- sky ---------- */
+
+.sky,
+.sky > * {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.sky {
+  z-index: 0;
+  overflow: hidden;
+}
+
+.layer-dawn {
+  background: linear-gradient(180deg, #0b1020 0%, #2a2350 45%, #7a4a6e 70%, #f59e6b 100%);
+}
+.layer-day {
+  opacity: var(--day, 0);
+  background: linear-gradient(180deg, #1b4f9c 0%, #3f86d6 55%, #9cc8f0 100%);
+}
+.layer-space {
+  opacity: var(--space, 0);
+  background: radial-gradient(ellipse at 70% 20%, #16204a 0%, #05070f 60%, #020308 100%);
+}
+.stars {
+  opacity: calc(var(--space, 0) * 0.9);
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 68% 32%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 40% 72%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 86% 84%, #cfe0ff 50%, transparent 51%),
+    radial-gradient(1px 1px at 24% 52%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 92% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 55% 8%, #cfe0ff 50%, transparent 51%);
+  background-size: 320px 320px;
+  background-position: 0 calc(var(--y, 0) * 0.08px);
+}
+.layer-light {
+  opacity: var(--light, 0);
+  background: linear-gradient(180deg, #fbfaf5 0%, #eef3fb 100%);
+}
+
+.clouds {
+  opacity: calc(var(--day, 0) * (1 - var(--space, 0)));
+  transform: translateY(calc(var(--y, 0) * 0.55px));
+}
+.cloud {
+  position: absolute;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.45);
+  filter: blur(22px);
+}
+
+.ground {
+  top: calc(50% + var(--rh) * 0.33);
+  transform: translateY(calc(var(--y, 0) * 1px));
+  background: linear-gradient(180deg, #1a1426 0%, #0c0a12 100%);
+  border-top: 1px solid rgb(255 255 255 / 0.18);
+}
+.tower {
+  position: absolute;
+  bottom: 100%;
+  left: calc(var(--rx) + var(--rh) * 0.227 + 6px);
+  height: calc(var(--rh) * 0.7);
+  width: calc(var(--rh) * 0.06 + 8px);
+  border: 1px solid rgb(255 255 255 / 0.35);
+  border-bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 9px,
+    rgb(255 255 255 / 0.22) 9px 10px
+  );
+}
+
+/* ---------- rocket ---------- */
+
+.rocket {
+  position: fixed;
+  z-index: 1;
+  left: var(--rx);
+  top: 50%;
+  height: var(--rh);
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition:
+    transform 2.4s cubic-bezier(0.5, 0, 0.75, 0),
+    opacity 2.4s ease-in;
+}
+.rocket svg {
+  height: 100%;
+  width: auto;
+  overflow: visible;
+}
+.rocket svg * {
+  fill: #f4f1ea;
+  stroke: #141222;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.rocket text {
+  stroke: none;
+  fill: #141222;
+  font: 700 12px var(--font-google-sans-code), monospace;
+}
+
+.r-stage1,
+.r-stage2,
+.r-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+.r-stage1,
+.r-stage2 {
+  transition:
+    transform 1.8s cubic-bezier(0.45, 0, 0.9, 0.6),
+    opacity 1.8s ease-in;
+}
+
+.r-flame {
+  opacity: 0;
+  fill: var(--accent-hot) !important;
+  stroke: #ffd29a !important;
+  transition: opacity 0.35s ease;
+  animation: flicker 0.12s ease-in-out infinite alternate;
+}
+@keyframes flicker {
+  to {
+    transform: scaleY(1.22) scaleX(0.92);
+  }
+}
+
+html[data-launched][data-stage="build"] .r-flame1,
+html[data-stage="ship"] .r-flame2,
+html[data-stage="operate"] .r-flame3 {
+  opacity: 1;
+}
+
+html[data-launched][data-stage="build"] .rocket {
+  animation: rumble 0.09s linear infinite alternate;
+}
+@keyframes rumble {
+  from {
+    transform: translate(-0.6px, -50%);
+  }
+  to {
+    transform: translate(0.6px, calc(-50% + 0.6px));
+  }
+}
+
+/* stage 1 falls away from the sky onward */
+html:is([data-stage="ship"], [data-stage="operate"], [data-stage="orbit"]) .r-stage1 {
+  transform: translate(-14px, 520px) rotate(-24deg);
+  opacity: 0;
+}
+/* stage 2 falls away in space */
+html:is([data-stage="operate"], [data-stage="orbit"]) .r-stage2 {
+  transform: translate(12px, 520px) rotate(20deg);
+  opacity: 0;
+}
+/* payload climbs out of frame when orbit is reached */
+html[data-stage="orbit"] .rocket {
+  transform: translateY(-160vh);
+  opacity: 0;
+}
+
+/* ---------- HUD ---------- */
+
+.hud,
+.meter,
+.skip {
+  position: fixed;
+  z-index: 3;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    color 0.6s ease,
+    opacity 0.4s ease;
+}
+.hud {
+  top: 10px;
+  left: 12px;
+  display: flex;
+  gap: 14px;
+  padding: 6px 10px;
+  border: 1px solid var(--panel-line);
+  border-radius: 6px;
+  background: rgb(5 8 20 / 0.55);
+  backdrop-filter: blur(6px);
+}
+.hud b {
+  font-weight: 600;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter {
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 22px;
+  padding: 10px 8px;
+  border-left: 1px dashed rgb(255 255 255 / 0.35);
+}
+.meter a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgb(230 237 247 / 0.6);
+  text-decoration: none;
+}
+.meter a::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  margin-left: -13px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: #0b1020;
+}
+.meter a[aria-current="step"] {
+  color: #fff;
+}
+.meter a[aria-current="step"]::before {
+  background: var(--accent-hot);
+  border-color: var(--accent-hot);
+}
+.meter span {
+  display: none;
+}
+@media (min-width: 768px) {
+  .meter span {
+    display: inline;
+  }
+}
+
+.skip {
+  right: 12px;
+  bottom: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #0b1020;
+  background: var(--accent-hot);
+  text-decoration: none;
+  font-weight: 600;
+}
+html[data-stage="orbit"] .skip {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-stage="orbit"] .hud {
+  color: #334155;
+  background: rgb(255 255 255 / 0.7);
+  border-color: rgb(15 23 42 / 0.12);
+}
+html[data-stage="orbit"] .hud b {
+  color: #0f172a;
+}
+html[data-stage="orbit"] .meter {
+  border-color: rgb(15 23 42 / 0.25);
+}
+html[data-stage="orbit"] .meter a {
+  color: rgb(15 23 42 / 0.55);
+}
+html[data-stage="orbit"] .meter a[aria-current="step"] {
+  color: #0f172a;
+}
+html[data-stage="orbit"] .meter a::before {
+  background: #fff;
+}
+
+/* ---------- content ---------- */
+
+.flight {
+  position: relative;
+  z-index: 2;
+  padding-left: calc(var(--rx) + var(--rh) * 0.24 + 14px);
+  padding-right: 44px;
+}
+@media (min-width: 768px) {
+  .flight {
+    padding-left: calc(var(--rx) + var(--rh) * 0.24 + 7vw);
+    padding-right: 160px;
+  }
+}
+
+.panel {
+  border: 1px solid var(--panel-line);
+  border-radius: 10px;
+  background: var(--panel);
+  backdrop-filter: blur(8px);
+}
+
+.telemetry {
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.45);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-hot);
+}
+
+.display {
+  font-family: var(--font-bricolage), sans-serif;
+}
+
+.rule {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px dashed rgb(255 255 255 / 0.4);
+  border-radius: 999px;
+  font-size: 11px;
+  color: #ffd29a;
+  text-decoration: none;
+}
+a.rule:hover {
+  border-style: solid;
+}
+
+.evidence a {
+  color: #bcd4f5;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
+}
+.evidence a:hover {
+  text-decoration-style: solid;
+  color: #fff;
+}
+
+/* summary sits on the bright orbit layer */
+.orbit {
+  color: #0f172a;
+}
+.orbit .panel {
+  background: rgb(255 255 255 / 0.82);
+  border-color: rgb(15 23 42 / 0.1);
+}
+.orbit .telemetry {
+  text-shadow: none;
+  color: #c2410c;
+}
+.orbit a {
+  color: #1d4ed8;
+}
+
+/* ---------- reduced motion: no parallax, no flight animation ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .rocket,
+  .r-stage1,
+  .r-stage2,
+  .r-flame {
+    transition: none !important;
+    animation: none !important;
+  }
+  .clouds,
+  .ground {
+    transform: none;
+  }
+  html:not([data-stage="build"]) .ground {
+    display: none;
+  }
+}

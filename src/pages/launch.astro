@@ -1,0 +1,294 @@
+---
+import { getCollection } from "astro:content";
+import LaunchLayout from "@/layouts/LaunchLayout.astro";
+import Rocket from "@/components/launch/Rocket.astro";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostUrl } from "@/utils/getPostPaths";
+import config from "@/config";
+import {
+  identity,
+  stages,
+  cards,
+  career,
+  certifications,
+  openSource,
+  audiences,
+  type Card,
+  type FlightRule,
+} from "@/data/portfolio";
+import "@/styles/launch.css";
+
+// Evidence must point at published, listed posts; fail the build otherwise
+// so a renamed or hidden post never ships as a dead link.
+const posts = getSortedPosts(await getCollection("posts")).filter(
+  p => !p.data.unlisted
+);
+const postById = new Map(posts.map(p => [p.id, p]));
+function post(slug: string) {
+  const p = postById.get(slug);
+  if (!p) {
+    throw new Error(
+      `portfolio: "${slug}" is not a published, listed post (src/data/portfolio.ts)`
+    );
+  }
+  return { title: p.data.title, url: getPostUrl(p.id, p.filePath) };
+}
+
+const cardIds = new Set(cards.map(c => c.id));
+if (cardIds.size !== cards.length) throw new Error("portfolio: duplicate card id");
+for (const a of audiences) {
+  for (const id of a.priority) {
+    if (!cardIds.has(id)) {
+      throw new Error(`portfolio: audience "${a.id}" lists unknown card "${id}"`);
+    }
+  }
+}
+
+const resolveCard = (c: Card) => ({
+  ...c,
+  evidenceLinks: c.evidence.map(post),
+  rules: (c.flightRules ?? []).map((r: FlightRule) => ({
+    label: r.label,
+    url: r.slug ? post(r.slug).url : undefined,
+  })),
+});
+const cardsByStage = Object.fromEntries(
+  stages.map(s => [s.id, cards.filter(c => c.stage === s.id).map(resolveCard)])
+);
+
+const prowlerChecks = posts.filter(p => p.data.tags.includes("Prowler")).length;
+const certCount = certifications.reduce((n, c) => n + c.count, 0);
+const numbers = [
+  { value: posts.length, label: "blog posts" },
+  { value: prowlerChecks, label: "Prowler checks" },
+  { value: openSource.length, label: "OSS projects" },
+  { value: certCount, label: "certifications" },
+];
+
+const socialLabel: Record<string, string> = {
+  github: "GitHub",
+  linkedin: "LinkedIn",
+  mail: "Email",
+};
+
+const meter = [
+  { id: "build", href: "#build", label: "Pad" },
+  { id: "ship", href: "#ship", label: "Stage 1" },
+  { id: "operate", href: "#operate", label: "Stage 2" },
+  { id: "orbit", href: "#summary", label: "Orbit" },
+];
+
+const EVIDENCE_SHOWN = 3;
+---
+
+<LaunchLayout
+  title={`${identity.name} | ${identity.headline}`}
+  description={identity.subline}
+  noindex
+>
+  <div class="sky" aria-hidden="true">
+    <div class="layer-dawn"></div>
+    <div class="layer-day"></div>
+    <div class="clouds">
+      <div class="cloud" style="top:-18vh;left:38%;width:34vw;height:9vh"></div>
+      <div class="cloud" style="top:-52vh;left:8%;width:28vw;height:7vh"></div>
+      <div class="cloud" style="top:-80vh;left:55%;width:40vw;height:10vh"></div>
+      <div class="cloud" style="top:-112vh;left:22%;width:30vw;height:8vh"></div>
+    </div>
+    <div class="layer-space"></div>
+    <div class="stars"></div>
+    <div class="layer-light"></div>
+    <div class="ground"><div class="tower"></div></div>
+  </div>
+
+  <Rocket />
+
+  <div class="hud" role="status" aria-label="Flight telemetry">
+    <span><b data-hud-t>T-00:10</b></span>
+    <span>ALT <b data-hud-alt>0.0</b> km</span>
+    <span class="hidden sm:inline"><b data-hud-stage>Pad</b></span>
+  </div>
+
+  <nav class="meter" aria-label="Flight stages">
+    {
+      meter.map(m => (
+        <a href={m.href} data-meter={m.id}>
+          <span>{m.label}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <a class="skip" href="#summary">Skip to summary ↓</a>
+
+  <main class="flight">
+    {
+      stages.map((stage, i) => (
+        <section
+          id={stage.id}
+          data-stage={stage.id}
+          data-label={stage.name}
+          class="flex min-h-[130vh] flex-col justify-center gap-6 py-24"
+        >
+          {i === 0 && (
+            <header class="mb-16 flex min-h-[70vh] flex-col justify-center gap-5">
+              <p class="telemetry">Mission {identity.handle} · T-00:10</p>
+              <p class="telemetry" data-audience-label hidden />
+              <h1 class="display text-4xl leading-tight font-bold text-white sm:text-6xl">
+                {identity.headline}
+              </h1>
+              <p class="max-w-xl text-base text-slate-200 sm:text-lg" data-subline>
+                {identity.subline}
+              </p>
+              <ul class="flex flex-wrap gap-2 text-xs">
+                {identity.roles.map(r => (
+                  <li class="panel px-3 py-1">{r}</li>
+                ))}
+              </ul>
+              <p class="telemetry mt-6 text-slate-300">Scroll to launch ↓</p>
+            </header>
+          )}
+
+          <div class="flex flex-col gap-2">
+            <p class="telemetry">{stage.event}</p>
+            <h2 class="display text-3xl font-bold text-white sm:text-4xl">
+              {stage.name}
+            </h2>
+            <p class="max-w-xl text-slate-200">{stage.tagline}</p>
+          </div>
+
+          <div class="flex max-w-3xl flex-col gap-4">
+            {cardsByStage[stage.id].map(card => (
+              <article id={card.id} data-card-id={card.id} class="panel flex flex-col gap-3 p-5">
+                <h3 class="display text-xl font-bold text-white">{card.title}</h3>
+                <p class="text-sm leading-relaxed text-slate-200">{card.summary}</p>
+                {card.rules.length > 0 && (
+                  <ul class="flex flex-wrap gap-2" aria-label="Flight rules">
+                    {card.rules.map(r => (
+                      <li>
+                        {r.url ? (
+                          <a class="rule" href={r.url}>{r.label}</a>
+                        ) : (
+                          <span class="rule">{r.label}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <ul class="evidence flex flex-col gap-1 text-sm" aria-label="Evidence">
+                  {card.evidenceLinks.slice(0, EVIDENCE_SHOWN).map(e => (
+                    <li>→ <a href={e.url}>{e.title}</a></li>
+                  ))}
+                </ul>
+                {card.evidenceLinks.length > EVIDENCE_SHOWN && (
+                  <details class="evidence text-sm">
+                    <summary class="cursor-pointer text-slate-400">
+                      +{card.evidenceLinks.length - EVIDENCE_SHOWN} more
+                    </summary>
+                    <ul class="mt-1 flex flex-col gap-1">
+                      {card.evidenceLinks.slice(EVIDENCE_SHOWN).map(e => (
+                        <li>→ <a href={e.url}>{e.title}</a></li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <section
+      id="summary"
+      data-stage="orbit"
+      data-label="Orbit"
+      class="orbit flex min-h-screen flex-col gap-10 py-28"
+    >
+      <header class="flex flex-col gap-3">
+        <p class="telemetry">T+09:00 · Orbit achieved</p>
+        <h2 class="display text-4xl font-bold sm:text-5xl">{identity.name}</h2>
+        <p class="max-w-xl text-lg" data-subline>{identity.subline}</p>
+        <ul class="flex flex-wrap gap-2 text-xs">
+          {identity.roles.map(r => <li class="panel px-3 py-1">{r}</li>)}
+        </ul>
+      </header>
+
+      <div class="grid gap-4 lg:grid-cols-3">
+        {
+          stages.map(stage => (
+            <div class="panel flex flex-col gap-2 p-5">
+              <p class="telemetry">{stage.name}</p>
+              <p class="text-sm">{stage.tagline}</p>
+              <ul class="mt-1 flex flex-col gap-1 text-sm">
+                {cardsByStage[stage.id].map(c => (
+                  <li><a href={`#${c.id}`}>{c.title}</a></li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <dl class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {
+          numbers.map(n => (
+            <div class="panel flex flex-col-reverse p-4">
+              <dt class="text-xs uppercase tracking-wider text-slate-500">{n.label}</dt>
+              <dd class="display text-3xl font-bold">{n.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="grid gap-4 lg:grid-cols-2">
+        <div class="panel p-5">
+          <h3 class="telemetry mb-3">Career</h3>
+          <ol class="flex flex-col gap-3 text-sm">
+            {
+              career.map(c => (
+                <li>
+                  <p class="font-semibold">{c.role}</p>
+                  <p class="text-slate-600">{c.detail}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <div class="panel flex flex-col gap-5 p-5">
+          <div>
+            <h3 class="telemetry mb-3">Certifications</h3>
+            <ul class="flex flex-col gap-1 text-sm">
+              {certifications.map(c => <li>{c.name}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h3 class="telemetry mb-3">Open source</h3>
+            <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              {openSource.map(o => <li><a href={o.url}>{o.name}</a></li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <nav class="flex flex-wrap gap-3 text-sm" aria-label="Contact">
+        {
+          config.socials.map(s => (
+            <a class="panel px-4 py-2" href={s.url}>{socialLabel[s.name] ?? s.name}</a>
+          ))
+        }
+        <a class="panel px-4 py-2" href="/posts/">Read the blog</a>
+      </nav>
+    </section>
+  </main>
+
+  <script
+    is:inline
+    type="application/json"
+    id="launch-audiences"
+    set:html={JSON.stringify(audiences).replace(/</g, "\\u003c")}
+  />
+  <script>
+    import "@/scripts/launch";
+  </script>
+</LaunchLayout>

@@ -1,0 +1,48 @@
+---
+import Analytics from "@vercel/analytics/astro";
+import { Font } from "astro:assets";
+import { getAssetPath } from "@/utils/withBase";
+import "@/styles/global.css";
+
+type Props = {
+  title: string;
+  description: string;
+  /** Keep the page out of search results until it replaces the home page. */
+  noindex?: boolean;
+};
+
+const { title, description, noindex = false } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={getAssetPath("favicon.svg")} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <Font
+      cssVariable="--font-google-sans-code"
+      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
+    />
+    <Font
+      cssVariable="--font-bricolage"
+      preload={[{ subset: "latin", weight: 700, style: "normal" }]}
+    />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta name="theme-color" content="#0b1020" />
+  </head>
+  <body class="launch-body">
+    <slot />
+    <Analytics />
+  </body>
+</html>

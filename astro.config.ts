@@ -32,6 +32,8 @@ export default defineConfig({
         // Unlisted: kept out of crawl/listing surfaces but still reachable
         // by direct URL (e.g. a link already handed out elsewhere).
         if (page.endsWith("/posts/hello-offchain/")) return false;
+        // Portfolio is built at /launch until it replaces the home page (v4).
+        if (page.endsWith("/launch/")) return false;
         return true;
       },
     }),
