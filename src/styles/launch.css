@@ -606,7 +606,6 @@ html[data-bright] .meter a::before {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 44rem;
 }
 .governing {
   margin: 6px 0 0;
@@ -628,7 +627,6 @@ html[data-bright] .meter a::before {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  max-width: 48rem;
   padding: 18px 20px;
 }
 .log-zone-head {
@@ -1084,7 +1082,12 @@ html[data-bright] .meter a::before {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 52rem;
+}
+@media (min-width: 768px) {
+  /* body runs as wide as the hero; the summary stops short of the parked satellite */
+  .summary-head {
+    margin-right: 70px;
+  }
 }
 .claim {
   margin: 18px 0 6px;
