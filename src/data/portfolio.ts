@@ -366,6 +366,14 @@ export const cards: Card[] = [
     ],
   },
   {
+    id: "aperture-flake",
+    stage: "ship",
+    zone: "oss",
+    title: "Aperture: flaky L402 test fix",
+    summary: "Opened a fix for a rare (1 in 256) flake in TestTamperedL402 that could fail CI at random.",
+    evidence: [{ label: "PR #285", url: "https://github.com/lightninglabs/aperture/pull/285" }],
+  },
+  {
     id: "gosentry",
     stage: "ship",
     zone: "oss",
