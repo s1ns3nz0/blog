@@ -69,13 +69,13 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 
 ## Summary page
 
-1. Identity line and target roles.
-2. Three teaser tiles, each one big stat + what it is + one muted line (long stats shrink to the tile width): Career "5+ yrs" with org logos; Open source = total contributions computed from the data, disclosures included (e.g. 40, "31 merged · 6 projects · 2 private disclosures"); Credentials "Kubestronaut". No audience-specific tile copy.
-3. Each tile opens a detail dialog (light; centered on desktop, bottom sheet on phones; Esc, backdrop, and ✕ close):
+1. One claim, the biggest thing on the screen: "I turn security and compliance requirements into platform code." Name and roles sit above it, small.
+2. One line of proof under it: 5+ yrs in security · N open-source contributions (computed from the data, disclosures included) · Kubestronaut + 3 AWS certifications. Then three quiet links (Career / Open source / Credentials).
+3. Each link opens a detail dialog (light; centered on desktop, bottom sheet on phones; Esc, backdrop, and ✕ close):
    - Career: full timeline, newest first, period / logo + organization / role with three keywords / detail.
    - Open source: collapsed cards (keyword headline, tags, status summary) that expand to per-contribution statuses checked against GitHub (Merged / Open PR / Proposed / Reported / Fixed upstream / Under embargo). Open items stay open, never rounded up. Unpublished vulnerability reports appear only as a vendor-level "Coordinated disclosure" card: no product, date, severity, or link until fixes ship and disclosure is agreed.
    - Credentials: certifications, education, highlights.
-4. The AI assistant opens only from the parked satellite.
+4. The AI assistant opens only from the parked satellite. In orbit the anomaly log and altitude meter fade out (and leave the tab order); the HUD dims.
 5. Contact marks: official GitHub, Gmail, and LinkedIn glyphs (Simple Icons, CC0) plus a blog link. No phone number or address. Organization logos: IBM (Simple Icons, CC0); Deloitte, KITRI, and the ROK Army emblem from Wikimedia Commons, marked public domain.
 
 English only.
@@ -110,6 +110,7 @@ English only.
 | v1.9 | Open source statuses verified on GitHub per contribution; added lnd #11211, Aperture #285/#291, SEAL #647, compliance-to-policy #51 |
 | v1.10 | Smaller logos; collapsible timeline rows; open-source cards with keyword headlines, tags, and status summaries; vendor-level coordinated-disclosure card |
 | v1.11 | Summary rebuilt as three teaser tiles with detail dialogs (Career / Open source / Credentials) |
+| v1.12 | Summary rebuilt around one claim, one proof line, and quiet detail links; instruments fold away in orbit |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

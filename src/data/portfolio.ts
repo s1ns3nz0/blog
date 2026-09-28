@@ -67,6 +67,8 @@ export const identity = {
   name: "Jinsoo Yang",
   handle: "s1ns3nz0",
   headline: "Launch your product securely.",
+  /** The one claim the summary makes; everything else is evidence. */
+  claim: "I turn security and compliance requirements into platform code.",
   /** Painted on the rocket fairing: the thing that actually reaches orbit. */
   fairing: "PRODUCT",
   subline:
@@ -474,36 +476,16 @@ export const education = [
 ];
 
 /**
- * Summary tiles: one big stat, what it is, and one muted supporting line.
- * The full detail opens in a dialog.
+ * Summary proof points: one small line of stats under the claim; each opens
+ * its detail dialog (Career / Open source / Credentials).
  */
 export type TileId = "career" | "oss" | "credentials";
 
-export type TileTeaser = { stat: string; label: string; detail: string };
-
-export const tiles: ({ id: TileId; title: string } & TileTeaser)[] = [
-  {
-    id: "career",
-    title: "Career",
-    stat: "5+ yrs",
-    label: "security across IBM, Deloitte, and the ROK Army",
-    detail: "Consulting · CERT · OT security → platform engineering",
-  },
-  {
-    id: "oss",
-    title: "Open source",
-    // stat and detail are computed from openSource in the page
-    stat: "",
-    label: "open-source contributions",
-    detail: "",
-  },
-  {
-    id: "credentials",
-    title: "Credentials",
-    stat: "Kubestronaut",
-    label: "all 5 Kubernetes certifications",
-    detail: "AWS × 3 · M.S. Cyber Defense (in progress)",
-  },
+export const tiles: { id: TileId; title: string; stat: string; label: string }[] = [
+  { id: "career", title: "Career", stat: "5+ yrs", label: "in security" },
+  // stat is computed from openSource in the page
+  { id: "oss", title: "Open source", stat: "", label: "open-source contributions" },
+  { id: "credentials", title: "Credentials", stat: "Kubestronaut", label: "+ 3 AWS certifications" },
 ];
 
 /** Resume highlights (kept for the assistant context; teasers carry them on the page). */

@@ -122,18 +122,7 @@ const orgLogos = { ibm: logoIbm, deloitte: logoDeloitte, kitri: logoKitri, "rok-
 const allContribs = openSource.flatMap(o => o.contributions);
 const countOf = (c: (typeof allContribs)[number]) => c.count ?? 1;
 const ossTotal = allContribs.reduce((n, c) => n + countOf(c), 0);
-const ossMerged = allContribs.filter(c => c.status === "merged").reduce((n, c) => n + countOf(c), 0);
-const ossDisclosed = allContribs.filter(c => c.status === "embargo").reduce((n, c) => n + countOf(c), 0);
-const ossProjects = openSource.filter(o => o.url).length;
-const tileList = tiles.map(t =>
-  t.id === "oss"
-    ? {
-        ...t,
-        stat: String(ossTotal),
-        detail: `${ossMerged} merged · ${ossProjects} projects · ${ossDisclosed} private disclosures`,
-      }
-    : t
-);
+const tileList = tiles.map(t => (t.id === "oss" ? { ...t, stat: String(ossTotal) } : t));
 
 const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
 
@@ -423,7 +412,7 @@ const smokePuffs: [number, number][] = [
       id="summary"
       data-stage="orbit"
       data-label="Orbit"
-      class="orbit flex min-h-screen flex-col gap-10 py-28"
+      class="orbit flex min-h-screen flex-col justify-center gap-10 py-28"
     >
       {
         anomalyBefore("orbit") && (
@@ -435,39 +424,29 @@ const smokePuffs: [number, number][] = [
           />
         )
       }
-      <header class="flex flex-col gap-3" data-stage-head>
+      <header class="summary-head" data-stage-head>
         <p class="meta">T+09:00 · Orbit achieved</p>
-        <h2 class="display text-4xl font-bold sm:text-5xl">{identity.name}</h2>
-        <p class="text-lg" data-subline>{identity.subline}</p>
-        <ul class="flex flex-wrap gap-2 text-xs">
-          {identity.roles.map(r => <li class="panel px-3 py-1">{r}</li>)}
-        </ul>
-      </header>
-
-      <div class="tiles">
-        {
-          tileList.map(t => (
-            <button type="button" class="tile" data-open-dialog={`dlg-${t.id}`}>
-              <span class="meta">{t.title}</span>
-              {t.id === "career" && (
-                <span class="tile-logos" aria-hidden="true">
-                  {[logoIbm, logoDeloitte, logoKitri, logoArmy].map(src => (
-                    <Image src={src} alt="" height={40} class="tile-logo" />
-                  ))}
-                </span>
-              )}
-              <span class="tile-lines" data-tile={t.id}>
-                <span class="tile-stat display" data-tile-part="stat" style={`--chars: ${t.stat.length}`}>
-                  {t.stat}
-                </span>
-                <span class="tile-label" data-tile-part="label">{t.label}</span>
-                <span class="tile-detail" data-tile-part="detail">{t.detail}</span>
+        <h2 class="display text-2xl font-bold">{identity.name}</h2>
+        <p class="meta">{identity.roles.join(" · ")}</p>
+        <p class="claim">{identity.claim}</p>
+        <p class="proof">
+          {tileList.map((t, i) => (
+            <>
+              {i > 0 && <span class="proof-sep" aria-hidden="true">·</span>}
+              <span>
+                <b>{t.stat}</b> {t.label}
               </span>
-              <span class="tile-open">Open ▸</span>
+            </>
+          ))}
+        </p>
+        <nav class="summary-links" aria-label="Details">
+          {tileList.map(t => (
+            <button type="button" data-open-dialog={`dlg-${t.id}`}>
+              {t.title} ▸
             </button>
-          ))
-        }
-      </div>
+          ))}
+        </nav>
+      </header>
 
       <dialog id="dlg-career" class="sheet" aria-labelledby="dlg-career-title">
         <div class="sheet-inner">

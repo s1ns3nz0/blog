@@ -995,80 +995,81 @@ html[data-bright] .meter a::before {
   font-weight: 600;
 }
 
-.tiles {
-  display: grid;
-  gap: 16px;
+/* one claim, one line of proof, quiet links to the detail */
+.summary-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 52rem;
 }
-@media (min-width: 1024px) {
-  .tiles {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+.claim {
+  margin: 18px 0 6px;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+.proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  color: #475569;
+  font-size: 16px;
+}
+.proof b {
+  color: #0f172a;
+  font-weight: 700;
+}
+.proof-sep {
+  color: #cbd5e1;
+}
+@media (max-width: 767px) {
+  .proof {
+    flex-direction: column;
+  }
+  .proof-sep {
+    display: none;
   }
 }
-.tile {
+.summary-links {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 200px;
-  padding: 22px;
-  border: 1px solid rgb(15 23 42 / 0.1);
-  border-radius: 14px;
-  background: rgb(255 255 255 / 0.85);
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  margin-top: 18px;
+}
+.summary-links button {
+  padding: 0;
+  border: 0;
+  background: none;
   color: #0f172a;
-  text-align: left;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-}
-.tile:hover {
-  transform: translateY(-2px);
-  border-color: rgb(15 23 42 / 0.25);
-  box-shadow: 0 10px 24px rgb(15 23 42 / 0.1);
-}
-.tile-logos {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.tile-logo {
-  width: auto;
-  height: 20px;
-}
-.tile-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-/* one thing per tile carries the weight; long stats shrink to the tile width */
-.tile {
-  container-type: inline-size;
-}
-.tile-stat {
-  font-size: min(2.75rem, calc(100cqi / var(--chars, 4) * 1.2));
-  white-space: nowrap;
-  font-weight: 700;
-  line-height: 1.05;
-}
-.tile-label {
-  font-size: 16px;
   font-weight: 600;
-  line-height: 1.35;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(15 23 42 / 0.3);
+  text-underline-offset: 4px;
 }
-.tile-detail {
-  margin-top: 4px;
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.45;
+.summary-links button:hover {
+  text-decoration-color: currentColor;
 }
-.tile-open {
-  margin-top: auto;
-  color: #64748b;
-  font: 400 11px var(--font-space-mono), monospace;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+
+/* the flight is over: fold away the instruments, keep the satellite */
+.hud-log,
+.meter,
+.hud-wrap {
+  transition: opacity 0.6s ease;
 }
-.tile:hover .tile-open {
-  color: #0f172a;
+html[data-stage="orbit"] .hud-log,
+html[data-stage="orbit"] .meter,
+html[data-stage="orbit"] .hud-systems {
+  opacity: 0;
+  visibility: hidden; /* also out of the tab order once faded */
+  transition:
+    opacity 0.6s ease,
+    visibility 0s linear 0.6s;
+}
+html[data-stage="orbit"] .hud-wrap {
+  opacity: 0.55;
 }
 
 /* detail dialogs: light, centered on desktop, bottom sheet on phones */
