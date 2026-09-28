@@ -516,8 +516,7 @@ html[data-bright] .meter a::before {
 }
 @media (min-width: 768px) {
   .flight {
-    /* clears the stage meter and the parked satellite (~186px from the right) */
-    padding-right: 230px;
+    padding-right: 160px;
   }
 }
 
@@ -607,7 +606,7 @@ html[data-bright] .meter a::before {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 60rem;
+  max-width: 44rem;
 }
 .governing {
   margin: 6px 0 0;
@@ -628,9 +627,9 @@ html[data-bright] .meter a::before {
 .stage-log {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  max-width: 72rem;
-  padding: 24px 28px;
+  gap: 18px;
+  max-width: 48rem;
+  padding: 18px 20px;
 }
 .log-zone-head {
   display: flex;
@@ -1085,7 +1084,7 @@ html[data-bright] .meter a::before {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 72rem;
+  max-width: 52rem;
 }
 .claim {
   margin: 18px 0 6px;
