@@ -501,7 +501,7 @@ export const stack = [
 /** "How I work" lines under the stat cards; "{oss}" is the computed open-source total. */
 export const traits = [
   {
-    name: "Proactive",
+    name: "Self-starter",
     line: "I get to security problems before they ship.",
     proof:
       "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 2 vulnerability reports sent upstream.",
