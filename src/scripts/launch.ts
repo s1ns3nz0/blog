@@ -111,8 +111,8 @@ function stageTitle(el: HTMLElement) {
 // In-flight anomalies: a fault is active from the moment its transit gap
 // reaches mid-screen until the next stage's title rises to the rocket's
 // nose. The callout then turns green and steps through the resolution
-// lines while that stage's cards scroll by, until their bottom passes
-// mid-screen. Orbit has no cards: its green line shows briefly.
+// lines, split evenly until just before the next red alert (or the Sun
+// Tzu screen). Orbit has no cards: its green line shows briefly.
 const transits = Array.from(document.querySelectorAll<HTMLElement>("[data-transit], [data-notes]"));
 const callout = document.querySelector<HTMLElement>("[data-callout]");
 const calloutTitle = document.querySelector<HTMLElement>("[data-callout-title]");
@@ -145,21 +145,17 @@ function updateAnomalies(vh: number) {
     const isPast = title <= nose;
     if (top < mid && !isPast && t.dataset.transit) active = t;
 
-    // Green window: title at the nose until the cards' bottom passes
-    // mid-screen. Spread stages hold on until the next fault's gap does,
-    // so their lines get the whole stretch.
+    // Green window: title at the nose until just before the next red
+    // alert (its gap reaching mid-screen), or before the Sun Tzu screen
+    // after Operate. The lines split that stretch evenly, so a taller
+    // stage keeps each line up longer.
     const log = section.querySelector<HTMLElement>(".stage-log");
-    const spread = "spread" in t.dataset;
     if (isPast && log) {
-      const next = spread ? transits.slice(i + 1).find(n => n.dataset.transit) : undefined;
-      const bottom = (next ?? log).getBoundingClientRect()[next ? "top" : "bottom"];
-      if (bottom > mid) {
-        // Lines split that window evenly (data-spread), or get a fixed 20%
-        // of the screen each with the last one holding to the end. A short
-        // window squeezes its lines into the room it has.
-        const span = bottom - title - (mid - nose);
-        const even = span / lines.length;
-        const each = spread ? even : Math.min(vh * 0.2, even);
+      const quote = section.querySelector<HTMLElement>(".sun-tzu");
+      const next = transits.slice(i + 1).find(n => n.dataset.transit);
+      const end = (quote ?? next)?.getBoundingClientRect().top ?? log.getBoundingClientRect().bottom;
+      if (end > mid) {
+        const each = (end - title - (mid - nose)) / lines.length;
         const step = Math.min(lines.length - 1, Math.floor((nose - title) / Math.max(each, 1)));
         green = { t, line: lines[step], label: t.dataset.calloutLabel ?? "✓ Resolved" };
       }

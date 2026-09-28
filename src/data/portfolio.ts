@@ -49,9 +49,6 @@ export type Stage = {
   flightRules?: FlightRule[];
   /** Green callout lines for a stage with no fault before it. */
   notes?: string[];
-  /** Spread the green lines evenly over the stage's cards instead of a
-      fixed scroll distance per line. */
-  spreadCallout?: boolean;
 };
 
 export type Audience = {
@@ -93,7 +90,6 @@ export const stages: Stage[] = [
   {
     id: "design",
     rocketStage: "build",
-    spreadCallout: true,
     event: "T-00:10  DESIGN REVIEW",
     name: "Design",
     governing: "I put security into the design before anything gets built.",
@@ -113,7 +109,6 @@ export const stages: Stage[] = [
   },
   {
     id: "build",
-    spreadCallout: true,
     event: "T-00:05  PAD CHECKS",
     name: "Build",
     governing: "I build platforms that are secure before the first workload ships.",
@@ -330,6 +325,15 @@ export const cards: Card[] = [
       { label: "PR #627", url: "https://github.com/security-alliance/frameworks/pull/627" },
     ],
   },
+  {
+    id: "lightning-disclosures",
+    stage: "build",
+    zone: "oss",
+    title: "2 vulnerabilities reported to Lightning Labs",
+    summary:
+      "Found two vulnerabilities in Lightning Labs products; both are under review. Product names and details stay private until fixes ship.",
+    evidence: [],
+  },
 
   // ---------- Deploy ----------
   {
@@ -396,12 +400,29 @@ export const cards: Card[] = [
 
   // ---------- Operate ----------
   {
+    id: "ibm-isms-p",
+    stage: "operate",
+    zone: "field",
+    title: "ISMS-P consulting at IBM",
+    summary:
+      "Joined ISMS-P certification consulting for a real-estate service and a shared-office service, assessed their AWS environments, and built an assessment tool for consultants on Prowler.",
+    evidence: [],
+  },
+  {
+    id: "deloitte-iso27001",
+    stage: "operate",
+    zone: "field",
+    title: "ISO 27001 for a global IoT service",
+    summary: "At Deloitte, consulted on and audited ISO 27001 certification for a global IoT service.",
+    evidence: [],
+  },
+  {
     id: "deloitte-pki",
     stage: "operate",
     zone: "field",
-    title: "PKI digital signature audits",
+    title: "Digital signature service audits",
     summary:
-      "At Deloitte, assessed a digital signature and certificate service (cryptographic controls, access, key lifecycle) and drafted Appendices 2-3 of the Digital Signature Certification Service Evaluation Guide v1.4.0.",
+      "At Deloitte, audited Korean authentication services built on digital signatures, and drafted Appendices 2-3 of the Digital Signature Certification Service Evaluation Guide v1.4.0.",
     evidence: [
       {
         label: "Digital Signature Certification Service Evaluation Guide (Deloitte)",
@@ -415,17 +436,8 @@ export const cards: Card[] = [
     zone: "field",
     title: "Corps CERT, Republic of Korea Army",
     summary:
-      "Tuned Splunk detection rules to cut false positives, ran first-line incident response, and built an interactive security awareness game (2nd place, Army education competition). Selected for the Elite 300 Cyber Warriors.",
+      "Tuned Splunk detection rules to cut false positives, ran first-line incident response, and went through an internal security audit by the Defense Counterintelligence Command. Selected for the Army's Elite 300 Cyber Warriors, won the Ground Operations Command incident response CTF, and placed 2nd in a cybersecurity education content competition with an interactive awareness game.",
     evidence: [],
-  },
-  {
-    id: "audit-logging",
-    stage: "operate",
-    zone: "test",
-    title: "Audit and logging architecture",
-    summary:
-      "CloudTrail, AWS Config, Fluent Bit, and Vault audit feeding an immutable, KMS-protected archive with cross-region recovery.",
-    evidence: ["audit-and-logging-architecture-for-hoodi-node-validator"],
   },
   {
     id: "compliance-ops",
@@ -435,15 +447,6 @@ export const cards: Card[] = [
     summary:
       "An OSCAL-based dashboard that tracks controls, policies, evidence, and owners, with an MCP interface for Slack and Jira.",
     evidence: [{ label: "compliance-ops on GitHub", url: `${GH}/compliance-ops` }],
-  },
-  {
-    id: "prioritization",
-    stage: "operate",
-    zone: "test",
-    title: "Risk-based prioritization",
-    summary:
-      "Lessons on deployment speed, infrastructure cost, and operational burden: a control that is too expensive or too hard to run is not a good control.",
-    evidence: ["prioritizing-security-controls-hoodi-validator-lessons"],
   },
   {
     id: "aperture-metrics",
