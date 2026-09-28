@@ -645,40 +645,34 @@ html[data-daylight] .stage-log {
   --panel: rgb(255 255 255 / 0.82);
   --panel-line: rgb(15 23 42 / 0.12);
 }
+/* Zone headings sit on the sky; each item below is its own card. */
 .stage-log {
-  transition: background-color 0.4s ease, border-color 0.4s ease;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 28px;
   max-width: var(--hero-w);
-  padding: 18px 20px;
 }
 .log-zone-head {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 4px;
-  color: rgb(var(--log-ink) / 0.62);
-  font: 700 11px var(--font-space-mono), monospace;
-  letter-spacing: 0.14em;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 10px;
+  color: #fff;
+  font: 700 14px var(--font-space-mono), monospace;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.35);
 }
 .log-zone-line {
-  flex: 1;
-  min-width: 12px;
-  height: 1px;
-  background: var(--panel-line);
+  display: none;
 }
-.log-zone-line-end {
-  flex: 0 0 12px;
-}
-/* what the zone means, sitting thin on the rail */
+/* what the zone means, next to its name */
 .log-zone-blurb {
-  color: rgb(var(--log-ink) / 0.5);
-  font: 400 11px var(--font-space-grotesk), sans-serif;
-  letter-spacing: 0.02em;
+  flex: 1;
+  color: rgb(255 255 255 / 0.78);
+  font: 400 13px var(--font-space-grotesk), sans-serif;
+  letter-spacing: 0;
   text-transform: none;
-  white-space: nowrap;
 }
 @media (max-width: 767px) {
   .log-zone-head {
@@ -687,28 +681,28 @@ html[data-daylight] .stage-log {
   .log-zone-blurb {
     order: 5;
     flex-basis: 100%;
-    white-space: normal;
-  }
-  .log-zone-line-end {
-    display: none;
   }
 }
 .log-list {
   display: flex;
   flex-direction: column;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.log-row + .log-row {
-  border-top: 1px solid var(--panel-line);
+.log-row {
+  padding: 0 20px;
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease;
 }
 .log-row summary,
 .row-static {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 10px 26px 10px 0;
+  padding: 14px 26px 14px 0;
   position: relative;
 }
 .log-row summary {
@@ -722,7 +716,7 @@ html[data-daylight] .stage-log {
   content: "▸";
   position: absolute;
   right: 4px;
-  top: 12px;
+  top: 16px;
   color: rgb(var(--log-ink) / 0.5);
   transition: transform 0.2s ease;
 }
@@ -763,7 +757,7 @@ html[data-daylight] .stage-log {
   flex-direction: column;
   gap: 10px;
   margin: 0;
-  padding: 0 0 12px;
+  padding: 0 0 16px;
 }
 /* Code, Write-ups, Rules: a label column, then the links */
 .row-links {

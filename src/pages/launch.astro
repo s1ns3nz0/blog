@@ -374,7 +374,7 @@ const smokePuffs: [number, number][] = [
             )}
           </div>
 
-          <div class="stage-log panel">
+          <div class="stage-log">
             {lanesByStage[stage.id].map(lane => (
               <section class="log-zone" aria-label={lane.zone.name}>
                 <h3 class="log-zone-head">
@@ -387,7 +387,7 @@ const smokePuffs: [number, number][] = [
                 </h3>
                 <ul class="log-list">
                   {lane.cards.map(card => (
-                    <li id={card.id} data-card-id={card.id} class="log-row">
+                    <li id={card.id} data-card-id={card.id} class="log-row panel">
                       {card.evidenceLinks.length > 0 ? (
                         <details open>
                           <summary>
