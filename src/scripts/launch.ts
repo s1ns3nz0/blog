@@ -136,7 +136,7 @@ function updateAnomalies(vh: number) {
   const nose = rocketTop(vh);
   let active: HTMLElement | undefined;
   let green: { t: HTMLElement; line: string; label: string } | undefined;
-  for (const t of transits) {
+  transits.forEach((t, i) => {
     const section = t.parentElement ?? t;
     const top = t.getBoundingClientRect().top;
     const title = stageTitle(section).getBoundingClientRect().top;
@@ -145,16 +145,21 @@ function updateAnomalies(vh: number) {
     const isPast = title <= nose;
     if (top < mid && !isPast && t.dataset.transit) active = t;
 
-    // Green window: title at the nose until the cards' bottom passes mid.
+    // Green window: title at the nose until the cards' bottom passes
+    // mid-screen. Spread stages hold on until the next fault's gap does,
+    // so their lines get the whole stretch.
     const log = section.querySelector<HTMLElement>(".stage-log");
+    const spread = "spread" in t.dataset;
     if (isPast && log) {
-      const bottom = log.getBoundingClientRect().bottom;
+      const next = spread ? transits.slice(i + 1).find(n => n.dataset.transit) : undefined;
+      const bottom = (next ?? log).getBoundingClientRect()[next ? "top" : "bottom"];
       if (bottom > mid) {
-        // Same scroll distance per line on every stage (20% of the screen);
-        // the last line holds until the cards pass. A short stage squeezes
-        // its lines evenly into whatever room it has.
+        // Lines split that window evenly (data-spread), or get a fixed 20%
+        // of the screen each with the last one holding to the end. A short
+        // window squeezes its lines into the room it has.
         const span = bottom - title - (mid - nose);
-        const each = Math.min(vh * 0.2, span / lines.length);
+        const even = span / lines.length;
+        const each = spread ? even : Math.min(vh * 0.2, even);
         const step = Math.min(lines.length - 1, Math.floor((nose - title) / Math.max(each, 1)));
         green = { t, line: lines[step], label: t.dataset.calloutLabel ?? "✓ Resolved" };
       }
@@ -162,8 +167,7 @@ function updateAnomalies(vh: number) {
 
     if (isPast && !passed.has(id)) {
       passed.add(id);
-      if (!anomaliesPrimed) continue;
-      if (!t.dataset.transit) continue;
+      if (!anomaliesPrimed || !t.dataset.transit) return;
       // Just cleared this gap: recovery pulse on the rocket.
       root.setAttribute("data-recovered", "");
       window.clearTimeout(recoverTimer);
@@ -176,7 +180,7 @@ function updateAnomalies(vh: number) {
     } else if (!isPast) {
       passed.delete(id);
     }
-  }
+  });
   anomaliesPrimed = true;
   if (active) {
     window.clearTimeout(calloutTimer);

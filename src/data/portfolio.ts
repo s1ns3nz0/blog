@@ -49,6 +49,9 @@ export type Stage = {
   flightRules?: FlightRule[];
   /** Green callout lines for a stage with no fault before it. */
   notes?: string[];
+  /** Spread the green lines evenly over the stage's cards instead of a
+      fixed scroll distance per line. */
+  spreadCallout?: boolean;
 };
 
 export type Audience = {
@@ -90,6 +93,7 @@ export const stages: Stage[] = [
   {
     id: "design",
     rocketStage: "build",
+    spreadCallout: true,
     event: "T-00:10  DESIGN REVIEW",
     name: "Design",
     governing: "I put security into the design before anything gets built.",
@@ -109,6 +113,7 @@ export const stages: Stage[] = [
   },
   {
     id: "build",
+    spreadCallout: true,
     event: "T-00:05  PAD CHECKS",
     name: "Build",
     governing: "I build platforms that are secure before the first workload ships.",
@@ -320,7 +325,10 @@ export const cards: Card[] = [
     zone: "oss",
     title: "SEAL Frameworks: private registries and mirrors",
     summary: "Guidance on private registries and package mirrors so builds pull only reviewed artifacts.",
-    evidence: ["private-registries-and-mirrors-seal-frameworks"],
+    evidence: [
+      "private-registries-and-mirrors-seal-frameworks",
+      { label: "PR #627", url: "https://github.com/security-alliance/frameworks/pull/627" },
+    ],
   },
 
   // ---------- Deploy ----------

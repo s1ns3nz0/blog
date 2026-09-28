@@ -362,11 +362,12 @@ const smokePuffs: [number, number][] = [
               data-motion={anomalyBefore(stage.id)?.motion}
               data-caution={anomalyBefore(stage.id)?.caution}
               data-resolution={anomalyBefore(stage.id)?.resolution.join("|")}
+              data-spread={stage.spreadCallout}
             />
           )}
 
           {!anomalyBefore(stage.id) && stage.notes && (
-            <div hidden data-notes data-callout-label="◆ Design review" data-resolution={stage.notes.join("|")} />
+            <div hidden data-notes data-callout-label="◆ Design review" data-resolution={stage.notes.join("|")} data-spread={stage.spreadCallout} />
           )}
 
           <div class="stage-head" data-stage-head>
