@@ -72,6 +72,9 @@ function update() {
     root.style.setProperty(prop, value.toFixed(3));
     if (prop === "--light") root.toggleAttribute("data-bright", value > 0.45);
   }
+  // Blue daytime sky: day has risen and space has not yet taken over.
+  const sky = Number(root.style.getPropertyValue("--day")) * (1 - Number(root.style.getPropertyValue("--space")));
+  root.toggleAttribute("data-daylight", sky > 0.5);
 
   updateAnomalies(vh);
 

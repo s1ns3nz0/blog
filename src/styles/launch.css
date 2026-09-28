@@ -18,6 +18,7 @@
   --col: calc(var(--rx) + 154 * var(--u) + 10px);
   --ink: #e6edf7;
   --panel: rgb(8 12 28 / 0.72);
+  --log-ink: 230 237 247; /* stage-log text, as an rgb triplet */
   --panel-line: rgb(255 255 255 / 0.14);
   --accent-hot: #ff8a3d;
   margin: 0;
@@ -637,7 +638,15 @@ html[data-bright] .meter a::before {
 
 /* ---------- stage log: one panel, zone sections, two-line rows ---------- */
 
+/* In daylight (the blue sky of Deploy) the log turns into frosted white
+   with slate ink; launch.ts sets html[data-daylight]. */
+html[data-daylight] .stage-log {
+  --log-ink: 15 23 42;
+  --panel: rgb(255 255 255 / 0.82);
+  --panel-line: rgb(15 23 42 / 0.12);
+}
 .stage-log {
+  transition: background-color 0.4s ease, border-color 0.4s ease;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -649,7 +658,7 @@ html[data-bright] .meter a::before {
   align-items: center;
   gap: 8px;
   margin: 0 0 4px;
-  color: rgb(230 237 247 / 0.62);
+  color: rgb(var(--log-ink) / 0.62);
   font: 700 11px var(--font-space-mono), monospace;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -665,7 +674,7 @@ html[data-bright] .meter a::before {
 }
 /* what the zone means, sitting thin on the rail */
 .log-zone-blurb {
-  color: rgb(230 237 247 / 0.5);
+  color: rgb(var(--log-ink) / 0.5);
   font: 400 11px var(--font-space-grotesk), sans-serif;
   letter-spacing: 0.02em;
   text-transform: none;
@@ -714,14 +723,14 @@ html[data-bright] .meter a::before {
   position: absolute;
   right: 4px;
   top: 12px;
-  color: rgb(230 237 247 / 0.5);
+  color: rgb(var(--log-ink) / 0.5);
   transition: transform 0.2s ease;
 }
 .log-row details[open] summary::after {
   transform: rotate(90deg);
 }
 .log-row summary:hover .row-title {
-  color: #fff;
+  color: rgb(var(--log-ink));
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
@@ -734,18 +743,18 @@ html[data-bright] .meter a::before {
   gap: 2px 12px;
 }
 .row-title {
-  color: #f1f5f9;
+  color: rgb(var(--log-ink));
   font-weight: 600;
 }
 .row-meta {
-  color: rgb(230 237 247 / 0.55);
+  color: rgb(var(--log-ink) / 0.55);
   font: 400 10px var(--font-space-mono), monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 .row-summary {
-  color: rgb(230 237 247 / 0.7);
+  color: rgb(var(--log-ink) / 0.7);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -768,7 +777,7 @@ html[data-bright] .meter a::before {
 }
 .row-links dt {
   padding-top: 2px;
-  color: rgb(230 237 247 / 0.55);
+  color: rgb(var(--log-ink) / 0.55);
   font: 400 11px var(--font-space-mono), monospace;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -784,14 +793,14 @@ html[data-bright] .meter a::before {
 }
 .code-links a,
 .rules a {
-  color: rgb(230 237 247 / 0.9);
+  color: rgb(var(--log-ink) / 0.9);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: rgb(230 237 247 / 0.35);
+  text-decoration-color: rgb(var(--log-ink) / 0.35);
   text-underline-offset: 3px;
 }
 .rules {
-  color: rgb(230 237 247 / 0.75);
+  color: rgb(var(--log-ink) / 0.75);
   font-size: 13px;
 }
 
@@ -807,15 +816,15 @@ html[data-bright] .meter a::before {
 }
 .evidence a,
 .orbit .answer a {
-  color: rgb(230 237 247 / 0.9);
+  color: rgb(var(--log-ink) / 0.9);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: rgb(230 237 247 / 0.35);
+  text-decoration-color: rgb(var(--log-ink) / 0.35);
   text-underline-offset: 3px;
 }
 .evidence a:hover {
-  color: #fff;
-  text-decoration-color: #fff;
+  color: rgb(var(--log-ink));
+  text-decoration-color: currentColor;
 }
 
 .summary-zone {

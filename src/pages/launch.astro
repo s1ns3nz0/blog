@@ -258,7 +258,7 @@ const smokePuffs: [number, number][] = [
         <rect class="arm" x="91" y="103" width="43" height="5" />
         <rect class="arm" x="91" y="223" width="43" height="5" />
       </svg>
-      <p class="pad-label"><span>PAD 01</span><span class="pad-handle">{identity.handle.toUpperCase()}</span></p>
+      <p class="pad-label"><span>PAD 01</span><span class="pad-handle">DEVSECOPS</span></p>
       {
         smokePuffs.map(([dx, scale]) => (
           <div class="smoke" style={`--dx: calc(${dx} * var(--u)); --s: ${scale}`} />
@@ -321,7 +321,7 @@ const smokePuffs: [number, number][] = [
         >
           {i === 0 && (
             <header class="mb-16 flex min-h-[70vh] flex-col justify-center gap-5">
-              <p class="telemetry spaced"><span>Mission {identity.handle}</span><span>T-00:10</span></p>
+              <p class="telemetry spaced"><span>Mission DevSecOps</span><span>T-00:10</span></p>
               <p class="telemetry" data-audience-label hidden />
               <h1 class="hero-title display text-4xl leading-tight font-bold text-white sm:text-6xl">
                 {identity.headline}
@@ -389,7 +389,7 @@ const smokePuffs: [number, number][] = [
                   {lane.cards.map(card => (
                     <li id={card.id} data-card-id={card.id} class="log-row">
                       {card.evidenceLinks.length > 0 ? (
-                        <details>
+                        <details open>
                           <summary>
                             <span class="row-top">
                               <span class="row-title">{card.title}</span>
