@@ -16,6 +16,7 @@ import {
   type Card,
   type FlightRule,
 } from "@/data/portfolio";
+import { chips, privacyNote, securityDesign } from "@/data/assistant";
 import "@/styles/launch.css";
 
 // Evidence must point at published, listed posts; fail the build otherwise
@@ -77,6 +78,16 @@ const meter = [
   { id: "operate", href: "#operate", label: "Stage 2" },
   { id: "orbit", href: "#summary", label: "Orbit" },
 ];
+
+const audienceIds = new Set(["default", ...audiences.map(a => a.id)]);
+const resolvedChips = chips.map(chip => {
+  for (const a of chip.audiences) {
+    if (!audienceIds.has(a)) {
+      throw new Error(`assistant: chip "${chip.id}" targets unknown audience "${a}"`);
+    }
+  }
+  return { ...chip, sourceLinks: chip.sources.map(post) };
+});
 
 const EVIDENCE_SHOWN = 3;
 // Launch tower cross-bracing rows (pad viewBox units) and ignition smoke
@@ -143,6 +154,16 @@ const smokePuffs: [number, number][] = [
   </div>
 
   <Rocket />
+
+  <!-- The parked satellite is the product: it opens the assistant. -->
+  <button
+    type="button"
+    class="sat-button"
+    data-open-assistant
+    aria-label={`Ask the AI assistant about ${identity.name}`}
+  >
+    <span class="sat-tag">Ask me</span>
+  </button>
 
   <div class="hud" role="status" aria-label="Flight telemetry">
     <span><b data-hud-t>T-00:10</b></span>
@@ -253,6 +274,9 @@ const smokePuffs: [number, number][] = [
         <ul class="flex flex-wrap gap-2 text-xs">
           {identity.roles.map(r => <li class="panel px-3 py-1">{r}</li>)}
         </ul>
+        <button type="button" class="ask-button mt-2 self-start" data-open-assistant>
+          Ask the satellite ↗
+        </button>
       </header>
 
       <div class="grid gap-4 lg:grid-cols-3">
@@ -322,6 +346,81 @@ const smokePuffs: [number, number][] = [
       </nav>
     </section>
   </main>
+
+  <dialog id="assistant" class="assistant" aria-labelledby="assistant-title">
+    <div class="assistant-inner">
+      <header class="flex items-start justify-between gap-4">
+        <div>
+          <p class="telemetry">Payload online · v2</p>
+          <h2 id="assistant-title" class="display text-xl font-bold">Ask the satellite</h2>
+          <p class="mt-1 text-sm text-slate-300">
+            The product this page launched: an assistant that answers questions
+            about {identity.name}.
+          </p>
+        </div>
+        <button type="button" class="assistant-close" data-close-assistant aria-label="Close">✕</button>
+      </header>
+
+      <ul class="flex flex-col gap-2" aria-label="Suggested questions">
+        {
+          resolvedChips.map(chip => (
+            <li data-chip-audiences={chip.audiences.join(" ")}>
+              <button type="button" class="chip" data-chip={chip.id} aria-pressed="false">
+                {chip.question}
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="answer-area" aria-live="polite">
+        <p class="text-sm text-slate-400" data-answer-empty>Pick a question above.</p>
+        {
+          resolvedChips.map(chip => (
+            <div class="answer" data-answer={chip.id} hidden>
+              <p class="text-sm leading-relaxed">{chip.answer}</p>
+              <ul class="evidence mt-3 flex flex-col gap-1 text-sm" aria-label="Sources">
+                {chip.sourceLinks.map(l => (
+                  <li>→ <a href={l.url}>{l.title}</a></li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <form class="flex gap-2">
+        <label class="sr-only" for="assistant-input">Your question</label>
+        <input
+          id="assistant-input"
+          class="assistant-input"
+          type="text"
+          maxlength="300"
+          placeholder="Free-form questions: coming soon"
+          disabled
+        />
+        <button type="submit" class="ask-button" disabled>Send</button>
+      </form>
+
+      <p class="text-xs text-slate-400">{privacyNote}</p>
+
+      <details class="text-sm">
+        <summary class="cursor-pointer font-semibold">How this assistant is secured</summary>
+        <div class="mt-3 flex flex-col gap-3">
+          {
+            securityDesign.map(group => (
+              <div>
+                <p class="telemetry mb-1">{group.title}</p>
+                <ul class="flex list-disc flex-col gap-1 pl-5 text-slate-300">
+                  {group.items.map(item => <li>{item}</li>)}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </details>
+    </div>
+  </dialog>
 
   <script
     is:inline

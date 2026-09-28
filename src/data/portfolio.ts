@@ -30,7 +30,7 @@ export type Audience = {
   id: string;
   label: string;
   subline: string;
-  /** Replaces identity.fairing on the rocket, e.g. the company name. */
+  /** Replaces identity.fairing on the rocket. Keep it to ~9 characters. */
   fairing?: string;
   /** Card ids shown first, in this order. Others keep their default order. */
   priority: string[];
@@ -41,11 +41,15 @@ export const identity = {
   handle: "s1ns3nz0",
   headline: "Launch your product securely.",
   /** Painted on the rocket fairing: the thing that actually reaches orbit. */
-  fairing: "YOUR PRODUCT",
+  fairing: "PRODUCT",
   subline:
     "I build the platform, secure the pipeline that ships to it, and watch it once it's running.",
   roles: ["Platform Engineer", "DevSecOps Engineer", "Security Engineer"],
 };
+
+/** Fairing lettering length in rocket viewBox units; the nose is narrow. */
+export const fairingTextLength = (label: string) =>
+  Math.min(48, Math.max(30, label.length * 5.2));
 
 export const stages: Stage[] = [
   {
@@ -230,7 +234,7 @@ export const audiences: Audience[] = [
   {
     id: "lightning-labs",
     label: "Lightning Labs",
-    fairing: "LIGHTNING LABS",
+    fairing: "LIGHTNING",
     subline:
       "Kubernetes in production, observability that operators can act on, and hands-on work with Aperture and the Lightning stack.",
     priority: ["private-eks", "l402-observability", "open-source", "secrets-and-keys", "pipeline-controls"],

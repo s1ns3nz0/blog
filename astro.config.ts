@@ -91,6 +91,34 @@ export default defineConfig({
       styles: ["normal"],
       formats: ["woff2", "woff"],
     },
+    // /launch portfolio only: space / mission-control type.
+    {
+      name: "Orbitron",
+      cssVariable: "--font-orbitron",
+      provider: fontProviders.google(),
+      fallbacks: ["sans-serif"],
+      weights: [500, 700, 900],
+      styles: ["normal"],
+      formats: ["woff2"],
+    },
+    {
+      name: "Space Grotesk",
+      cssVariable: "--font-space-grotesk",
+      provider: fontProviders.google(),
+      fallbacks: ["Pretendard Variable", "sans-serif"],
+      weights: [400, 500, 700],
+      styles: ["normal"],
+      formats: ["woff2"],
+    },
+    {
+      name: "Space Mono",
+      cssVariable: "--font-space-mono",
+      provider: fontProviders.google(),
+      fallbacks: ["monospace"],
+      weights: [400, 700],
+      styles: ["normal"],
+      formats: ["woff2"],
+    },
   ],
   env: {
     schema: {

@@ -38,9 +38,10 @@ Compliance (NIST, OSCAL) appears as "flight rule" badges on cards, not as its ow
 - SVG line-art rocket, CSS gradient background (ground to sky to space to bright orbit).
 - Mission-control telemetry UI (T+ clock, altitude, stage log), monospace type.
 - Ignores the blog light/dark toggle; the flight itself is the theme.
+- Type (launch page only): Orbitron for display and numbers, Space Grotesk for body text, Space Mono for telemetry.
 - Launch pad: line-art lattice tower with a crane, two umbilical arms that swing away at ignition, a pad platform with a `PAD 01` label, and ignition smoke.
 - Space: Earth's limb with an atmosphere glow rises from the bottom after stage 2 separation.
-- Rocket labels tell the DevSecOps story: stage 1 `PLATFORM`, stage 2 `PIPELINE`, fairing `YOUR PRODUCT` (`?for=` swaps in the company name). Each booster falls away once its job is done; only the product reaches orbit.
+- Rocket labels tell the DevSecOps story: stage 1 `PLATFORM`, stage 2 `PIPELINE`, fairing `PRODUCT` (`?for=` swaps in the company name). Each booster falls away once its job is done; only the product reaches orbit.
 - Orbit arrival: the fairing splits clamshell-style, a folded satellite emerges and deploys its solar panels, then parks top-right with a blinking beacon. The satellite is the product: the AI assistant about me (v2). The sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
 - All brightness changes follow scroll position. Reduced motion drops smoke, bloom, and arm/satellite transitions; states still change.
 
@@ -57,7 +58,7 @@ English only.
 
 ## AI assistant (v2, v3)
 
-- Suggested-question chips: answers are drafted, reviewed, and committed as JSON with cited post slugs (validated at build). v2 drafts them by hand; v3 adds a generation script. Zero runtime calls.
+- Suggested-question chips: answers are drafted, reviewed, and committed in `src/data/assistant.ts` with cited post slugs (validated at build). v2 drafts them by hand; v3 adds a generation script. Zero runtime calls.
 - Free-form questions only: OpenRouter free models with a fallback chain, small context (resume summary, stage cards, 3-5 posts picked by a build-time keyword index), answers must cite posts.
 - Limits: per-IP daily cap and a global daily cap below the account quota, both configurable. On exhaustion, fall back to chip answers and contact links.
 - Privacy notice (free providers may log prompts), input length cap, off-topic refusal, API key only in the serverless function.

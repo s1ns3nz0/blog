@@ -25,13 +25,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <Font
-      cssVariable="--font-google-sans-code"
-      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
-    />
-    <Font
-      cssVariable="--font-bricolage"
+      cssVariable="--font-orbitron"
       preload={[{ subset: "latin", weight: 700, style: "normal" }]}
     />
+    <Font
+      cssVariable="--font-space-grotesk"
+      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
+    />
+    <Font cssVariable="--font-space-mono" />
 
     <title>{title}</title>
     <meta name="description" content={description} />

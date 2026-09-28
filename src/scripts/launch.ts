@@ -97,7 +97,8 @@ function schedule() {
   });
 }
 
-function applyAudience() {
+/** Applies ?for= overrides and returns the matched audience id, if any. */
+function applyAudience(): string | undefined {
   const id = new URLSearchParams(window.location.search).get("for");
   if (!id) return;
   const json = document.getElementById("launch-audiences")?.textContent;
@@ -114,17 +115,59 @@ function applyAudience() {
   });
   if (audience.fairing) {
     const fairing = audience.fairing;
+    const length = Math.min(48, Math.max(30, fairing.length * 5.2));
     document.querySelectorAll("[data-fairing-label]").forEach(el => {
       el.textContent = fairing;
+      el.setAttribute("textLength", String(length)); // mirrors fairingTextLength()
     });
   }
   document.querySelectorAll<HTMLElement>("[data-card-id]").forEach(card => {
     const rank = audience.priority.indexOf(card.dataset.cardId ?? "");
     card.style.order = String(rank === -1 ? 100 : rank);
   });
+  return audience.id;
 }
 
-applyAudience();
+/** Satellite assistant: native <dialog>, pre-written answers only (v2). */
+function setupAssistant(audienceId: string | undefined) {
+  const dialog = document.getElementById("assistant");
+  if (!(dialog instanceof HTMLDialogElement)) return;
+
+  // Show this audience's chips, falling back to the default set.
+  const items = Array.from(
+    dialog.querySelectorAll<HTMLElement>("[data-chip-audiences]")
+  );
+  const has = (el: HTMLElement, id: string) =>
+    (el.dataset.chipAudiences ?? "").split(" ").includes(id);
+  const target =
+    audienceId && items.some(el => has(el, audienceId)) ? audienceId : "default";
+  for (const el of items) el.hidden = !has(el, target);
+
+  document.querySelectorAll("[data-open-assistant]").forEach(button => {
+    button.addEventListener("click", () => dialog.showModal());
+  });
+  dialog.querySelector("[data-close-assistant]")?.addEventListener("click", () => {
+    dialog.close();
+  });
+  // Clicks on the transparent dialog area (outside the panel) close it.
+  dialog.addEventListener("click", event => {
+    if (event.target === dialog) dialog.close();
+  });
+
+  const chips = Array.from(dialog.querySelectorAll<HTMLButtonElement>("[data-chip]"));
+  const answers = Array.from(dialog.querySelectorAll<HTMLElement>("[data-answer]"));
+  const empty = dialog.querySelector<HTMLElement>("[data-answer-empty]");
+  for (const chip of chips) {
+    chip.addEventListener("click", () => {
+      const id = chip.dataset.chip;
+      for (const c of chips) c.setAttribute("aria-pressed", String(c === chip));
+      for (const a of answers) a.hidden = a.dataset.answer !== id;
+      if (empty) empty.hidden = true;
+    });
+  }
+}
+
+setupAssistant(applyAudience());
 update();
 window.addEventListener("scroll", schedule, { passive: true });
 window.addEventListener("resize", schedule);
