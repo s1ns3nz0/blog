@@ -38,9 +38,10 @@
   .launch-body {
     --rh: min(62vh, 520px);
     --rx: max(24px, 7vw);
-    --sat-x: calc(100vw - 150px);
+    /* park inside the 160px right gutter, clear of the content column */
+    --sat-x: calc(100vw - 84px);
     --sat-y: 118px;
-    --sat-scale: 1.3;
+    --sat-scale: 1.1;
     --col: calc(var(--rx) + var(--rh) * 0.24 + 7vw);
   }
 }
@@ -359,6 +360,7 @@ html[data-stage="orbit"] .r-beacon {
   transform-origin: calc(50 * var(--u)) calc(60 * var(--u));
 }
 html[data-stage="orbit"] .rocket {
+  z-index: 3; /* on phones the parked satellite sits over the content, like the HUD */
   left: calc(var(--sat-x) - 50 * var(--u));
   top: calc(var(--sat-y) - 60 * var(--u));
   transform: scale(var(--sat-scale)) rotate(-6deg);
@@ -726,6 +728,117 @@ html[data-bright] .meter a::before {
   font: 700 10px var(--font-space-mono), monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+/* ---------- summary: career timeline | highlights, certs, open source ---------- */
+
+.summary-split {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 1024px) {
+  .summary-split {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.timeline {
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 22px;
+  list-style: none;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: rgb(15 23 42 / 0.18);
+}
+.timeline li {
+  position: relative;
+  padding-bottom: 20px;
+}
+.timeline li:last-child {
+  padding-bottom: 0;
+}
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -21px;
+  top: 5px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgb(15 23 42 / 0.45);
+  border-radius: 999px;
+  background: #fff;
+}
+.timeline li:first-child::before {
+  border-color: var(--accent-hot);
+  background: var(--accent-hot);
+}
+.tl-period {
+  margin: 0;
+  color: #64748b;
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.tl-role {
+  margin: 2px 0 0;
+  font-weight: 600;
+}
+.tl-org {
+  margin: 0;
+  color: #334155;
+  font-size: 14px;
+}
+.tl-detail {
+  margin: 4px 0 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.side-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.contact-link {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgb(15 23 42 / 0.12);
+  border-radius: 12px;
+  background: #fff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.contact-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgb(15 23 42 / 0.12);
+}
+.contact-icon {
+  width: 22px;
+  height: 22px;
+}
+.contact-blog {
+  margin-left: 8px;
+  font-weight: 600;
 }
 
 /* summary sits on the bright orbit layer */

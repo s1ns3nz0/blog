@@ -194,10 +194,10 @@ export const cards: Card[] = [
     zone: "field",
     title: "PKI digital signature audits",
     summary:
-      "At Deloitte, audited PKI-based digital signature systems and contributed to the Digital Signature System Audit Assessment Guide v1.4.0, built on WebTrust criteria.",
+      "At Deloitte, assessed a digital signature and certificate service (cryptographic controls, access, key lifecycle) and drafted Appendices 2-3 of the Digital Signature Certification Service Evaluation Guide v1.4.0.",
     evidence: [
       {
-        label: "Digital Signature Audit Assessment Guide (Deloitte)",
+        label: "Digital Signature Certification Service Evaluation Guide (Deloitte)",
         url: "https://www.deloitte.com/kr/ko/services/consulting/perspectives/crisis-management-article-20201230.html",
       },
     ],
@@ -340,9 +340,9 @@ export const cards: Card[] = [
     id: "army-automation",
     stage: "operate",
     zone: "field",
-    title: "Security automation in the Army Signal Corps",
+    title: "Corps CERT, Republic of Korea Army",
     summary:
-      "As a platoon leader, wrote security-check automation scripts and a game-based security awareness program; won an Army cybersecurity competition.",
+      "Tuned Splunk detection rules to cut false positives, ran first-line incident response, and built an interactive security awareness game (2nd place, Army education competition). Selected for the Elite 300 Cyber Warriors.",
     evidence: [],
   },
   {
@@ -408,21 +408,56 @@ export const cards: Card[] = [
   },
 ];
 
+/** Newest first; from the resume. Rendered as a vertical timeline. */
 export const career = [
   {
-    role: "Captain, Republic of Korea Army Signal Corps",
+    period: "Nov 2024 – Sep 2026",
+    role: "Cybersecurity Consultant",
+    org: "IBM",
     detail:
-      "Led a platoon of about 20. First place in a communications-site deployment evaluation; won an Army cybersecurity competition.",
+      "Product security maturity roadmap against the EU Cyber Resilience Act, iDMZ and OT security across nuclear, semiconductor, and automotive sites, OT SOC detection logic, and AWS assessments against ISMS-P.",
   },
   {
-    role: "Deloitte",
+    period: "Mar 2024 – Nov 2024",
+    role: "Sr. Security Consultant",
+    org: "Deloitte Consulting Korea",
     detail:
-      "Audited PKI-based digital signature systems; contributed to the Digital Signature System Audit Assessment Guide v1.4.0 (WebTrust-based).",
+      "ISO 27001 certification audit, a digital signature service assessment, and co-authoring the Digital Signature Certification Service Evaluation Guide v1.4.0.",
   },
   {
-    role: "IBM",
-    detail: "Security consulting for global clients.",
+    period: "Jun 2023 – Feb 2024",
+    role: "Vulnerability Analysis Track",
+    org: "KITRI Best of the Best (BoB) 12th",
+    detail:
+      "National program with a ~3% acceptance rate. Led a multi-cloud CIEM platform with an IAM policy normalization engine across AWS, Azure, and GCP.",
   },
+  {
+    period: "Dec 2021 – Mar 2023",
+    role: "Signal Officer (Captain), Corps CERT",
+    org: "Republic of Korea Army",
+    detail:
+      "Elite 300 Cyber Warriors. Splunk detection tuning, first-line incident response, and audit evidence packages.",
+  },
+  {
+    period: "Mar 2018 – Dec 2021",
+    role: "Signal Officer (Lieutenant), Network Platoon Leader",
+    org: "Republic of Korea Army",
+    detail:
+      "Led a 25-member signal platoon; ranked #1 of 24 signal sites in a corps-level readiness evaluation.",
+  },
+];
+
+export const education = [
+  { period: "Aug 2026 – Aug 2028", degree: "M.S., Cyber Defense", school: "Dakota State University" },
+  { period: "Feb 2014 – Mar 2018", degree: "B.S., Civil Engineering", school: "Korea Military Academy" },
+];
+
+/** Resume highlights, shown beside the timeline. */
+export const highlights = [
+  { title: "Kubestronaut", detail: "3 hands-on and 2 knowledge-based Kubernetes certifications." },
+  { title: "Open-source contributor", detail: "30+ contributions to cloud, compliance, and security tooling." },
+  { title: "Detection rule optimizer", detail: "Better detection accuracy through Splunk and QRadar rule tuning." },
+  { title: "Top signal platoon leader", detail: "#1 of 24 signal platoons in a corps-level readiness evaluation." },
 ];
 
 export const certifications = [

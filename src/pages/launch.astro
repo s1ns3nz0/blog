@@ -3,6 +3,9 @@ import { getCollection } from "astro:content";
 import LaunchLayout from "@/layouts/LaunchLayout.astro";
 import Rocket from "@/components/launch/Rocket.astro";
 import EvidenceLink from "@/components/launch/EvidenceLink.astro";
+import IconGitHub from "@/assets/icons/brands/github.svg";
+import IconLinkedIn from "@/assets/icons/brands/linkedin.svg";
+import IconGmail from "@/assets/icons/brands/gmail.svg";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { getPostUrl } from "@/utils/getPostPaths";
 import config from "@/config";
@@ -11,6 +14,8 @@ import {
   stages,
   cards,
   career,
+  education,
+  highlights,
   certifications,
   openSource,
   audiences,
@@ -97,11 +102,20 @@ const numbers = [
   { value: certCount, label: "certifications" },
 ];
 
-const socialLabel: Record<string, string> = {
-  github: "GitHub",
-  linkedin: "LinkedIn",
-  mail: "Email",
+// Contact marks: official brand glyphs (Simple Icons, CC0) in brand colours.
+const brandIcons = { github: IconGitHub, linkedin: IconLinkedIn, mail: IconGmail };
+const brandMeta: Record<string, { label: string; color: string }> = {
+  github: { label: "GitHub", color: "#181717" },
+  linkedin: { label: "LinkedIn", color: "#0A66C2" },
+  mail: { label: "Email (Gmail)", color: "#EA4335" },
 };
+const contacts = config.socials
+  .filter(s => s.name in brandIcons)
+  .map(s => ({
+    url: s.url,
+    Icon: brandIcons[s.name as keyof typeof brandIcons],
+    ...brandMeta[s.name],
+  }));
 
 const meter = [
   { id: "build", href: "#build", label: "Pad" },
@@ -268,7 +282,7 @@ const smokePuffs: [number, number][] = [
               <h1 class="display text-4xl leading-tight font-bold text-white sm:text-6xl">
                 {identity.headline}
               </h1>
-              <p class="max-w-xl text-base text-slate-200 sm:text-lg" data-subline>
+              <p class="text-base text-slate-200 sm:text-lg" data-subline>
                 {identity.subline}
               </p>
               <ul class="flex flex-wrap gap-2 text-xs">
@@ -388,13 +402,10 @@ const smokePuffs: [number, number][] = [
       <header class="flex flex-col gap-3" data-stage-head>
         <p class="meta">T+09:00 · Orbit achieved</p>
         <h2 class="display text-4xl font-bold sm:text-5xl">{identity.name}</h2>
-        <p class="max-w-xl text-lg" data-subline>{identity.subline}</p>
+        <p class="text-lg" data-subline>{identity.subline}</p>
         <ul class="flex flex-wrap gap-2 text-xs">
           {identity.roles.map(r => <li class="panel px-3 py-1">{r}</li>)}
         </ul>
-        <button type="button" class="ask-button mt-2 self-start" data-open-assistant>
-          Ask the satellite ↗
-        </button>
       </header>
 
       <div class="grid gap-4 lg:grid-cols-3">
@@ -429,43 +440,78 @@ const smokePuffs: [number, number][] = [
         }
       </dl>
 
-      <div class="grid gap-4 lg:grid-cols-2">
-        <div class="panel p-5">
-          <h3 class="telemetry mb-3">Career</h3>
-          <ol class="flex flex-col gap-3 text-sm">
+      <div class="summary-split">
+        <section class="panel p-6" aria-labelledby="career-title">
+          <h3 id="career-title" class="meta mb-4">Career</h3>
+          <ol class="timeline">
             {
               career.map(c => (
                 <li>
-                  <p class="font-semibold">{c.role}</p>
-                  <p class="text-slate-600">{c.detail}</p>
+                  <p class="tl-period">{c.period}</p>
+                  <p class="tl-role">{c.role}</p>
+                  <p class="tl-org">{c.org}</p>
+                  <p class="tl-detail">{c.detail}</p>
                 </li>
               ))
             }
           </ol>
-        </div>
-        <div class="panel flex flex-col gap-5 p-5">
-          <div>
-            <h3 class="telemetry mb-3">Certifications</h3>
-            <ul class="flex flex-col gap-1 text-sm">
+          <h3 class="meta mt-6 mb-3">Education</h3>
+          <ul class="side-list">
+            {
+              education.map(e => (
+                <li>
+                  <span class="font-semibold">{e.degree}</span>, {e.school}
+                  <span class="tl-period block">{e.period}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <aside class="flex flex-col gap-4">
+          <section class="panel p-6" aria-labelledby="highlights-title">
+            <h3 id="highlights-title" class="meta mb-3">Highlights</h3>
+            <ul class="side-list">
+              {
+                highlights.map(h => (
+                  <li>
+                    <span class="font-semibold">{h.title}</span>
+                    <span class="block text-slate-600">{h.detail}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+          <section class="panel p-6" aria-labelledby="certs-title">
+            <h3 id="certs-title" class="meta mb-3">Certifications</h3>
+            <ul class="side-list">
               {certifications.map(c => <li>{c.name}</li>)}
             </ul>
-          </div>
-          <div>
-            <h3 class="telemetry mb-3">Open source</h3>
-            <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-              {openSource.map(o => <li><a href={o.url}>{o.name}</a></li>)}
+          </section>
+          <section class="panel p-6" aria-labelledby="oss-title">
+            <h3 id="oss-title" class="meta mb-3">Open source</h3>
+            <ul class="side-list">
+              {
+                openSource.map(o => (
+                  <li>
+                    <a href={o.url} target="_blank" rel="noopener noreferrer">{o.name} ↗</a>
+                  </li>
+                ))
+              }
             </ul>
-          </div>
-        </div>
+          </section>
+        </aside>
       </div>
 
-      <nav class="flex flex-wrap gap-3 text-sm" aria-label="Contact">
+      <nav class="contact" aria-label="Contact">
         {
-          config.socials.map(s => (
-            <a class="panel px-4 py-2" href={s.url}>{socialLabel[s.name] ?? s.name}</a>
+          contacts.map(c => (
+            <a class="contact-link" href={c.url} aria-label={c.label} title={c.label}>
+              <c.Icon class="contact-icon" style={`color: ${c.color}`} />
+            </a>
           ))
         }
-        <a class="panel px-4 py-2" href="/posts/">Read the blog</a>
+        <a class="contact-blog" href="/posts/">Read the blog →</a>
       </nav>
     </section>
   </main>
