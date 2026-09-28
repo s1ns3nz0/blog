@@ -187,10 +187,7 @@ const resolvedChips = chips.map(chip => {
   return { ...chip, sourceLinks: chip.sources.map(post) };
 });
 
-// HUD systems readouts and the in-flight anomaly log, both sourced from posts.
-const stageReadouts = Object.fromEntries(
-  stages.map(st => [st.id, st.readouts.map(r => ({ ...r, url: post(r.source).url }))])
-);
+// In-flight anomalies (their source posts are validated like any evidence).
 const anomalyLog = anomalies.map(a => ({
   ...a,
   url: post(a.source).url + (a.anchor ? `#${a.anchor}` : ""),
@@ -279,33 +276,17 @@ const smokePuffs: [number, number][] = [
       <span>ALT <b data-hud-alt>0.0</b> km</span>
       <span class="hidden sm:inline"><b data-hud-stage>Pad</b></span>
     </div>
-    <div class="hud-systems" aria-label="Systems">
-      {
-        stages.map(st => (
-          <p data-for-stage={st.id}>
-            {stageReadouts[st.id].map(r => (
-              <a href={r.url}>
-                {r.label} <b>{r.value}</b>
-              </a>
-            ))}
-          </p>
-        ))
-      }
-    </div>
   </div>
 
-  <ol class="hud-log" aria-label="Anomaly log" aria-live="polite">
-    {
-      anomalyLog.map(a => (
-        <li data-anomaly={a.id} data-state="pending">
-          <span class="log-caution">⚠ Caution: {a.caution}</span>
-          <a class="log-resolved" href={a.url} title={a.resolution}>
-            ✓ {a.caution} → {a.fix}
-          </a>
-        </li>
-      ))
-    }
-  </ol>
+  <!-- In-flight caution callout beside the rocket; launch.ts fills it. -->
+  <div class="flight-callout" data-callout data-state="idle" role="status" aria-live="polite">
+    <p class="flight-callout-title" data-callout-title></p>
+    <p class="flight-callout-text" data-callout-text></p>
+  </div>
+  <div class="alarm-vignette" aria-hidden="true"></div>
+  <div class="sparks" aria-hidden="true">
+    {Array.from({ length: 8 }, (_, i) => <span style={`--i: ${i}`} />)}
+  </div>
 
   <nav class="meter" aria-label="Flight stages">
     {
@@ -353,6 +334,8 @@ const smokePuffs: [number, number][] = [
               aria-hidden="true"
               data-transit={anomalyBefore(stage.id)?.id}
               data-motion={anomalyBefore(stage.id)?.motion}
+              data-caution={anomalyBefore(stage.id)?.caution}
+              data-resolution={anomalyBefore(stage.id)?.resolution}
             />
           )}
 
@@ -449,6 +432,8 @@ const smokePuffs: [number, number][] = [
             aria-hidden="true"
             data-transit={anomalyBefore("orbit")?.id}
             data-motion={anomalyBefore("orbit")?.motion}
+            data-caution={anomalyBefore("orbit")?.caution}
+            data-resolution={anomalyBefore("orbit")?.resolution}
           />
         )
       }

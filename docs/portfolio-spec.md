@@ -58,13 +58,13 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 - Ignores the blog light/dark toggle; the flight itself is the theme.
 - Type (launch page only): Orbitron for the hero, stage names, and big numbers; Space Grotesk for titles and body; Space Mono for labels, meta, and the HUD.
 - Lists are spaced or chipped, not joined with middle dots.
-- One accent: orange marks only the current state (meter, active chip) and primary buttons. Red and green appear only in the HUD caution panel. Zones use icons, not colours. One hairline style; no dashed borders or dashed underlines.
+- One accent: orange marks only the current state (meter, active chip) and primary buttons. Red and green appear only in the in-flight caution callout and alarm. Zones use icons, not colours. One hairline style; no dashed borders or dashed underlines.
 - Launch pad: line-art lattice tower with a crane, two umbilical arms that swing away at ignition, a pad platform with a `PAD 01` label, and ignition smoke.
 - Space: Earth's limb with an atmosphere glow rises from the bottom after stage 2 separation.
 - Rocket labels tell the DevSecOps story: stage 1 `PLATFORM`, stage 2 `PIPELINE`, fairing `PRODUCT` (`?for=` swaps in the company name). Each booster falls away once its job is done; only the product reaches orbit.
 - Orbit arrival: the fairing splits clamshell-style, a folded satellite emerges and deploys its solar panels, then parks top-right with a blinking beacon. The satellite is the product: the AI assistant about me (v2). The sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
-- HUD systems line: per-stage readouts taken from posts (Build: public API 0, namespaces 4, Vault+KMS; Deploy: 24 pipeline controls, 12 threat areas, SHA-pinned actions; Operate: L402 outcomes 6+10, 4 audit sources, immutable archive). Each links to its source post.
-- In-flight anomalies: a transit gap before each stage plays a fault (Cost overrun: PLATFORM overheats; Insecure CI/CD: flame sputters and the rocket sags; Anomaly detected: wobble; AI over-reliance: fairing alarm). Arriving at the stage clears it with a green recovery pulse, and the HUD log keeps a linked "Resolved" entry. Stages switch on their heading, so separations happen after the fix.
+- HUD: one line top-left (clock, altitude, stage). No readouts row.
+- In-flight anomalies: a transit gap before each stage plays a fault (Cost overrun: PLATFORM overheats; Insecure CI/CD: flame sputters and the rocket sags; Anomaly detected: wobble; AI over-reliance: fairing alarm). While a fault is active the failing stage glows red, sparks fly from it, the shake is stronger, the screen edges pulse red, and a blinking red `MASTER CAUTION` callout sits beside the rocket. Arriving at the stage clears it with a green recovery pulse and turns the callout into a green `RESOLVED` line that hides after 1.8s. Reduced motion keeps only the callout text. Stages switch on their heading, so separations happen after the fix.
 - Upper-stage nozzles stay hidden inside the stage below and slide out after separation.
 - All brightness changes follow scroll position. Reduced motion drops smoke, bloom, and arm/satellite transitions; states still change.
 
@@ -76,7 +76,7 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
    - Career: full timeline, newest first, period / logo + organization / role with three keywords / detail.
    - Open source: a "Security disclosures" block on top (embargoed reports only, orange left rule), a divider, then "Contributions": one full-width row per project: name with domain badges (Cloud, Security, Blockchain, Compliance), line 1 what the project is, line 2 what I contributed (copy reviewed with avoid-ai-writing), then status badges with counts. Rows expand to a Repo chip and per-contribution bullets whose links are uniform chips: code first (PR #n, Issue #n, or "28 PRs"), then "Write-up" for blog posts (post title as tooltip). Earlier layout: collapsed cards (keyword headline, tags, status summary) that expand to per-contribution statuses checked against GitHub (Merged / Open PR / Proposed / Reported / Fixed upstream / Under embargo). Open items stay open, never rounded up. Unpublished vulnerability reports appear only as a vendor-level "Coordinated disclosure" card: no product, date, severity, or link until fixes ship and disclosure is agreed.
    - Credentials: certifications, education, highlights.
-4. The AI assistant opens only from the parked satellite. In orbit the anomaly log and altitude meter fade out (and leave the tab order); the HUD dims.
+4. The AI assistant opens only from the parked satellite. In orbit the altitude meter fades out (and leave the tab order); the HUD dims.
 5. Contact marks: official GitHub, Gmail, and LinkedIn glyphs (Simple Icons, CC0) plus a blog link. No phone number or address. Organization logos: IBM (Simple Icons, CC0); Deloitte, KITRI, and the ROK Army emblem from Wikimedia Commons, marked public domain.
 
 English only.
@@ -115,6 +115,7 @@ English only.
 | v1.13 | Stat cards (5+ / 40 / 12+), full-width open-source rows with domain and status badges, 4 Korean certifications, no middle dots |
 | v1.14 | Stages renamed Build / Deploy / Operate |
 | v1.15 | Security disclosures block on top of open source, uniform link chips, Detection rule optimizer highlight removed |
+| v1.16 | One-line HUD; readouts and anomaly log removed; caution callout, red glow, sparks, vignette, stronger shake |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

@@ -94,38 +94,57 @@ function update() {
   }
 }
 
-// In-flight anomalies: active while their transit gap spans mid-screen,
-// resolved once scrolled past. State is derived from scroll position only.
+// In-flight anomalies: a fault is active while its transit gap spans
+// mid-screen, and resolves once scrolled past. The callout beside the
+// rocket shows the caution, then briefly the resolution.
 const transits = Array.from(document.querySelectorAll<HTMLElement>("[data-transit]"));
-const logItems = new Map(
-  Array.from(document.querySelectorAll<HTMLElement>("[data-anomaly]")).map(li => [
-    li.dataset.anomaly ?? "",
-    li,
-  ])
-);
+const callout = document.querySelector<HTMLElement>("[data-callout]");
+const calloutTitle = document.querySelector<HTMLElement>("[data-callout-title]");
+const calloutText = document.querySelector<HTMLElement>("[data-callout-text]");
+const passed = new Set<string>();
+let anomaliesPrimed = false; // first pass records position silently (e.g. reload mid-page)
+let calloutTimer: number | undefined;
 let recoverTimer: number | undefined;
+
+function showCallout(state: "caution" | "resolved" | "idle", title = "", text = "") {
+  if (!callout || !calloutTitle || !calloutText) return;
+  if (callout.dataset.state === state && calloutText.textContent === text) return;
+  callout.dataset.state = state;
+  calloutTitle.textContent = title;
+  calloutText.textContent = text;
+}
 
 function updateAnomalies(vh: number) {
   const mid = vh * 0.5;
-  let fault: string | undefined;
-  let latest: HTMLElement | undefined;
+  let active: HTMLElement | undefined;
   for (const t of transits) {
     const { top, bottom } = t.getBoundingClientRect();
-    const state = top < mid && bottom > mid ? "active" : bottom <= mid ? "resolved" : "pending";
-    if (state === "active") fault = t.dataset.motion;
-    const li = logItems.get(t.dataset.transit ?? "");
-    if (!li) continue;
-    if (li.dataset.state === "active" && state === "resolved") {
+    const id = t.dataset.transit ?? "";
+    if (top < mid && bottom > mid) active = t;
+    const isPast = bottom <= mid;
+    if (isPast && !passed.has(id)) {
+      passed.add(id);
+      if (!anomaliesPrimed) continue;
+      // Just cleared this gap: recovery pulse and a short "resolved" callout.
       root.setAttribute("data-recovered", "");
       window.clearTimeout(recoverTimer);
       recoverTimer = window.setTimeout(() => root.removeAttribute("data-recovered"), 1200);
+      showCallout("resolved", "✓ Resolved", t.dataset.resolution ?? "");
+      window.clearTimeout(calloutTimer);
+      calloutTimer = window.setTimeout(() => showCallout("idle"), 1800);
+    } else if (!isPast) {
+      passed.delete(id);
     }
-    li.dataset.state = state;
-    if (state !== "pending") latest = li;
   }
-  for (const li of logItems.values()) li.toggleAttribute("data-latest", li === latest);
-  if (fault) root.dataset.fault = fault;
-  else delete root.dataset.fault;
+  anomaliesPrimed = true;
+  if (active) {
+    window.clearTimeout(calloutTimer);
+    root.dataset.fault = active.dataset.motion;
+    showCallout("caution", "⚠ Master caution", active.dataset.caution ?? "");
+  } else {
+    delete root.dataset.fault;
+    if (callout?.dataset.state === "caution") showCallout("idle");
+  }
 }
 
 let queued = false;

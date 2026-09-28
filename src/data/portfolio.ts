@@ -33,13 +33,8 @@ export type Card = {
   flightRules?: FlightRule[];
 };
 
-/** One HUD systems readout; `source` is the post the number comes from. */
-export type Readout = { label: string; value: string; source: string };
-
 export type Stage = {
   id: StageId;
-  /** Shown in the HUD systems line while this stage is active. */
-  readouts: Readout[];
   /** Telemetry label shown in the HUD and section header. */
   event: string;
   name: string;
@@ -83,11 +78,6 @@ export const fairingTextLength = (label: string) =>
 export const stages: Stage[] = [
   {
     id: "build",
-    readouts: [
-      { label: "Public API", value: "0", source: "eks-security-controls-implemented-in-the-cluster-design" },
-      { label: "Namespaces", value: "4", source: "kubernetes-namespace-design-for-a-hoodi-validator" },
-      { label: "Secrets", value: "Vault+KMS", source: "vault-architecture-on-kubernetes" },
-    ],
     event: "T-00:10  PAD CHECKS",
     name: "Build",
     governing: "I build platforms that are secure before the first workload ships.",
@@ -96,11 +86,6 @@ export const stages: Stage[] = [
   },
   {
     id: "ship",
-    readouts: [
-      { label: "Pipeline ctrl", value: "24", source: "ci-cd-security-controls-implemented-in-the-pipeline-design" },
-      { label: "Threat areas", value: "12", source: "ci-cd-security-controls-implemented-in-the-pipeline-design" },
-      { label: "Actions", value: "SHA-pinned", source: "ci-cd-security-controls-implemented-in-the-pipeline-design" },
-    ],
     event: "T+01:12  STAGE 1 SEP",
     name: "Deploy",
     governing: "I make pipelines prove their own integrity, and I fix what I find upstream.",
@@ -109,11 +94,6 @@ export const stages: Stage[] = [
   },
   {
     id: "operate",
-    readouts: [
-      { label: "L402 outcomes", value: "6+10", source: "aperture-l402-metrics-before-and-after" },
-      { label: "Audit sources", value: "4", source: "audit-and-logging-architecture-for-hoodi-node-validator" },
-      { label: "Archive", value: "Immutable", source: "audit-and-logging-architecture-for-hoodi-node-validator" },
-    ],
     event: "T+04:38  STAGE 2 SEP",
     name: "Operate",
     governing: "I make running systems observable, and cheap enough to keep defending.",
