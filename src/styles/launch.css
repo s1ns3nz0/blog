@@ -747,7 +747,7 @@ html[data-bright] .meter a::before {
   width: 1px;
   background: rgb(15 23 42 / 0.18);
 }
-.timeline li {
+.timeline > li {
   position: relative;
   padding-bottom: 12px;
 }
@@ -761,10 +761,10 @@ html[data-bright] .meter a::before {
   justify-content: space-between;
   gap: 2px 12px;
 }
-.timeline li:last-child {
+.timeline > li:last-child {
   padding-bottom: 0;
 }
-.timeline li::before {
+.timeline > li::before {
   content: "";
   position: absolute;
   left: -21px;
@@ -775,7 +775,7 @@ html[data-bright] .meter a::before {
   border-radius: 999px;
   background: #fff;
 }
-.timeline li:first-child::before {
+.timeline > li:first-child::before {
   border-color: var(--accent-hot);
   background: var(--accent-hot);
 }
@@ -1038,7 +1038,8 @@ html[data-bright] .meter a::before {
   gap: 6px 24px;
   margin-top: 18px;
 }
-.summary-links button {
+.summary-links button,
+.summary-links a {
   padding: 0;
   border: 0;
   background: none;
@@ -1049,7 +1050,8 @@ html[data-bright] .meter a::before {
   text-decoration-color: rgb(15 23 42 / 0.3);
   text-underline-offset: 4px;
 }
-.summary-links button:hover {
+.summary-links button:hover,
+.summary-links a:hover {
   text-decoration-color: currentColor;
 }
 
@@ -1070,6 +1072,35 @@ html[data-stage="orbit"] .hud-systems {
 }
 html[data-stage="orbit"] .hud-wrap {
   opacity: 0.55;
+}
+
+/* tidy bullet lists inside the detail dialogs */
+.bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding-left: 1.1em;
+  list-style: disc;
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.bullets li::marker {
+  color: #94a3b8;
+}
+.bullets .tl-period {
+  margin-left: 8px;
+}
+.bullets .oss-status {
+  display: inline-block;
+  margin-right: 2px;
+  vertical-align: 1px;
+}
+.bullets .oss-links {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
 }
 
 /* detail dialogs: light, centered on desktop, bottom sheet on phones */

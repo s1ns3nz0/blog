@@ -69,9 +69,9 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 
 ## Summary page
 
-1. One claim, the biggest thing on the screen: "I turn security and compliance requirements into platform code." Name and roles sit above it, small.
-2. One line of proof under it: 5+ yrs in security · N open-source contributions (computed from the data, disclosures included) · Kubestronaut + 3 AWS certifications. Then three quiet links (Career / Open source / Credentials).
-3. Each link opens a detail dialog (light; centered on desktop, bottom sheet on phones; Esc, backdrop, and ✕ close):
+1. One claim, the biggest thing on the screen: "I turn security frameworks and compliance into platform code." Name and roles sit above it, small.
+2. One line of proof under it: 5+ yrs in security · N open-source contributions (computed from the data, disclosures included) · Kubestronaut + 3 AWS certifications. Then three quiet links (Career / Open source / Credentials) and "Resume (PDF) ↗", which renders only when `public/resume/Jinsoo_Yang_Resume.pdf` exists (publish a copy without the phone number).
+3. Each link opens a detail dialog, content as tidy bullet lists (light; centered on desktop, bottom sheet on phones; Esc, backdrop, and ✕ close):
    - Career: full timeline, newest first, period / logo + organization / role with three keywords / detail.
    - Open source: collapsed cards (keyword headline, tags, status summary) that expand to per-contribution statuses checked against GitHub (Merged / Open PR / Proposed / Reported / Fixed upstream / Under embargo). Open items stay open, never rounded up. Unpublished vulnerability reports appear only as a vendor-level "Coordinated disclosure" card: no product, date, severity, or link until fixes ship and disclosure is agreed.
    - Credentials: certifications, education, highlights.

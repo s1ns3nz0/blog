@@ -68,7 +68,7 @@ export const identity = {
   handle: "s1ns3nz0",
   headline: "Launch your product securely.",
   /** The one claim the summary makes; everything else is evidence. */
-  claim: "I turn security and compliance requirements into platform code.",
+  claim: "I turn security frameworks and compliance into platform code.",
   /** Painted on the rocket fairing: the thing that actually reaches orbit. */
   fairing: "PRODUCT",
   subline:
@@ -429,8 +429,12 @@ export const career = [
     keywords: ["EU CRA", "OT security", "ISMS-P"],
     org: "IBM",
     logo: "ibm",
-    detail:
-      "Product security maturity roadmap against the EU Cyber Resilience Act, iDMZ and OT security across nuclear, semiconductor, and automotive sites, OT SOC detection logic, and AWS assessments against ISMS-P.",
+    bullets: [
+      "Led a product security maturity assessment and roadmap aligned with the EU Cyber Resilience Act, presented to C-level leadership",
+      "Designed and deployed iDMZ and OT security across nuclear, semiconductor, and automotive sites",
+      "Built detection logic and monitoring use cases with IBM's global OT SOC",
+      "Assessed AWS environments against ISMS-P",
+    ],
   },
   {
     period: "Mar 2024 – Nov 2024",
@@ -438,8 +442,12 @@ export const career = [
     keywords: ["ISO 27001", "PKI", "Evaluation guide"],
     org: "Deloitte Consulting Korea",
     logo: "deloitte",
-    detail:
-      "ISO 27001 certification audit, a digital signature service assessment, and co-authoring the Digital Signature Certification Service Evaluation Guide v1.4.0.",
+    bullets: [
+      "Ran an ISO 27001 certification audit: gap analysis, control effectiveness, remediation validation",
+      "Assessed a digital signature and certificate service: cryptographic controls, access, key lifecycle",
+      "Drafted Appendices 2–3 of the Digital Signature Certification Service Evaluation Guide v1.4.0",
+      "Reviewed AWS architecture and controls against compliance frameworks",
+    ],
   },
   {
     period: "Jun 2023 – Feb 2024",
@@ -447,8 +455,11 @@ export const career = [
     keywords: ["Vulnerability analysis", "CIEM", "Multi-cloud IAM"],
     org: "KITRI Best of the Best (BoB) 12th",
     logo: "kitri",
-    detail:
-      "National program with a ~3% acceptance rate. Led a multi-cloud CIEM platform with an IAM policy normalization engine across AWS, Azure, and GCP.",
+    bullets: [
+      "Selected for a national program with a ~3% acceptance rate",
+      "Led a multi-cloud CIEM platform with an IAM policy normalization engine for AWS, Azure, and GCP",
+      "Published research on the IAM translation engine; the project became a startup",
+    ],
   },
   {
     period: "Dec 2021 – Mar 2023",
@@ -456,8 +467,12 @@ export const career = [
     keywords: ["Corps CERT", "Splunk", "Incident response"],
     org: "Republic of Korea Army",
     logo: "rok-army",
-    detail:
-      "Elite 300 Cyber Warriors. Splunk detection tuning, first-line incident response, and audit evidence packages.",
+    bullets: [
+      "Selected for the Army's Elite 300 Cyber Warriors",
+      "Tuned Splunk dashboards and detection rules, cutting false positives",
+      "Ran first-line incident response: evidence, interviews, timelines, reports",
+      "2nd place in a cybersecurity education competition with a web-based awareness game",
+    ],
   },
   {
     period: "Mar 2018 – Dec 2021",
@@ -465,8 +480,11 @@ export const career = [
     keywords: ["Network ops", "25-member platoon", "#1 of 24"],
     org: "Republic of Korea Army",
     logo: "rok-army",
-    detail:
-      "Led a 25-member signal platoon; ranked #1 of 24 signal sites in a corps-level readiness evaluation.",
+    bullets: [
+      "Led a 25-member signal platoon responsible for military network availability and security",
+      "Ranked #1 of 24 signal sites in a corps-level readiness evaluation",
+      "Designed and tested network failover and disaster recovery procedures",
+    ],
   },
 ];
 
