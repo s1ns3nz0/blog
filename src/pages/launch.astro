@@ -106,7 +106,7 @@ function statusBadges(contribs: { status: keyof typeof statusLabel; count?: numb
   for (const c of contribs) counts.set(c.status, (counts.get(c.status) ?? 0) + (c.count ?? 1));
   return [...counts].map(([st, n]) => `${n} ${statusLabel[st]}`);
 }
-// Link chips: code (PR/issue, external) first, then blog write-ups.
+// Contribution links: code (PR/issue, external) first, then blog write-ups.
 function linkChips(links: { title: string; url: string; external: boolean }[]) {
   const code = links.filter(l => l.external).map(l => ({ ...l, label: `${l.title} ↗`, tip: undefined }));
   const posts = links.filter(l => !l.external);
@@ -543,7 +543,9 @@ const smokePuffs: [number, number][] = [
                     <div class="oss-row-body">
                       {o.url && (
                         <p class="oss-repo">
-                          <a class="link-chip" href={o.url} target="_blank" rel="noopener noreferrer">Repo ↗</a>
+                          <a class="text-link" href={o.url} target="_blank" rel="noopener noreferrer">
+                            {o.url.replace(/^https:\/\/github\.com\//, "")} ↗
+                          </a>
                         </p>
                       )}
                       <ul class="bullets">
@@ -552,10 +554,10 @@ const smokePuffs: [number, number][] = [
                             <span class="oss-status">{statusLabel[c.status]}</span>{" "}
                             {c.what}
                             {c.chips.length > 0 && (
-                              <span class="link-chips">
+                              <span class="text-links">
                                 {c.chips.map(l => (
                                   <a
-                                    class="link-chip"
+                                    class="text-link"
                                     href={l.url}
                                     title={l.tip}
                                     target={l.external ? "_blank" : undefined}

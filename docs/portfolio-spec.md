@@ -118,6 +118,7 @@ English only.
 | v1.15 | Security disclosures block on top of open source, uniform link chips, Detection rule optimizer highlight removed |
 | v1.16 | One-line HUD; readouts and anomaly log removed; caution callout, red glow, sparks, vignette, stronger shake |
 | v1.17 | Summary: "How I work" (Proactive, Fast learner, Problem solver) under the stat cards; cards and lines rise in once on scroll; SEAL maintainer role |
+| v1.18 | Open source: links as underlined text in the flow, repo path atop each expanded row, kind as plain mono text (status is the only box) |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

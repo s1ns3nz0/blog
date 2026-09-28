@@ -1123,13 +1123,15 @@ html[data-bright] .meter a::before {
   flex-wrap: wrap;
   gap: 6px;
 }
+/* kind is a category, not a state: plain text, so status stays the only box */
+.kind-badges {
+  column-gap: 12px;
+}
 .kind-badge {
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: #eef2f7;
-  color: #334155;
-  font-size: 12px;
-  font-weight: 500;
+  color: #64748b;
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 .oss-row-about {
   color: #64748b;
@@ -1161,28 +1163,28 @@ html[data-bright] .meter a::before {
   padding-left: 20px;
 }
 .oss-repo {
-  margin: 0;
+  margin: 0 0 4px;
+  font-size: 13px;
 }
-/* links as uniform chips: code (PR/issue) first, then write-ups */
-.link-chips {
-  display: flex;
+/* plain underlined links in the text flow: code (PR/issue) first, then write-ups */
+.text-links {
+  display: inline-flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
+  column-gap: 12px;
+  margin-left: 8px;
+  font-size: 13px;
 }
-.sheet a.link-chip {
-  display: inline-block;
-  padding: 2px 9px;
-  border: 1px solid rgb(15 23 42 / 0.15);
-  border-radius: 6px;
-  background: #fff;
-  color: #1e293b;
-  font-size: 12px;
-  font-weight: 500;
-  text-decoration: none;
+.sheet a.text-link {
+  color: #334155;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(15 23 42 / 0.3);
+  text-underline-offset: 3px;
+  white-space: nowrap;
 }
-.sheet a.link-chip:hover {
-  border-color: rgb(15 23 42 / 0.4);
+.sheet a.text-link:hover {
+  color: #0f172a;
+  text-decoration-color: currentColor;
 }
 
 /* security disclosures sit apart, above the contributions */
