@@ -82,9 +82,16 @@ function evidenceMeta(links: { url: string; external: boolean }[]) {
 }
 const resolveCard = (c: Card) => {
   const evidenceLinks = c.evidence.map(resolveEvidence);
+  // Expanded row: code/external links as short labels, write-ups by full title.
+  const code = evidenceLinks
+    .filter(l => l.external)
+    .map(l => ({ ...l, title: l.title.replace(/ on GitHub$/, "") }));
   return {
     ...c,
     evidenceLinks,
+    code,
+    codeLabel: code.every(l => l.url.includes("github.com")) ? "Code" : "Links",
+    writeups: evidenceLinks.filter(l => !l.external),
     meta: evidenceMeta(evidenceLinks),
     rules: resolveRules(c.flightRules),
   };
@@ -280,7 +287,7 @@ const smokePuffs: [number, number][] = [
     </div>
   </div>
 
-  <!-- In-flight caution callout beside the rocket; launch.ts fills it. -->
+  <!-- In-flight caution callout above the rocket; launch.ts fills it. -->
   <div class="flight-callout" data-callout data-state="idle" role="status" aria-live="polite">
     <p class="flight-callout-title" data-callout-title></p>
     <p class="flight-callout-text" data-callout-text></p>
@@ -382,26 +389,45 @@ const smokePuffs: [number, number][] = [
                             </span>
                             <span class="row-summary">{card.summary}</span>
                           </summary>
-                          <div class="row-body">
-                            <ul class="evidence">
-                              {card.evidenceLinks.map(e => (
-                                <li>
-                                  <EvidenceLink {...e} />
-                                </li>
-                              ))}
-                            </ul>
-                            {card.rules.length > 0 && (
-                              <p class="meta rules">
-                                Rules:{" "}
-                                {card.rules.map((r, i) => (
-                                  <>
-                                    {i > 0 && ", "}
-                                    {r.url ? <a href={r.url}>{r.label}</a> : r.label}
-                                  </>
-                                ))}
-                              </p>
+                          <dl class="row-body">
+                            {card.code.length > 0 && (
+                              <div class="row-links">
+                                <dt>{card.codeLabel}</dt>
+                                <dd class="code-links">
+                                  {card.code.map(e => (
+                                    <EvidenceLink {...e} />
+                                  ))}
+                                </dd>
+                              </div>
                             )}
-                          </div>
+                            {card.writeups.length > 0 && (
+                              <div class="row-links">
+                                <dt>Write-ups</dt>
+                                <dd>
+                                  <ul class="evidence">
+                                    {card.writeups.map(e => (
+                                      <li>
+                                        <EvidenceLink {...e} />
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </dd>
+                              </div>
+                            )}
+                            {card.rules.length > 0 && (
+                              <div class="row-links">
+                                <dt>Rules</dt>
+                                <dd class="rules">
+                                  {card.rules.map((r, i) => (
+                                    <>
+                                      {i > 0 && ", "}
+                                      {r.url ? <a href={r.url}>{r.label}</a> : r.label}
+                                    </>
+                                  ))}
+                                </dd>
+                              </div>
+                            )}
+                          </dl>
                         </details>
                       ) : (
                         <div class="row-static">

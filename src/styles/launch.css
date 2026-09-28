@@ -695,8 +695,47 @@ html[data-bright] .meter a::before {
 .row-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  margin: 0;
   padding: 0 0 12px;
+}
+/* Code, Write-ups, Rules: a label column, then the links */
+.row-links {
+  display: grid;
+  gap: 4px 16px;
+}
+@media (min-width: 768px) {
+  .row-links {
+    grid-template-columns: 6rem minmax(0, 1fr);
+  }
+}
+.row-links dt {
+  padding-top: 2px;
+  color: rgb(230 237 247 / 0.55);
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.row-links dd {
+  margin: 0;
+}
+.code-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font: 400 13px var(--font-space-mono), monospace;
+}
+.code-links a,
+.rules a {
+  color: rgb(230 237 247 / 0.9);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(230 237 247 / 0.35);
+  text-underline-offset: 3px;
+}
+.rules {
+  color: rgb(230 237 247 / 0.75);
+  font-size: 13px;
 }
 
 .evidence {
@@ -1452,32 +1491,38 @@ html[data-stage="orbit"] .hud-wrap {
 
 /* ---------- in-flight alarm: callout, vignette, sparks ---------- */
 
-/* Caution callout beside the rocket's upper body, with a leader line. */
+/* Caution callout above the rocket's nose, clear of the page text, with a leader line down to it. */
 .flight-callout {
   position: fixed;
   z-index: 3;
-  left: calc(var(--rx) + var(--rh) * 0.227 + 34px);
-  top: calc(50% - var(--rh) * 0.34);
-  max-width: min(320px, calc(100vw - var(--rx) - var(--rh) * 0.227 - 50px));
+  left: var(--rx);
+  bottom: calc(50% + var(--rh) / 2 + 16px);
+  max-width: min(320px, calc(100vw - var(--rx) - 16px));
   padding: 10px 14px;
   border-radius: 8px;
   font-family: var(--font-space-mono), ui-monospace, monospace;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   opacity: 0;
-  transform: translateX(-8px);
+  transform: translateY(8px);
   transition:
     opacity 0.25s ease,
     transform 0.25s ease;
   pointer-events: none;
 }
+@media (min-width: 768px) {
+  /* stay in the rocket's column so the callout never covers the page text */
+  .flight-callout {
+    max-width: calc(var(--col) - var(--rx) - 16px);
+  }
+}
 .flight-callout::before {
   content: "";
   position: absolute;
-  right: 100%;
-  top: 50%;
-  width: 26px;
-  height: 2px;
+  top: 100%;
+  left: calc(var(--rh) * 0.1136 - 1px); /* rocket centre line */
+  width: 2px;
+  height: 14px;
   background: currentColor;
 }
 .flight-callout-title {
