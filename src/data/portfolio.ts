@@ -323,8 +323,8 @@ export const cards: Card[] = [
     id: "lnd-short-reads",
     stage: "ship",
     zone: "oss",
-    title: "lnd: short reads in address decoders",
-    summary: "Reported that lnd's fixed-width node announcement address decoders accept short reads.",
+    title: "LND: short reads in address decoders",
+    summary: "Reported that LND's fixed-width node announcement address decoders accept short reads.",
     evidence: [{ label: "Issue #11211", url: "https://github.com/lightningnetwork/lnd/issues/11211" }],
   },
 
@@ -657,7 +657,7 @@ export const openSource: OpenSourceEntry[] = [
   },
   {
     id: "lnd",
-    name: "lnd",
+    name: "LND",
     about: "Lightning Labs' implementation of a Lightning Network node.",
     url: "https://github.com/lightningnetwork/lnd",
     did: "Reported that the fixed-width decoders for node announcement addresses accept short reads.",
