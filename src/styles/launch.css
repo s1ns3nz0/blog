@@ -1152,15 +1152,66 @@ html[data-bright] .meter a::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.bullets.oss-row-body {
-  margin: 0;
-  padding: 12px 18px 16px 38px;
+.oss-row-body {
+  padding: 12px 18px 16px;
   border-top: 1px solid rgb(15 23 42 / 0.08);
 }
+.oss-row-body .bullets {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
 .oss-repo {
-  list-style: none;
-  margin-left: -1.1em;
-  font-size: 13px;
+  margin: 0;
+}
+/* links as uniform chips: code (PR/issue) first, then write-ups */
+.link-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.sheet a.link-chip {
+  display: inline-block;
+  padding: 2px 9px;
+  border: 1px solid rgb(15 23 42 / 0.15);
+  border-radius: 6px;
+  background: #fff;
+  color: #1e293b;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.sheet a.link-chip:hover {
+  border-color: rgb(15 23 42 / 0.4);
+}
+
+/* security disclosures sit apart, above the contributions */
+.disclosures {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  border: 1px solid rgb(15 23 42 / 0.1);
+  border-left: 3px solid var(--accent-hot);
+  border-radius: 10px;
+  background: #fff;
+}
+.disclosure-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin: 0;
+}
+.disclosure .oss-row-about {
+  margin: 0;
+}
+.contributions-title {
+  margin: 0 0 10px;
+  padding-top: 16px;
+  border-top: 1px solid rgb(15 23 42 / 0.12);
 }
 
 /* the flight is over: fold away the instruments, keep the satellite */

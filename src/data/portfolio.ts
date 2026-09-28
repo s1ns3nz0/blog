@@ -511,7 +511,6 @@ export const highlights = [
   { title: "Kubestronaut", detail: "3 hands-on and 2 knowledge-based Kubernetes certifications." },
   // "{oss}" is replaced with the computed open-source total in the page
   { title: "Open-source contributor", detail: "{oss} contributions to cloud, compliance, security, and blockchain tooling." },
-  { title: "Detection rule optimizer", detail: "Better detection accuracy through Splunk and QRadar rule tuning." },
   { title: "Top signal platoon leader", detail: "#1 of 24 signal platoons in a corps-level readiness evaluation." },
 ];
 
@@ -585,7 +584,7 @@ export const openSource: OpenSourceEntry[] = [
         status: "merged",
         links: [
           {
-            label: "Pull requests",
+            label: "28 PRs",
             url: "https://github.com/prowler-cloud/prowler/pulls?q=is%3Apr+is%3Amerged+author%3As1ns3nz0",
           },
           "adding-azure-aks-defender-check-to-prowler",
@@ -692,7 +691,7 @@ export const openSource: OpenSourceEntry[] = [
     id: "disclosure",
     name: "Coordinated disclosure",
     about: "Private reports to Lightning Labs, held until fixes ship.",
-    did: "Reported two vulnerabilities. Product names and details stay private until disclosure.",
+    did: "Product names and details stay private until fixes ship.",
     headline: "2 vulnerabilities reported to Lightning Labs",
     kind: ["Blockchain", "Security"],
     tags: ["Responsible disclosure", "Lightning"],

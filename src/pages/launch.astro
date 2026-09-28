@@ -105,11 +105,26 @@ function statusBadges(contribs: { status: keyof typeof statusLabel; count?: numb
   for (const c of contribs) counts.set(c.status, (counts.get(c.status) ?? 0) + (c.count ?? 1));
   return [...counts].map(([st, n]) => `${n} ${statusLabel[st]}`);
 }
-const ossEntries = openSource.map(o => ({
+// Link chips: code (PR/issue, external) first, then blog write-ups.
+function linkChips(links: { title: string; url: string; external: boolean }[]) {
+  const code = links.filter(l => l.external).map(l => ({ ...l, label: `${l.title} ↗`, tip: undefined }));
+  const posts = links.filter(l => !l.external);
+  const writeups = posts.map((l, i) => ({
+    ...l,
+    label: posts.length > 1 ? `Write-up ${i + 1}` : "Write-up",
+    tip: l.title,
+  }));
+  return [...code, ...writeups];
+}
+const isDisclosure = (o: { contributions: { status: string }[] }) =>
+  o.contributions.every(c => c.status === "embargo");
+const ossEntriesAll = openSource.map(o => ({
   ...o,
   badges: statusBadges(o.contributions),
-  contributions: o.contributions.map(c => ({ ...c, links: c.links.map(resolveEvidence) })),
+  contributions: o.contributions.map(c => ({ ...c, chips: linkChips(c.links.map(resolveEvidence)) })),
 }));
+const disclosures = ossEntriesAll.filter(isDisclosure);
+const ossEntries = ossEntriesAll.filter(o => !isDisclosure(o));
 const ossIds = new Set(openSource.map(o => o.id));
 for (const a of audiences) {
   for (const id of a.ossPriority ?? []) {
@@ -493,6 +508,23 @@ const smokePuffs: [number, number][] = [
             <h3 id="dlg-oss-title" class="display text-2xl font-bold">Open source</h3>
             <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
           </header>
+          {disclosures.length > 0 && (
+            <section class="disclosures" aria-labelledby="disclosures-title">
+              <h4 id="disclosures-title" class="meta">Security disclosures</h4>
+              {disclosures.map(d => (
+                <div class="disclosure">
+                  <p class="disclosure-head">
+                    <span class="oss-row-did">{d.headline}</span>
+                    <span class="status-badges">
+                      {d.badges.map(b => <span class="status-badge">{b}</span>)}
+                    </span>
+                  </p>
+                  <p class="oss-row-about">{d.did}</p>
+                </div>
+              ))}
+            </section>
+          )}
+          <h4 class="meta contributions-title">Contributions</h4>
           <ul class="oss-rows">
             {
               ossEntries.map(o => (
@@ -511,26 +543,36 @@ const smokePuffs: [number, number][] = [
                         {o.badges.map(b => <span class="status-badge">{b}</span>)}
                       </span>
                     </summary>
-                    <ul class="bullets oss-row-body">
-                      {o.contributions.map(c => (
-                        <li>
-                          <span class="oss-status">{statusLabel[c.status]}</span>{" "}
-                          {c.what}
-                          {c.links.length > 0 && (
-                            <span class="oss-links">
-                              {c.links.map(l => (
-                                <EvidenceLink {...l} />
-                              ))}
-                            </span>
-                          )}
-                        </li>
-                      ))}
+                    <div class="oss-row-body">
                       {o.url && (
-                        <li class="oss-repo">
-                          <a href={o.url} target="_blank" rel="noopener noreferrer">Repository ↗</a>
-                        </li>
+                        <p class="oss-repo">
+                          <a class="link-chip" href={o.url} target="_blank" rel="noopener noreferrer">Repo ↗</a>
+                        </p>
                       )}
-                    </ul>
+                      <ul class="bullets">
+                        {o.contributions.map(c => (
+                          <li>
+                            <span class="oss-status">{statusLabel[c.status]}</span>{" "}
+                            {c.what}
+                            {c.chips.length > 0 && (
+                              <span class="link-chips">
+                                {c.chips.map(l => (
+                                  <a
+                                    class="link-chip"
+                                    href={l.url}
+                                    title={l.tip}
+                                    target={l.external ? "_blank" : undefined}
+                                    rel={l.external ? "noopener noreferrer" : undefined}
+                                  >
+                                    {l.label}
+                                  </a>
+                                ))}
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </details>
                 </li>
               ))
