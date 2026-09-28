@@ -473,7 +473,40 @@ export const education = [
   { period: "Feb 2014 – Mar 2018", degree: "B.S., Civil Engineering", school: "Korea Military Academy" },
 ];
 
-/** Resume highlights, shown beside the timeline. */
+/**
+ * Summary tiles: one big stat, what it is, and one muted supporting line.
+ * The full detail opens in a dialog.
+ */
+export type TileId = "career" | "oss" | "credentials";
+
+export type TileTeaser = { stat: string; label: string; detail: string };
+
+export const tiles: ({ id: TileId; title: string } & TileTeaser)[] = [
+  {
+    id: "career",
+    title: "Career",
+    stat: "5+ yrs",
+    label: "security across IBM, Deloitte, and the ROK Army",
+    detail: "Consulting · CERT · OT security → platform engineering",
+  },
+  {
+    id: "oss",
+    title: "Open source",
+    // stat and detail are computed from openSource in the page
+    stat: "",
+    label: "open-source contributions",
+    detail: "",
+  },
+  {
+    id: "credentials",
+    title: "Credentials",
+    stat: "Kubestronaut",
+    label: "all 5 Kubernetes certifications",
+    detail: "AWS × 3 · M.S. Cyber Defense (in progress)",
+  },
+];
+
+/** Resume highlights (kept for the assistant context; teasers carry them on the page). */
 export const highlights = [
   { title: "Kubestronaut", detail: "3 hands-on and 2 knowledge-based Kubernetes certifications." },
   { title: "Open-source contributor", detail: "30+ contributions to cloud, compliance, and security tooling." },
@@ -502,6 +535,8 @@ export const statusLabel: Record<ContributionStatus, string> = {
 
 export type Contribution = {
   what: string;
+  /** How many PRs/reports this line stands for (default 1). */
+  count?: number;
   /** Checked against GitHub; update when a PR or issue changes state. */
   status: ContributionStatus;
   links: Evidence[];
@@ -535,6 +570,7 @@ export const openSource: OpenSourceEntry[] = [
       {
         what:
           "28 Azure and GCP checks: AKS (Defender, auto-upgrade, local accounts, monitoring), Cosmos DB (TLS, failover, backup, public access), Databricks, Entra ID, MySQL and PostgreSQL HA and geo-backup, Recovery Vault, NSG, DDoS, Cloud Functions, Cloud SQL, and Secret Manager.",
+        count: 28,
         status: "merged",
         links: [
           {
@@ -642,6 +678,7 @@ export const openSource: OpenSourceEntry[] = [
     contributions: [
       {
         what: "Details will be added once fixes ship and disclosure is agreed.",
+        count: 2,
         status: "embargo",
         links: [],
       },

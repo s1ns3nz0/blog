@@ -174,6 +174,20 @@ function applyAudience(): string | undefined {
   return audience.id;
 }
 
+/** Summary detail dialogs: [data-open-dialog="<id>"] opens <dialog id>. */
+function setupDetailDialogs() {
+  document.querySelectorAll<HTMLElement>("[data-open-dialog]").forEach(button => {
+    const dialog = document.getElementById(button.dataset.openDialog ?? "");
+    if (!(dialog instanceof HTMLDialogElement)) return;
+    button.addEventListener("click", () => dialog.showModal());
+    dialog.querySelector("[data-close-dialog]")?.addEventListener("click", () => dialog.close());
+    // A click that lands on the dialog box itself (not its content) is the backdrop.
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) dialog.close();
+    });
+  });
+}
+
 /** Satellite assistant: native <dialog>, pre-written answers only (v2). */
 function setupAssistant(audienceId: string | undefined) {
   const dialog = document.getElementById("assistant");
@@ -214,6 +228,7 @@ function setupAssistant(audienceId: string | undefined) {
 }
 
 setupAssistant(applyAudience());
+setupDetailDialogs();
 update();
 window.addEventListener("scroll", schedule, { passive: true });
 window.addEventListener("resize", schedule);

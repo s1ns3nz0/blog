@@ -730,18 +730,8 @@ html[data-bright] .meter a::before {
   text-transform: uppercase;
 }
 
-/* ---------- summary: career timeline | highlights, certs, open source ---------- */
+/* ---------- summary: teaser tiles, detail in dialogs ---------- */
 
-.summary-split {
-  display: grid;
-  gap: 16px;
-}
-@media (min-width: 1024px) {
-  .summary-split {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-    align-items: start;
-  }
-}
 .timeline {
   position: relative;
   margin: 0;
@@ -760,35 +750,6 @@ html[data-bright] .meter a::before {
 .timeline li {
   position: relative;
   padding-bottom: 12px;
-}
-.timeline summary {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding-right: 22px;
-  position: relative;
-  cursor: pointer;
-  list-style: none;
-}
-.timeline summary::-webkit-details-marker {
-  display: none;
-}
-.timeline summary::after {
-  content: "▸";
-  position: absolute;
-  right: 0;
-  top: 0;
-  color: #94a3b8;
-  transition: transform 0.2s ease;
-}
-.timeline details[open] summary::after {
-  transform: rotate(90deg);
-}
-/* period on a small line above; logo + organization always on one line */
-.tl-head {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
 }
 .tl-keywords {
   color: #64748b;
@@ -1032,6 +993,158 @@ html[data-bright] .meter a::before {
 .contact-blog {
   margin-left: 8px;
   font-weight: 600;
+}
+
+.tiles {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 1024px) {
+  .tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 200px;
+  padding: 22px;
+  border: 1px solid rgb(15 23 42 / 0.1);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.85);
+  color: #0f172a;
+  text-align: left;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+.tile:hover {
+  transform: translateY(-2px);
+  border-color: rgb(15 23 42 / 0.25);
+  box-shadow: 0 10px 24px rgb(15 23 42 / 0.1);
+}
+.tile-logos {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.tile-logo {
+  width: auto;
+  height: 20px;
+}
+.tile-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+/* one thing per tile carries the weight; long stats shrink to the tile width */
+.tile {
+  container-type: inline-size;
+}
+.tile-stat {
+  font-size: min(2.75rem, calc(100cqi / var(--chars, 4) * 1.2));
+  white-space: nowrap;
+  font-weight: 700;
+  line-height: 1.05;
+}
+.tile-label {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.tile-detail {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.tile-open {
+  margin-top: auto;
+  color: #64748b;
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.tile:hover .tile-open {
+  color: #0f172a;
+}
+
+/* detail dialogs: light, centered on desktop, bottom sheet on phones */
+.sheet {
+  width: min(880px, calc(100vw - 32px));
+  max-width: none;
+  max-height: min(86dvh, 900px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid rgb(15 23 42 / 0.12);
+  border-radius: 16px;
+  background: #fbfaf7;
+  color: #0f172a;
+  box-shadow: 0 24px 60px rgb(15 23 42 / 0.25);
+}
+.sheet::backdrop {
+  background: rgb(15 23 42 / 0.35);
+  backdrop-filter: blur(3px);
+}
+.sheet[open] {
+  animation: sheet-pop 0.25s cubic-bezier(0.3, 0, 0.2, 1);
+}
+@keyframes sheet-pop {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+}
+.sheet-inner {
+  padding: 0 26px 28px;
+}
+.sheet-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 -26px 18px;
+  padding: 18px 26px 14px;
+  border-bottom: 1px solid rgb(15 23 42 / 0.08);
+  background: #fbfaf7;
+}
+.sheet-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(15 23 42 / 0.15);
+  border-radius: 8px;
+  background: #fff;
+  color: #0f172a;
+}
+.sheet .oss-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 768px) {
+  .sheet .oss-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.sheet a {
+  color: #1e293b;
+}
+.sheet .oss-links a,
+.sheet .oss-about a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(15 23 42 / 0.3);
+  text-underline-offset: 3px;
+}
+@media (max-width: 767px) {
+  .sheet {
+    width: 100vw;
+    max-height: 88dvh;
+    margin: auto 0 0;
+    border-radius: 16px 16px 0 0;
+  }
 }
 
 /* summary sits on the bright orbit layer */
@@ -1472,6 +1585,7 @@ html[data-stage="orbit"] .sat-button {
   .r-fairing > path,
   .sat-button,
   .sat-tag,
+  .sheet[open],
   .assistant-inner,
   .pad .arm,
   .r-panel,

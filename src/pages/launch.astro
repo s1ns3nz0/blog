@@ -26,6 +26,7 @@ import {
   audiences,
   anomalies,
   zones,
+  tiles,
   statusLabel,
   type Card,
   type Evidence,
@@ -116,6 +117,23 @@ for (const a of audiences) {
   }
 }
 const orgLogos = { ibm: logoIbm, deloitte: logoDeloitte, kitri: logoKitri, "rok-army": logoArmy };
+
+// Open-source tile totals: every contribution counts, disclosures included.
+const allContribs = openSource.flatMap(o => o.contributions);
+const countOf = (c: (typeof allContribs)[number]) => c.count ?? 1;
+const ossTotal = allContribs.reduce((n, c) => n + countOf(c), 0);
+const ossMerged = allContribs.filter(c => c.status === "merged").reduce((n, c) => n + countOf(c), 0);
+const ossDisclosed = allContribs.filter(c => c.status === "embargo").reduce((n, c) => n + countOf(c), 0);
+const ossProjects = openSource.filter(o => o.url).length;
+const tileList = tiles.map(t =>
+  t.id === "oss"
+    ? {
+        ...t,
+        stat: String(ossTotal),
+        detail: `${ossMerged} merged · ${ossProjects} projects · ${ossDisclosed} private disclosures`,
+      }
+    : t
+);
 
 const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
 
@@ -426,39 +444,123 @@ const smokePuffs: [number, number][] = [
         </ul>
       </header>
 
-      <div class="summary-split">
-        <section class="panel p-6" aria-labelledby="career-title">
-          <h3 id="career-title" class="meta mb-4">Career</h3>
+      <div class="tiles">
+        {
+          tileList.map(t => (
+            <button type="button" class="tile" data-open-dialog={`dlg-${t.id}`}>
+              <span class="meta">{t.title}</span>
+              {t.id === "career" && (
+                <span class="tile-logos" aria-hidden="true">
+                  {[logoIbm, logoDeloitte, logoKitri, logoArmy].map(src => (
+                    <Image src={src} alt="" height={40} class="tile-logo" />
+                  ))}
+                </span>
+              )}
+              <span class="tile-lines" data-tile={t.id}>
+                <span class="tile-stat display" data-tile-part="stat" style={`--chars: ${t.stat.length}`}>
+                  {t.stat}
+                </span>
+                <span class="tile-label" data-tile-part="label">{t.label}</span>
+                <span class="tile-detail" data-tile-part="detail">{t.detail}</span>
+              </span>
+              <span class="tile-open">Open ▸</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <dialog id="dlg-career" class="sheet" aria-labelledby="dlg-career-title">
+        <div class="sheet-inner">
+          <header class="sheet-head">
+            <h3 id="dlg-career-title" class="display text-2xl font-bold">Career</h3>
+            <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
+          </header>
           <ol class="timeline">
             {
               career.map(c => (
                 <li>
-                  <details>
-                    <summary>
-                      <span class="tl-head">
-                        <span class="tl-period">{c.period}</span>
-                        <span class="tl-org">
-                          <Image
-                            src={orgLogos[c.logo as keyof typeof orgLogos]}
-                            alt=""
-                            height={48}
-                            class="tl-logo"
-                          />
-                          <span>{c.org}</span>
-                        </span>
-                      </span>
-                      <span class="tl-role">
-                        {c.role}
-                        <span class="tl-keywords"> · {c.keywords.join(" · ")}</span>
-                      </span>
-                    </summary>
-                    <p class="tl-detail">{c.detail}</p>
-                  </details>
+                  <p class="tl-period">{c.period}</p>
+                  <p class="tl-org">
+                    <Image src={orgLogos[c.logo as keyof typeof orgLogos]} alt="" height={48} class="tl-logo" />
+                    <span>{c.org}</span>
+                  </p>
+                  <p class="tl-role">
+                    {c.role}
+                    <span class="tl-keywords"> · {c.keywords.join(" · ")}</span>
+                  </p>
+                  <p class="tl-detail">{c.detail}</p>
                 </li>
               ))
             }
           </ol>
-          <h3 class="meta mt-6 mb-3">Education</h3>
+        </div>
+      </dialog>
+
+      <dialog id="dlg-oss" class="sheet" aria-labelledby="dlg-oss-title">
+        <div class="sheet-inner">
+          <header class="sheet-head">
+            <h3 id="dlg-oss-title" class="display text-2xl font-bold">Open source</h3>
+            <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
+          </header>
+          <ul class="oss-grid">
+            {
+              ossEntries.map(o => (
+                <li class="oss-entry" data-oss-id={o.id}>
+                  <details>
+                    <summary>
+                      <span class="oss-name">{o.name}</span>
+                      <span class="oss-headline">{o.headline}</span>
+                      <span class="oss-tags">{o.tags.join(" · ")}</span>
+                      <span class="oss-summary">{o.summary}</span>
+                    </summary>
+                    <div class="oss-body">
+                      <p class="oss-about">
+                        {o.about}
+                        {o.url && (
+                          <>
+                            {" · "}
+                            <a href={o.url} target="_blank" rel="noopener noreferrer">repo ↗</a>
+                          </>
+                        )}
+                      </p>
+                      <ul class="oss-contribs">
+                        {o.contributions.map(c => (
+                          <li>
+                            <span class="oss-status">{statusLabel[c.status]}</span>
+                            <span class="oss-work">{c.what}</span>
+                            {c.links.length > 0 && (
+                              <span class="oss-links">
+                                {c.links.map((l, i) => (
+                                  <>
+                                    {i > 0 && " · "}
+                                    <EvidenceLink {...l} />
+                                  </>
+                                ))}
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </details>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </dialog>
+
+      <dialog id="dlg-credentials" class="sheet" aria-labelledby="dlg-credentials-title">
+        <div class="sheet-inner">
+          <header class="sheet-head">
+            <h3 id="dlg-credentials-title" class="display text-2xl font-bold">Credentials</h3>
+            <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
+          </header>
+          <h4 class="meta mb-3">Certifications</h4>
+          <ul class="side-list">
+            {certifications.map(c => <li>{c.name}</li>)}
+          </ul>
+          <h4 class="meta mt-6 mb-3">Education</h4>
           <ul class="side-list">
             {
               education.map(e => (
@@ -471,77 +573,19 @@ const smokePuffs: [number, number][] = [
               ))
             }
           </ul>
-        </section>
-
-        <aside class="flex flex-col gap-4">
-          <section class="panel p-6" aria-labelledby="highlights-title">
-            <h3 id="highlights-title" class="meta mb-3">Highlights</h3>
-            <ul class="side-list">
-              {
-                highlights.map(h => (
-                  <li>
-                    <span class="font-semibold">{h.title}</span>
-                    <span class="block text-slate-600">{h.detail}</span>
-                  </li>
-                ))
-              }
-            </ul>
-          </section>
-          <section class="panel p-6" aria-labelledby="certs-title">
-            <h3 id="certs-title" class="meta mb-3">Certifications</h3>
-            <ul class="side-list">
-              {certifications.map(c => <li>{c.name}</li>)}
-            </ul>
-          </section>
-        </aside>
-      </div>
-
-      <section class="panel p-6" aria-labelledby="oss-title">
-        <h3 id="oss-title" class="meta mb-4">Open source contributions</h3>
-        <ul class="oss-grid">
-          {
-            ossEntries.map(o => (
-              <li class="oss-entry" data-oss-id={o.id}>
-                <details>
-                  <summary>
-                    <span class="oss-name">{o.name}</span>
-                    <span class="oss-headline">{o.headline}</span>
-                    <span class="oss-tags">{o.tags.join(" · ")}</span>
-                    <span class="oss-summary">{o.summary}</span>
-                  </summary>
-                  <div class="oss-body">
-                    <p class="oss-about">
-                      {o.about}
-                      {o.url && (
-                        <>
-                          {" · "}
-                          <a href={o.url} target="_blank" rel="noopener noreferrer">repo ↗</a>
-                        </>
-                      )}
-                    </p>
-                    <ul class="oss-contribs">
-                      {o.contributions.map(c => (
-                        <li>
-                          <span class="oss-status">{statusLabel[c.status]}</span>
-                          <span class="oss-work">{c.what}</span>
-                          {c.links.length > 0 && <span class="oss-links">
-                            {c.links.map((l, i) => (
-                              <>
-                                {i > 0 && " · "}
-                                <EvidenceLink {...l} />
-                              </>
-                            ))}
-                          </span>}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </details>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
+          <h4 class="meta mt-6 mb-3">Highlights</h4>
+          <ul class="side-list">
+            {
+              highlights.map(h => (
+                <li>
+                  <span class="font-semibold">{h.title}</span>
+                  <span class="block text-slate-600">{h.detail}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </dialog>
 
       <nav class="contact" aria-label="Contact">
         {

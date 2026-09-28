@@ -70,12 +70,13 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 ## Summary page
 
 1. Identity line and target roles.
-2. Two halves: a vertical career timeline (newest first, dates from the resume). Each entry is collapsed to period, logo (56x18 box) + organization, and role with three keywords; the detail expands in place with education below it, and on the right highlights and certifications.
-3. Open source contributions, full width, three columns: each project is a collapsed card (name, bold keyword headline, 2-3 tech tags, status summary such as "2 merged · 1 open PR") that expands to each contribution with a status checked against GitHub (Merged / Open PR / Proposed / Reported / Fixed upstream) and links to PRs, issues, and posts. Open items are listed as open, never rounded up. Unpublished vulnerability reports appear only as a vendor-level "Coordinated disclosure" card (under embargo): no product name, date, severity, or link until fixes ship and disclosure is agreed. `?for=` can move entries first (Lightning Labs: lnd, Aperture).
-4. (removed) The stage summary cards and number strip; the flight above already carries them.
-5. The AI assistant opens only from the parked satellite (no separate button).
-5b. Organization logos: IBM (Simple Icons, CC0); Deloitte, KITRI, and the ROK Army emblem from Wikimedia Commons, marked public domain.
-6. Contact marks: official GitHub, Gmail, and LinkedIn glyphs (Simple Icons, CC0) plus a blog link. No phone number or address.
+2. Three teaser tiles, each one big stat + what it is + one muted line (long stats shrink to the tile width): Career "5+ yrs" with org logos; Open source = total contributions computed from the data, disclosures included (e.g. 40, "31 merged · 6 projects · 2 private disclosures"); Credentials "Kubestronaut". No audience-specific tile copy.
+3. Each tile opens a detail dialog (light; centered on desktop, bottom sheet on phones; Esc, backdrop, and ✕ close):
+   - Career: full timeline, newest first, period / logo + organization / role with three keywords / detail.
+   - Open source: collapsed cards (keyword headline, tags, status summary) that expand to per-contribution statuses checked against GitHub (Merged / Open PR / Proposed / Reported / Fixed upstream / Under embargo). Open items stay open, never rounded up. Unpublished vulnerability reports appear only as a vendor-level "Coordinated disclosure" card: no product, date, severity, or link until fixes ship and disclosure is agreed.
+   - Credentials: certifications, education, highlights.
+4. The AI assistant opens only from the parked satellite.
+5. Contact marks: official GitHub, Gmail, and LinkedIn glyphs (Simple Icons, CC0) plus a blog link. No phone number or address. Organization logos: IBM (Simple Icons, CC0); Deloitte, KITRI, and the ROK Army emblem from Wikimedia Commons, marked public domain.
 
 English only.
 
@@ -108,6 +109,7 @@ English only.
 | v1.8 | Summary: stage cards and number strip removed, org logos on the timeline, full-width open source section with per-project detail |
 | v1.9 | Open source statuses verified on GitHub per contribution; added lnd #11211, Aperture #285/#291, SEAL #647, compliance-to-policy #51 |
 | v1.10 | Smaller logos; collapsible timeline rows; open-source cards with keyword headlines, tags, and status summaries; vendor-level coordinated-disclosure card |
+| v1.11 | Summary rebuilt as three teaser tiles with detail dialogs (Career / Open source / Credentials) |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |
