@@ -45,3 +45,30 @@
 :target {
   scroll-margin-block: 1rem;
 }
+
+/*
+ * Dark theme: the launch page's night sky behind the blog. Two faint
+ * nebula glows and three star layers tiled at co-prime sizes so the
+ * pattern does not visibly repeat. Pure CSS, fixed to the viewport.
+ */
+[data-theme="dark"] body:not(.launch-body) {
+  background-image:
+    radial-gradient(ellipse 60% 45% at 85% -5%, rgb(99 102 241 / 0.16), transparent 70%),
+    radial-gradient(ellipse 55% 40% at -5% 105%, rgb(255 138 61 / 0.07), transparent 70%),
+    radial-gradient(1px 1px at 37px 53px, rgb(255 255 255 / 0.55), transparent),
+    radial-gradient(1px 1px at 131px 17px, rgb(255 255 255 / 0.35), transparent),
+    radial-gradient(1px 1px at 89px 163px, rgb(255 255 255 / 0.45), transparent),
+    radial-gradient(1.5px 1.5px at 211px 97px, rgb(255 255 255 / 0.6), transparent),
+    radial-gradient(1px 1px at 263px 241px, rgb(200 214 255 / 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 151px 331px, rgb(255 255 255 / 0.5), transparent);
+  background-size:
+    100% 100%,
+    100% 100%,
+    211px 211px,
+    211px 211px,
+    307px 307px,
+    307px 307px,
+    419px 419px,
+    419px 419px;
+  background-attachment: fixed;
+}
