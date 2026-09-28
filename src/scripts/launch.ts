@@ -9,6 +9,7 @@ type Audience = {
   id: string;
   label: string;
   subline: string;
+  ossPriority?: string[];
   fairing?: string;
   priority: string[];
 };
@@ -164,6 +165,11 @@ function applyAudience(): string | undefined {
   document.querySelectorAll<HTMLElement>("[data-card-id]").forEach(card => {
     const rank = audience.priority.indexOf(card.dataset.cardId ?? "");
     card.style.order = String(rank === -1 ? 100 : rank);
+  });
+  const ossPriority = audience.ossPriority ?? [];
+  document.querySelectorAll<HTMLElement>("[data-oss-id]").forEach(entry => {
+    const rank = ossPriority.indexOf(entry.dataset.ossId ?? "");
+    entry.style.order = String(rank === -1 ? 100 : rank);
   });
   return audience.id;
 }

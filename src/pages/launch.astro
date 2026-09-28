@@ -3,6 +3,11 @@ import { getCollection } from "astro:content";
 import LaunchLayout from "@/layouts/LaunchLayout.astro";
 import Rocket from "@/components/launch/Rocket.astro";
 import EvidenceLink from "@/components/launch/EvidenceLink.astro";
+import { Image } from "astro:assets";
+import logoIbm from "@/assets/images/orgs/ibm.webp";
+import logoDeloitte from "@/assets/images/orgs/deloitte.webp";
+import logoKitri from "@/assets/images/orgs/kitri.webp";
+import logoArmy from "@/assets/images/orgs/rok-army.webp";
 import IconGitHub from "@/assets/icons/brands/github.svg";
 import IconLinkedIn from "@/assets/icons/brands/linkedin.svg";
 import IconGmail from "@/assets/icons/brands/gmail.svg";
@@ -21,6 +26,7 @@ import {
   audiences,
   anomalies,
   zones,
+  statusLabel,
   type Card,
   type Evidence,
   type FlightRule,
@@ -91,16 +97,20 @@ const lanesByStage = Object.fromEntries(
       .filter(l => l.cards.length > 0),
   ])
 );
+const ossEntries = openSource.map(o => ({
+  ...o,
+  contributions: o.contributions.map(c => ({ ...c, links: c.links.map(resolveEvidence) })),
+}));
+const ossIds = new Set(openSource.map(o => o.id));
+for (const a of audiences) {
+  for (const id of a.ossPriority ?? []) {
+    if (!ossIds.has(id)) throw new Error(`portfolio: audience "${a.id}" lists unknown open-source entry "${id}"`);
+  }
+}
+const orgLogos = { ibm: logoIbm, deloitte: logoDeloitte, kitri: logoKitri, "rok-army": logoArmy };
+
 const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
 
-const prowlerChecks = posts.filter(p => p.data.tags.includes("Prowler")).length;
-const certCount = certifications.reduce((n, c) => n + c.count, 0);
-const numbers = [
-  { value: posts.length, label: "blog posts" },
-  { value: prowlerChecks, label: "Prowler checks" },
-  { value: openSource.length, label: "OSS projects" },
-  { value: certCount, label: "certifications" },
-];
 
 // Contact marks: official brand glyphs (Simple Icons, CC0) in brand colours.
 const brandIcons = { github: IconGitHub, linkedin: IconLinkedIn, mail: IconGmail };
@@ -408,38 +418,6 @@ const smokePuffs: [number, number][] = [
         </ul>
       </header>
 
-      <div class="grid gap-4 lg:grid-cols-3">
-        {
-          stages.map(stage => (
-            <div class="panel flex flex-col gap-2 p-5">
-              <p class="meta">{stage.name}</p>
-              <p class="text-sm font-semibold">{stage.governing}</p>
-              {lanesByStage[stage.id].map(lane => (
-                <div>
-                  <p class="summary-zone">{lane.zone.icon} {lane.zone.name}</p>
-                  <ul class="flex flex-col gap-1 text-sm">
-                    {lane.cards.map(c => (
-                      <li><a href={`#${c.id}`}>{c.title}</a></li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          ))
-        }
-      </div>
-
-      <dl class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {
-          numbers.map(n => (
-            <div class="panel flex flex-col-reverse p-4">
-              <dt class="text-xs uppercase tracking-wider text-slate-500">{n.label}</dt>
-              <dd class="display text-3xl font-bold">{n.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
-
       <div class="summary-split">
         <section class="panel p-6" aria-labelledby="career-title">
           <h3 id="career-title" class="meta mb-4">Career</h3>
@@ -448,8 +426,16 @@ const smokePuffs: [number, number][] = [
               career.map(c => (
                 <li>
                   <p class="tl-period">{c.period}</p>
+                  <p class="tl-org">
+                    <Image
+                      src={orgLogos[c.logo as keyof typeof orgLogos]}
+                      alt=""
+                      height={48}
+                      class="tl-logo"
+                    />
+                    <span>{c.org}</span>
+                  </p>
                   <p class="tl-role">{c.role}</p>
-                  <p class="tl-org">{c.org}</p>
                   <p class="tl-detail">{c.detail}</p>
                 </li>
               ))
@@ -488,20 +474,42 @@ const smokePuffs: [number, number][] = [
               {certifications.map(c => <li>{c.name}</li>)}
             </ul>
           </section>
-          <section class="panel p-6" aria-labelledby="oss-title">
-            <h3 id="oss-title" class="meta mb-3">Open source</h3>
-            <ul class="side-list">
-              {
-                openSource.map(o => (
-                  <li>
-                    <a href={o.url} target="_blank" rel="noopener noreferrer">{o.name} ↗</a>
-                  </li>
-                ))
-              }
-            </ul>
-          </section>
         </aside>
       </div>
+
+      <section class="panel p-6" aria-labelledby="oss-title">
+        <h3 id="oss-title" class="meta mb-4">Open source contributions</h3>
+        <ul class="oss-grid">
+          {
+            ossEntries.map(o => (
+              <li class="oss-entry" data-oss-id={o.id}>
+                <p class="oss-head">
+                  <a class="oss-name" href={o.url} target="_blank" rel="noopener noreferrer">
+                    {o.name} ↗
+                  </a>
+                  <span class="oss-about">{o.about}</span>
+                </p>
+                <ul class="oss-contribs">
+                  {o.contributions.map(c => (
+                    <li>
+                      <span class="oss-status">{statusLabel[c.status]}</span>
+                      <span class="oss-work">{c.what}</span>
+                      <span class="oss-links">
+                        {c.links.map((l, i) => (
+                          <>
+                            {i > 0 && " · "}
+                            <EvidenceLink {...l} />
+                          </>
+                        ))}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
 
       <nav class="contact" aria-label="Contact">
         {

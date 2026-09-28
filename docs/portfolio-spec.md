@@ -70,10 +70,11 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 ## Summary page
 
 1. Identity line and target roles.
-2. Build / Ship / Operate cards with evidence links and flight-rule badges.
-3. Number strip (computed at build where possible).
-4. Two halves: a vertical career timeline (newest first, dates from the resume) with education below it, and on the right highlights, certifications, and open source.
+2. Two halves: a vertical career timeline (newest first, dates from the resume; organization name emphasized with its logo in a fixed 72x24 box) with education below it, and on the right highlights and certifications.
+3. Open source contributions, full width: one entry per project, each contribution with a status checked against GitHub (Merged / Open PR / Proposed / Reported / Fixed upstream) and links to PRs, issues, and posts. Open items are listed as open, never rounded up. `?for=` can move entries first (Lightning Labs: lnd, Aperture).
+4. (removed) The stage summary cards and number strip; the flight above already carries them.
 5. The AI assistant opens only from the parked satellite (no separate button).
+5b. Organization logos: IBM (Simple Icons, CC0); Deloitte, KITRI, and the ROK Army emblem from Wikimedia Commons, marked public domain.
 6. Contact marks: official GitHub, Gmail, and LinkedIn glyphs (Simple Icons, CC0) plus a blog link. No phone number or address.
 
 English only.
@@ -104,6 +105,8 @@ English only.
 | v1.5 | Governing message per stage; mission-log rows replace cards; single-accent design rules |
 | v1.6 | First-person governing messages tied to strengths; zone meaning shown on each zone rail |
 | v1.7 | Summary: timeline + highlights/certs/open source halves, brand contact marks, subline on one line, Ask button removed; card facts corrected against the resume |
+| v1.8 | Summary: stage cards and number strip removed, org logos on the timeline, full-width open source section with per-project detail |
+| v1.9 | Open source statuses verified on GitHub per contribution; added lnd #11211, Aperture #285/#291, SEAL #647, compliance-to-policy #51 |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

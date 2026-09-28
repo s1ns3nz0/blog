@@ -55,6 +55,8 @@ export type Audience = {
   id: string;
   label: string;
   subline: string;
+  /** Open-source entry ids shown first in the summary. */
+  ossPriority?: string[];
   /** Replaces identity.fairing on the rocket. Keep it to ~9 characters. */
   fairing?: string;
   /** Card ids shown first, in this order. Others keep their default order. */
@@ -328,11 +330,20 @@ export const cards: Card[] = [
     zone: "oss",
     title: "OSCAL Compass",
     summary:
-      "Added a GitHub Actions integration for Compliance-to-Policy workflows and fixed a KeyError in compliance-trestle.",
+      "Fixed a KeyError in compliance-trestle (merged) and opened a GitHub Actions DevSecOps pipeline plugin for compliance-to-policy.",
     evidence: [
       { label: "compliance-trestle PR #2222", url: "https://github.com/oscal-compass/compliance-trestle/pull/2222" },
+      { label: "compliance-to-policy PR #51", url: "https://github.com/oscal-compass/compliance-to-policy/pull/51" },
       "nist-oscal-and-associated-projects",
     ],
+  },
+  {
+    id: "lnd-short-reads",
+    stage: "ship",
+    zone: "oss",
+    title: "lnd: short reads in address decoders",
+    summary: "Reported that lnd's fixed-width node announcement address decoders accept short reads.",
+    evidence: [{ label: "Issue #11211", url: "https://github.com/lightningnetwork/lnd/issues/11211" }],
   },
 
   // ---------- Operate & Defend ----------
@@ -414,6 +425,7 @@ export const career = [
     period: "Nov 2024 – Sep 2026",
     role: "Cybersecurity Consultant",
     org: "IBM",
+    logo: "ibm",
     detail:
       "Product security maturity roadmap against the EU Cyber Resilience Act, iDMZ and OT security across nuclear, semiconductor, and automotive sites, OT SOC detection logic, and AWS assessments against ISMS-P.",
   },
@@ -421,6 +433,7 @@ export const career = [
     period: "Mar 2024 – Nov 2024",
     role: "Sr. Security Consultant",
     org: "Deloitte Consulting Korea",
+    logo: "deloitte",
     detail:
       "ISO 27001 certification audit, a digital signature service assessment, and co-authoring the Digital Signature Certification Service Evaluation Guide v1.4.0.",
   },
@@ -428,6 +441,7 @@ export const career = [
     period: "Jun 2023 – Feb 2024",
     role: "Vulnerability Analysis Track",
     org: "KITRI Best of the Best (BoB) 12th",
+    logo: "kitri",
     detail:
       "National program with a ~3% acceptance rate. Led a multi-cloud CIEM platform with an IAM policy normalization engine across AWS, Azure, and GCP.",
   },
@@ -435,6 +449,7 @@ export const career = [
     period: "Dec 2021 – Mar 2023",
     role: "Signal Officer (Captain), Corps CERT",
     org: "Republic of Korea Army",
+    logo: "rok-army",
     detail:
       "Elite 300 Cyber Warriors. Splunk detection tuning, first-line incident response, and audit evidence packages.",
   },
@@ -442,6 +457,7 @@ export const career = [
     period: "Mar 2018 – Dec 2021",
     role: "Signal Officer (Lieutenant), Network Platoon Leader",
     org: "Republic of Korea Army",
+    logo: "rok-army",
     detail:
       "Led a 25-member signal platoon; ranked #1 of 24 signal sites in a corps-level readiness evaluation.",
   },
@@ -467,12 +483,150 @@ export const certifications = [
   { name: "AWS Certified CloudOps Engineer - Associate", count: 1 },
 ];
 
-export const openSource = [
-  { name: "Prowler", url: "https://github.com/prowler-cloud/prowler" },
-  { name: "SEAL Frameworks", url: "https://github.com/security-alliance/frameworks" },
-  { name: "OSCAL Compass", url: "https://github.com/oscal-compass/compliance-trestle" },
-  { name: "Aperture (Lightning Labs)", url: "https://github.com/lightninglabs/aperture" },
-  { name: "gosentry (Trail of Bits)", url: "https://github.com/trailofbits/gosentry" },
+/** Open-source work, one entry per project, shown in the summary. */
+export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed";
+
+export const statusLabel: Record<ContributionStatus, string> = {
+  merged: "Merged",
+  open: "Open PR",
+  proposed: "Proposed",
+  reported: "Reported",
+  fixed: "Fixed upstream",
+};
+
+export type Contribution = {
+  what: string;
+  /** Checked against GitHub; update when a PR or issue changes state. */
+  status: ContributionStatus;
+  links: Evidence[];
+};
+
+export type OpenSourceEntry = {
+  id: string;
+  name: string;
+  about: string;
+  url: string;
+  contributions: Contribution[];
+};
+
+const PR = (repo: string, n: number) => ({ label: `PR #${n}`, url: `https://github.com/${repo}/pull/${n}` });
+const ISSUE = (repo: string, n: number) => ({ label: `Issue #${n}`, url: `https://github.com/${repo}/issues/${n}` });
+
+export const openSource: OpenSourceEntry[] = [
+  {
+    id: "prowler",
+    name: "Prowler",
+    about: "Open cloud security platform",
+    url: "https://github.com/prowler-cloud/prowler",
+    contributions: [
+      {
+        what:
+          "28 Azure and GCP checks: AKS (Defender, auto-upgrade, local accounts, monitoring), Cosmos DB (TLS, failover, backup, public access), Databricks, Entra ID, MySQL and PostgreSQL HA and geo-backup, Recovery Vault, NSG, DDoS, Cloud Functions, Cloud SQL, and Secret Manager.",
+        status: "merged",
+        links: [
+          {
+            label: "Pull requests",
+            url: "https://github.com/prowler-cloud/prowler/pulls?q=is%3Apr+is%3Amerged+author%3As1ns3nz0",
+          },
+          "adding-azure-aks-defender-check-to-prowler",
+        ],
+      },
+    ],
+  },
+  {
+    id: "seal",
+    name: "SEAL Frameworks",
+    about: "Security Alliance's open-source blockchain security framework",
+    url: "https://github.com/security-alliance/frameworks",
+    contributions: [
+      {
+        what: "Policy as Code enforced through the CI/CD pipeline.",
+        status: "merged",
+        links: [PR("security-alliance/frameworks", 592), "policy-as-code-seal-frameworks"],
+      },
+      {
+        what: "Private registries and package mirrors, so builds pull only reviewed artifacts.",
+        status: "merged",
+        links: [PR("security-alliance/frameworks", 627), "private-registries-and-mirrors-seal-frameworks"],
+      },
+      {
+        what: "An endpoint compromise runbook for incident management.",
+        status: "open",
+        links: [PR("security-alliance/frameworks", 647)],
+      },
+    ],
+  },
+  {
+    id: "oscal-compass",
+    name: "OSCAL Compass",
+    about: "Compliance as Code, backed by NIST and CNCF",
+    url: "https://github.com/oscal-compass",
+    contributions: [
+      {
+        what: "Fixed an ssp-generate KeyError on a missing profile-param-value-origin in compliance-trestle.",
+        status: "merged",
+        links: [PR("oscal-compass/compliance-trestle", 2222)],
+      },
+      {
+        what: "A GitHub Actions DevSecOps pipeline plugin for compliance-to-policy.",
+        status: "open",
+        links: [PR("oscal-compass/compliance-to-policy", 51), "nist-oscal-and-associated-projects"],
+      },
+    ],
+  },
+  {
+    id: "lnd",
+    name: "lnd",
+    about: "Lightning Network Daemon",
+    url: "https://github.com/lightningnetwork/lnd",
+    contributions: [
+      {
+        what: "Found that the fixed-width node announcement address decoders accept short reads.",
+        status: "reported",
+        links: [ISSUE("lightningnetwork/lnd", 11211)],
+      },
+    ],
+  },
+  {
+    id: "aperture",
+    name: "Aperture",
+    about: "Lightning Labs' L402 reverse proxy",
+    url: "https://github.com/lightninglabs/aperture",
+    contributions: [
+      {
+        what: "Per-outcome Prometheus counters for the L402 mint and verify paths.",
+        status: "proposed",
+        links: [ISSUE("lightninglabs/aperture", 286), "aperture-l402-metrics-before-and-after"],
+      },
+      {
+        what: "Dedicated security event logging that keeps raw macaroons and preimages out of logs.",
+        status: "proposed",
+        links: [ISSUE("lightninglabs/aperture", 291), "aperture-l402-security-events-monitoring-proposal"],
+      },
+      {
+        what: "A fix for a rare (1 in 256) flake in TestTamperedL402.",
+        status: "open",
+        links: [PR("lightninglabs/aperture", 285)],
+      },
+    ],
+  },
+  {
+    id: "gosentry",
+    name: "gosentry",
+    about: "Trail of Bits' security-oriented Go toolchain",
+    url: "https://github.com/trailofbits/gosentry",
+    contributions: [
+      {
+        what: "Reported a LibAFL corpus bug where fuzzing stopped while go test still passed; fixed in #212.",
+        status: "fixed",
+        links: [
+          ISSUE("trailofbits/gosentry", 210),
+          PR("trailofbits/gosentry", 212),
+          "reporting-a-libafl-corpus-id-bug-in-gosentry",
+        ],
+      },
+    ],
+  },
 ];
 
 export const audiences: Audience[] = [
@@ -482,6 +636,7 @@ export const audiences: Audience[] = [
     fairing: "LIGHTNING",
     subline:
       "Kubernetes in production, observability that operators can act on, and hands-on work with Aperture and the Lightning stack.",
-    priority: ["private-eks", "aperture-metrics", "aperture-events", "pipeline-controls", "secrets-and-keys", "gosentry"],
+    priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "secrets-and-keys", "gosentry"],
+    ossPriority: ["lnd", "aperture"],
   },
 ];

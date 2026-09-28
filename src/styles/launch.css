@@ -786,14 +786,118 @@ html[data-bright] .meter a::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+.tl-org {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 0;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 700;
+}
+/* every logo sits in the same 72x24 box, scaled to fit */
+.tl-logo {
+  flex: none;
+  width: 72px;
+  height: 24px;
+  object-fit: contain;
+  object-position: left center;
+}
 .tl-role {
   margin: 2px 0 0;
-  font-weight: 600;
-}
-.tl-org {
-  margin: 0;
   color: #334155;
   font-size: 14px;
+  font-weight: 600;
+}
+
+/* open-source contributions: two columns of entries */
+.oss-grid {
+  display: grid;
+  gap: 20px 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 1024px) {
+  .oss-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.oss-entry {
+  padding-top: 14px;
+  border-top: 1px solid rgb(15 23 42 / 0.1);
+}
+.oss-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin: 0;
+}
+.orbit .oss-name {
+  color: #0f172a;
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.orbit .oss-name:hover {
+  text-decoration: underline;
+}
+.oss-about {
+  color: #64748b;
+  font-size: 13px;
+}
+.oss-contribs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.oss-contribs li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+}
+@media (min-width: 768px) {
+  .oss-contribs li {
+    grid-template-columns: 6.75rem minmax(0, 1fr);
+    gap: 2px 12px;
+  }
+}
+/* one status style for every state; the label carries the meaning */
+.oss-status {
+  align-self: start;
+  justify-self: start;
+  margin-top: 2px;
+  padding: 1px 7px;
+  border: 1px solid rgb(15 23 42 / 0.2);
+  border-radius: 4px;
+  color: #475569;
+  font: 400 10px var(--font-space-mono), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.oss-work {
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.oss-links {
+  font-size: 13px;
+}
+@media (min-width: 768px) {
+  .oss-links {
+    grid-column: 2;
+  }
+}
+.orbit .oss-links a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(15 23 42 / 0.3);
+  text-underline-offset: 3px;
 }
 .tl-detail {
   margin: 4px 0 0;
