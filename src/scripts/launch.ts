@@ -5,7 +5,13 @@
  * JSON are used; the query value is never written into the DOM.
  */
 
-type Audience = { id: string; label: string; subline: string; priority: string[] };
+type Audience = {
+  id: string;
+  label: string;
+  subline: string;
+  fairing?: string;
+  priority: string[];
+};
 
 const root = document.documentElement;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -106,6 +112,12 @@ function applyAudience() {
     el.textContent = `Prepared for ${audience.label}`;
     el.hidden = false;
   });
+  if (audience.fairing) {
+    const fairing = audience.fairing;
+    document.querySelectorAll("[data-fairing-label]").forEach(el => {
+      el.textContent = fairing;
+    });
+  }
   document.querySelectorAll<HTMLElement>("[data-card-id]").forEach(card => {
     const rank = audience.priority.indexOf(card.dataset.cardId ?? "");
     card.style.order = String(rank === -1 ? 100 : rank);

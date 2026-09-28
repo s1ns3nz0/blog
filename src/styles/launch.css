@@ -10,9 +10,9 @@
   --rh: 30vh; /* rocket height */
   --rx: 8px; /* rocket left edge */
   --u: calc(var(--rh) / 440); /* one rocket viewBox unit */
-  --sat-x: calc(100vw - 52px); /* satellite centre in orbit */
-  --sat-y: 30px;
-  --sat-scale: 0.42;
+  --sat-x: calc(100vw - 58px); /* satellite centre in orbit */
+  --sat-y: 36px;
+  --sat-scale: 1.2;
   --ink: #e6edf7;
   --panel: rgb(8 12 28 / 0.72);
   --panel-line: rgb(255 255 255 / 0.14);
@@ -28,9 +28,9 @@
   .launch-body {
     --rh: min(62vh, 520px);
     --rx: max(24px, 7vw);
-    --sat-x: calc(100vw - 130px);
-    --sat-y: 120px;
-    --sat-scale: 0.55;
+    --sat-x: calc(100vw - 150px);
+    --sat-y: 118px;
+    --sat-scale: 1.3;
   }
 }
 
@@ -217,7 +217,12 @@ html[data-launched] .smoke {
 .rocket text {
   stroke: none;
   fill: #141222;
-  font: 700 12px var(--font-google-sans-code), monospace;
+  font: 700 13px var(--font-google-sans-code), monospace;
+  letter-spacing: 0.08em;
+}
+.rocket .r-fairing-text {
+  font-size: 9px;
+  fill: #c2410c;
 }
 
 .r-stage1,
@@ -274,20 +279,39 @@ html:is([data-stage="operate"], [data-stage="orbit"]) .r-stage2 {
   transform: translate(12px, 520px) rotate(20deg);
   opacity: 0;
 }
-/* In orbit the payload parks top-right and deploys its solar panels.
-   transform-origin is the payload's centre (viewBox 50, 55). */
-html[data-stage="orbit"] .rocket {
-  left: calc(var(--sat-x) - 50 * var(--u));
-  top: calc(var(--sat-y) - 55 * var(--u));
-  transform: scale(var(--sat-scale)) rotate(-8deg);
+/* Orbit arrival, in order: the fairing splits (0s), the satellite unfolds
+   its panels (0.9s), then parks top-right (1.4s). Delays live on the orbit
+   rules only, so scrolling back up reverses immediately. */
+.r-fairing,
+.r-kick {
+  transform-box: fill-box;
+  transition:
+    transform 1.4s cubic-bezier(0.3, 0, 0.6, 1),
+    opacity 1.4s ease-in;
 }
-.rocket {
-  transform-origin: calc(50 * var(--u)) calc(55 * var(--u));
+.r-fairing-l {
+  transform-origin: 100% 100%;
 }
+.r-fairing-r {
+  transform-origin: 0 100%;
+}
+html[data-stage="orbit"] .r-fairing-l {
+  transform: translate(-26px, 18px) rotate(-58deg);
+  opacity: 0;
+}
+html[data-stage="orbit"] .r-fairing-r {
+  transform: translate(26px, 18px) rotate(58deg);
+  opacity: 0;
+}
+html[data-stage="orbit"] .r-kick {
+  transform: translateY(40px);
+  opacity: 0;
+}
+
 .r-panel {
   transform-box: fill-box;
   transform: scaleX(0);
-  transition: transform 1.2s cubic-bezier(0.3, 0, 0.2, 1) 0.9s;
+  transition: transform 1.1s cubic-bezier(0.3, 0, 0.2, 1);
 }
 .r-panel-l {
   transform-origin: 100% 50%;
@@ -300,6 +324,34 @@ html[data-stage="orbit"] .rocket {
 }
 html[data-stage="orbit"] .r-panel {
   transform: scaleX(1);
+  transition-delay: 0.9s;
+}
+
+.rocket .r-bubble {
+  fill: #fff;
+  stroke: #c2410c;
+}
+.rocket .r-beacon {
+  fill: var(--accent-hot);
+}
+html[data-stage="orbit"] .r-beacon {
+  animation: beacon 1.8s ease-in-out 2.4s infinite;
+}
+@keyframes beacon {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+/* transform-origin is the satellite's centre (viewBox 50, 60) */
+.rocket {
+  transform-origin: calc(50 * var(--u)) calc(60 * var(--u));
+}
+html[data-stage="orbit"] .rocket {
+  left: calc(var(--sat-x) - 50 * var(--u));
+  top: calc(var(--sat-y) - 60 * var(--u));
+  transform: scale(var(--sat-scale)) rotate(-6deg);
+  transition-delay: 1.4s;
 }
 
 /* ---------- HUD ---------- */
@@ -487,6 +539,13 @@ a.rule:hover {
 .orbit {
   color: #0f172a;
 }
+/* The rocket is parked as a satellite by now, so on mobile the summary
+   takes back the column reserved for the launch tower. */
+@media (max-width: 767px) {
+  .orbit {
+    margin-left: calc(16px - var(--rx) - 154 * var(--u) - 10px);
+  }
+}
 .orbit .panel {
   background: rgb(255 255 255 / 0.82);
   border-color: rgb(15 23 42 / 0.1);
@@ -525,6 +584,9 @@ a.rule:hover {
   }
   .pad .arm,
   .r-panel,
+  .r-fairing,
+  .r-kick,
+  .r-beacon,
   html[data-stage="orbit"] .hud {
     transition: none !important;
     animation: none !important;

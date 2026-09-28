@@ -40,7 +40,8 @@ Compliance (NIST, OSCAL) appears as "flight rule" badges on cards, not as its ow
 - Ignores the blog light/dark toggle; the flight itself is the theme.
 - Launch pad: line-art lattice tower with a crane, two umbilical arms that swing away at ignition, a pad platform with a `PAD 01` label, and ignition smoke.
 - Space: Earth's limb with an atmosphere glow rises from the bottom after stage 2 separation.
-- Orbit arrival: the payload stays and deploys solar panels (a satellite parked top-right over the summary), the sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
+- Rocket labels tell the DevSecOps story: stage 1 `PLATFORM`, stage 2 `PIPELINE`, fairing `YOUR PRODUCT` (`?for=` swaps in the company name). Each booster falls away once its job is done; only the product reaches orbit.
+- Orbit arrival: the fairing splits clamshell-style, a folded satellite emerges and deploys its solar panels, then parks top-right with a blinking beacon. The satellite is the product: the AI assistant about me (v2). The sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
 - All brightness changes follow scroll position. Reduced motion drops smoke, bloom, and arm/satellite transitions; states still change.
 
 ## Summary page
@@ -56,7 +57,7 @@ English only.
 
 ## AI assistant (v2, v3)
 
-- Suggested-question chips: answers generated at build time, zero runtime calls.
+- Suggested-question chips: answers are drafted, reviewed, and committed as JSON with cited post slugs (validated at build). v2 drafts them by hand; v3 adds a generation script. Zero runtime calls.
 - Free-form questions only: OpenRouter free models with a fallback chain, small context (resume summary, stage cards, 3-5 posts picked by a build-time keyword index), answers must cite posts.
 - Limits: per-IP daily cap and a global daily cap below the account quota, both configurable. On exhaustion, fall back to chip answers and contact links.
 - Privacy notice (free providers may log prompts), input length cap, off-topic refusal, API key only in the serverless function.
@@ -74,7 +75,8 @@ English only.
 |---|---|
 | v1 | `/launch` rocket page and summary, data module, `?for=`, skip button, altitude meter, reduced-motion fallback |
 | v1.1 | Launch pad, Earth limb, orbital sunrise, satellite, HUD orbit lock |
-| v2 | Build-time chip answers |
+| v1.2 | Rocket labels (PLATFORM / PIPELINE / YOUR PRODUCT), clamshell fairing, satellite emerges from inside |
+| v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |
 
