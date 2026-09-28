@@ -97,8 +97,16 @@ const lanesByStage = Object.fromEntries(
       .filter(l => l.cards.length > 0),
   ])
 );
+// "Merged" for one contribution, "2 merged · 1 open PR" for several.
+function statusSummary(statuses: (keyof typeof statusLabel)[]) {
+  const counts = new Map<string, number>();
+  for (const st of statuses) counts.set(st, (counts.get(st) ?? 0) + 1);
+  if (statuses.length === 1) return statusLabel[statuses[0]];
+  return [...counts].map(([st, n]) => `${n} ${statusLabel[st as keyof typeof statusLabel]}`).join(" · ");
+}
 const ossEntries = openSource.map(o => ({
   ...o,
+  summary: statusSummary(o.contributions.map(c => c.status)),
   contributions: o.contributions.map(c => ({ ...c, links: c.links.map(resolveEvidence) })),
 }));
 const ossIds = new Set(openSource.map(o => o.id));
@@ -425,18 +433,27 @@ const smokePuffs: [number, number][] = [
             {
               career.map(c => (
                 <li>
-                  <p class="tl-period">{c.period}</p>
-                  <p class="tl-org">
-                    <Image
-                      src={orgLogos[c.logo as keyof typeof orgLogos]}
-                      alt=""
-                      height={48}
-                      class="tl-logo"
-                    />
-                    <span>{c.org}</span>
-                  </p>
-                  <p class="tl-role">{c.role}</p>
-                  <p class="tl-detail">{c.detail}</p>
+                  <details>
+                    <summary>
+                      <span class="tl-head">
+                        <span class="tl-period">{c.period}</span>
+                        <span class="tl-org">
+                          <Image
+                            src={orgLogos[c.logo as keyof typeof orgLogos]}
+                            alt=""
+                            height={48}
+                            class="tl-logo"
+                          />
+                          <span>{c.org}</span>
+                        </span>
+                      </span>
+                      <span class="tl-role">
+                        {c.role}
+                        <span class="tl-keywords"> · {c.keywords.join(" · ")}</span>
+                      </span>
+                    </summary>
+                    <p class="tl-detail">{c.detail}</p>
+                  </details>
                 </li>
               ))
             }
@@ -445,9 +462,11 @@ const smokePuffs: [number, number][] = [
           <ul class="side-list">
             {
               education.map(e => (
-                <li>
-                  <span class="font-semibold">{e.degree}</span>, {e.school}
-                  <span class="tl-period block">{e.period}</span>
+                <li class="edu-row">
+                  <span>
+                    <span class="font-semibold">{e.degree}</span> · {e.school}
+                  </span>
+                  <span class="tl-period">{e.period}</span>
                 </li>
               ))
             }
@@ -483,28 +502,41 @@ const smokePuffs: [number, number][] = [
           {
             ossEntries.map(o => (
               <li class="oss-entry" data-oss-id={o.id}>
-                <p class="oss-head">
-                  <a class="oss-name" href={o.url} target="_blank" rel="noopener noreferrer">
-                    {o.name} ↗
-                  </a>
-                  <span class="oss-about">{o.about}</span>
-                </p>
-                <ul class="oss-contribs">
-                  {o.contributions.map(c => (
-                    <li>
-                      <span class="oss-status">{statusLabel[c.status]}</span>
-                      <span class="oss-work">{c.what}</span>
-                      <span class="oss-links">
-                        {c.links.map((l, i) => (
-                          <>
-                            {i > 0 && " · "}
-                            <EvidenceLink {...l} />
-                          </>
-                        ))}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <details>
+                  <summary>
+                    <span class="oss-name">{o.name}</span>
+                    <span class="oss-headline">{o.headline}</span>
+                    <span class="oss-tags">{o.tags.join(" · ")}</span>
+                    <span class="oss-summary">{o.summary}</span>
+                  </summary>
+                  <div class="oss-body">
+                    <p class="oss-about">
+                      {o.about}
+                      {o.url && (
+                        <>
+                          {" · "}
+                          <a href={o.url} target="_blank" rel="noopener noreferrer">repo ↗</a>
+                        </>
+                      )}
+                    </p>
+                    <ul class="oss-contribs">
+                      {o.contributions.map(c => (
+                        <li>
+                          <span class="oss-status">{statusLabel[c.status]}</span>
+                          <span class="oss-work">{c.what}</span>
+                          {c.links.length > 0 && <span class="oss-links">
+                            {c.links.map((l, i) => (
+                              <>
+                                {i > 0 && " · "}
+                                <EvidenceLink {...l} />
+                              </>
+                            ))}
+                          </span>}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </details>
               </li>
             ))
           }

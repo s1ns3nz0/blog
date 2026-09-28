@@ -424,6 +424,7 @@ export const career = [
   {
     period: "Nov 2024 – Sep 2026",
     role: "Cybersecurity Consultant",
+    keywords: ["EU CRA", "OT security", "ISMS-P"],
     org: "IBM",
     logo: "ibm",
     detail:
@@ -432,6 +433,7 @@ export const career = [
   {
     period: "Mar 2024 – Nov 2024",
     role: "Sr. Security Consultant",
+    keywords: ["ISO 27001", "PKI", "Evaluation guide"],
     org: "Deloitte Consulting Korea",
     logo: "deloitte",
     detail:
@@ -440,6 +442,7 @@ export const career = [
   {
     period: "Jun 2023 – Feb 2024",
     role: "Vulnerability Analysis Track",
+    keywords: ["Vulnerability analysis", "CIEM", "Multi-cloud IAM"],
     org: "KITRI Best of the Best (BoB) 12th",
     logo: "kitri",
     detail:
@@ -448,6 +451,7 @@ export const career = [
   {
     period: "Dec 2021 – Mar 2023",
     role: "Signal Officer (Captain), Corps CERT",
+    keywords: ["Corps CERT", "Splunk", "Incident response"],
     org: "Republic of Korea Army",
     logo: "rok-army",
     detail:
@@ -456,6 +460,7 @@ export const career = [
   {
     period: "Mar 2018 – Dec 2021",
     role: "Signal Officer (Lieutenant), Network Platoon Leader",
+    keywords: ["Network ops", "25-member platoon", "#1 of 24"],
     org: "Republic of Korea Army",
     logo: "rok-army",
     detail:
@@ -484,7 +489,7 @@ export const certifications = [
 ];
 
 /** Open-source work, one entry per project, shown in the summary. */
-export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed";
+export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo";
 
 export const statusLabel: Record<ContributionStatus, string> = {
   merged: "Merged",
@@ -492,6 +497,7 @@ export const statusLabel: Record<ContributionStatus, string> = {
   proposed: "Proposed",
   reported: "Reported",
   fixed: "Fixed upstream",
+  embargo: "Under embargo",
 };
 
 export type Contribution = {
@@ -505,7 +511,12 @@ export type OpenSourceEntry = {
   id: string;
   name: string;
   about: string;
-  url: string;
+  /** Omitted for embargoed disclosures, which must not name a product. */
+  url?: string;
+  /** Bold one-line summary of what I did, shown collapsed. */
+  headline: string;
+  /** 2-3 technology keywords recruiters can match against a JD. */
+  tags: string[];
   contributions: Contribution[];
 };
 
@@ -518,6 +529,8 @@ export const openSource: OpenSourceEntry[] = [
     name: "Prowler",
     about: "Open cloud security platform",
     url: "https://github.com/prowler-cloud/prowler",
+    headline: "28 cloud security checks",
+    tags: ["Azure", "GCP", "CSPM"],
     contributions: [
       {
         what:
@@ -538,6 +551,8 @@ export const openSource: OpenSourceEntry[] = [
     name: "SEAL Frameworks",
     about: "Security Alliance's open-source blockchain security framework",
     url: "https://github.com/security-alliance/frameworks",
+    headline: "Policy as Code & supply-chain guidance",
+    tags: ["Policy as Code", "Supply chain", "Incident response"],
     contributions: [
       {
         what: "Policy as Code enforced through the CI/CD pipeline.",
@@ -561,6 +576,8 @@ export const openSource: OpenSourceEntry[] = [
     name: "OSCAL Compass",
     about: "Compliance as Code, backed by NIST and CNCF",
     url: "https://github.com/oscal-compass",
+    headline: "Compliance-as-Code fix & CI plugin",
+    tags: ["OSCAL", "Compliance as Code", "CI/CD"],
     contributions: [
       {
         what: "Fixed an ssp-generate KeyError on a missing profile-param-value-origin in compliance-trestle.",
@@ -579,6 +596,8 @@ export const openSource: OpenSourceEntry[] = [
     name: "lnd",
     about: "Lightning Network Daemon",
     url: "https://github.com/lightningnetwork/lnd",
+    headline: "Short-read bug in address decoders",
+    tags: ["Lightning", "Go", "Input validation"],
     contributions: [
       {
         what: "Found that the fixed-width node announcement address decoders accept short reads.",
@@ -592,6 +611,8 @@ export const openSource: OpenSourceEntry[] = [
     name: "Aperture",
     about: "Lightning Labs' L402 reverse proxy",
     url: "https://github.com/lightninglabs/aperture",
+    headline: "L402 metrics & security events",
+    tags: ["Lightning", "L402", "Observability"],
     contributions: [
       {
         what: "Per-outcome Prometheus counters for the L402 mint and verify paths.",
@@ -611,10 +632,28 @@ export const openSource: OpenSourceEntry[] = [
     ],
   },
   {
+    // Undisclosed reports: vendor only. No product, date, severity, or link
+    // until fixes ship and disclosure is agreed.
+    id: "disclosure",
+    name: "Coordinated disclosure",
+    about: "Private vulnerability reports",
+    headline: "2 vulnerabilities reported to Lightning Labs",
+    tags: ["Responsible disclosure", "Lightning"],
+    contributions: [
+      {
+        what: "Details will be added once fixes ship and disclosure is agreed.",
+        status: "embargo",
+        links: [],
+      },
+    ],
+  },
+  {
     id: "gosentry",
     name: "gosentry",
     about: "Trail of Bits' security-oriented Go toolchain",
     url: "https://github.com/trailofbits/gosentry",
+    headline: "Silent fuzzer failure, fixed upstream",
+    tags: ["Fuzzing", "Go", "LibAFL"],
     contributions: [
       {
         what: "Reported a LibAFL corpus bug where fuzzing stopped while go test still passed; fixed in #212.",
@@ -637,6 +676,6 @@ export const audiences: Audience[] = [
     subline:
       "Kubernetes in production, observability that operators can act on, and hands-on work with Aperture and the Lightning stack.",
     priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "secrets-and-keys", "gosentry"],
-    ossPriority: ["lnd", "aperture"],
+    ossPriority: ["lnd", "aperture", "disclosure"],
   },
 ];
