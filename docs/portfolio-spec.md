@@ -38,6 +38,10 @@ Compliance (NIST, OSCAL) appears as "flight rule" badges on cards, not as its ow
 - SVG line-art rocket, CSS gradient background (ground to sky to space to bright orbit).
 - Mission-control telemetry UI (T+ clock, altitude, stage log), monospace type.
 - Ignores the blog light/dark toggle; the flight itself is the theme.
+- Launch pad: line-art lattice tower with a crane, two umbilical arms that swing away at ignition, a pad platform with a `PAD 01` label, and ignition smoke.
+- Space: Earth's limb with an atmosphere glow rises from the bottom after stage 2 separation.
+- Orbit arrival: the payload stays and deploys solar panels (a satellite parked top-right over the summary), the sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
+- All brightness changes follow scroll position. Reduced motion drops smoke, bloom, and arm/satellite transitions; states still change.
 
 ## Summary page
 
@@ -69,6 +73,7 @@ English only.
 | Version | Scope |
 |---|---|
 | v1 | `/launch` rocket page and summary, data module, `?for=`, skip button, altitude meter, reduced-motion fallback |
+| v1.1 | Launch pad, Earth limb, orbital sunrise, satellite, HUD orbit lock |
 | v2 | Build-time chip answers |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

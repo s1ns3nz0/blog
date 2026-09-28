@@ -35,10 +35,14 @@ function formatT(seconds: number): string {
   return `T${sign}${mm}:${ss}`;
 }
 
+const summary = document.getElementById("summary");
+
 function update() {
   const vh = window.innerHeight;
-  const max = document.documentElement.scrollHeight - vh;
-  const progress = max > 0 ? clamp(window.scrollY / max) : 0;
+  // Flight progress runs from the pad (0) to orbit insertion (1), reached
+  // when the summary's top crosses mid-screen.
+  const orbitAt = summary ? summary.offsetTop - vh * 0.5 : 1;
+  const progress = orbitAt > 0 ? clamp(window.scrollY / orbitAt) : 0;
 
   // Current stage: last section whose top has crossed mid-screen.
   let current = sections[0];
@@ -53,18 +57,23 @@ function update() {
   for (const [prop, el] of fades) {
     if (!el) continue;
     const top = el.getBoundingClientRect().top;
-    root.style.setProperty(prop, clamp((vh - top) / (vh * 0.7)).toFixed(3));
+    const value = clamp((vh - top) / (vh * 0.7));
+    root.style.setProperty(prop, value.toFixed(3));
+    if (prop === "--light") root.toggleAttribute("data-bright", value > 0.45);
   }
 
   if (reduceMotion.matches) root.style.removeProperty("--y");
   else root.style.setProperty("--y", String(Math.round(window.scrollY)));
 
+  const inOrbit = stage === "orbit";
   if (hudT) hudT.textContent = formatT(-10 + progress * 550);
   if (hudAlt) {
-    const km = progress * progress * 420;
+    const km = inOrbit ? 400 : progress * progress * 400;
     hudAlt.textContent = km < 10 ? km.toFixed(1) : String(Math.round(km));
   }
-  if (hudStage) hudStage.textContent = current?.dataset.label ?? "";
+  if (hudStage) {
+    hudStage.textContent = inOrbit ? "Orbit achieved" : (current?.dataset.label ?? "");
+  }
 
   for (const link of meterLinks) {
     if (link.dataset.meter === stage) link.setAttribute("aria-current", "step");
