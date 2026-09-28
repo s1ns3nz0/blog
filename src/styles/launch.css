@@ -788,7 +788,7 @@ html[data-bright] .meter a::before {
 }
 .timeline > li {
   position: relative;
-  padding-bottom: 12px;
+  padding-bottom: 32px;
 }
 .tl-keywords {
   color: #64748b;
@@ -826,6 +826,7 @@ html[data-bright] .meter a::before {
   text-transform: uppercase;
 }
 .tl-org {
+  margin-top: 6px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -842,7 +843,7 @@ html[data-bright] .meter a::before {
   object-position: left center;
 }
 .tl-role {
-  margin: 2px 0 0;
+  margin: 8px 0 0;
   color: #334155;
   font-size: 14px;
   font-weight: 600;
@@ -1311,6 +1312,12 @@ html[data-stage="orbit"] .hud-wrap {
   color: #334155;
   font-size: 14px;
   line-height: 1.5;
+}
+/* career entries read as short paragraphs, so give them more air */
+.timeline .bullets {
+  gap: 10px;
+  margin-top: 12px;
+  line-height: 1.65;
 }
 .bullets li::marker {
   color: #94a3b8;
