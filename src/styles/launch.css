@@ -13,6 +13,7 @@
   --sat-x: calc(100vw - 58px); /* satellite centre in orbit */
   --sat-y: 36px;
   --sat-scale: 1.6;
+  --hero-w: none; /* set from 1100px up, see below */
   /* left edge of the content column (clears the rocket and tower) */
   --col: calc(var(--rx) + 154 * var(--u) + 10px);
   --ink: #e6edf7;
@@ -43,6 +44,18 @@
     --sat-y: 124px;
     --sat-scale: 1.45;
     --col: calc(var(--rx) + var(--rh) * 0.24 + 7vw);
+  }
+}
+@media (min-width: 1100px) {
+  /* The headline stays on one line (60px max) and the body ends at its
+     period: 17.67em is the headline's width in Orbitron. */
+  .launch-body {
+    --hero-fs: min(3.75rem, calc((100vw - var(--col) - 160px) / 17.7));
+    --hero-w: calc(var(--hero-fs) * 17.67);
+  }
+  .hero-title {
+    font-size: var(--hero-fs);
+    white-space: nowrap;
   }
 }
 
@@ -606,6 +619,7 @@ html[data-bright] .meter a::before {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-width: var(--hero-w);
 }
 .governing {
   margin: 6px 0 0;
@@ -627,6 +641,7 @@ html[data-bright] .meter a::before {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  max-width: var(--hero-w);
   padding: 18px 20px;
 }
 .log-zone-head {
@@ -1082,9 +1097,10 @@ html[data-bright] .meter a::before {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: var(--hero-w);
 }
 @media (min-width: 768px) {
-  /* body runs as wide as the hero; the summary stops short of the parked satellite */
+  /* the summary also stops short of the parked satellite */
   .summary-head {
     margin-right: 70px;
   }
