@@ -110,9 +110,10 @@ function stageTitle(el: HTMLElement) {
 
 // In-flight anomalies: a fault is active from the moment its transit gap
 // reaches mid-screen until the next stage's title rises to the rocket's
-// nose, then it resolves. The callout beside the
-// rocket shows the caution, then briefly the resolution.
-const transits = Array.from(document.querySelectorAll<HTMLElement>("[data-transit]"));
+// nose. The callout then turns green and steps through the resolution
+// lines while that stage's cards scroll by, until their bottom passes
+// mid-screen. Orbit has no cards: its green line shows briefly.
+const transits = Array.from(document.querySelectorAll<HTMLElement>("[data-transit], [data-notes]"));
 const callout = document.querySelector<HTMLElement>("[data-callout]");
 const calloutTitle = document.querySelector<HTMLElement>("[data-callout-title]");
 const calloutText = document.querySelector<HTMLElement>("[data-callout-text]");
@@ -120,6 +121,7 @@ const passed = new Set<string>();
 let anomaliesPrimed = false; // first pass records position silently (e.g. reload mid-page)
 let calloutTimer: number | undefined;
 let recoverTimer: number | undefined;
+let greenOn = false; // callout is showing a stage's green window
 
 function showCallout(state: "caution" | "resolved" | "idle", title = "", text = "") {
   if (!callout || !calloutTitle || !calloutText) return;
@@ -133,22 +135,41 @@ function updateAnomalies(vh: number) {
   const mid = vh * 0.5;
   const nose = rocketTop(vh);
   let active: HTMLElement | undefined;
+  let green: { t: HTMLElement; line: string; label: string } | undefined;
   for (const t of transits) {
+    const section = t.parentElement ?? t;
     const top = t.getBoundingClientRect().top;
-    const title = stageTitle(t.parentElement ?? t).getBoundingClientRect().top;
+    const title = stageTitle(section).getBoundingClientRect().top;
     const id = t.dataset.transit ?? "";
+    const lines = (t.dataset.resolution ?? "").split("|");
     const isPast = title <= nose;
-    if (top < mid && !isPast) active = t;
+    if (top < mid && !isPast && t.dataset.transit) active = t;
+
+    // Green window: title at the nose until the cards' bottom passes mid.
+    const log = section.querySelector<HTMLElement>(".stage-log");
+    if (isPast && log) {
+      const bottom = log.getBoundingClientRect().bottom;
+      if (bottom > mid) {
+        const span = bottom - title - (mid - nose);
+        const progress = span > 0 ? (nose - title) / span : 0;
+        const step = Math.min(lines.length - 1, Math.floor(progress * lines.length));
+        green = { t, line: lines[step], label: t.dataset.calloutLabel ?? "✓ Resolved" };
+      }
+    }
+
     if (isPast && !passed.has(id)) {
       passed.add(id);
       if (!anomaliesPrimed) continue;
-      // Just cleared this gap: recovery pulse and a short "resolved" callout.
+      if (!t.dataset.transit) continue;
+      // Just cleared this gap: recovery pulse on the rocket.
       root.setAttribute("data-recovered", "");
       window.clearTimeout(recoverTimer);
       recoverTimer = window.setTimeout(() => root.removeAttribute("data-recovered"), 1200);
-      showCallout("resolved", "✓ Resolved", t.dataset.resolution ?? "");
-      window.clearTimeout(calloutTimer);
-      calloutTimer = window.setTimeout(() => showCallout("idle"), 1800);
+      if (!log) {
+        showCallout("resolved", "✓ Resolved", lines[0]);
+        window.clearTimeout(calloutTimer);
+        calloutTimer = window.setTimeout(() => showCallout("idle"), 1800);
+      }
     } else if (!isPast) {
       passed.delete(id);
     }
@@ -156,11 +177,19 @@ function updateAnomalies(vh: number) {
   anomaliesPrimed = true;
   if (active) {
     window.clearTimeout(calloutTimer);
+    greenOn = false;
     root.dataset.fault = active.dataset.motion;
     showCallout("caution", "⚠ Master caution", active.dataset.caution ?? "");
-  } else {
-    delete root.dataset.fault;
-    if (callout?.dataset.state === "caution") showCallout("idle");
+    return;
+  }
+  delete root.dataset.fault;
+  if (green) {
+    window.clearTimeout(calloutTimer);
+    greenOn = true;
+    showCallout("resolved", green.label, green.line);
+  } else if (callout?.dataset.state === "caution" || greenOn) {
+    greenOn = false;
+    showCallout("idle");
   }
 }
 

@@ -47,6 +47,8 @@ export type Stage = {
   support: string;
   /** Standards and methods behind the stage, shown under its heading. */
   flightRules?: FlightRule[];
+  /** Green callout lines for a stage with no fault before it. */
+  notes?: string[];
 };
 
 export type Audience = {
@@ -67,6 +69,12 @@ export const identity = {
   headline: "Launch your product securely.",
   /** The one claim the summary makes; everything else is evidence. */
   claim: "I turn security frameworks and compliance into platform code.",
+  /** Summary lead-in above the name: a quote, then the question it raises. */
+  quote: {
+    text: "Know the enemy and know yourself, and you will not be imperiled in a hundred battles.",
+    by: "Sun Tzu",
+    question: "How well do you know your organization's security activities?",
+  },
   /** Painted on the rocket fairing: the thing that actually reaches orbit. */
   fairing: "PRODUCT",
   subline:
@@ -92,6 +100,12 @@ export const stages: Stage[] = [
       { label: "NIST SP 800-53" },
       { label: "OWASP ASVS" },
     ],
+    notes: [
+      "Security requirements",
+      "Service characteristics",
+      "Compliance requirements",
+      "Framework-driven",
+    ],
   },
   {
     id: "build",
@@ -107,7 +121,7 @@ export const stages: Stage[] = [
     name: "Deploy",
     governing: "I make pipelines prove their own integrity, and I fix what I find upstream.",
     support:
-      "24 controls mapped to 12 threat areas in my own CI/CD, plus contributions to SEAL and OSCAL Compass, and a fuzzer bug in Trail of Bits' gosentry fixed the same day.",
+      "24 controls mapped to 12 threat areas in my own CI/CD, plus contributions to SEAL and OSCAL Compass, and a fuzzer bug in Trail of Bits' Gosentry fixed the same day.",
   },
   {
     id: "operate",
@@ -133,9 +147,10 @@ export type Anomaly = {
   id: string;
   resolvesAt: StageId | "orbit";
   caution: string;
-  /** Short HUD form; `resolution` is the full sentence (tooltip). */
+  /** Short HUD form of the fix. */
   fix: string;
-  resolution: string;
+  /** Green callout lines, shown in turn while the stage's cards scroll by. */
+  resolution: string[];
   motion: "overheat" | "sputter" | "wobble" | "fairing";
   source: string;
   anchor?: string;
@@ -147,9 +162,9 @@ export const anomalies: Anomaly[] = [
   {
     id: "cost-overrun",
     resolvesAt: "build",
-    caution: "Cost overrun",
-    fix: "Simplified",
-    resolution: "Architecture simplified",
+    caution: "No tests or scans",
+    fix: "Scanned",
+    resolution: ["IaC scanning", "Secret scanning", "SAST"],
     motion: "overheat",
     source: LESSONS,
     anchor: "2-the-architecture-became-too-expensive-to-operate",
@@ -159,7 +174,7 @@ export const anomalies: Anomaly[] = [
     resolvesAt: "ship",
     caution: "Insecure CI/CD",
     fix: "Hardened",
-    resolution: "Pipeline hardened: 24 controls",
+    resolution: ["Git as single source of truth", "Policy as code", "Risk assessment"],
     motion: "sputter",
     source: "ci-cd-security-controls-implemented-in-the-pipeline-design",
     anchor: "threat-mapped-implementation",
@@ -169,16 +184,16 @@ export const anomalies: Anomaly[] = [
     resolvesAt: "operate",
     caution: "Anomaly detected",
     fix: "Contained",
-    resolution: "Triaged with ADS, contained",
+    resolution: ["Incident response", "Logs, metrics, traces"],
     motion: "wobble",
     source: "palantir-ads",
   },
   {
-    id: "ai-over-reliance",
+    id: "no-visibility",
     resolvesAt: "orbit",
-    caution: "AI over-reliance",
-    fix: "Human-reviewed",
-    resolution: "Answers human-reviewed",
+    caution: "No visibility",
+    fix: "Visible",
+    resolution: ["Full visibility"],
     motion: "fairing",
     source: LESSONS,
     anchor: "4-i-relied-too-much-on-ai",
@@ -352,9 +367,9 @@ export const cards: Card[] = [
     id: "gosentry",
     stage: "ship",
     zone: "oss",
-    title: "gosentry: a fuzzer that died silently",
+    title: "Gosentry: a fuzzer that died silently",
     summary:
-      "Reported a LibAFL corpus bug in Trail of Bits' gosentry where fuzzing stopped but go test still passed; fixed the same day.",
+      "Reported a LibAFL corpus bug in Trail of Bits' Gosentry where fuzzing stopped but go test still passed; fixed the same day.",
     evidence: [
       "reporting-a-libafl-corpus-id-bug-in-gosentry",
       { label: "Issue #210", url: "https://github.com/trailofbits/gosentry/issues/210" },
@@ -775,7 +790,7 @@ export const openSource: OpenSourceEntry[] = [
   },
   {
     id: "gosentry",
-    name: "gosentry",
+    name: "Gosentry",
     about: "Trail of Bits' security-focused Go toolchain for fuzzing.",
     url: "https://github.com/trailofbits/gosentry",
     did: "Found a LibAFL bug that stopped fuzzing while go test still passed. Fixed upstream the same day.",

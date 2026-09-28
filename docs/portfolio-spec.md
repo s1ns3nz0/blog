@@ -20,7 +20,7 @@ Agreed 2026-09-28. Source of truth for the portfolio build.
 | Stage | Visual | Theme | Evidence |
 |---|---|---|---|
 | Pad | ground, dawn | Build: IaC, private EKS, Vault/KMS, network design | Hoodi infra posts, key management posts |
-| Stage 1 separation | sky | Deploy: CI/CD security, supply chain, fuzzing, OSS, vulnerability reports | CI/CD posts, gosentry, Aperture, Prowler |
+| Stage 1 separation | sky | Deploy: CI/CD security, supply chain, fuzzing, OSS, vulnerability reports | CI/CD posts, Gosentry, Aperture, Prowler |
 | Stage 2 separation | space | Operate: observability, audit logging, SOC, detection, response | Aperture metrics/events, audit and logging, SOC posts |
 | Orbit | screen brightens | Summary, career, certifications, AI assistant | resume |
 
@@ -65,7 +65,7 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 - Orbit arrival: the fairing splits clamshell-style, a folded satellite emerges and deploys its solar panels, then parks top-right with a blinking beacon. The satellite is the product: the AI assistant about me (v2). The sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
 - Summary: the claim scrolls normally; the stat cards and three "How I work" lines (from `traits` in portfolio.ts) fade up 24px once as they enter, staggered 0.1s. Reduced motion or no JS: shown as is.
 - HUD: one line top-left (clock, altitude, stage). No readouts row.
-- In-flight anomalies: a transit gap before each stage plays a fault (Cost overrun: PLATFORM overheats; Insecure CI/CD: flame sputters and the rocket sags; Anomaly detected: wobble; AI over-reliance: fairing alarm). While a fault is active the failing stage glows red, sparks fly from it, the shake is stronger, the screen edges pulse red, and a blinking red `MASTER CAUTION` callout sits above the rocket nose, clear of the text. Arriving at the stage clears it with a green recovery pulse and turns the callout into a green `RESOLVED` line that hides after 1.8s. Reduced motion keeps only the callout text. A fault stays active until the next stage title rises to the rocket nose; stages switch on that same line, so separations happen after the fix.
+- In-flight anomalies: a transit gap before each stage plays a fault (No tests or scans: PLATFORM overheats; Insecure CI/CD: flame sputters and the rocket sags; Anomaly detected: wobble; No visibility: fairing alarm). While a fault is active the failing stage glows red, sparks fly from it, the shake is stronger, the screen edges pulse red, and a blinking red `MASTER CAUTION` callout sits above the rocket nose, clear of the text. Arriving at the stage clears it with a green recovery pulse; the callout turns green and steps through the stage's resolution lines (Build: IaC scanning, SAST, secret scanning; Deploy: Git as single source of truth, policy as code, risk assessment; Operate: incident response, then logs, metrics, traces) until the bottom of the stage's cards passes mid-screen. Orbit's line (Full visibility) hides after 1.8s. Design has no fault; its green `DESIGN REVIEW` callout steps through security requirements, service characteristics, compliance requirements, framework-driven. Reduced motion keeps only the callout text. A fault stays active until the next stage title rises to the rocket nose; stages switch on that same line, so separations happen after the fix.
 - Upper-stage nozzles stay hidden inside the stage below and slide out after separation.
 - All brightness changes follow scroll position. Reduced motion drops smoke, bloom, and arm/satellite transitions; states still change.
 
@@ -121,6 +121,8 @@ English only.
 | v1.18 | Open source: links as underlined text in the flow, repo path atop each expanded row, kind as plain mono text (status is the only box) |
 | v1.19 | Caution callout above the rocket, kept inside the rocket column; fins drawn under the stage-1 body; stage rows split into Code, Write-ups, Rules |
 | v1.20 | Design stage before Build (rocket unchanged: it flies in its Build state); IBM OT design, security-requirements plugin (moved from Deploy), and ECS/EKS/serverless design-review series linked to their tag pages; faults hold until the stage title reaches the rocket nose |
+| v1.21 | New caution/resolution wording; green callout holds and steps through lines until the stage's cards pass; Design review callout |
+| v1.22 | Orbit fault: No visibility / Full visibility; Sun Tzu lead-in under the summary roles; flames wait for their nozzle; Gosentry capitalised |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

@@ -45,7 +45,7 @@ export const chips: Chip[] = [
     audiences: ["default", "lightning-labs"],
     question: "What open source has he contributed to?",
     answer:
-      "28 Azure and GCP checks for Prowler, Policy as Code and private-registry guidance for the SEAL frameworks, a fuzzer bug report in Trail of Bits' gosentry (fixed the same day), and per-outcome L402 metrics for Lightning Labs' Aperture.",
+      "28 Azure and GCP checks for Prowler, Policy as Code and private-registry guidance for the SEAL frameworks, a fuzzer bug report in Trail of Bits' Gosentry (fixed the same day), and per-outcome L402 metrics for Lightning Labs' Aperture.",
     sources: [
       "reporting-a-libafl-corpus-id-bug-in-gosentry",
       "aperture-l402-metrics-before-and-after",

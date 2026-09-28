@@ -282,6 +282,11 @@ html[data-stage="ship"] .r-flame2,
 html[data-stage="operate"] .r-flame3 {
   opacity: 1;
 }
+/* Upper-stage flames wait for their nozzle to slide out (0.6s + 0.8s). */
+html[data-stage="ship"] .r-flame2,
+html[data-stage="operate"] .r-flame3 {
+  transition-delay: 1.3s;
+}
 
 html[data-launched][data-stage="build"] .rocket {
   animation: rumble 0.09s linear infinite alternate;
@@ -1108,6 +1113,31 @@ html[data-daylight] .stage-log {
     margin-right: 70px;
   }
 }
+/* Sun Tzu lead-in at the top of the summary; the name and claim answer it */
+.sun-tzu {
+  margin: 0 0 28px;
+  padding-left: 14px;
+  border-left: 2px solid var(--accent-hot);
+}
+.sun-tzu blockquote {
+  margin: 0;
+  color: #334155;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.sun-tzu figcaption {
+  margin-top: 4px;
+  color: #64748b;
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.sun-tzu-q {
+  margin: 10px 0 0;
+  color: #0f172a;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
 .claim {
   margin: 18px 0 6px;
   font-size: clamp(2rem, 4.2vw, 3.25rem);
@@ -1605,7 +1635,8 @@ html[data-stage="orbit"] .hud-wrap {
 }
 .flight-callout-text {
   margin: 2px 0 0;
-  font-size: clamp(15px, 1.6vw, 20px);
+  font-size: clamp(14px, 1.1vw, 18px);
+  overflow-wrap: anywhere; /* last resort for one long word in a narrow column */
   font-weight: 700;
   line-height: 1.2;
 }
@@ -2033,6 +2064,7 @@ html[data-stage="orbit"] .sat-button {
   }
   .rocket svg,
   .r-nozzle,
+  .r-flame,
   .flight-callout,
   .alarm-vignette,
   .rocket::before,

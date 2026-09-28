@@ -362,8 +362,12 @@ const smokePuffs: [number, number][] = [
               data-transit={anomalyBefore(stage.id)?.id}
               data-motion={anomalyBefore(stage.id)?.motion}
               data-caution={anomalyBefore(stage.id)?.caution}
-              data-resolution={anomalyBefore(stage.id)?.resolution}
+              data-resolution={anomalyBefore(stage.id)?.resolution.join("|")}
             />
+          )}
+
+          {!anomalyBefore(stage.id) && stage.notes && (
+            <div hidden data-notes data-callout-label="◆ Design review" data-resolution={stage.notes.join("|")} />
           )}
 
           <div class="stage-head" data-stage-head>
@@ -479,11 +483,16 @@ const smokePuffs: [number, number][] = [
             data-transit={anomalyBefore("orbit")?.id}
             data-motion={anomalyBefore("orbit")?.motion}
             data-caution={anomalyBefore("orbit")?.caution}
-            data-resolution={anomalyBefore("orbit")?.resolution}
+            data-resolution={anomalyBefore("orbit")?.resolution.join("|")}
           />
         )
       }
       <header class="summary-head" data-stage-head>
+        <figure class="sun-tzu">
+          <blockquote>“{identity.quote.text}”</blockquote>
+          <figcaption>{identity.quote.by}</figcaption>
+          <p class="sun-tzu-q">{identity.quote.question}</p>
+        </figure>
         <p class="meta spaced"><span>T+09:00</span><span>Orbit achieved</span></p>
         <h2 class="display text-2xl font-bold">{identity.name}</h2>
         <p class="meta spaced">{identity.roles.map(r => <span>{r}</span>)}</p>
