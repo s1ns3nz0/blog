@@ -24,7 +24,7 @@
   font-family: var(--font-space-grotesk), sans-serif;
 }
 /* mission-control telemetry */
-.hud,
+.hud-wrap,
 .meter,
 .skip,
 .telemetry,
@@ -365,7 +365,7 @@ html[data-stage="orbit"] .rocket {
 
 /* ---------- HUD ---------- */
 
-.hud,
+.hud-wrap,
 .meter,
 .skip {
   position: fixed;
@@ -377,9 +377,16 @@ html[data-stage="orbit"] .rocket {
     color 0.6s ease,
     opacity 0.4s ease;
 }
-.hud {
+.hud-wrap {
   top: 10px;
   left: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  max-width: calc(100vw - 150px);
+}
+.hud {
   display: flex;
   gap: 14px;
   padding: 6px 10px;
@@ -566,6 +573,190 @@ a.rule:hover {
 }
 .orbit a {
   color: #1d4ed8;
+}
+
+/* ---------- HUD systems readouts and anomaly log ---------- */
+
+.hud-systems p {
+  display: none;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 4px 10px;
+  border-left: 2px solid var(--accent-hot);
+  font-size: 10px;
+  background: rgb(5 8 20 / 0.45);
+}
+html[data-stage="build"] .hud-systems [data-for-stage="build"],
+html[data-stage="ship"] .hud-systems [data-for-stage="ship"],
+html[data-stage="operate"] .hud-systems [data-for-stage="operate"] {
+  display: flex;
+}
+.hud-systems a {
+  color: rgb(230 237 247 / 0.7);
+  text-decoration: none;
+}
+.hud-systems a:hover b {
+  text-decoration: underline;
+}
+.hud-systems b {
+  color: #fff;
+}
+
+.hud-log {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 10px;
+}
+.hud-log li[data-state="pending"],
+.hud-log li:not([data-state="active"]) .log-caution,
+.hud-log li:not([data-state="resolved"]) .log-resolved {
+  display: none;
+}
+.log-caution,
+.log-resolved {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.log-caution {
+  color: #1a0d05;
+  background: #f59e0b;
+  font-weight: 700;
+  animation: caution 0.6s steps(2) infinite;
+}
+@keyframes caution {
+  50% {
+    background: #b45309;
+    color: #fff;
+  }
+}
+.log-resolved {
+  color: #86efac;
+  background: rgb(5 8 20 / 0.55);
+  text-decoration: none;
+}
+.log-resolved:hover {
+  text-decoration: underline;
+}
+/* phones: one readout line, and only the newest log entry */
+@media (max-width: 767px) {
+  .hud-log li:not([data-latest]) {
+    display: none;
+  }
+  html .hud-systems p {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: calc(100vw - 64px);
+    mask-image: linear-gradient(90deg, #000 85%, transparent);
+  }
+}
+html[data-bright] .hud-systems p,
+html[data-bright] .log-resolved {
+  background: rgb(255 255 255 / 0.75);
+}
+html[data-bright] .hud-systems a {
+  color: #334155;
+}
+html[data-bright] .hud-systems b {
+  color: #0f172a;
+}
+html[data-bright] .log-resolved {
+  color: #15803d;
+}
+
+/* Empty stretch between stages where the in-flight anomaly plays out. */
+.transit {
+  height: 38vh;
+}
+@media (min-width: 768px) {
+  .transit {
+    height: 48vh;
+  }
+}
+
+/* ---------- rocket faults (html[data-fault]) and recovery ---------- */
+
+.rocket svg {
+  transform-origin: 50% 55%;
+}
+@keyframes fault-line {
+  50% {
+    stroke: #ef4444;
+  }
+}
+html[data-fault="overheat"] .r-stage1 > rect,
+html[data-fault="sputter"] .r-stage2 > rect,
+html[data-fault="wobble"] .r-stage2 > rect,
+html[data-fault="fairing"] .r-fairing > path {
+  stroke-width: 3;
+  animation: fault-line 0.45s steps(2) infinite;
+}
+html[data-fault="overheat"] .r-flame1 {
+  fill: #ef4444 !important;
+  animation: sputter 0.4s steps(3) infinite;
+}
+html[data-fault="sputter"] .r-flame1 {
+  animation: sputter 0.5s steps(4) infinite;
+}
+@keyframes sputter {
+  0% { opacity: 1; }
+  25% { opacity: 0.15; }
+  50% { opacity: 0.9; }
+  75% { opacity: 0; }
+}
+html[data-fault="sputter"] .rocket svg {
+  animation: sag 1.4s ease-in-out infinite;
+}
+@keyframes sag {
+  50% {
+    transform: translateY(16px);
+  }
+}
+html[data-fault="wobble"] .rocket svg {
+  animation: wobble 0.8s ease-in-out infinite;
+}
+html[data-fault="fairing"] .rocket svg {
+  animation: wobble 1.2s ease-in-out infinite;
+}
+@keyframes wobble {
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+html[data-recovered] .rocket svg {
+  animation: recovered 1.2s ease-out 1;
+}
+@keyframes recovered {
+  0% {
+    filter: drop-shadow(0 0 0 rgb(74 222 128 / 0.9));
+  }
+  40% {
+    filter: drop-shadow(0 0 14px rgb(74 222 128 / 0.9));
+  }
+  100% {
+    filter: drop-shadow(0 0 0 rgb(74 222 128 / 0));
+  }
+}
+
+/* Upper-stage nozzles hide inside the stage below and slide out once it
+   drops away. */
+.r-nozzle {
+  transform-box: fill-box;
+  transform: translateY(-9px);
+  transition: transform 0.8s cubic-bezier(0.3, 0, 0.2, 1) 0.6s;
+}
+html:is([data-stage="ship"], [data-stage="operate"], [data-stage="orbit"]) .r-stage2 .r-nozzle,
+html:is([data-stage="operate"], [data-stage="orbit"]) .r-kick .r-nozzle {
+  transform: none;
 }
 
 /* ---------- satellite assistant (v2) ---------- */
@@ -767,6 +958,12 @@ html[data-stage="orbit"] .sat-button {
   .layer-light {
     opacity: var(--light, 0);
   }
+  .rocket svg,
+  .r-nozzle,
+  .log-caution,
+  .r-stage1 > rect,
+  .r-stage2 > rect,
+  .r-fairing > path,
   .sat-button,
   .sat-tag,
   .assistant-inner,

@@ -13,6 +13,7 @@ import {
   certifications,
   openSource,
   audiences,
+  anomalies,
   type Card,
   type FlightRule,
 } from "@/data/portfolio";
@@ -88,6 +89,16 @@ const resolvedChips = chips.map(chip => {
   }
   return { ...chip, sourceLinks: chip.sources.map(post) };
 });
+
+// HUD systems readouts and the in-flight anomaly log, both sourced from posts.
+const stageReadouts = Object.fromEntries(
+  stages.map(st => [st.id, st.readouts.map(r => ({ ...r, url: post(r.source).url }))])
+);
+const anomalyLog = anomalies.map(a => ({
+  ...a,
+  url: post(a.source).url + (a.anchor ? `#${a.anchor}` : ""),
+}));
+const anomalyBefore = (stageId: string) => anomalyLog.find(a => a.resolvesAt === stageId);
 
 const EVIDENCE_SHOWN = 3;
 // Launch tower cross-bracing rows (pad viewBox units) and ignition smoke
@@ -165,10 +176,38 @@ const smokePuffs: [number, number][] = [
     <span class="sat-tag">Ask me</span>
   </button>
 
-  <div class="hud" role="status" aria-label="Flight telemetry">
-    <span><b data-hud-t>T-00:10</b></span>
-    <span>ALT <b data-hud-alt>0.0</b> km</span>
-    <span class="hidden sm:inline"><b data-hud-stage>Pad</b></span>
+  <div class="hud-wrap">
+    <!-- The clock updates every frame, so it is not a live region. -->
+    <div class="hud" aria-label="Flight telemetry">
+      <span><b data-hud-t>T-00:10</b></span>
+      <span>ALT <b data-hud-alt>0.0</b> km</span>
+      <span class="hidden sm:inline"><b data-hud-stage>Pad</b></span>
+    </div>
+    <div class="hud-systems" aria-label="Systems">
+      {
+        stages.map(st => (
+          <p data-for-stage={st.id}>
+            {stageReadouts[st.id].map(r => (
+              <a href={r.url}>
+                {r.label} <b>{r.value}</b>
+              </a>
+            ))}
+          </p>
+        ))
+      }
+    </div>
+    <ol class="hud-log" aria-label="Anomaly log" aria-live="polite">
+      {
+        anomalyLog.map(a => (
+          <li data-anomaly={a.id} data-state="pending">
+            <span class="log-caution">⚠ Master caution · {a.caution}</span>
+            <a class="log-resolved" href={a.url}>
+              ✓ Resolved · {a.caution} → {a.resolution}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 
   <nav class="meter" aria-label="Flight stages">
@@ -211,7 +250,16 @@ const smokePuffs: [number, number][] = [
             </header>
           )}
 
-          <div class="flex flex-col gap-2">
+          {anomalyBefore(stage.id) && (
+            <div
+              class="transit"
+              aria-hidden="true"
+              data-transit={anomalyBefore(stage.id)?.id}
+              data-motion={anomalyBefore(stage.id)?.motion}
+            />
+          )}
+
+          <div class="flex flex-col gap-2" data-stage-head>
             <p class="telemetry">{stage.event}</p>
             <h2 class="display text-3xl font-bold text-white sm:text-4xl">
               {stage.name}
@@ -267,7 +315,17 @@ const smokePuffs: [number, number][] = [
       data-label="Orbit"
       class="orbit flex min-h-screen flex-col gap-10 py-28"
     >
-      <header class="flex flex-col gap-3">
+      {
+        anomalyBefore("orbit") && (
+          <div
+            class="transit"
+            aria-hidden="true"
+            data-transit={anomalyBefore("orbit")?.id}
+            data-motion={anomalyBefore("orbit")?.motion}
+          />
+        )
+      }
+      <header class="flex flex-col gap-3" data-stage-head>
         <p class="telemetry">T+09:00 · Orbit achieved</p>
         <h2 class="display text-4xl font-bold sm:text-5xl">{identity.name}</h2>
         <p class="max-w-xl text-lg" data-subline>{identity.subline}</p>

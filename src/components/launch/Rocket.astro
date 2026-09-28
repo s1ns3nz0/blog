@@ -10,6 +10,28 @@ import { identity, fairingTextLength } from "@/data/portfolio";
 
 <div class="rocket" aria-hidden="true">
   <svg viewBox="0 0 100 440" xmlns="http://www.w3.org/2000/svg">
+    <!-- Drawn upper stage first: each upper stage's nozzle sits hidden
+         behind the stage below it and slides out once that stage drops. -->
+    <g class="r-kick">
+      <path class="r-nozzle" d="M44 96 L42 104 L58 104 L56 96 Z" />
+      <path class="r-flame r-flame3" d="M43 106 Q50 140 57 106 Z" />
+    </g>
+
+    <g class="r-stage2">
+      <rect x="32" y="96" width="36" height="104" rx="2" />
+      <line x1="32" y1="120" x2="68" y2="120" />
+      <text
+        x="50"
+        y="164"
+        transform="rotate(-90 50 160)"
+        text-anchor="middle"
+        textLength="62"
+        lengthAdjust="spacingAndGlyphs">PIPELINE</text
+      >
+      <path class="r-nozzle" d="M41 200 L38 210 L62 210 L59 200 Z" />
+      <path class="r-flame r-flame2" d="M39 212 Q50 270 61 212 Z" />
+    </g>
+
     <g class="r-stage1">
       <rect x="30" y="200" width="40" height="150" rx="2" />
       <line x1="30" y1="230" x2="70" y2="230" />
@@ -26,26 +48,6 @@ import { identity, fairingTextLength } from "@/data/portfolio";
       <path d="M70 300 L90 352 L70 346 Z" />
       <path d="M38 350 L34 364 L66 364 L62 350 Z" />
       <path class="r-flame r-flame1" d="M36 366 Q50 440 64 366 Z" />
-    </g>
-
-    <g class="r-stage2">
-      <rect x="32" y="96" width="36" height="104" rx="2" />
-      <line x1="32" y1="120" x2="68" y2="120" />
-      <text
-        x="50"
-        y="164"
-        transform="rotate(-90 50 160)"
-        text-anchor="middle"
-        textLength="62"
-        lengthAdjust="spacingAndGlyphs">PIPELINE</text
-      >
-      <path d="M41 200 L38 210 L62 210 L59 200 Z" />
-      <path class="r-flame r-flame2" d="M39 212 Q50 270 61 212 Z" />
-    </g>
-
-    <g class="r-kick">
-      <path d="M44 96 L42 104 L58 104 L56 96 Z" />
-      <path class="r-flame r-flame3" d="M43 106 Q50 140 57 106 Z" />
     </g>
 
     <!-- The product: a folded satellite that sits inside the fairing. -->

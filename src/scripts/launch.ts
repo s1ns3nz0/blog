@@ -50,10 +50,12 @@ function update() {
   const orbitAt = summary ? summary.offsetTop - vh * 0.5 : 1;
   const progress = orbitAt > 0 ? clamp(window.scrollY / orbitAt) : 0;
 
-  // Current stage: last section whose top has crossed mid-screen.
+  // Current stage: the last stage whose heading has reached mid-screen, so
+  // a stage "arrives" only after the transit gap before it.
   let current = sections[0];
   for (const s of sections) {
-    if (s.getBoundingClientRect().top < vh * 0.5) current = s;
+    const head = s.querySelector<HTMLElement>("[data-stage-head]") ?? s;
+    if (head.getBoundingClientRect().top < vh * 0.5) current = s;
   }
   const stage = current?.dataset.stage ?? "build";
   root.dataset.stage = stage;
@@ -67,6 +69,8 @@ function update() {
     root.style.setProperty(prop, value.toFixed(3));
     if (prop === "--light") root.toggleAttribute("data-bright", value > 0.45);
   }
+
+  updateAnomalies(vh);
 
   if (reduceMotion.matches) root.style.removeProperty("--y");
   else root.style.setProperty("--y", String(Math.round(window.scrollY)));
@@ -85,6 +89,40 @@ function update() {
     if (link.dataset.meter === stage) link.setAttribute("aria-current", "step");
     else link.removeAttribute("aria-current");
   }
+}
+
+// In-flight anomalies: active while their transit gap spans mid-screen,
+// resolved once scrolled past. State is derived from scroll position only.
+const transits = Array.from(document.querySelectorAll<HTMLElement>("[data-transit]"));
+const logItems = new Map(
+  Array.from(document.querySelectorAll<HTMLElement>("[data-anomaly]")).map(li => [
+    li.dataset.anomaly ?? "",
+    li,
+  ])
+);
+let recoverTimer: number | undefined;
+
+function updateAnomalies(vh: number) {
+  const mid = vh * 0.5;
+  let fault: string | undefined;
+  let latest: HTMLElement | undefined;
+  for (const t of transits) {
+    const { top, bottom } = t.getBoundingClientRect();
+    const state = top < mid && bottom > mid ? "active" : bottom <= mid ? "resolved" : "pending";
+    if (state === "active") fault = t.dataset.motion;
+    const li = logItems.get(t.dataset.transit ?? "");
+    if (!li) continue;
+    if (li.dataset.state === "active" && state === "resolved") {
+      root.setAttribute("data-recovered", "");
+      window.clearTimeout(recoverTimer);
+      recoverTimer = window.setTimeout(() => root.removeAttribute("data-recovered"), 1200);
+    }
+    li.dataset.state = state;
+    if (state !== "pending") latest = li;
+  }
+  for (const li of logItems.values()) li.toggleAttribute("data-latest", li === latest);
+  if (fault) root.dataset.fault = fault;
+  else delete root.dataset.fault;
 }
 
 let queued = false;

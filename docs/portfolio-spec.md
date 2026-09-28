@@ -43,6 +43,9 @@ Compliance (NIST, OSCAL) appears as "flight rule" badges on cards, not as its ow
 - Space: Earth's limb with an atmosphere glow rises from the bottom after stage 2 separation.
 - Rocket labels tell the DevSecOps story: stage 1 `PLATFORM`, stage 2 `PIPELINE`, fairing `PRODUCT` (`?for=` swaps in the company name). Each booster falls away once its job is done; only the product reaches orbit.
 - Orbit arrival: the fairing splits clamshell-style, a folded satellite emerges and deploys its solar panels, then parks top-right with a blinking beacon. The satellite is the product: the AI assistant about me (v2). The sun rises over the limb and its light spreads until the screen is bright, and the HUD locks to `ORBIT ACHIEVED · 400 km`.
+- HUD systems line: per-stage readouts taken from posts (Build: public API 0, namespaces 4, Vault+KMS; Ship: 24 pipeline controls, 12 threat areas, SHA-pinned actions; Operate: L402 outcomes 6+10, 4 audit sources, immutable archive). Each links to its source post.
+- In-flight anomalies: a transit gap before each stage plays a fault (Cost overrun: PLATFORM overheats; Insecure CI/CD: flame sputters and the rocket sags; Anomaly detected: wobble; AI over-reliance: fairing alarm). Arriving at the stage clears it with a green recovery pulse, and the HUD log keeps a linked "Resolved" entry. Stages switch on their heading, so separations happen after the fix.
+- Upper-stage nozzles stay hidden inside the stage below and slide out after separation.
 - All brightness changes follow scroll position. Reduced motion drops smoke, bloom, and arm/satellite transitions; states still change.
 
 ## Summary page
@@ -77,6 +80,7 @@ English only.
 | v1 | `/launch` rocket page and summary, data module, `?for=`, skip button, altitude meter, reduced-motion fallback |
 | v1.1 | Launch pad, Earth limb, orbital sunrise, satellite, HUD orbit lock |
 | v1.2 | Rocket labels (PLATFORM / PIPELINE / YOUR PRODUCT), clamshell fairing, satellite emerges from inside |
+| v1.3 | HUD systems readouts, in-flight anomaly log with rocket fault/recovery motion, nozzle fix |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

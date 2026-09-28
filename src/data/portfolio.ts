@@ -18,8 +18,13 @@ export type Card = {
   flightRules?: FlightRule[];
 };
 
+/** One HUD systems readout; `source` is the post the number comes from. */
+export type Readout = { label: string; value: string; source: string };
+
 export type Stage = {
   id: StageId;
+  /** Shown in the HUD systems line while this stage is active. */
+  readouts: Readout[];
   /** Telemetry label shown in the HUD and section header. */
   event: string;
   name: string;
@@ -54,21 +59,91 @@ export const fairingTextLength = (label: string) =>
 export const stages: Stage[] = [
   {
     id: "build",
+    readouts: [
+      { label: "Public API", value: "0", source: "eks-security-controls-implemented-in-the-cluster-design" },
+      { label: "Namespaces", value: "4", source: "kubernetes-namespace-design-for-a-hoodi-validator" },
+      { label: "Secrets", value: "Vault+KMS", source: "vault-architecture-on-kubernetes" },
+    ],
     event: "T-00:10  PAD CHECKS",
     name: "Build",
     tagline: "A platform that is safe to launch from.",
   },
   {
     id: "ship",
+    readouts: [
+      { label: "Pipeline ctrl", value: "24", source: "ci-cd-security-controls-implemented-in-the-pipeline-design" },
+      { label: "Threat areas", value: "12", source: "ci-cd-security-controls-implemented-in-the-pipeline-design" },
+      { label: "Actions", value: "SHA-pinned", source: "ci-cd-security-controls-implemented-in-the-pipeline-design" },
+    ],
     event: "T+01:12  STAGE 1 SEP",
     name: "Ship",
     tagline: "Every change reaches production through a pipeline I can trust.",
   },
   {
     id: "operate",
+    readouts: [
+      { label: "L402 outcomes", value: "6+10", source: "aperture-l402-metrics-before-and-after" },
+      { label: "Audit sources", value: "4", source: "audit-and-logging-architecture-for-hoodi-node-validator" },
+      { label: "Archive", value: "Immutable", source: "audit-and-logging-architecture-for-hoodi-node-validator" },
+    ],
     event: "T+04:38  STAGE 2 SEP",
     name: "Operate & Defend",
     tagline: "Once it's up, I can see it, and I can respond.",
+  },
+];
+
+/**
+ * In-flight anomalies. Each fires in the transit gap before `resolvesAt`
+ * and clears once that stage arrives; `motion` picks the rocket fault and
+ * `source`/`anchor` point at the post that tells the real story.
+ */
+export type Anomaly = {
+  id: string;
+  resolvesAt: StageId | "orbit";
+  caution: string;
+  resolution: string;
+  motion: "overheat" | "sputter" | "wobble" | "fairing";
+  source: string;
+  anchor?: string;
+};
+
+const LESSONS = "prioritizing-security-controls-hoodi-validator-lessons";
+
+export const anomalies: Anomaly[] = [
+  {
+    id: "cost-overrun",
+    resolvesAt: "build",
+    caution: "Cost overrun",
+    resolution: "Architecture simplified",
+    motion: "overheat",
+    source: LESSONS,
+    anchor: "2-the-architecture-became-too-expensive-to-operate",
+  },
+  {
+    id: "insecure-cicd",
+    resolvesAt: "ship",
+    caution: "Insecure CI/CD",
+    resolution: "Pipeline hardened: 24 controls",
+    motion: "sputter",
+    source: "ci-cd-security-controls-implemented-in-the-pipeline-design",
+    anchor: "threat-mapped-implementation",
+  },
+  {
+    id: "anomaly-detected",
+    resolvesAt: "operate",
+    caution: "Anomaly detected",
+    resolution: "Triaged with ADS, contained",
+    motion: "wobble",
+    source: "palantir-ads",
+  },
+  {
+    id: "ai-over-reliance",
+    resolvesAt: "orbit",
+    caution: "AI over-reliance",
+    resolution: "Answers human-reviewed",
+    motion: "fairing",
+    source: LESSONS,
+    anchor: "4-i-relied-too-much-on-ai",
   },
 ];
 
