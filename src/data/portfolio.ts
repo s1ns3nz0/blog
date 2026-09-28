@@ -13,9 +13,9 @@ export type ZoneId = "field" | "test" | "oss";
 export type Zone = { id: ZoneId; name: string; icon: string; blurb: string };
 
 export const zones: Zone[] = [
-  { id: "field", name: "Field Missions", icon: "◆", blurb: "Work done for clients and organizations" },
-  { id: "test", name: "Test Flights", icon: "▲", blurb: "Things I designed and flew myself" },
-  { id: "oss", name: "Proactive Minds", icon: "●", blurb: "Open source I contributed to unprompted" },
+  { id: "field", name: "Field Missions", icon: "◆", blurb: "delivered on the job" },
+  { id: "test", name: "Test Flights", icon: "▲", blurb: "personal projects, built and run end to end" },
+  { id: "oss", name: "Proactive Minds", icon: "●", blurb: "open-source work, contributed or reported upstream" },
 ];
 
 export type FlightRule = { label: string; slug?: string };
@@ -86,9 +86,9 @@ export const stages: Stage[] = [
     ],
     event: "T-00:10  PAD CHECKS",
     name: "Build",
-    governing: "Security is cheapest when it's built into the platform.",
+    governing: "I build platforms that are secure before the first workload ships.",
     support:
-      "Private by default, no static credentials, and keys governed by a written policy before the first workload ships.",
+      "A private EKS validator with no public Kubernetes API and no static credentials, and a key management policy I wrote against NIST SP 800-57, a habit from auditing PKI systems at Deloitte.",
   },
   {
     id: "ship",
@@ -99,9 +99,9 @@ export const stages: Stage[] = [
     ],
     event: "T+01:12  STAGE 1 SEP",
     name: "Ship",
-    governing: "A pipeline is only as trustworthy as the evidence it produces.",
+    governing: "I make pipelines prove their own integrity, and I fix what I find upstream.",
     support:
-      "Every control maps to a threat, every artifact is pinned and signed, and gates fail closed.",
+      "24 controls mapped to 12 threat areas in my own CI/CD, plus contributions to SEAL and OSCAL Compass, and a fuzzer bug in Trail of Bits' gosentry fixed the same day.",
   },
   {
     id: "operate",
@@ -112,9 +112,9 @@ export const stages: Stage[] = [
     ],
     event: "T+04:38  STAGE 2 SEP",
     name: "Operate & Defend",
-    governing: "You can't defend what you can't see, or what you can't afford to run.",
+    governing: "I make running systems observable, and cheap enough to keep defending.",
     support:
-      "Outcomes are counted by cause, audit evidence can't be tampered with, and controls are ordered by risk and cost.",
+      "Per-outcome L402 metrics for Lightning Labs' Aperture, a tamper-evident audit trail, and controls I cut when they cost more than they protected.",
     flightRules: [
       { label: "MITRE ATT&CK", slug: "palantir-ads" },
       { label: "CACAO", slug: "cacao-playbook" },

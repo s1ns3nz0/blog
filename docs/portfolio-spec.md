@@ -26,21 +26,21 @@ Agreed 2026-09-28. Source of truth for the portfolio build.
 
 Compliance (NIST, OSCAL) appears as "flight rule" badges on cards, not as its own stage.
 
-Each stage opens with a governing message (its claim) and one supporting line; the entries below are the evidence:
+Each stage opens with a first-person governing message (what I do, tied to one strength) and one supporting line with concrete evidence; the entries below are the evidence:
 
 | Stage | Governing message |
 |---|---|
-| Build | Security is cheapest when it's built into the platform. |
-| Ship | A pipeline is only as trustworthy as the evidence it produces. |
-| Operate & Defend | You can't defend what you can't see, or what you can't afford to run. |
+| Build | I build platforms that are secure before the first workload ships. |
+| Ship | I make pipelines prove their own integrity, and I fix what I find upstream. |
+| Operate & Defend | I make running systems observable, and cheap enough to keep defending. |
 
 Inside each stage, entries sit in one log panel, grouped by zone in this order (empty zones are hidden). Each entry is a two-line row (title + meta, one-line summary) that expands in place to show its links:
 
 | Zone | Name | Content |
 |---|---|---|
-| Career | ◆ Field Missions | Work done for clients and organizations (external links allowed) |
-| Personal projects | ▲ Test Flights | Things I designed and flew myself (GitHub + posts) |
-| Open source | ● Proactive Minds | Contributions made unprompted, one card per project |
+| Career | ◆ Field Missions | "delivered on the job" (external links allowed) |
+| Personal projects | ▲ Test Flights | "personal projects, built and run end to end" (GitHub + posts) |
+| Open source | ● Proactive Minds | "open-source work, contributed or reported upstream", one entry per project |
 
 Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) are stage-level flight-rule badges rather than cards.
 
@@ -102,6 +102,7 @@ English only.
 | v1.3 | HUD systems readouts, in-flight anomaly log with rocket fault/recovery motion, nozzle fix |
 | v1.4 | Zone lanes (Field Missions / Test Flights / Proactive Minds) inside each stage, external evidence links, per-project OSS cards |
 | v1.5 | Governing message per stage; mission-log rows replace cards; single-accent design rules |
+| v1.6 | First-person governing messages tied to strengths; zone meaning shown on each zone rail |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

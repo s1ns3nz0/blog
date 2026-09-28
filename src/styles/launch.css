@@ -597,8 +597,33 @@ html[data-bright] .meter a::before {
 }
 .log-zone-line {
   flex: 1;
+  min-width: 12px;
   height: 1px;
   background: var(--panel-line);
+}
+.log-zone-line-end {
+  flex: 0 0 12px;
+}
+/* what the zone means, sitting thin on the rail */
+.log-zone-blurb {
+  color: rgb(230 237 247 / 0.5);
+  font: 400 11px var(--font-space-grotesk), sans-serif;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  white-space: nowrap;
+}
+@media (max-width: 767px) {
+  .log-zone-head {
+    flex-wrap: wrap;
+  }
+  .log-zone-blurb {
+    order: 5;
+    flex-basis: 100%;
+    white-space: normal;
+  }
+  .log-zone-line-end {
+    display: none;
+  }
 }
 .log-list {
   display: flex;
