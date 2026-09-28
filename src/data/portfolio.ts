@@ -560,7 +560,7 @@ export const stack = [
   { area: "Policy", items: ["OPA", "Kyverno", "OSCAL"] },
   { area: "Secrets", items: ["Vault", "AWS KMS"] },
   { area: "Observability", items: ["Prometheus", "Grafana", "Loki", "OpenTelemetry", "Fluent Bit"] },
-  { area: "GRC", items: ["PKI", "ISO 27001", "ISMS-P", "EU CRA", "NIST SSDF", "NIST SP 800-204"] },
+  { area: "GRC", items: ["PKI", "ISO 27001", "ISMS-P", "EU CRA", "NIST CSF", "NIST SP 800-53", "NIST SP 800-30", "NIST SSDF", "NIST SP 800-204"] },
 ];
 
 /** "How I work" lines under the stat cards; "{oss}" is the computed open-source total. */
