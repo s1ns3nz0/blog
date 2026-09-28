@@ -127,14 +127,13 @@ const ogImage = ogImageUrl
   >
     <h1
       style={{ viewTransitionName: toTransitionName(title) }}
-      class="text-accent inline-block text-2xl font-bold sm:text-3xl"
+      class="inline-block text-2xl font-bold sm:text-3xl"
     >
       {title}
     </h1>
 
-    <div class="my-2 flex items-center gap-2 font-mono">
+    <div class="my-2 flex items-center gap-5 font-mono">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span aria-hidden="true" class="text-muted-foreground">·</span>
       <span class="text-muted-foreground text-sm sm:text-base">
         {readingTime}
       </span>
@@ -162,7 +161,7 @@ const ogImage = ogImageUrl
       <Content />
     </article>
 
-    <hr class="my-8 border-dashed" />
+    <hr class="my-8" />
 
     <EditPost class="sm:hidden" {hideEditPost} {post} />
 
@@ -176,7 +175,7 @@ const ogImage = ogImageUrl
 
     <Comments />
 
-    <hr class="my-8 border-dashed" />
+    <hr class="my-8" />
 
     <AdjacentPostNav {prevPost} {nextPost} />
   </main>

@@ -22,8 +22,8 @@ const readingTime = getReadingTime(body);
   <a
     href={postUrl}
     class:list={[
-      "group border-border flex flex-col-reverse gap-4 rounded-lg border border-dashed p-4",
-      "hover:border-accent/70 transition-colors hover:border-solid",
+      "group border-border flex flex-col-reverse gap-4 rounded-xl border bg-white/80 p-4 dark:bg-white/[0.03]",
+      "transition hover:-translate-y-0.5 hover:border-foreground/25 hover:shadow-lg hover:shadow-slate-900/5",
       "focus-visible:border-accent focus-visible:outline-none",
       "sm:flex-row sm:items-center sm:gap-6 sm:p-5",
     ]}
@@ -31,7 +31,7 @@ const readingTime = getReadingTime(body);
     <div class="min-w-0 flex-1">
       {
         tags.length > 0 && (
-          <div class="text-accent mb-1.5 flex flex-wrap gap-x-3 font-mono text-xs font-semibold tracking-wider uppercase">
+          <div class="text-muted-foreground mb-1.5 flex flex-wrap gap-x-3 font-mono text-xs tracking-widest uppercase">
             {tags.slice(0, 3).map(tag => (
               <span>#{tag}</span>
             ))}
@@ -40,17 +40,16 @@ const readingTime = getReadingTime(body);
       }
       <Heading
         transition:name={toTransitionName(title)}
-        class="group-hover:text-accent text-lg font-semibold transition-colors sm:text-xl"
+        class="text-lg font-semibold sm:text-xl"
       >
         {title}
       </Heading>
       <p class="text-muted-foreground mt-1 line-clamp-2">{description}</p>
       <div
-        class="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-2 font-mono"
+        class="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-5 font-mono text-xs tracking-wider uppercase"
       >
         <Datetime {pubDatetime} {modDatetime} {timezone} />
-        <span aria-hidden="true">·</span>
-        <span class="text-sm">{readingTime}</span>
+        <span>{readingTime}</span>
       </div>
     </div>
   </a>

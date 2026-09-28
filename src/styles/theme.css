@@ -8,37 +8,37 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
 
-  /* Type roles:
-     - app (body): Pretendard — carries Korean and English prose equally well
-     - display: Bricolage Grotesque — headings, wordmark
-     - mono: Google Sans Code — dates, tags, meta ("log" voice) */
-  --font-app: "Pretendard Variable", "Apple SD Gothic Neo", sans-serif;
-  --font-display: var(--font-bricolage), "Pretendard Variable", sans-serif;
-  --font-mono: var(--font-google-sans-code), monospace;
+  /* Type roles, shared with /launch:
+     - app (body) and display: Space Grotesk; Korean falls back to Pretendard
+     - mono: Space Mono — dates, tags, meta */
+  --font-app: var(--font-space-grotesk), "Pretendard Variable", "Apple SD Gothic Neo", sans-serif;
+  --font-display: var(--font-space-grotesk), "Pretendard Variable", sans-serif;
+  --font-mono: var(--font-space-mono), monospace;
 }
 
 /*
- * Palette: "engineer's notebook" — fountain-pen ink on cool paper.
- * Light theme values
+ * Palette shared with /launch: slate ink, one orange accent, one hairline.
+ * The accent marks the current state and primary actions only. On light
+ * backgrounds it is a darker orange so it passes contrast as text.
  */
 :root,
 [data-theme="light"] {
-  --background: #f7f7f2; /* paper */
-  --foreground: #1b2733; /* ink */
-  --accent: #2c49d8; /* fountain blue */
-  --accent-foreground: #f7f7f2;
-  --muted: #e9eae0; /* mist */
-  --muted-foreground: #5c6b77; /* graphite */
-  --border: #d9dacc;
+  --background: #f5f7fa;
+  --foreground: #0f172a;
+  --accent: #c2410c;
+  --accent-foreground: #ffffff;
+  --muted: #eef2f7;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
 }
 
-/* Dark theme values — late-night desk, same ink family */
+/* Dark: the launch page's night sky */
 [data-theme="dark"] {
-  --background: #10161d;
-  --foreground: #e2e8e6;
-  --accent: #8ca3ff;
-  --accent-foreground: #10161d;
-  --muted: #1d2630;
-  --muted-foreground: #93a1ac;
-  --border: #2b3540;
+  --background: #0a0f1f;
+  --foreground: #e6edf7;
+  --accent: #ff8a3d;
+  --accent-foreground: #0b1020;
+  --muted: #141b30;
+  --muted-foreground: #94a3b8;
+  --border: #1f2a44;
 }

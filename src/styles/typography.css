@@ -13,10 +13,6 @@
       @apply text-foreground mb-3;
     }
 
-    h3 {
-      @apply italic;
-    }
-
     p,
     strong,
     ol,
@@ -28,7 +24,7 @@
     }
 
     a {
-      @apply text-foreground hover:text-accent wrap-break-word decoration-dashed underline-offset-4 focus-visible:no-underline;
+      @apply text-foreground hover:decoration-foreground decoration-foreground/30 wrap-break-word decoration-1 underline-offset-4 focus-visible:no-underline;
     }
 
     ul {
@@ -51,7 +47,7 @@
       @apply cursor-zoom-in;
 
       &:focus-visible {
-        @apply outline-2 outline-offset-2 outline-dashed;
+        @apply outline-2 outline-offset-2 outline-solid;
       }
     }
 
@@ -87,11 +83,11 @@
     }
 
     summary {
-      @apply focus-visible:outline-accent focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-dashed;
+      @apply focus-visible:outline-accent focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-solid;
     }
 
     pre {
-      @apply focus-visible:outline-accent focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-dashed;
+      @apply focus-visible:outline-accent focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-solid;
     }
   }
 

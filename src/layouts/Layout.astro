@@ -46,15 +46,12 @@ const rssHref = getRelativeLocaleUrl(
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Fonts: Google Sans Code (mono/meta), Bricolage Grotesque (display) -->
+    <!-- Fonts shared with /launch: Space Grotesk (body, display), Space Mono (meta) -->
     <Font
-      cssVariable="--font-google-sans-code"
+      cssVariable="--font-space-grotesk"
       preload={[{ subset: "latin", weight: 400, style: "normal" }]}
     />
-    <Font
-      cssVariable="--font-bricolage"
-      preload={[{ subset: "latin", weight: 700, style: "normal" }]}
-    />
+    <Font cssVariable="--font-space-mono" />
 
     <!-- Primary meta -->
     <title>{title}</title>

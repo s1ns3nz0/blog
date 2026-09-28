@@ -168,7 +168,7 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
       chip.dataset.tag = tag;
       chip.className = [
         "border-accent bg-accent/10 text-accent flex items-center gap-1.5",
-        "rounded-full border border-dashed px-3 py-1 font-mono text-sm",
+        "rounded-full border px-3 py-1 font-mono text-sm",
         "hover:bg-accent/20 focus-visible:outline-none",
       ].join(" ");
       chip.setAttribute("aria-label", `Remove ${names[tag] ?? tag} filter`);
