@@ -12,7 +12,7 @@
   --u: calc(var(--rh) / 440); /* one rocket viewBox unit */
   --sat-x: calc(100vw - 58px); /* satellite centre in orbit */
   --sat-y: 36px;
-  --sat-scale: 1.2;
+  --sat-scale: 1.6;
   /* left edge of the content column (clears the rocket and tower) */
   --col: calc(var(--rx) + 154 * var(--u) + 10px);
   --ink: #e6edf7;
@@ -39,9 +39,9 @@
     --rh: min(62vh, 520px);
     --rx: max(24px, 7vw);
     /* park inside the 160px right gutter, clear of the content column */
-    --sat-x: calc(100vw - 84px);
-    --sat-y: 118px;
-    --sat-scale: 1.1;
+    --sat-x: calc(100vw - 100px);
+    --sat-y: 124px;
+    --sat-scale: 1.45;
     --col: calc(var(--rx) + var(--rh) * 0.24 + 7vw);
   }
 }
@@ -1677,7 +1677,7 @@ html[data-fault="fairing"] .sparks {
 @keyframes fault-line {
   50% {
     stroke: #ef4444;
-    fill: rgb(239 68 68 / 0.35);
+    fill: #fbc4c4; /* opaque, so hidden nozzles and the satellite stay hidden */
   }
 }
 html[data-fault="overheat"] .r-stage1 > rect,
@@ -1800,12 +1800,12 @@ html[data-stage="orbit"] .sat-button {
   left: 50%;
   top: 100%;
   transform: translateX(-50%);
-  margin-top: 2px;
-  padding: 2px 8px;
+  margin-top: 4px;
+  padding: 4px 12px;
   border-radius: 999px;
   background: var(--accent-hot);
   color: #0b1020;
-  font: 700 10px var(--font-space-mono), monospace;
+  font: 700 13px var(--font-space-mono), monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap;
