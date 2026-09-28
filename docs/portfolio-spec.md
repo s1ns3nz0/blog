@@ -124,6 +124,7 @@ English only.
 | v1.21 | New caution/resolution wording; green callout holds and steps through lines until the stage's cards pass; Design review callout |
 | v1.22 | Orbit fault: No visibility / Full visibility; Sun Tzu lead-in under the summary roles; flames wait for their nozzle; Gosentry capitalised |
 | v1.23 | Green lines change every 20% of the screen on every stage (last one holds); meter shows Design / Build / Deploy / Operate / Orbit; Sun Tzu moves to a full screen after Operate |
+| v1.24 | Build rewritten: SSDF/SP 800-204 support line; IBM EU CRA and Army SIEM training field missions; one Hoodi-on-private-EKS card (Vault/key posts dropped) and an OSCAL policy card; OSCAL Compass and SEAL registries move to Build; Deloitte PKI moves to Operate |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

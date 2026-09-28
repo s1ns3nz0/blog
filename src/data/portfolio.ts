@@ -113,7 +113,7 @@ export const stages: Stage[] = [
     name: "Build",
     governing: "I build platforms that are secure before the first workload ships.",
     support:
-      "A private EKS validator with no public Kubernetes API and no static credentials, and a key management policy I wrote against NIST SP 800-57, a habit from auditing PKI systems at Deloitte.",
+      "I set up the organization, environment, and activities for building software securely, based on NIST SSDF and NIST SP 800-204.",
   },
   {
     id: "ship",
@@ -121,7 +121,7 @@ export const stages: Stage[] = [
     name: "Deploy",
     governing: "I make pipelines prove their own integrity, and I fix what I find upstream.",
     support:
-      "24 controls mapped to 12 threat areas in my own CI/CD, plus contributions to SEAL and OSCAL Compass, and a fuzzer bug in Trail of Bits' Gosentry fixed the same day.",
+      "24 controls mapped to 12 threat areas in my own CI/CD, plus contributions to SEAL, and a fuzzer bug in Trail of Bits' Gosentry fixed the same day.",
   },
   {
     id: "operate",
@@ -256,26 +256,30 @@ export const cards: Card[] = [
 
   // ---------- Build ----------
   {
-    id: "deloitte-pki",
+    id: "ibm-eu-cra",
     stage: "build",
     zone: "field",
-    title: "PKI digital signature audits",
+    title: "EU CRA supply-chain assessment at IBM",
     summary:
-      "At Deloitte, assessed a digital signature and certificate service (cryptographic controls, access, key lifecycle) and drafted Appendices 2-3 of the Digital Signature Certification Service Evaluation Guide v1.4.0.",
-    evidence: [
-      {
-        label: "Digital Signature Certification Service Evaluation Guide (Deloitte)",
-        url: "https://www.deloitte.com/kr/ko/services/consulting/perspectives/crisis-management-article-20201230.html",
-      },
-    ],
+      "Assessed the software supply chain of a nuclear power company and a heavy-equipment maker against the EU Cyber Resilience Act, and set their roadmaps.",
+    evidence: [],
+  },
+  {
+    id: "army-siem-training",
+    stage: "build",
+    zone: "field",
+    title: "SIEM training platform, Republic of Korea Army",
+    summary:
+      "Built a SIEM learning platform for new recruits and an assistant that helps them write Splunk SPL queries.",
+    evidence: [],
   },
   {
     id: "private-eks",
     stage: "build",
     zone: "test",
-    title: "Private EKS for an Ethereum validator",
+    title: "Ethereum Hoodi Validator on Private EKS",
     summary:
-      "Designed and ran a Hoodi testnet validator (Prysm, Nethermind) on a private EKS cluster with namespace isolation, workload identity, and private image delivery.",
+      "Designed and ran a Hoodi testnet validator (Prysm, Nethermind) on a private EKS cluster: no public Kubernetes API, namespace isolation, workload identity, and private image delivery.",
     evidence: [
       { label: "node-operator-public on GitHub", url: `${GH}/node-operator-public` },
       "hoodi-node-validator-aws-architecture-overview",
@@ -286,39 +290,37 @@ export const cards: Card[] = [
     ],
   },
   {
-    id: "secrets-and-keys",
+    id: "oscal-policy",
     stage: "build",
     zone: "test",
-    title: "Secrets and identity with Vault",
+    title: "Security policy as an OSCAL catalog",
     summary:
-      "Vault on Kubernetes with KMS auto-unseal, cert-manager for TLS, and workload identity so no application holds a static credential.",
+      "Turned an 18-section key management policy into an OSCAL catalog, so the policy is machine-readable and checked like code.",
     evidence: [
-      "vault-architecture-on-kubernetes",
-      "vault-secret-management-for-hoodi-validator",
-      "cert-manager-and-vault-roles-scope-and-collaboration",
-      "identity-management-in-this-project",
+      { label: "kms-policy on GitHub", url: `${GH}/kms-policy` },
+      "converting-the-web3-key-management-policy-to-oscal",
     ],
   },
   {
-    id: "kms-policy",
+    id: "oscal-compass",
     stage: "build",
-    zone: "test",
-    title: "Web3 key management policy",
+    zone: "oss",
+    title: "OSCAL Compass",
     summary:
-      "An 18-section key management policy for validator infrastructure, aligned with NIST SP 800-57 and SP 800-131A and published as an OSCAL catalog.",
+      "Fixed a KeyError in compliance-trestle (merged) and opened a GitHub Actions DevSecOps pipeline plugin for compliance-to-policy.",
     evidence: [
-      { label: "kms-policy on GitHub", url: `${GH}/kms-policy` },
-      "validator-key-types-and-key-management-policy-for-a-hoodi-validator",
-      "web3-key-management-policy-applied-to-my-hoodi-validator",
-      "converting-the-web3-key-management-policy-to-oscal",
+      { label: "compliance-trestle PR #2222", url: "https://github.com/oscal-compass/compliance-trestle/pull/2222" },
+      { label: "compliance-to-policy PR #51", url: "https://github.com/oscal-compass/compliance-to-policy/pull/51" },
+      "nist-oscal-and-associated-projects",
     ],
-    flightRules: [
-      {
-        label: "NIST SP 800-57",
-        slug: "nist-sp-800-57-and-sp-800-131a-in-the-web3-key-management-policy",
-      },
-      { label: "OSCAL", slug: "converting-the-web3-key-management-policy-to-oscal" },
-    ],
+  },
+  {
+    id: "seal-registries",
+    stage: "build",
+    zone: "oss",
+    title: "SEAL Frameworks: private registries and mirrors",
+    summary: "Guidance on private registries and package mirrors so builds pull only reviewed artifacts.",
+    evidence: ["private-registries-and-mirrors-seal-frameworks"],
   },
 
   // ---------- Deploy ----------
@@ -356,14 +358,6 @@ export const cards: Card[] = [
     ],
   },
   {
-    id: "seal-registries",
-    stage: "ship",
-    zone: "oss",
-    title: "SEAL Frameworks: private registries and mirrors",
-    summary: "Guidance on private registries and package mirrors so builds pull only reviewed artifacts.",
-    evidence: ["private-registries-and-mirrors-seal-frameworks"],
-  },
-  {
     id: "gosentry",
     stage: "ship",
     zone: "oss",
@@ -376,19 +370,6 @@ export const cards: Card[] = [
     ],
   },
   {
-    id: "oscal-compass",
-    stage: "ship",
-    zone: "oss",
-    title: "OSCAL Compass",
-    summary:
-      "Fixed a KeyError in compliance-trestle (merged) and opened a GitHub Actions DevSecOps pipeline plugin for compliance-to-policy.",
-    evidence: [
-      { label: "compliance-trestle PR #2222", url: "https://github.com/oscal-compass/compliance-trestle/pull/2222" },
-      { label: "compliance-to-policy PR #51", url: "https://github.com/oscal-compass/compliance-to-policy/pull/51" },
-      "nist-oscal-and-associated-projects",
-    ],
-  },
-  {
     id: "lnd-short-reads",
     stage: "ship",
     zone: "oss",
@@ -398,6 +379,20 @@ export const cards: Card[] = [
   },
 
   // ---------- Operate ----------
+  {
+    id: "deloitte-pki",
+    stage: "operate",
+    zone: "field",
+    title: "PKI digital signature audits",
+    summary:
+      "At Deloitte, assessed a digital signature and certificate service (cryptographic controls, access, key lifecycle) and drafted Appendices 2-3 of the Digital Signature Certification Service Evaluation Guide v1.4.0.",
+    evidence: [
+      {
+        label: "Digital Signature Certification Service Evaluation Guide (Deloitte)",
+        url: "https://www.deloitte.com/kr/ko/services/consulting/perspectives/crisis-management-article-20201230.html",
+      },
+    ],
+  },
   {
     id: "army-automation",
     stage: "operate",
@@ -818,7 +813,7 @@ export const audiences: Audience[] = [
     fairing: "LIGHTNING",
     subline:
       "Kubernetes in production, observability that operators can act on, and hands-on work with Aperture and the Lightning stack.",
-    priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "secrets-and-keys", "gosentry"],
+    priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "gosentry"],
     ossPriority: ["lnd", "aperture", "disclosure"],
   },
 ];
