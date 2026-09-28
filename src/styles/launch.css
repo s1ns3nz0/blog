@@ -1113,29 +1113,38 @@ html[data-daylight] .stage-log {
     margin-right: 70px;
   }
 }
-/* Sun Tzu lead-in at the top of the summary; the name and claim answer it */
+/* Sun Tzu, one full screen between Operate and orbit: the question the
+   summary then answers. */
 .sun-tzu {
-  margin: 0 0 28px;
-  padding-left: 14px;
-  border-left: 2px solid var(--accent-hot);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 100vh;
+  max-width: var(--hero-w);
+  margin: 0;
+  padding: 0 12px 0 0; /* clear of the phone meter dots */
+  text-align: center;
 }
 .sun-tzu blockquote {
   margin: 0;
-  color: #334155;
-  font-size: 1.05rem;
-  line-height: 1.5;
+  color: #fff;
+  font-size: clamp(1.6rem, 3.4vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.25;
+  text-shadow: 0 2px 16px rgb(0 0 0 / 0.45);
 }
 .sun-tzu figcaption {
-  margin-top: 4px;
-  color: #64748b;
-  font: 400 11px var(--font-space-mono), monospace;
-  letter-spacing: 0.1em;
+  color: rgb(230 237 247 / 0.7);
+  font: 400 12px var(--font-space-mono), monospace;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 .sun-tzu-q {
-  margin: 10px 0 0;
-  color: #0f172a;
-  font-size: 1.1rem;
+  margin: 28px 0 0;
+  color: #e6edf7;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
   font-weight: 600;
 }
 .claim {

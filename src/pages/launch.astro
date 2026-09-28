@@ -190,11 +190,10 @@ const contacts = config.socials
     ...brandMeta[s.name],
   }));
 
+// One meter step per section, named like the stage headings.
 const meter = [
-  { id: "build", href: "#build", label: "Pad" },
-  { id: "ship", href: "#ship", label: "Stage 1" },
-  { id: "operate", href: "#operate", label: "Stage 2" },
-  { id: "orbit", href: "#summary", label: "Orbit" },
+  ...stages.map(s => ({ id: s.id, href: `#${s.id}`, label: s.name })),
+  { id: "summary", href: "#summary", label: "Orbit" },
 ];
 
 const audienceIds = new Set(["default", ...audiences.map(a => a.id)]);
@@ -465,6 +464,14 @@ const smokePuffs: [number, number][] = [
               </section>
             ))}
           </div>
+
+          {stage.id === "operate" && (
+            <figure class="sun-tzu" data-reveal>
+              <blockquote>“{identity.quote.text}”</blockquote>
+              <figcaption>{identity.quote.by}</figcaption>
+              <p class="sun-tzu-q">{identity.quote.question}</p>
+            </figure>
+          )}
         </section>
       ))
     }
@@ -488,11 +495,6 @@ const smokePuffs: [number, number][] = [
         )
       }
       <header class="summary-head" data-stage-head>
-        <figure class="sun-tzu">
-          <blockquote>“{identity.quote.text}”</blockquote>
-          <figcaption>{identity.quote.by}</figcaption>
-          <p class="sun-tzu-q">{identity.quote.question}</p>
-        </figure>
         <p class="meta spaced"><span>T+09:00</span><span>Orbit achieved</span></p>
         <h2 class="display text-2xl font-bold">{identity.name}</h2>
         <p class="meta spaced">{identity.roles.map(r => <span>{r}</span>)}</p>

@@ -92,7 +92,7 @@ function update() {
   }
 
   for (const link of meterLinks) {
-    if (link.dataset.meter === stage) link.setAttribute("aria-current", "step");
+    if (link.dataset.meter === current?.id) link.setAttribute("aria-current", "step");
     else link.removeAttribute("aria-current");
   }
 }
@@ -150,9 +150,12 @@ function updateAnomalies(vh: number) {
     if (isPast && log) {
       const bottom = log.getBoundingClientRect().bottom;
       if (bottom > mid) {
+        // Same scroll distance per line on every stage (20% of the screen);
+        // the last line holds until the cards pass. A short stage squeezes
+        // its lines evenly into whatever room it has.
         const span = bottom - title - (mid - nose);
-        const progress = span > 0 ? (nose - title) / span : 0;
-        const step = Math.min(lines.length - 1, Math.floor(progress * lines.length));
+        const each = Math.min(vh * 0.2, span / lines.length);
+        const step = Math.min(lines.length - 1, Math.floor((nose - title) / Math.max(each, 1)));
         green = { t, line: lines[step], label: t.dataset.calloutLabel ?? "✓ Resolved" };
       }
     }

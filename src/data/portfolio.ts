@@ -69,7 +69,7 @@ export const identity = {
   headline: "Launch your product securely.",
   /** The one claim the summary makes; everything else is evidence. */
   claim: "I turn security frameworks and compliance into platform code.",
-  /** Summary lead-in above the name: a quote, then the question it raises. */
+  /** Full-screen quote after Operate: the question the summary then answers. */
   quote: {
     text: "Know the enemy and know yourself, and you will not be imperiled in a hundred battles.",
     by: "Sun Tzu",
