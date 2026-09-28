@@ -43,7 +43,10 @@ export type Stage = {
   /** Telemetry label shown in the HUD and section header. */
   event: string;
   name: string;
-  tagline: string;
+  /** The stage's claim; the log entries below are its evidence. */
+  governing: string;
+  /** One line on how the evidence backs the claim. */
+  support: string;
   /** Standards and methods behind the stage, shown under its heading. */
   flightRules?: FlightRule[];
 };
@@ -83,7 +86,9 @@ export const stages: Stage[] = [
     ],
     event: "T-00:10  PAD CHECKS",
     name: "Build",
-    tagline: "A platform that is safe to launch from.",
+    governing: "Security is cheapest when it's built into the platform.",
+    support:
+      "Private by default, no static credentials, and keys governed by a written policy before the first workload ships.",
   },
   {
     id: "ship",
@@ -94,7 +99,9 @@ export const stages: Stage[] = [
     ],
     event: "T+01:12  STAGE 1 SEP",
     name: "Ship",
-    tagline: "Every change reaches production through a pipeline I can trust.",
+    governing: "A pipeline is only as trustworthy as the evidence it produces.",
+    support:
+      "Every control maps to a threat, every artifact is pinned and signed, and gates fail closed.",
   },
   {
     id: "operate",
@@ -105,7 +112,9 @@ export const stages: Stage[] = [
     ],
     event: "T+04:38  STAGE 2 SEP",
     name: "Operate & Defend",
-    tagline: "Once it's up, I can see it, and I can respond.",
+    governing: "You can't defend what you can't see, or what you can't afford to run.",
+    support:
+      "Outcomes are counted by cause, audit evidence can't be tampered with, and controls are ordered by risk and cost.",
     flightRules: [
       { label: "MITRE ATT&CK", slug: "palantir-ads" },
       { label: "CACAO", slug: "cacao-playbook" },

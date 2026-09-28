@@ -26,7 +26,15 @@ Agreed 2026-09-28. Source of truth for the portfolio build.
 
 Compliance (NIST, OSCAL) appears as "flight rule" badges on cards, not as its own stage.
 
-Inside each stage, cards sit in up to three zone lanes, in this order (empty lanes are hidden):
+Each stage opens with a governing message (its claim) and one supporting line; the entries below are the evidence:
+
+| Stage | Governing message |
+|---|---|
+| Build | Security is cheapest when it's built into the platform. |
+| Ship | A pipeline is only as trustworthy as the evidence it produces. |
+| Operate & Defend | You can't defend what you can't see, or what you can't afford to run. |
+
+Inside each stage, entries sit in one log panel, grouped by zone in this order (empty zones are hidden). Each entry is a two-line row (title + meta, one-line summary) that expands in place to show its links:
 
 | Zone | Name | Content |
 |---|---|---|
@@ -48,7 +56,8 @@ Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) a
 - SVG line-art rocket, CSS gradient background (ground to sky to space to bright orbit).
 - Mission-control telemetry UI (T+ clock, altitude, stage log), monospace type.
 - Ignores the blog light/dark toggle; the flight itself is the theme.
-- Type (launch page only): Orbitron for display and numbers, Space Grotesk for body text, Space Mono for telemetry.
+- Type (launch page only): Orbitron for the hero, stage names, and big numbers; Space Grotesk for titles and body; Space Mono for labels, meta, and the HUD.
+- One accent: orange marks only the current state (meter, active chip) and primary buttons. Red and green appear only in the HUD caution panel. Zones use icons, not colours. One hairline style; no dashed borders or dashed underlines.
 - Launch pad: line-art lattice tower with a crane, two umbilical arms that swing away at ignition, a pad platform with a `PAD 01` label, and ignition smoke.
 - Space: Earth's limb with an atmosphere glow rises from the bottom after stage 2 separation.
 - Rocket labels tell the DevSecOps story: stage 1 `PLATFORM`, stage 2 `PIPELINE`, fairing `PRODUCT` (`?for=` swaps in the company name). Each booster falls away once its job is done; only the product reaches orbit.
@@ -92,6 +101,7 @@ English only.
 | v1.2 | Rocket labels (PLATFORM / PIPELINE / YOUR PRODUCT), clamshell fairing, satellite emerges from inside |
 | v1.3 | HUD systems readouts, in-flight anomaly log with rocket fault/recovery motion, nozzle fix |
 | v1.4 | Zone lanes (Field Missions / Test Flights / Proactive Minds) inside each stage, external evidence links, per-project OSS cards |
+| v1.5 | Governing message per stage; mission-log rows replace cards; single-accent design rules |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

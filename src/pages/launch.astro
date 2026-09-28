@@ -55,11 +55,25 @@ const resolveEvidence = (e: Evidence) =>
     : { title: e.label, url: e.url, external: true };
 const resolveRules = (rules: FlightRule[] = []) =>
   rules.map(r => ({ label: r.label, url: r.slug ? post(r.slug).url : undefined }));
-const resolveCard = (c: Card) => ({
-  ...c,
-  evidenceLinks: c.evidence.map(resolveEvidence),
-  rules: resolveRules(c.flightRules),
-});
+// Collapsed-row meta, e.g. "5 posts · GitHub ↗".
+function evidenceMeta(links: { url: string; external: boolean }[]) {
+  const posts = links.filter(l => !l.external).length;
+  const external = links.filter(l => l.external);
+  const parts = [];
+  if (posts) parts.push(`${posts} post${posts > 1 ? "s" : ""}`);
+  if (external.some(l => l.url.includes("github.com"))) parts.push("GitHub ↗");
+  if (external.some(l => !l.url.includes("github.com"))) parts.push("Link ↗");
+  return parts.join(" · ");
+}
+const resolveCard = (c: Card) => {
+  const evidenceLinks = c.evidence.map(resolveEvidence);
+  return {
+    ...c,
+    evidenceLinks,
+    meta: evidenceMeta(evidenceLinks),
+    rules: resolveRules(c.flightRules),
+  };
+};
 const cardsByStage = Object.fromEntries(
   stages.map(s => [s.id, cards.filter(c => c.stage === s.id).map(resolveCard)])
 );
@@ -116,7 +130,6 @@ const anomalyLog = anomalies.map(a => ({
 }));
 const anomalyBefore = (stageId: string) => anomalyLog.find(a => a.resolvesAt === stageId);
 
-const EVIDENCE_SHOWN = 3;
 // Launch tower cross-bracing rows (pad viewBox units) and ignition smoke
 // puffs as [x offset in rocket units, final scale].
 const braceRows = Array.from({ length: 10 }, (_, i) => 30 + i * 29);
@@ -276,70 +289,80 @@ const smokePuffs: [number, number][] = [
             />
           )}
 
-          <div class="flex flex-col gap-2" data-stage-head>
-            <p class="telemetry">{stage.event}</p>
-            <h2 class="display text-3xl font-bold text-white sm:text-4xl">
-              {stage.name}
-            </h2>
-            <p class="max-w-xl text-slate-200">{stage.tagline}</p>
+          <div class="stage-head" data-stage-head>
+            <p class="meta">{stage.event}</p>
+            <h2 class="display text-3xl font-bold text-white sm:text-4xl">{stage.name}</h2>
+            <p class="governing">{stage.governing}</p>
+            <p class="support">{stage.support}</p>
             {stageRules[stage.id].length > 0 && (
-              <ul class="mt-1 flex flex-wrap gap-2" aria-label="Flight rules">
+              <p class="meta rules">
+                Rules
                 {stageRules[stage.id].map(r => (
-                  <li><a class="rule" href={r.url}>{r.label}</a></li>
+                  <>
+                    {" · "}
+                    <a href={r.url}>{r.label}</a>
+                  </>
                 ))}
-              </ul>
+              </p>
             )}
           </div>
 
-          {lanesByStage[stage.id].map(lane => (
-          <section class={`lane zone-${lane.zone.id}`} aria-label={lane.zone.name}>
-            <h3 class="lane-head">
-              <span aria-hidden="true">{lane.zone.icon}</span> {lane.zone.name}
-              <span class="lane-count">· {lane.cards.length}</span>
-              <span class="lane-blurb">{lane.zone.blurb}</span>
-            </h3>
-          <div class="lane-cards">
-            {lane.cards.map(card => (
-              <article id={card.id} data-card-id={card.id} class="panel card flex flex-col gap-3 p-5">
-                <h3 class="display text-xl font-bold text-white">{card.title}</h3>
-                <p class="text-sm leading-relaxed text-slate-200">{card.summary}</p>
-                {card.rules.length > 0 && (
-                  <ul class="flex flex-wrap gap-2" aria-label="Flight rules">
-                    {card.rules.map(r => (
-                      <li>
-                        {r.url ? (
-                          <a class="rule" href={r.url}>{r.label}</a>
-                        ) : (
-                          <span class="rule">{r.label}</span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {card.evidenceLinks.length > 0 && (
-                <ul class="evidence flex flex-col gap-1 text-sm" aria-label="Evidence">
-                  {card.evidenceLinks.slice(0, EVIDENCE_SHOWN).map(e => (
-                    <li>→ <EvidenceLink {...e} /></li>
+          <div class="stage-log panel">
+            {lanesByStage[stage.id].map(lane => (
+              <section class="log-zone" aria-label={lane.zone.name}>
+                <h3 class="log-zone-head">
+                  <span aria-hidden="true">{lane.zone.icon}</span>
+                  <span>{lane.zone.name}</span>
+                  <span class="log-zone-line" aria-hidden="true" />
+                  <span>{lane.cards.length}</span>
+                </h3>
+                <ul class="log-list">
+                  {lane.cards.map(card => (
+                    <li id={card.id} data-card-id={card.id} class="log-row">
+                      {card.evidenceLinks.length > 0 ? (
+                        <details>
+                          <summary>
+                            <span class="row-top">
+                              <span class="row-title">{card.title}</span>
+                              <span class="row-meta">{card.meta}</span>
+                            </span>
+                            <span class="row-summary">{card.summary}</span>
+                          </summary>
+                          <div class="row-body">
+                            <ul class="evidence">
+                              {card.evidenceLinks.map(e => (
+                                <li>
+                                  <EvidenceLink {...e} />
+                                </li>
+                              ))}
+                            </ul>
+                            {card.rules.length > 0 && (
+                              <p class="meta rules">
+                                Rules
+                                {card.rules.map(r => (
+                                  <>
+                                    {" · "}
+                                    {r.url ? <a href={r.url}>{r.label}</a> : r.label}
+                                  </>
+                                ))}
+                              </p>
+                            )}
+                          </div>
+                        </details>
+                      ) : (
+                        <div class="row-static">
+                          <span class="row-top">
+                            <span class="row-title">{card.title}</span>
+                          </span>
+                          <span class="row-summary">{card.summary}</span>
+                        </div>
+                      )}
+                    </li>
                   ))}
                 </ul>
-                )}
-                {card.evidenceLinks.length > EVIDENCE_SHOWN && (
-                  <details class="evidence text-sm">
-                    <summary class="cursor-pointer text-slate-400">
-                      +{card.evidenceLinks.length - EVIDENCE_SHOWN} more
-                    </summary>
-                    <ul class="mt-1 flex flex-col gap-1">
-                      {card.evidenceLinks.slice(EVIDENCE_SHOWN).map(e => (
-                        <li>→ <EvidenceLink {...e} /></li>
-                      ))}
-                    </ul>
-                  </details>
-                )}
-              </article>
+              </section>
             ))}
           </div>
-          </section>
-          ))}
         </section>
       ))
     }
@@ -361,7 +384,7 @@ const smokePuffs: [number, number][] = [
         )
       }
       <header class="flex flex-col gap-3" data-stage-head>
-        <p class="telemetry">T+09:00 · Orbit achieved</p>
+        <p class="meta">T+09:00 · Orbit achieved</p>
         <h2 class="display text-4xl font-bold sm:text-5xl">{identity.name}</h2>
         <p class="max-w-xl text-lg" data-subline>{identity.subline}</p>
         <ul class="flex flex-wrap gap-2 text-xs">
@@ -376,10 +399,10 @@ const smokePuffs: [number, number][] = [
         {
           stages.map(stage => (
             <div class="panel flex flex-col gap-2 p-5">
-              <p class="telemetry">{stage.name}</p>
-              <p class="text-sm">{stage.tagline}</p>
+              <p class="meta">{stage.name}</p>
+              <p class="text-sm font-semibold">{stage.governing}</p>
               {lanesByStage[stage.id].map(lane => (
-                <div class={`zone-${lane.zone.id}`}>
+                <div>
                   <p class="summary-zone">{lane.zone.icon} {lane.zone.name}</p>
                   <ul class="flex flex-col gap-1 text-sm">
                     {lane.cards.map(c => (

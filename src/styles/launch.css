@@ -30,7 +30,6 @@
 .meter,
 .skip,
 .telemetry,
-.rule,
 .pad-label {
   font-family: var(--font-space-mono), ui-monospace, monospace;
 }
@@ -526,12 +525,28 @@ html[data-bright] .meter a::before {
   backdrop-filter: blur(8px);
 }
 
-.telemetry {
+/* Design rules: white ink + one hairline + a single orange accent that
+   marks only the current state and primary buttons. Status colours
+   (red/green) live in the HUD caution panel only. Orbitron for display,
+   Space Grotesk for reading, Space Mono for labels. */
+
+.telemetry,
+.meta {
   text-shadow: 0 1px 6px rgb(0 0 0 / 0.45);
+  font-family: var(--font-space-mono), ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-hot);
+  color: rgb(230 237 247 / 0.62);
+}
+.meta a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.meta a:hover {
+  color: #fff;
 }
 
 .display {
@@ -539,108 +554,153 @@ html[data-bright] .meter a::before {
   letter-spacing: 0.02em;
 }
 
-.rule {
-  display: inline-block;
-  padding: 2px 8px;
-  border: 1px dashed rgb(255 255 255 / 0.4);
-  border-radius: 999px;
-  font-size: 11px;
-  color: #ffd29a;
-  text-decoration: none;
-}
-a.rule:hover {
-  border-style: solid;
-}
+/* ---------- stage header: the claim, then its support ---------- */
 
-.evidence a {
-  color: #bcd4f5;
-  text-decoration: underline;
-  text-decoration-style: dashed;
-  text-underline-offset: 4px;
-}
-.evidence a:hover {
-  text-decoration-style: solid;
-  color: #fff;
-}
-
-/* ---------- zones: one lane per zone inside each stage ---------- */
-
-.zone-field {
-  --zone: #60a5fa;
-}
-.zone-test {
-  --zone: #ff8a3d;
-}
-.zone-oss {
-  --zone: #4ade80;
-}
-.lane {
+.stage-head {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-width: 56rem;
+  gap: 8px;
+  max-width: 44rem;
 }
-.lane-head {
+.governing {
+  margin: 6px 0 0;
+  color: #fff;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.3;
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.35);
+}
+.support {
+  margin: 0;
+  color: rgb(230 237 247 / 0.8);
+  line-height: 1.55;
+}
+
+/* ---------- stage log: one panel, zone sections, two-line rows ---------- */
+
+.stage-log {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 48rem;
+  padding: 18px 20px;
+}
+.log-zone-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  color: rgb(230 237 247 / 0.62);
+  font: 700 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.log-zone-line {
+  flex: 1;
+  height: 1px;
+  background: var(--panel-line);
+}
+.log-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.log-row + .log-row {
+  border-top: 1px solid var(--panel-line);
+}
+.log-row summary,
+.row-static {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 26px 10px 0;
+  position: relative;
+}
+.log-row summary {
+  cursor: pointer;
+  list-style: none;
+}
+.log-row summary::-webkit-details-marker {
+  display: none;
+}
+.log-row summary::after {
+  content: "▸";
+  position: absolute;
+  right: 4px;
+  top: 12px;
+  color: rgb(230 237 247 / 0.5);
+  transition: transform 0.2s ease;
+}
+.log-row details[open] summary::after {
+  transform: rotate(90deg);
+}
+.log-row summary:hover .row-title {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.row-top {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  align-self: flex-start;
-  gap: 4px 8px;
-  margin: 8px 0 0;
-  padding: 6px 12px;
-  border-left: 3px solid var(--zone);
-  border-radius: 0 8px 8px 0;
-  background: rgb(5 8 20 / 0.62);
-  backdrop-filter: blur(6px);
-  color: var(--zone);
-  font: 700 12px var(--font-space-mono), monospace;
-  letter-spacing: 0.14em;
+  justify-content: space-between;
+  gap: 2px 12px;
+}
+.row-title {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+.row-meta {
+  color: rgb(230 237 247 / 0.55);
+  font: 400 10px var(--font-space-mono), monospace;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  text-shadow: 0 1px 6px rgb(0 0 0 / 0.45);
+  white-space: nowrap;
 }
-.lane-count {
-  opacity: 0.7;
-}
-.lane-blurb {
-  flex-basis: 100%;
+.row-summary {
   color: rgb(230 237 247 / 0.7);
-  font: 400 12px var(--font-space-grotesk), sans-serif;
-  letter-spacing: 0;
-  text-transform: none;
+  font-size: 14px;
+  line-height: 1.5;
 }
-.lane-cards {
-  display: grid;
-  gap: 12px;
+.row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 0 12px;
 }
-@media (min-width: 1024px) {
-  .lane-cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+
+.evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0 0 0 14px;
+  border-left: 1px solid var(--panel-line);
+  list-style: none;
+  font-size: 14px;
 }
-.card {
-  border-left: 3px solid var(--zone);
+.evidence a,
+.orbit .answer a {
+  color: rgb(230 237 247 / 0.9);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(230 237 247 / 0.35);
+  text-underline-offset: 3px;
 }
+.evidence a:hover {
+  color: #fff;
+  text-decoration-color: #fff;
+}
+
 .summary-zone {
-  margin: 8px 0 2px;
-  color: var(--zone);
+  margin: 10px 0 2px;
+  color: #64748b;
   font: 700 10px var(--font-space-mono), monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-.orbit .lane-head {
-  background: rgb(255 255 255 / 0.8);
-}
-.orbit .lane-blurb {
-  color: #475569;
-}
-.orbit .zone-field {
-  --zone: #1d4ed8;
-}
-.orbit .zone-test {
-  --zone: #c2410c;
-}
-.orbit .zone-oss {
-  --zone: #15803d;
 }
 
 /* summary sits on the bright orbit layer */
@@ -658,12 +718,22 @@ a.rule:hover {
   background: rgb(255 255 255 / 0.82);
   border-color: rgb(15 23 42 / 0.1);
 }
-.orbit .telemetry {
+.orbit .telemetry,
+.orbit .meta {
   text-shadow: none;
-  color: #c2410c;
+  color: #64748b;
 }
 .orbit a {
-  color: #1d4ed8;
+  color: #1e293b;
+}
+.orbit ul a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(15 23 42 / 0.3);
+  text-underline-offset: 3px;
+}
+.orbit ul a:hover {
+  text-decoration-color: currentColor;
 }
 
 /* ---------- HUD systems readouts and anomaly log ---------- */
@@ -674,7 +744,7 @@ a.rule:hover {
   gap: 4px 12px;
   margin: 0;
   padding: 4px 10px;
-  border-left: 2px solid var(--accent-hot);
+  border: 1px solid var(--panel-line);
   font-size: 10px;
   background: rgb(5 8 20 / 0.45);
 }
@@ -1007,7 +1077,7 @@ html[data-stage="orbit"] .sat-button {
 .chip {
   width: 100%;
   padding: 10px 12px;
-  border: 1px dashed rgb(255 255 255 / 0.3);
+  border: 1px solid var(--panel-line);
   border-radius: 8px;
   background: transparent;
   color: var(--ink);
@@ -1015,7 +1085,7 @@ html[data-stage="orbit"] .sat-button {
   font-size: 14px;
 }
 .chip:hover {
-  border-style: solid;
+  border-color: rgb(255 255 255 / 0.4);
 }
 .chip[aria-pressed="true"] {
   border: 1px solid var(--accent-hot);
