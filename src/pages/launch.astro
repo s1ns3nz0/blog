@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import LaunchLayout from "@/layouts/LaunchLayout.astro";
 import Rocket from "@/components/launch/Rocket.astro";
+import EvidenceLink from "@/components/launch/EvidenceLink.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { getPostUrl } from "@/utils/getPostPaths";
 import config from "@/config";
@@ -14,7 +15,9 @@ import {
   openSource,
   audiences,
   anomalies,
+  zones,
   type Card,
+  type Evidence,
   type FlightRule,
 } from "@/data/portfolio";
 import { chips, privacyNote, securityDesign } from "@/data/assistant";
@@ -46,17 +49,30 @@ for (const a of audiences) {
   }
 }
 
+const resolveEvidence = (e: Evidence) =>
+  typeof e === "string"
+    ? { ...post(e), external: false }
+    : { title: e.label, url: e.url, external: true };
+const resolveRules = (rules: FlightRule[] = []) =>
+  rules.map(r => ({ label: r.label, url: r.slug ? post(r.slug).url : undefined }));
 const resolveCard = (c: Card) => ({
   ...c,
-  evidenceLinks: c.evidence.map(post),
-  rules: (c.flightRules ?? []).map((r: FlightRule) => ({
-    label: r.label,
-    url: r.slug ? post(r.slug).url : undefined,
-  })),
+  evidenceLinks: c.evidence.map(resolveEvidence),
+  rules: resolveRules(c.flightRules),
 });
 const cardsByStage = Object.fromEntries(
   stages.map(s => [s.id, cards.filter(c => c.stage === s.id).map(resolveCard)])
 );
+// Lanes per stage, in zone order; empty lanes are dropped.
+const lanesByStage = Object.fromEntries(
+  stages.map(s => [
+    s.id,
+    zones
+      .map(z => ({ zone: z, cards: cardsByStage[s.id].filter(c => c.zone === z.id) }))
+      .filter(l => l.cards.length > 0),
+  ])
+);
+const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
 
 const prowlerChecks = posts.filter(p => p.data.tags.includes("Prowler")).length;
 const certCount = certifications.reduce((n, c) => n + c.count, 0);
@@ -266,11 +282,25 @@ const smokePuffs: [number, number][] = [
               {stage.name}
             </h2>
             <p class="max-w-xl text-slate-200">{stage.tagline}</p>
+            {stageRules[stage.id].length > 0 && (
+              <ul class="mt-1 flex flex-wrap gap-2" aria-label="Flight rules">
+                {stageRules[stage.id].map(r => (
+                  <li><a class="rule" href={r.url}>{r.label}</a></li>
+                ))}
+              </ul>
+            )}
           </div>
 
-          <div class="flex max-w-3xl flex-col gap-4">
-            {cardsByStage[stage.id].map(card => (
-              <article id={card.id} data-card-id={card.id} class="panel flex flex-col gap-3 p-5">
+          {lanesByStage[stage.id].map(lane => (
+          <section class={`lane zone-${lane.zone.id}`} aria-label={lane.zone.name}>
+            <h3 class="lane-head">
+              <span aria-hidden="true">{lane.zone.icon}</span> {lane.zone.name}
+              <span class="lane-count">· {lane.cards.length}</span>
+              <span class="lane-blurb">{lane.zone.blurb}</span>
+            </h3>
+          <div class="lane-cards">
+            {lane.cards.map(card => (
+              <article id={card.id} data-card-id={card.id} class="panel card flex flex-col gap-3 p-5">
                 <h3 class="display text-xl font-bold text-white">{card.title}</h3>
                 <p class="text-sm leading-relaxed text-slate-200">{card.summary}</p>
                 {card.rules.length > 0 && (
@@ -286,11 +316,13 @@ const smokePuffs: [number, number][] = [
                     ))}
                   </ul>
                 )}
+                {card.evidenceLinks.length > 0 && (
                 <ul class="evidence flex flex-col gap-1 text-sm" aria-label="Evidence">
                   {card.evidenceLinks.slice(0, EVIDENCE_SHOWN).map(e => (
-                    <li>→ <a href={e.url}>{e.title}</a></li>
+                    <li>→ <EvidenceLink {...e} /></li>
                   ))}
                 </ul>
+                )}
                 {card.evidenceLinks.length > EVIDENCE_SHOWN && (
                   <details class="evidence text-sm">
                     <summary class="cursor-pointer text-slate-400">
@@ -298,7 +330,7 @@ const smokePuffs: [number, number][] = [
                     </summary>
                     <ul class="mt-1 flex flex-col gap-1">
                       {card.evidenceLinks.slice(EVIDENCE_SHOWN).map(e => (
-                        <li>→ <a href={e.url}>{e.title}</a></li>
+                        <li>→ <EvidenceLink {...e} /></li>
                       ))}
                     </ul>
                   </details>
@@ -306,6 +338,8 @@ const smokePuffs: [number, number][] = [
               </article>
             ))}
           </div>
+          </section>
+          ))}
         </section>
       ))
     }
@@ -344,11 +378,16 @@ const smokePuffs: [number, number][] = [
             <div class="panel flex flex-col gap-2 p-5">
               <p class="telemetry">{stage.name}</p>
               <p class="text-sm">{stage.tagline}</p>
-              <ul class="mt-1 flex flex-col gap-1 text-sm">
-                {cardsByStage[stage.id].map(c => (
-                  <li><a href={`#${c.id}`}>{c.title}</a></li>
-                ))}
-              </ul>
+              {lanesByStage[stage.id].map(lane => (
+                <div class={`zone-${lane.zone.id}`}>
+                  <p class="summary-zone">{lane.zone.icon} {lane.zone.name}</p>
+                  <ul class="flex flex-col gap-1 text-sm">
+                    {lane.cards.map(c => (
+                      <li><a href={`#${c.id}`}>{c.title}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           ))
         }

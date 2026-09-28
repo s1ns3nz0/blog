@@ -563,6 +563,86 @@ a.rule:hover {
   color: #fff;
 }
 
+/* ---------- zones: one lane per zone inside each stage ---------- */
+
+.zone-field {
+  --zone: #60a5fa;
+}
+.zone-test {
+  --zone: #ff8a3d;
+}
+.zone-oss {
+  --zone: #4ade80;
+}
+.lane {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 56rem;
+}
+.lane-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  align-self: flex-start;
+  gap: 4px 8px;
+  margin: 8px 0 0;
+  padding: 6px 12px;
+  border-left: 3px solid var(--zone);
+  border-radius: 0 8px 8px 0;
+  background: rgb(5 8 20 / 0.62);
+  backdrop-filter: blur(6px);
+  color: var(--zone);
+  font: 700 12px var(--font-space-mono), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.45);
+}
+.lane-count {
+  opacity: 0.7;
+}
+.lane-blurb {
+  flex-basis: 100%;
+  color: rgb(230 237 247 / 0.7);
+  font: 400 12px var(--font-space-grotesk), sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.lane-cards {
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 1024px) {
+  .lane-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.card {
+  border-left: 3px solid var(--zone);
+}
+.summary-zone {
+  margin: 8px 0 2px;
+  color: var(--zone);
+  font: 700 10px var(--font-space-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.orbit .lane-head {
+  background: rgb(255 255 255 / 0.8);
+}
+.orbit .lane-blurb {
+  color: #475569;
+}
+.orbit .zone-field {
+  --zone: #1d4ed8;
+}
+.orbit .zone-test {
+  --zone: #c2410c;
+}
+.orbit .zone-oss {
+  --zone: #15803d;
+}
+
 /* summary sits on the bright orbit layer */
 .orbit {
   color: #0f172a;

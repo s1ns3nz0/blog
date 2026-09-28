@@ -1,20 +1,35 @@
 /**
  * Single source of truth for the /launch portfolio page (and later the AI
- * assistant context). Evidence and flight-rule links reference blog post
- * slugs; the page build fails if a slug is missing, draft, or unlisted.
+ * assistant context). Evidence is either a blog post slug (the build fails
+ * if it is missing, draft, or unlisted) or an external link.
  * See docs/portfolio-spec.md.
  */
 
 export type StageId = "build" | "ship" | "operate";
 
+/** Where the work came from; each stage shows one lane per zone. */
+export type ZoneId = "field" | "test" | "oss";
+
+export type Zone = { id: ZoneId; name: string; icon: string; blurb: string };
+
+export const zones: Zone[] = [
+  { id: "field", name: "Field Missions", icon: "◆", blurb: "Work done for clients and organizations" },
+  { id: "test", name: "Test Flights", icon: "▲", blurb: "Things I designed and flew myself" },
+  { id: "oss", name: "Proactive Minds", icon: "●", blurb: "Open source I contributed to unprompted" },
+];
+
 export type FlightRule = { label: string; slug?: string };
+
+/** A blog post slug, or an external link. */
+export type Evidence = string | { label: string; url: string };
 
 export type Card = {
   id: string;
   stage: StageId;
+  zone: ZoneId;
   title: string;
   summary: string;
-  evidence: string[];
+  evidence: Evidence[];
   flightRules?: FlightRule[];
 };
 
@@ -29,6 +44,8 @@ export type Stage = {
   event: string;
   name: string;
   tagline: string;
+  /** Standards and methods behind the stage, shown under its heading. */
+  flightRules?: FlightRule[];
 };
 
 export type Audience = {
@@ -89,6 +106,11 @@ export const stages: Stage[] = [
     event: "T+04:38  STAGE 2 SEP",
     name: "Operate & Defend",
     tagline: "Once it's up, I can see it, and I can respond.",
+    flightRules: [
+      { label: "MITRE ATT&CK", slug: "palantir-ads" },
+      { label: "CACAO", slug: "cacao-playbook" },
+      { label: "CISA playbooks", slug: "cisa-incident-vulnerability-response-playbooks" },
+    ],
   },
 ];
 
@@ -153,15 +175,33 @@ export const anomalies: Anomaly[] = [
   },
 ];
 
+const GH = "https://github.com/s1ns3nz0";
+
 export const cards: Card[] = [
-  // Build
+  // ---------- Build ----------
+  {
+    id: "deloitte-pki",
+    stage: "build",
+    zone: "field",
+    title: "PKI digital signature audits",
+    summary:
+      "At Deloitte, audited PKI-based digital signature systems and contributed to the Digital Signature System Audit Assessment Guide v1.4.0, built on WebTrust criteria.",
+    evidence: [
+      {
+        label: "Digital Signature Audit Assessment Guide (Deloitte)",
+        url: "https://www.deloitte.com/kr/ko/services/consulting/perspectives/crisis-management-article-20201230.html",
+      },
+    ],
+  },
   {
     id: "private-eks",
     stage: "build",
+    zone: "test",
     title: "Private EKS for an Ethereum validator",
     summary:
       "Designed and ran a Hoodi testnet validator (Prysm, Nethermind) on a private EKS cluster with namespace isolation, workload identity, and private image delivery.",
     evidence: [
+      { label: "node-operator-public on GitHub", url: `${GH}/node-operator-public` },
       "hoodi-node-validator-aws-architecture-overview",
       "securing-a-hoodi-ethereum-testnet-validator-on-aws-eks",
       "eks-security-controls-implemented-in-the-cluster-design",
@@ -172,15 +212,29 @@ export const cards: Card[] = [
   {
     id: "secrets-and-keys",
     stage: "build",
-    title: "Secrets and validator keys",
+    zone: "test",
+    title: "Secrets and identity with Vault",
     summary:
-      "Vault on Kubernetes with KMS auto-unseal and cert-manager for TLS, plus a written key management policy for validator keys that maps back to NIST guidance.",
+      "Vault on Kubernetes with KMS auto-unseal, cert-manager for TLS, and workload identity so no application holds a static credential.",
     evidence: [
       "vault-architecture-on-kubernetes",
       "vault-secret-management-for-hoodi-validator",
       "cert-manager-and-vault-roles-scope-and-collaboration",
       "identity-management-in-this-project",
+    ],
+  },
+  {
+    id: "kms-policy",
+    stage: "build",
+    zone: "test",
+    title: "Web3 key management policy",
+    summary:
+      "An 18-section key management policy for validator infrastructure, aligned with NIST SP 800-57 and SP 800-131A and published as an OSCAL catalog.",
+    evidence: [
+      { label: "kms-policy on GitHub", url: `${GH}/kms-policy` },
       "validator-key-types-and-key-management-policy-for-a-hoodi-validator",
+      "web3-key-management-policy-applied-to-my-hoodi-validator",
+      "converting-the-web3-key-management-policy-to-oscal",
     ],
     flightRules: [
       {
@@ -191,10 +245,11 @@ export const cards: Card[] = [
     ],
   },
 
-  // Ship
+  // ---------- Ship ----------
   {
     id: "pipeline-controls",
     stage: "ship",
+    zone: "test",
     title: "Pipeline security controls",
     summary:
       "Controls from token permissions to release signing, each paired with the threat it answers and how it's implemented.",
@@ -203,6 +258,7 @@ export const cards: Card[] = [
       "secure-build",
       "securing-workflows-in-ci-pipelines-secure-code-commits",
       "securing-workflows-in-cd-pipelines",
+      "security-review-process-for-private-repositories",
     ],
     flightRules: [
       { label: "NIST SP 800-218 (SSDF)", slug: "nist-sp-218-ssdf" },
@@ -210,72 +266,136 @@ export const cards: Card[] = [
     ],
   },
   {
-    id: "open-source",
+    id: "security-requirements",
     stage: "ship",
-    title: "Open source contributions",
+    zone: "test",
+    title: "Security Requirements plugin",
     summary:
-      "28 Azure and GCP security checks added to Prowler, Policy as Code and registry guidance for the SEAL frameworks, a fuzzer bug in Trail of Bits' gosentry, and L402 metrics for Lightning Labs' Aperture.",
+      "An AI plugin that derives service-specific security requirements from a service's context, users, and compliance obligations, with Kubernetes analysis and blast-radius mapping.",
     evidence: [
-      "reporting-a-libafl-corpus-id-bug-in-gosentry",
-      "aperture-l402-metrics-before-and-after",
-      "policy-as-code-seal-frameworks",
-      "private-registries-and-mirrors-seal-frameworks",
-      "adding-azure-aks-defender-check-to-prowler",
+      { label: "security-requirements on GitHub", url: `${GH}/security-requirements` },
+      "security-requirements-plugin",
+      "security-requirements-plugin-kubernetes-analysis",
+      "security-requirements-plugin-blast-radius",
     ],
   },
   {
-    id: "supply-chain",
+    id: "seal-policy-as-code",
     stage: "ship",
-    title: "Supply chain and private registries",
-    summary:
-      "Private registries and package mirrors, plus a process for reviewing, approving, and reassessing third-party artifacts before internal use.",
+    zone: "oss",
+    title: "SEAL Frameworks: Policy as Code",
+    summary: "Guidance on enforcing security policy through the CI/CD pipeline for the Security Alliance frameworks.",
     evidence: [
-      "private-registries-and-mirrors-seal-frameworks",
-      "security-review-process-for-private-repositories",
-      "ai-supply-chain-attacks",
+      "policy-as-code-seal-frameworks",
+      {
+        label: "Pull requests",
+        url: "https://github.com/security-alliance/frameworks/pulls?q=is%3Apr+involves%3As1ns3nz0",
+      },
+    ],
+  },
+  {
+    id: "seal-registries",
+    stage: "ship",
+    zone: "oss",
+    title: "SEAL Frameworks: private registries and mirrors",
+    summary: "Guidance on private registries and package mirrors so builds pull only reviewed artifacts.",
+    evidence: ["private-registries-and-mirrors-seal-frameworks"],
+  },
+  {
+    id: "gosentry",
+    stage: "ship",
+    zone: "oss",
+    title: "gosentry: a fuzzer that died silently",
+    summary:
+      "Reported a LibAFL corpus bug in Trail of Bits' gosentry where fuzzing stopped but go test still passed; fixed the same day.",
+    evidence: [
+      "reporting-a-libafl-corpus-id-bug-in-gosentry",
+      { label: "Issue #210", url: "https://github.com/trailofbits/gosentry/issues/210" },
+    ],
+  },
+  {
+    id: "oscal-compass",
+    stage: "ship",
+    zone: "oss",
+    title: "OSCAL Compass",
+    summary:
+      "Added a GitHub Actions integration for Compliance-to-Policy workflows and fixed a KeyError in compliance-trestle.",
+    evidence: [
+      { label: "compliance-trestle PR #2222", url: "https://github.com/oscal-compass/compliance-trestle/pull/2222" },
+      "nist-oscal-and-associated-projects",
     ],
   },
 
-  // Operate & Defend
+  // ---------- Operate & Defend ----------
   {
-    id: "l402-observability",
+    id: "army-automation",
     stage: "operate",
-    title: "Observability for L402 authentication",
+    zone: "field",
+    title: "Security automation in the Army Signal Corps",
     summary:
-      "Per-outcome Prometheus counters for Aperture's mint and verify paths, and a proposal for structured security events that never store raw credentials.",
-    evidence: [
-      "aperture-l402-metrics-before-and-after",
-      "aperture-l402-security-events-monitoring-proposal",
-    ],
+      "As a platoon leader, wrote security-check automation scripts and a game-based security awareness program; won an Army cybersecurity competition.",
+    evidence: [],
   },
   {
     id: "audit-logging",
     stage: "operate",
+    zone: "test",
     title: "Audit and logging architecture",
     summary:
       "CloudTrail, AWS Config, Fluent Bit, and Vault audit feeding an immutable, KMS-protected archive with cross-region recovery.",
     evidence: ["audit-and-logging-architecture-for-hoodi-node-validator"],
   },
   {
-    id: "detection-response",
+    id: "compliance-ops",
     stage: "operate",
-    title: "Detection and response",
+    zone: "test",
+    title: "Compliance Ops dashboard",
     summary:
-      "Detection engineering with Palantir's ADS framework, and incident and vulnerability response playbooks in CACAO and CISA formats.",
-    evidence: [
-      "palantir-ads",
-      "cacao-playbook",
-      "cisa-incident-vulnerability-response-playbooks",
-    ],
-    flightRules: [{ label: "MITRE ATT&CK", slug: "palantir-ads" }],
+      "An OSCAL-based dashboard that tracks controls, policies, evidence, and owners, with an MCP interface for Slack and Jira.",
+    evidence: [{ label: "compliance-ops on GitHub", url: `${GH}/compliance-ops` }],
   },
   {
     id: "prioritization",
     stage: "operate",
+    zone: "test",
     title: "Risk-based prioritization",
     summary:
       "Lessons on deployment speed, infrastructure cost, and operational burden: a control that is too expensive or too hard to run is not a good control.",
     evidence: ["prioritizing-security-controls-hoodi-validator-lessons"],
+  },
+  {
+    id: "aperture-metrics",
+    stage: "operate",
+    zone: "oss",
+    title: "Aperture: L402 metrics",
+    summary: "Per-outcome Prometheus counters for Aperture's L402 mint and verify paths (issue #286).",
+    evidence: [
+      "aperture-l402-metrics-before-and-after",
+      { label: "Issue #286", url: "https://github.com/lightninglabs/aperture/issues/286" },
+    ],
+  },
+  {
+    id: "aperture-events",
+    stage: "operate",
+    zone: "oss",
+    title: "Aperture: security event proposal",
+    summary: "Structured L402 security events that carry HMAC references instead of raw macaroons and preimages.",
+    evidence: ["aperture-l402-security-events-monitoring-proposal"],
+  },
+  {
+    id: "prowler",
+    stage: "operate",
+    zone: "oss",
+    title: "Prowler: 28 Azure and GCP checks",
+    summary: "Posture checks for AKS, Cosmos DB, Databricks, Entra ID, Cloud SQL, Secret Manager, and more.",
+    evidence: [
+      {
+        label: "Pull requests",
+        url: "https://github.com/prowler-cloud/prowler/pulls?q=is%3Apr+state%3Aclosed+involves%3As1ns3nz0",
+      },
+      "adding-azure-aks-defender-check-to-prowler",
+      "adding-gcp-secret-manager-rotation-check-to-prowler",
+    ],
   },
 ];
 
@@ -318,6 +438,6 @@ export const audiences: Audience[] = [
     fairing: "LIGHTNING",
     subline:
       "Kubernetes in production, observability that operators can act on, and hands-on work with Aperture and the Lightning stack.",
-    priority: ["private-eks", "l402-observability", "open-source", "secrets-and-keys", "pipeline-controls"],
+    priority: ["private-eks", "aperture-metrics", "aperture-events", "pipeline-controls", "secrets-and-keys", "gosentry"],
   },
 ];

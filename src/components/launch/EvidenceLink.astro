@@ -1,0 +1,15 @@
+---
+/** An evidence link: a blog post, or an external page opened in a new tab. */
+type Props = { title: string; url: string; external: boolean };
+const { title, url, external } = Astro.props;
+---
+
+{
+  external ? (
+    <a href={url} target="_blank" rel="noopener noreferrer">
+      {title} <span aria-label="(opens in a new tab)">↗</span>
+    </a>
+  ) : (
+    <a href={url}>{title}</a>
+  )
+}

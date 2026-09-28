@@ -26,6 +26,16 @@ Agreed 2026-09-28. Source of truth for the portfolio build.
 
 Compliance (NIST, OSCAL) appears as "flight rule" badges on cards, not as its own stage.
 
+Inside each stage, cards sit in up to three zone lanes, in this order (empty lanes are hidden):
+
+| Zone | Name | Content |
+|---|---|---|
+| Career | ◆ Field Missions | Work done for clients and organizations (external links allowed) |
+| Personal projects | ▲ Test Flights | Things I designed and flew myself (GitHub + posts) |
+| Open source | ● Proactive Minds | Contributions made unprompted, one card per project |
+
+Study and research write-ups (for example Palantir ADS, CACAO, CISA playbooks) are stage-level flight-rule badges rather than cards.
+
 ## Interaction
 
 - Scroll-driven, never autoplay. Five to six screens in total.
@@ -71,7 +81,7 @@ English only.
 ## Data
 
 - Single typed module, `src/data/portfolio.ts`, read by the launch page, summary, and later the AI context and chip generator.
-- Evidence references posts by slug. The build fails if a slug is missing, draft, or unlisted.
+- Evidence is a post slug (the build fails if it is missing, draft, or unlisted) or an external `{ label, url }` link, which opens in a new tab.
 
 ## Delivery
 
@@ -81,6 +91,7 @@ English only.
 | v1.1 | Launch pad, Earth limb, orbital sunrise, satellite, HUD orbit lock |
 | v1.2 | Rocket labels (PLATFORM / PIPELINE / YOUR PRODUCT), clamshell fairing, satellite emerges from inside |
 | v1.3 | HUD systems readouts, in-flight anomaly log with rocket fault/recovery motion, nozzle fix |
+| v1.4 | Zone lanes (Field Missions / Test Flights / Proactive Minds) inside each stage, external evidence links, per-project OSS cards |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |
