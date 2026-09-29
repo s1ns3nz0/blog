@@ -678,24 +678,25 @@ html[data-daylight] .stage-log {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.co-card-title {
+.co-card-go {
+  color: #cffafe;
   font-size: 1.05rem;
   font-weight: 600;
-}
-.co-card-go {
-  color: #67e8f9;
-  font-size: 13px;
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration-color: rgb(103 232 249 / 0.6);
+  text-underline-offset: 4px;
 }
 html[data-daylight] .co-card {
   border-color: rgb(8 145 178 / 0.6);
   background: rgb(236 254 255 / 0.9);
   color: #164e63;
 }
-html[data-daylight] .co-card-kicker,
-html[data-daylight] .co-card-go {
+html[data-daylight] .co-card-kicker {
   color: #0e7490;
+}
+html[data-daylight] .co-card-go {
+  color: #164e63;
+  text-decoration-color: rgb(14 116 144 / 0.5);
 }
 
 /* Zone headings sit on the sky; each item below is its own card. */
