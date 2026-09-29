@@ -18,8 +18,6 @@ export const zones: Zone[] = [
   { id: "oss", name: "Open source", metaphor: "proactive minds", icon: "●" },
 ];
 
-export type FlightRule = { label: string; slug?: string };
-
 /** A blog post slug, or an external link. */
 export type Evidence = string | { label: string; url: string };
 
@@ -32,7 +30,6 @@ export type Card = {
   title: string;
   summary: string;
   evidence: Evidence[];
-  flightRules?: FlightRule[];
 };
 
 export type Stage = {
@@ -47,8 +44,6 @@ export type Stage = {
   governing: string;
   /** One line on how the evidence backs the claim. */
   support: string;
-  /** Standards and methods behind the stage, shown under its heading. */
-  flightRules?: FlightRule[];
   /** Green callout lines for a stage with no fault before it. */
   notes?: string[];
   /** The NIST SSDF practice Compliance Ops tracks for this stage, with the
@@ -84,6 +79,8 @@ export const identity = {
   headline: "Launch your product securely.",
   /** The one claim the summary makes; everything else is evidence. */
   claim: "I turn security frameworks and compliance into platform code.",
+  /** The summary's closing line: what the trip through the stages showed. */
+  closing: "Security controls you can read, run, and prove.",
   /** Full-screen quote after Operate: the question the summary then answers. */
   quote: {
     text: "Know the enemy and know yourself, and you will not be imperiled in a hundred battles.",
@@ -124,11 +121,6 @@ export const stages: Stage[] = [
     governing: "I put security into the design before anything gets built.",
     support:
       "Threat models, blast-radius maps, and requirements for three AWS reference architectures.",
-    flightRules: [
-      { label: "STRIDE", slug: "threat-modeling" },
-      { label: "NIST SP 800-53" },
-      { label: "OWASP ASVS" },
-    ],
     notes: [
       "Security requirements",
       "Service characteristics",
@@ -192,11 +184,6 @@ export const stages: Stage[] = [
     governing: "I make running systems observable, and cheap enough to keep defending.",
     support:
       "Per-outcome L402 metrics and a security event proposal for Lightning Labs' Aperture, plus 28 cloud security checks in Prowler.",
-    flightRules: [
-      { label: "MITRE ATT&CK", slug: "palantir-ads" },
-      { label: "CACAO", slug: "cacao-playbook" },
-      { label: "CISA playbooks", slug: "cisa-incident-vulnerability-response-playbooks" },
-    ],
   },
 ];
 
@@ -361,10 +348,6 @@ export const cards: Card[] = [
       "securing-workflows-in-ci-pipelines-secure-code-commits",
       "securing-workflows-in-cd-pipelines",
       "security-review-process-for-private-repositories",
-    ],
-    flightRules: [
-      { label: "NIST SP 800-218 (SSDF)", slug: "nist-sp-218-ssdf" },
-      { label: "NIST SP 800-204D", slug: "relationship-between-nist-sp-800-218-and-sp-800-204-d" },
     ],
   },
   {

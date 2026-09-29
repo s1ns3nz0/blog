@@ -629,8 +629,23 @@ html[data-bright] .meter a::before {
   width: 18px;
   height: 18px;
 }
-.hero-stats {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+/* compact: each card only as wide as its number and label */
+.stat-cards.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+.hero-stats .stat-card {
+  padding: 12px 18px;
+}
+.hero-stats .stat-num {
+  font-size: 36px;
+}
+.hero-stats .stat-label {
+  font-size: 13px;
+}
+.hero-stats .stat-open {
   margin-top: 4px;
 }
 /* On the night sky the hero cards and buttons use the same dark panel as
@@ -654,7 +669,7 @@ html[data-bright] .meter a::before {
 @media (max-width: 767px) {
   /* narrow column: one compact row per stat */
   .hero-stats {
-    grid-template-columns: minmax(0, 1fr);
+    flex-direction: column;
     gap: 6px;
   }
   .hero-stats .stat-card {
@@ -996,17 +1011,12 @@ html[data-daylight] .co-card-go {
   gap: 4px 16px;
   font: 400 13px var(--font-space-mono), monospace;
 }
-.code-links a,
-.rules a {
+.code-links a {
   color: rgb(var(--log-ink) / 0.9);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: rgb(var(--log-ink) / 0.35);
   text-underline-offset: 3px;
-}
-.rules {
-  color: rgb(var(--log-ink) / 0.75);
-  font-size: 13px;
 }
 
 .evidence {

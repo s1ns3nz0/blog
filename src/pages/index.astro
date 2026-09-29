@@ -37,7 +37,6 @@ import {
   statusLabel,
   type Card,
   type Evidence,
-  type FlightRule,
 } from "@/data/portfolio";
 import { chips, privacyNote, securityDesign } from "@/data/assistant";
 import "@/styles/launch.css";
@@ -81,8 +80,6 @@ const resolveEvidence = (e: Evidence) =>
     : e.url.startsWith("/tags/")
       ? { title: `${e.label}: ${tagPage(e.url)} posts`, url: e.url, external: false, series: tagPage(e.url) }
       : { title: e.label, url: e.url, external: true, series: 0 };
-const resolveRules = (rules: FlightRule[] = []) =>
-  rules.map(r => ({ label: r.label, url: r.slug ? post(r.slug).url : undefined }));
 // Collapsed-row meta parts, e.g. ["5 posts", "GitHub ↗"].
 function evidenceMeta(links: { url: string; external: boolean; series: number }[]) {
   const posts = links.reduce((n, l) => n + (l.external ? 0 : l.series || 1), 0);
@@ -106,7 +103,6 @@ const resolveCard = (c: Card) => {
     codeLabel: code.every(l => l.url.includes("github.com")) ? "Code" : "Links",
     writeups: evidenceLinks.filter(l => !l.external),
     meta: evidenceMeta(evidenceLinks),
-    rules: resolveRules(c.flightRules),
   };
 };
 const cardsByStage = Object.fromEntries(
@@ -174,7 +170,6 @@ const tileList = tiles.map(t =>
 const traitList = traits.map(t => ({ ...t, proof: t.proof.replace("{oss}", String(ossTotal)) }));
 const highlightList = highlights.map(h => ({ ...h, detail: h.detail.replace("{oss}", String(ossTotal)) }));
 
-const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
 // Each stage's SSDF practice and the node-operator files Compliance Ops
 // records as its evidence, linked at the pinned commit.
 const stageProof = Object.fromEntries(stages.map(s => [s.id, s.proof]));
@@ -437,17 +432,6 @@ const smokePuffs: [number, number][] = [
             <h2 class="display text-3xl font-bold text-white sm:text-4xl">{stage.name}</h2>
             <p class="governing">{stage.governing}</p>
             <p class="support">{stage.support}</p>
-            {stageRules[stage.id].length > 0 && (
-              <p class="meta rules">
-                Rules:{" "}
-                {stageRules[stage.id].map((r, i) => (
-                  <>
-                    {i > 0 && ", "}
-                    {r.url ? <a href={r.url}>{r.label}</a> : r.label}
-                  </>
-                ))}
-              </p>
-            )}
           </div>
 
           <div class="stage-log">
@@ -502,19 +486,6 @@ const smokePuffs: [number, number][] = [
                                       </li>
                                     ))}
                                   </ul>
-                                </dd>
-                              </div>
-                            )}
-                            {card.rules.length > 0 && (
-                              <div class="row-links">
-                                <dt>Rules</dt>
-                                <dd class="rules">
-                                  {card.rules.map((r, i) => (
-                                    <>
-                                      {i > 0 && ", "}
-                                      {r.url ? <a href={r.url}>{r.label}</a> : r.label}
-                                    </>
-                                  ))}
                                 </dd>
                               </div>
                             )}
@@ -604,7 +575,7 @@ const smokePuffs: [number, number][] = [
         <p class="meta spaced"><span>T+09:00</span><span>Orbit achieved</span></p>
         <h2 class="display text-2xl font-bold">{identity.name}</h2>
         <p class="meta"><span data-audience-default>{identity.title}</span>{audiences.filter(a => a.title).map(a => <span data-audience={a.id} hidden>{a.title}</span>)}</p>
-        <p class="claim">{identity.claim}</p>
+        <p class="claim">{identity.closing}</p>
         <section class="traits" aria-labelledby="traits-title">
           <h3 id="traits-title" class="meta">How I work</h3>
           {traitList.map(t => (

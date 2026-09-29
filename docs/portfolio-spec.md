@@ -137,6 +137,7 @@ English only.
 | v4 | Portfolio promoted to / (indexed, in the sitemap); the old blog home moves to /blog/ and the blog header, breadcrumbs and back links point there; /launch redirects to / on Vercel with the query kept (?for=lightning-labs still works) |
 | v4.1 | Second review: hero shows one title (DevSecOps / Platform Engineer), the claim, 'Open to remote and overseas ... roles' + Available now, GitHub/Email/LinkedIn (and resume when present) buttons, the stat cards (moved from the summary), IBM and Deloitte logos, and the tech stack behind a toggle; zone labels read plain first (Personal projects / Open source) with the metaphor small; og:image + Twitter card |
 | v4.2 | Review pass: dark hero cards and buttons; phone alert becomes a one-line bar under the HUD; Operate support line matches its cards; career details from the removed field missions folded into Career; unused CSS removed |
+| v4.3 | Compact hero stat cards; summary closes on 'Security controls you can read, run, and prove.' instead of repeating the hero claim; RULES lines removed from stage headings and cards |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |
