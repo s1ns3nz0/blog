@@ -283,30 +283,17 @@ export const cards: Card[] = [
     ],
   },
   {
-    id: "review-ecs-saas",
+    id: "aws-saas-design-review",
     stage: "design",
     zone: "test",
-    title: "Security Design Review - ECS SaaS",
+    title: "AWS SaaS Security Design Review",
     summary:
-      "STRIDE across nine trust boundaries, blast radius per tenant, and requirements gated in CI/CD.",
-    evidence: [{ label: "ECS SaaS series", url: "/tags/ecs-saas/" }],
-  },
-  {
-    id: "review-eks-saas",
-    stage: "design",
-    zone: "test",
-    title: "Security Design Review - EKS SaaS",
-    summary:
-      "Namespace-per-tenant isolation, IRSA, and a shared control plane, worked through from threat model to CI/CD gates.",
-    evidence: [{ label: "EKS SaaS series", url: "/tags/eks-saas/" }],
-  },
-  {
-    id: "review-serverless",
-    stage: "design",
-    zone: "test",
-    title: "Security Design Review - Serverless",
-    summary: "A movie-voting sample taken from service profile to ISMS-P and GDPR overlays.",
-    evidence: [{ label: "Serverless series", url: "/tags/serverless/" }],
+      "Three AWS reference architectures (ECS SaaS, EKS SaaS, and a serverless app) taken from service profile through STRIDE, blast radius, and CI/CD gates to ISMS-P and GDPR overlays.",
+    evidence: [
+      { label: "ECS SaaS series", url: "/tags/ecs-saas/" },
+      { label: "EKS SaaS series", url: "/tags/eks-saas/" },
+      { label: "Serverless series", url: "/tags/serverless/" },
+    ],
   },
 
   // ---------- Build ----------
@@ -342,18 +329,6 @@ export const cards: Card[] = [
       "eks-security-controls-implemented-in-the-cluster-design",
       "kubernetes-namespace-design-for-a-hoodi-validator",
       "private-ecr-delivery-architecture-for-private-eks",
-    ],
-  },
-  {
-    id: "oscal-policy",
-    stage: "build",
-    zone: "test",
-    title: "Security policy as an OSCAL catalog",
-    summary:
-      "Turned an 18-section key management policy into an OSCAL catalog, so the policy is machine-readable and checked like code.",
-    evidence: [
-      { label: "kms-policy on GitHub", url: `${GH}/kms-policy` },
-      "converting-the-web3-key-management-policy-to-oscal",
     ],
   },
   {
@@ -493,15 +468,6 @@ export const cards: Card[] = [
     summary:
       "Tuned Splunk detection rules to cut false positives, ran first-line incident response, and went through an internal security audit by the Defense Counterintelligence Command. Selected for the Army's Elite 300 Cyber Warriors, won the Ground Operations Command incident response CTF, and placed 2nd in a cybersecurity education content competition with an interactive awareness game.",
     evidence: [],
-  },
-  {
-    id: "compliance-ops",
-    stage: "operate",
-    zone: "test",
-    title: "Compliance Ops dashboard",
-    summary:
-      "An OSCAL-based dashboard that tracks controls, policies, evidence, and owners, with an MCP interface for Slack and Jira.",
-    evidence: [{ label: "compliance-ops on GitHub", url: `${GH}/compliance-ops` }],
   },
   {
     id: "aperture-metrics",
