@@ -130,6 +130,7 @@ English only.
 | v1.27 | Strips rebuilt as one NIST SSDF thread from Compliance Ops: Design PW.1, Build PW.9, Deploy PS.2, Operate RV.2, each linking the node-operator evidence files at commit 8f4121f, with SSDF 10/19 implemented; screenshot dropped |
 | v1.28 | Cyan Compliance Ops card closing each stage (SSDF practice, evidence count, status); links GitHub until COMPLIANCE_OPS_LIVE is set, then deep-links each requirement |
 | v1.29 | The SSDF strip and the closing card merge into one cyan Compliance Ops card at the top of each stage, deep-linking the read-only live requirement page (PW.1, PW.9, PS.2, RV.2) |
+| v1.30 | Compliance Ops card moves to the end of each stage (two lines: SSDF practice, 'See the code behind it, tracked live'); dashboard screenshot with 'Every control, its owner, and its evidence on one screen.' right before Sun Tzu, labeled example data |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

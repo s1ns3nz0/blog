@@ -650,12 +650,13 @@ html[data-daylight] .stage-log {
   --panel: rgb(255 255 255 / 0.82);
   --panel-line: rgb(15 23 42 / 0.12);
 }
-/* Each stage opens with a link to its SSDF practice in Compliance Ops:
+/* Each stage closes with a link to its SSDF practice in Compliance Ops:
    cyan, so it reads apart from the orange accent and the green status. */
 .co-card {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  max-width: var(--hero-w);
   padding: 14px 18px;
   border: 1px solid rgb(34 211 238 / 0.55);
   border-radius: 10px;
@@ -1162,6 +1163,37 @@ html[data-daylight] .co-card-go {
     margin-right: 70px;
   }
 }
+/* The dashboard, just before Sun Tzu asks how well you know yourself. */
+.co-shot {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: var(--hero-w);
+  margin: 72px 0 0;
+}
+.co-shot-line {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.25;
+  text-shadow: 0 2px 14px rgb(0 0 0 / 0.4);
+}
+.co-shot-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgb(34 211 238 / 0.55);
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgb(34 211 238 / 0.2);
+}
+.co-shot figcaption {
+  color: #67e8f9;
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 /* Sun Tzu, one full screen between Operate and orbit: the question the
    summary then answers. */
 .sun-tzu {

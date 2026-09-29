@@ -10,6 +10,7 @@ import logoIbm from "@/assets/images/orgs/ibm.webp";
 import logoDeloitte from "@/assets/images/orgs/deloitte.webp";
 import logoKitri from "@/assets/images/orgs/kitri.webp";
 import logoArmy from "@/assets/images/orgs/rok-army.webp";
+import complianceOpsDashboard from "@/assets/images/launch/compliance-ops-dashboard.png";
 import IconGitHub from "@/assets/icons/brands/github.svg";
 import IconLinkedIn from "@/assets/icons/brands/linkedin.svg";
 import IconGmail from "@/assets/icons/brands/gmail.svg";
@@ -397,12 +398,6 @@ const smokePuffs: [number, number][] = [
           </div>
 
           <div class="stage-log">
-            {[stageProof[stage.id]].filter(p => p !== undefined).map(p => (
-              <a class="co-card" href={complianceOpsHref(p.requirementId)} target="_blank" rel="noopener noreferrer">
-                <span class="co-card-kicker">NIST SSDF {p.practice}</span>
-                <span class="co-card-go">See the code behind it, tracked live ↗</span>
-              </a>
-            ))}
             {lanesByStage[stage.id].map(lane => (
               <section class="log-zone" aria-label={lane.zone.name}>
                 <h3 class="log-zone-head">
@@ -481,6 +476,27 @@ const smokePuffs: [number, number][] = [
           </div>
 
 
+          {[stageProof[stage.id]].filter(p => p !== undefined).map(p => (
+            <a class="co-card" href={complianceOpsHref(p.requirementId)} target="_blank" rel="noopener noreferrer">
+              <span class="co-card-kicker">NIST SSDF {p.practice}</span>
+              <span class="co-card-go">See the code behind it, tracked live ↗</span>
+            </a>
+          ))}
+          {stage.id === "operate" && (
+            <figure class="co-shot" data-reveal>
+              <p class="co-shot-line">Every control, its owner, and its evidence on one screen.</p>
+              <a href={COMPLIANCE_OPS_LIVE ?? "https://github.com/s1ns3nz0/compliance-ops"} target="_blank" rel="noopener noreferrer">
+                <Image
+                  src={complianceOpsDashboard}
+                  alt="Compliance Ops dashboard: 69% coverage, 966 of 1409 requirements implemented, and status by framework for NIST SP 800-53, NIST SSDF, and a key management policy."
+                  widths={[640, 1280, 2528]}
+                  sizes="(min-width: 1100px) 1060px, 100vw"
+                  class="co-shot-img"
+                />
+              </a>
+              <figcaption>Compliance Ops, example data</figcaption>
+            </figure>
+          )}
           {stage.id === "operate" && (
             <figure class="sun-tzu" data-reveal>
               <blockquote>“{identity.quote.text}”</blockquote>
