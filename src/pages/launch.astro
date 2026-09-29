@@ -10,8 +10,6 @@ import logoIbm from "@/assets/images/orgs/ibm.webp";
 import logoDeloitte from "@/assets/images/orgs/deloitte.webp";
 import logoKitri from "@/assets/images/orgs/kitri.webp";
 import logoArmy from "@/assets/images/orgs/rok-army.webp";
-import proofComplianceOps from "@/assets/images/launch/compliance-ops-status.png";
-const proofImages = { "compliance-ops-status": proofComplianceOps };
 import IconGitHub from "@/assets/icons/brands/github.svg";
 import IconLinkedIn from "@/assets/icons/brands/linkedin.svg";
 import IconGmail from "@/assets/icons/brands/gmail.svg";
@@ -27,6 +25,8 @@ import {
   education,
   highlights,
   traits,
+  NODE_OPERATOR_COMMIT,
+  ssdfCoverage,
   stack,
   certifications,
   openSource,
@@ -175,10 +175,11 @@ const traitList = traits.map(t => ({ ...t, proof: t.proof.replace("{oss}", Strin
 const highlightList = highlights.map(h => ({ ...h, detail: h.detail.replace("{oss}", String(ossTotal)) }));
 
 const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
-// Each stage's "compliance → code" pair; its source is validated like evidence.
-const stageProof = Object.fromEntries(
-  stages.map(s => [s.id, s.proof && { ...s.proof, link: resolveEvidence(s.proof.source) }])
-);
+// Each stage's SSDF practice and the node-operator files Compliance Ops
+// records as its evidence, linked at the pinned commit.
+const nodeOperatorFile = (path: string) =>
+  `https://github.com/s1ns3nz0/node-operator/blob/${NODE_OPERATOR_COMMIT}/${path}`;
+const stageProof = Object.fromEntries(stages.map(s => [s.id, s.proof]));
 
 
 // Contact marks: official brand glyphs (Simple Icons, CC0) in brand colours.
@@ -396,29 +397,31 @@ const smokePuffs: [number, number][] = [
 
           <div class="stage-log">
             {[stageProof[stage.id]].filter(p => p !== undefined).map(p => (
-              <figure class:list={["proof panel", { "proof-wide": p.to.image }]} aria-label="Compliance to code">
+              <figure class="proof panel" aria-label={`NIST SSDF ${p.practice} and its evidence`}>
                 <div class="proof-from">
-                  <p class="proof-label">{p.from.label}</p>
-                  <p class="proof-text">{p.from.text}</p>
+                  <p class="proof-label">NIST SSDF</p>
+                  <p class="proof-text"><span class="proof-id">{p.practice}</span> {p.title}</p>
+                  <span class="proof-status">{p.status}</span>
                 </div>
                 <span class="proof-arrow" aria-hidden="true">→</span>
                 <div class="proof-to">
-                  <p class="proof-label">{p.to.label}</p>
-                  {p.to.image ? (
-                    <Image
-                      src={proofImages[p.to.image as keyof typeof proofImages]}
-                      alt={p.to.alt ?? ""}
-                      widths={[520, 1040]}
-                      sizes="(min-width: 768px) 560px, 100vw"
-                      class="proof-shot"
-                    />
-                  ) : (
-                    <pre><code>{p.to.code}</code></pre>
-                  )}
+                  <p class="proof-label">node-operator @ {NODE_OPERATOR_COMMIT.slice(0, 7)}</p>
+                  <ul class="proof-files">
+                    {p.files.map(f => (
+                      <li>
+                        <a href={nodeOperatorFile(f)} target="_blank" rel="noopener noreferrer">
+                          {f} <span aria-label="(opens in a new tab)">↗</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
                 <figcaption class="proof-source">
-                  <span>Compliance → code</span>
-                  <EvidenceLink {...p.link} />
+                  <span>Tracked in</span>
+                  <a href="https://github.com/s1ns3nz0/compliance-ops" target="_blank" rel="noopener noreferrer">
+                    Compliance Ops <span aria-label="(opens in a new tab)">↗</span>
+                  </a>
+                  <span>SSDF {ssdfCoverage.implemented} / {ssdfCoverage.total} implemented</span>
                 </figcaption>
               </figure>
             ))}
