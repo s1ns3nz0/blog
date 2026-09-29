@@ -49,8 +49,8 @@ export type Stage = {
   flightRules?: FlightRule[];
   /** Green callout lines for a stage with no fault before it. */
   notes?: string[];
-  /** One NIST SSDF practice and the node-operator files Compliance Ops
-      records as its evidence (paths at NODE_OPERATOR_COMMIT). */
+  /** The NIST SSDF practice Compliance Ops tracks for this stage, with the
+      node-operator evidence files it records (at commit 8f4121f). */
   proof?: {
     practice: string;
     /** Compliance Ops requirement id, for the live page once it is public. */
@@ -254,15 +254,8 @@ export const anomalies: Anomaly[] = [
 ];
 
 const GH = "https://github.com/s1ns3nz0";
-/** node-operator commit that Compliance Ops' SSDF evidence points at. */
-export const NODE_OPERATOR_COMMIT = "8f4121f184d2c01e3c248adbfb9c5091a256b284";
-/**
- * Public read-only Compliance Ops. While unset, the stage cards link the
- * GitHub repo; once set, each card deep-links its requirement page.
- */
-export const COMPLIANCE_OPS_LIVE: string | undefined = undefined;
-/** SSDF coverage Compliance Ops recorded for node-operator at that commit. */
-export const ssdfCoverage = { implemented: 10, total: 19 };
+/** Public read-only Compliance Ops; each stage card deep-links its requirement. */
+export const COMPLIANCE_OPS_LIVE: string | undefined = "http://193.122.146.187";
 
 export const cards: Card[] = [
   // ---------- Design ----------

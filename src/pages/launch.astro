@@ -25,9 +25,7 @@ import {
   education,
   highlights,
   traits,
-  NODE_OPERATOR_COMMIT,
   COMPLIANCE_OPS_LIVE,
-  ssdfCoverage,
   stack,
   certifications,
   openSource,
@@ -178,8 +176,6 @@ const highlightList = highlights.map(h => ({ ...h, detail: h.detail.replace("{os
 const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
 // Each stage's SSDF practice and the node-operator files Compliance Ops
 // records as its evidence, linked at the pinned commit.
-const nodeOperatorFile = (path: string) =>
-  `https://github.com/s1ns3nz0/node-operator/blob/${NODE_OPERATOR_COMMIT}/${path}`;
 const stageProof = Object.fromEntries(stages.map(s => [s.id, s.proof]));
 const complianceOpsHref = (requirementId: string) =>
   COMPLIANCE_OPS_LIVE
@@ -402,33 +398,15 @@ const smokePuffs: [number, number][] = [
 
           <div class="stage-log">
             {[stageProof[stage.id]].filter(p => p !== undefined).map(p => (
-              <figure class="proof panel" aria-label={`NIST SSDF ${p.practice} and its evidence`}>
-                <div class="proof-from">
-                  <p class="proof-label">NIST SSDF</p>
-                  <p class="proof-text"><span class="proof-id">{p.practice}</span> {p.title}</p>
-                  <span class="proof-status">{p.status}</span>
-                </div>
-                <span class="proof-arrow" aria-hidden="true">→</span>
-                <div class="proof-to">
-                  <p class="proof-label">node-operator @ {NODE_OPERATOR_COMMIT.slice(0, 7)}</p>
-                  <ul class="proof-files">
-                    {p.files.map(f => (
-                      <li>
-                        <a href={nodeOperatorFile(f)} target="_blank" rel="noopener noreferrer">
-                          {f} <span aria-label="(opens in a new tab)">↗</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <figcaption class="proof-source">
-                  <span>Tracked in</span>
-                  <a href="https://github.com/s1ns3nz0/compliance-ops" target="_blank" rel="noopener noreferrer">
-                    Compliance Ops <span aria-label="(opens in a new tab)">↗</span>
-                  </a>
-                  <span>SSDF {ssdfCoverage.implemented} / {ssdfCoverage.total} implemented</span>
-                </figcaption>
-              </figure>
+              <a class="co-card" href={complianceOpsHref(p.requirementId)} target="_blank" rel="noopener noreferrer">
+                <span class="co-card-kicker">◆ Tracked in Compliance Ops</span>
+                <span class="co-card-title">
+                  SSDF {p.practice} · {p.files.length} evidence files · {p.status}
+                </span>
+                <span class="co-card-go">
+                  {COMPLIANCE_OPS_LIVE ? "Open the requirement" : "See Compliance Ops on GitHub"} ↗
+                </span>
+              </a>
             ))}
             {lanesByStage[stage.id].map(lane => (
               <section class="log-zone" aria-label={lane.zone.name}>
@@ -507,17 +485,6 @@ const smokePuffs: [number, number][] = [
             ))}
           </div>
 
-          {[stageProof[stage.id]].filter(p => p !== undefined).map(p => (
-            <a class="co-card" href={complianceOpsHref(p.requirementId)} target="_blank" rel="noopener noreferrer">
-              <span class="co-card-kicker">◆ Tracked in Compliance Ops</span>
-              <span class="co-card-title">
-                SSDF {p.practice} · {p.files.length} evidence files · {p.status}
-              </span>
-              <span class="co-card-go">
-                {COMPLIANCE_OPS_LIVE ? "Open the requirement" : "See Compliance Ops on GitHub"} ↗
-              </span>
-            </a>
-          ))}
 
           {stage.id === "operate" && (
             <figure class="sun-tzu" data-reveal>

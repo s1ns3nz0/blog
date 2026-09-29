@@ -129,6 +129,7 @@ English only.
 | v1.26 | Compliance-to-code spine: hero subline is the claim (echoed in the summary); each stage opens with a real clause-to-artifact strip (800-53 AC-3/AC-6 to REQ-TENANT-DDB-01, policy 17.1.1 to OSCAL km-17.1.1, pinned inputs to CICD-02, SSDF to a Compliance Ops dashboard screenshot labeled example data; no demo URL or token on the page) |
 | v1.27 | Strips rebuilt as one NIST SSDF thread from Compliance Ops: Design PW.1, Build PW.9, Deploy PS.2, Operate RV.2, each linking the node-operator evidence files at commit 8f4121f, with SSDF 10/19 implemented; screenshot dropped |
 | v1.28 | Cyan Compliance Ops card closing each stage (SSDF practice, evidence count, status); links GitHub until COMPLIANCE_OPS_LIVE is set, then deep-links each requirement |
+| v1.29 | The SSDF strip and the closing card merge into one cyan Compliance Ops card at the top of each stage, deep-linking the read-only live requirement page (PW.1, PW.9, PS.2, RV.2) |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |
