@@ -8,12 +8,11 @@
 export type StageId = "design" | "build" | "ship" | "operate";
 
 /** Where the work came from; each stage shows one lane per zone. */
-export type ZoneId = "field" | "test" | "oss";
+export type ZoneId = "test" | "oss";
 
 export type Zone = { id: ZoneId; name: string; icon: string; blurb: string };
 
 export const zones: Zone[] = [
-  { id: "field", name: "Field Missions", icon: "◆", blurb: "delivered on the job" },
   { id: "test", name: "Test Flights", icon: "▲", blurb: "personal projects, built and run end to end" },
   { id: "oss", name: "Proactive Minds", icon: "●", blurb: "open-source work, contributed or reported upstream" },
 ];
@@ -116,7 +115,7 @@ export const stages: Stage[] = [
     },
     governing: "I put security into the design before anything gets built.",
     support:
-      "Threat models, blast-radius maps, and requirements for three AWS reference architectures, plus IDMZ and OT network design for industrial sites at IBM.",
+      "Threat models, blast-radius maps, and requirements for three AWS reference architectures.",
     flightRules: [
       { label: "STRIDE", slug: "threat-modeling" },
       { label: "NIST SP 800-53" },
@@ -262,15 +261,6 @@ export const COMPLIANCE_OPS_LIVE: string | undefined = "http://193.122.146.187";
 export const cards: Card[] = [
   // ---------- Design ----------
   {
-    id: "ibm-ot-design",
-    stage: "design",
-    zone: "field",
-    title: "OT security design at IBM",
-    summary:
-      "Designed and built IDMZs between IT and OT networks, reworked network segmentation, and ran risk assessments for a global heavy-equipment maker, a nuclear power company, and a semiconductor manufacturer.",
-    evidence: [],
-  },
-  {
     id: "security-requirements",
     stage: "design",
     zone: "test",
@@ -299,24 +289,6 @@ export const cards: Card[] = [
   },
 
   // ---------- Build ----------
-  {
-    id: "ibm-eu-cra",
-    stage: "build",
-    zone: "field",
-    title: "EU CRA supply-chain assessment at IBM",
-    summary:
-      "Assessed the software supply chain of a nuclear power company and a heavy-equipment maker against the EU Cyber Resilience Act, and set their roadmaps.",
-    evidence: [],
-  },
-  {
-    id: "army-siem-training",
-    stage: "build",
-    zone: "field",
-    title: "SIEM training platform, Republic of Korea Army",
-    summary:
-      "Built a SIEM learning platform for new recruits and an assistant that helps them write Splunk SPL queries.",
-    evidence: [],
-  },
   {
     id: "private-eks",
     stage: "build",
@@ -431,46 +403,6 @@ export const cards: Card[] = [
   },
 
   // ---------- Operate ----------
-  {
-    id: "ibm-isms-p",
-    stage: "operate",
-    zone: "field",
-    title: "ISMS-P consulting at IBM",
-    summary:
-      "Joined ISMS-P certification consulting for a real-estate service and a shared-office service, assessed their AWS environments, and built an assessment tool for consultants on Prowler.",
-    evidence: [],
-  },
-  {
-    id: "deloitte-iso27001",
-    stage: "operate",
-    zone: "field",
-    title: "ISO 27001 for a global IoT service",
-    summary: "At Deloitte, consulted on and audited ISO 27001 certification for a global IoT service.",
-    evidence: [],
-  },
-  {
-    id: "deloitte-pki",
-    stage: "operate",
-    zone: "field",
-    title: "Digital signature service audits",
-    summary:
-      "At Deloitte, audited Korean authentication services built on digital signatures, and drafted Appendices 2-3 of the Digital Signature Certification Service Evaluation Guide v1.4.0.",
-    evidence: [
-      {
-        label: "Digital Signature Certification Service Evaluation Guide (Deloitte)",
-        url: "https://www.deloitte.com/kr/ko/services/consulting/perspectives/crisis-management-article-20201230.html",
-      },
-    ],
-  },
-  {
-    id: "army-automation",
-    stage: "operate",
-    zone: "field",
-    title: "Corps CERT, Republic of Korea Army",
-    summary:
-      "Tuned Splunk detection rules to cut false positives, ran first-line incident response, and went through an internal security audit by the Defense Counterintelligence Command. Selected for the Army's Elite 300 Cyber Warriors, won the Ground Operations Command incident response CTF, and placed 2nd in a cybersecurity education content competition with an interactive awareness game.",
-    evidence: [],
-  },
   {
     id: "aperture-metrics",
     stage: "operate",
