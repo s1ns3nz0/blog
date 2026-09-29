@@ -334,7 +334,7 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "2 security reports submitted to Lightning Labs",
+    title: "2 security reports submitted to a blockchain company",
     summary: "Both are under review. Product names and details stay private until fixes ship.",
     evidence: [],
   },
@@ -744,11 +744,11 @@ export const openSource: OpenSourceEntry[] = [
     // until fixes ship and disclosure is agreed.
     id: "disclosure",
     name: "Coordinated disclosure",
-    about: "Private reports to Lightning Labs, held until fixes ship.",
+    about: "Private reports to a blockchain company, held until fixes ship.",
     did: "Product names and details stay private until fixes ship.",
-    headline: "2 security reports submitted to Lightning Labs",
+    headline: "2 security reports submitted to a blockchain company",
     kind: ["Blockchain", "Security"],
-    tags: ["Responsible disclosure", "Lightning"],
+    tags: ["Responsible disclosure"],
     contributions: [
       {
         what: "Details will be added once fixes ship and disclosure is agreed.",
