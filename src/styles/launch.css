@@ -1713,15 +1713,9 @@ html[data-stage="orbit"] .hud-wrap {
   text-transform: uppercase;
 }
 
-/* "Global reach": three plain numbers at the very end of the summary */
+/* "Global reach": three plain numbers right under the closing line */
 .reach-block {
-  max-width: 72rem;
-  margin: 8px 0 28px;
-}
-@media (min-width: 768px) {
-  .reach-block {
-    margin-right: 70px;
-  }
+  margin: 4px 0 6px;
 }
 .reach-cards {
   display: grid;

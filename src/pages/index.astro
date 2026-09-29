@@ -594,6 +594,17 @@ const smokePuffs: [number, number][] = [
         <h2 class="display text-2xl font-bold">{identity.name}</h2>
         <p class="meta"><span data-audience-default>{identity.title}</span>{audiences.filter(a => a.title).map(a => <span data-audience={a.id} hidden>{a.title}</span>)}</p>
         <p class="claim">{identity.closing}</p>
+        <section class="reach-block" aria-labelledby="reach-title">
+          <h3 id="reach-title" class="meta">Global reach</h3>
+          <ul class="reach-cards">
+            {reach.map(r => (
+              <li class="reach-card" data-reveal>
+                <span class="stat-num display">{r.stat}</span>
+                <span class="stat-label">{r.label}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
         <section class="field-notes" aria-labelledby="field-notes-title">
           <h3 id="field-notes-title" class="meta">Field notes</h3>
           {fieldNoteList.map(n => (
@@ -767,18 +778,6 @@ const smokePuffs: [number, number][] = [
           </ul>
         </div>
       </dialog>
-
-      <section class="reach-block" aria-labelledby="reach-title">
-        <h3 id="reach-title" class="meta">Global reach</h3>
-        <ul class="reach-cards">
-          {reach.map(r => (
-            <li class="reach-card" data-reveal>
-              <span class="stat-num display">{r.stat}</span>
-              <span class="stat-label">{r.label}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
 
       <nav class="contact" aria-label="Contact">
         {
