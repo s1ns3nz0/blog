@@ -388,14 +388,8 @@ const smokePuffs: [number, number][] = [
                   <button type="button" class="stat-card" data-open-dialog={`dlg-${t.id}`}>
                     <span class="stat-num display">{t.stat}</span>
                     <span class="stat-label">{t.label}</span>
-                    <span class="stat-open">View →</span>
+                    <span class="stat-open">View details →</span>
                   </button>
-                ))}
-                {reach.map(r => (
-                  <div class="stat-card reach-card">
-                    <span class="stat-num display">{r.stat}</span>
-                    <span class="stat-label">{r.label}</span>
-                  </div>
                 ))}
               </div>
               <ul class="hero-orgs" aria-label="Worked at">
@@ -773,6 +767,18 @@ const smokePuffs: [number, number][] = [
           </ul>
         </div>
       </dialog>
+
+      <section class="reach-block" aria-labelledby="reach-title">
+        <h3 id="reach-title" class="meta">Global reach</h3>
+        <ul class="reach-cards">
+          {reach.map(r => (
+            <li class="reach-card" data-reveal>
+              <span class="stat-num display">{r.stat}</span>
+              <span class="stat-label">{r.label}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <nav class="contact" aria-label="Contact">
         {
