@@ -327,6 +327,15 @@ function setupReveal() {
   });
 }
 
+// "What I've done" lines open the card they point at on the way there.
+document.querySelectorAll<HTMLAnchorElement>("[data-win]").forEach(link => {
+  link.addEventListener("click", () => {
+    const card = document.getElementById(link.hash.slice(1));
+    const details = card?.querySelector("details");
+    if (details) details.open = true;
+  });
+});
+
 setupReveal();
 setupAssistant(applyAudience());
 setupDetailDialogs();

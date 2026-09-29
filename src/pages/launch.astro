@@ -26,6 +26,7 @@ import {
   education,
   highlights,
   traits,
+  wins,
   COMPLIANCE_OPS_LIVE,
   stack,
   certifications,
@@ -67,6 +68,10 @@ function tagPage(url: string) {
 
 const cardIds = new Set(cards.map(c => c.id));
 if (cardIds.size !== cards.length) throw new Error("portfolio: duplicate card id");
+// Every "What I've done" line must open a real card.
+for (const w of [...wins, ...audiences.flatMap(a => a.wins ?? [])]) {
+  if (!cardIds.has(w.card)) throw new Error(`portfolio: win "${w.text}" points at unknown card "${w.card}"`);
+}
 for (const a of audiences) {
   for (const id of a.priority) {
     if (!cardIds.has(id)) {
@@ -350,6 +355,17 @@ const smokePuffs: [number, number][] = [
               <p class="text-sm text-slate-300 sm:text-base" data-audience="lightning-labs" hidden>
                 Kubernetes, AWS, CI/CD, and observability, with security built into the platform.
               </p>
+              <section class="wins" aria-labelledby="wins-title">
+                <p id="wins-title" class="telemetry">What I've done</p>
+                <ol data-audience-default>
+                  {wins.map(w => <li><a href={`#${w.card}`} data-win>{w.text}</a></li>)}
+                </ol>
+                {audiences.filter(a => a.wins).map(a => (
+                  <ol data-audience={a.id} hidden>
+                    {a.wins!.map(w => <li><a href={`#${w.card}`} data-win>{w.text}</a></li>)}
+                  </ol>
+                ))}
+              </section>
               <dl class="stack" aria-label="Tech stack">
                 {stack.map(row => (
                   <div class="stack-row">
@@ -362,16 +378,6 @@ const smokePuffs: [number, number][] = [
                   </div>
                 ))}
               </dl>
-              <div class="proof-strip" data-audience="lightning-labs" hidden>
-                <p class="telemetry">Proof, not keywords</p>
-                <ul>
-                  <li><a href="https://github.com/lightningnetwork/lnd/issues/11211" target="_blank" rel="noopener noreferrer">LND #11211 ↗</a></li>
-                  <li><a href="https://github.com/lightninglabs/aperture/issues/286" target="_blank" rel="noopener noreferrer">Aperture #286 ↗</a></li>
-                  <li><a href="https://github.com/lightninglabs/aperture/pull/285" target="_blank" rel="noopener noreferrer">Aperture PR #285 ↗</a></li>
-                  <li><span>2 security reports (under review)</span></li>
-                  <li><a href="https://github.com/s1ns3nz0/node-operator-public" target="_blank" rel="noopener noreferrer">Private EKS validator ↗</a></li>
-                </ul>
-              </div>
               <p class="telemetry mt-6 text-slate-300">Scroll to launch ↓</p>
             </header>
           )}
@@ -425,7 +431,7 @@ const smokePuffs: [number, number][] = [
                   {lane.cards.map(card => (
                     <li id={card.id} data-card-id={card.id} class="log-row panel">
                       {card.evidenceLinks.length > 0 ? (
-                        <details open>
+                        <details>
                           <summary>
                             <span class="row-top">
                               <span class="row-title">
