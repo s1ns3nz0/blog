@@ -276,7 +276,7 @@ const smokePuffs: [number, number][] = [
         <rect class="arm" x="91" y="103" width="43" height="5" />
         <rect class="arm" x="91" y="223" width="43" height="5" />
       </svg>
-      <p class="pad-label"><span>PAD 01</span><span class="pad-handle">DEVSECOPS</span></p>
+      <p class="pad-label"><span>PAD 01</span><span class="pad-handle"><span data-audience-default>DEVSECOPS</span><span data-audience="lightning-labs" hidden>PLATFORM</span></span></p>
       {
         smokePuffs.map(([dx, scale]) => (
           <div class="smoke" style={`--dx: calc(${dx} * var(--u)); --s: ${scale}`} />
@@ -339,13 +339,16 @@ const smokePuffs: [number, number][] = [
         >
           {i === 0 && (
             <header class="mb-16 flex min-h-[70vh] flex-col justify-center gap-5">
-              <p class="telemetry spaced"><span>Mission DevSecOps</span><span>T-00:10</span></p>
+              <p class="telemetry spaced"><span>Mission <span data-audience-default>DevSecOps</span><span data-audience="lightning-labs" hidden>Platform Engineering</span></span><span>T-00:10</span></p>
               <p class="telemetry" data-audience-label hidden />
               <h1 class="hero-title display text-4xl leading-tight font-bold text-white sm:text-6xl">
                 {identity.headline}
               </h1>
               <p class="text-base text-slate-200 sm:text-lg" data-subline>
                 {identity.subline}
+              </p>
+              <p class="text-sm text-slate-300 sm:text-base" data-audience="lightning-labs" hidden>
+                Kubernetes, AWS, CI/CD, and observability, with security built into the platform.
               </p>
               <dl class="stack" aria-label="Tech stack">
                 {stack.map(row => (
@@ -359,6 +362,16 @@ const smokePuffs: [number, number][] = [
                   </div>
                 ))}
               </dl>
+              <div class="proof-strip" data-audience="lightning-labs" hidden>
+                <p class="telemetry">Proof, not keywords</p>
+                <ul>
+                  <li><a href="https://github.com/lightningnetwork/lnd/issues/11211" target="_blank" rel="noopener noreferrer">LND #11211 ↗</a></li>
+                  <li><a href="https://github.com/lightninglabs/aperture/issues/286" target="_blank" rel="noopener noreferrer">Aperture #286 ↗</a></li>
+                  <li><a href="https://github.com/lightninglabs/aperture/pull/285" target="_blank" rel="noopener noreferrer">Aperture PR #285 ↗</a></li>
+                  <li><span>2 security reports (under review)</span></li>
+                  <li><a href="https://github.com/s1ns3nz0/node-operator-public" target="_blank" rel="noopener noreferrer">Private EKS validator ↗</a></li>
+                </ul>
+              </div>
               <p class="telemetry mt-6 text-slate-300">Scroll to launch ↓</p>
             </header>
           )}
@@ -415,7 +428,16 @@ const smokePuffs: [number, number][] = [
                         <details open>
                           <summary>
                             <span class="row-top">
-                              <span class="row-title">{card.title}</span>
+                              <span class="row-title">
+                  {card.titleFor ? (
+                    <>
+                      <span data-audience-default>{card.title}</span>
+                      {Object.entries(card.titleFor).map(([aud, t]) => (
+                        <span data-audience={aud} hidden>{t}</span>
+                      ))}
+                    </>
+                  ) : card.title}
+                </span>
                               <span class="row-meta">{card.meta.map(m => <span>{m}</span>)}</span>
                             </span>
                             <span class="row-summary">{card.summary}</span>
@@ -463,7 +485,16 @@ const smokePuffs: [number, number][] = [
                       ) : (
                         <div class="row-static">
                           <span class="row-top">
-                            <span class="row-title">{card.title}</span>
+                            <span class="row-title">
+                  {card.titleFor ? (
+                    <>
+                      <span data-audience-default>{card.title}</span>
+                      {Object.entries(card.titleFor).map(([aud, t]) => (
+                        <span data-audience={aud} hidden>{t}</span>
+                      ))}
+                    </>
+                  ) : card.title}
+                </span>
                           </span>
                           <span class="row-summary">{card.summary}</span>
                         </div>
@@ -498,10 +529,15 @@ const smokePuffs: [number, number][] = [
             </figure>
           )}
           {stage.id === "operate" && (
-            <figure class="sun-tzu" data-reveal>
+            <figure class="sun-tzu" data-reveal data-audience-default>
               <blockquote>“{identity.quote.text}”</blockquote>
               <figcaption>{identity.quote.by}</figcaption>
               <p class="sun-tzu-q">{identity.quote.question}</p>
+            </figure>
+          )}
+          {stage.id === "operate" && (
+            <figure class="sun-tzu" data-reveal data-audience="lightning-labs" hidden>
+              <blockquote>Design for failure.<br />Automate the recovery.<br />Prove the control.</blockquote>
             </figure>
           )}
         </section>
@@ -724,6 +760,7 @@ const smokePuffs: [number, number][] = [
             The product this page launched: an assistant that answers questions
             about {identity.name}.
           </p>
+          <p class="mt-1 text-xs text-slate-400">Answers come only from this portfolio and the posts they link.</p>
         </div>
         <button type="button" class="assistant-close" data-close-assistant aria-label="Close">✕</button>
       </header>

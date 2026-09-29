@@ -151,7 +151,7 @@ function updateAnomalies(vh: number) {
     // stage keeps each line up longer.
     const log = section.querySelector<HTMLElement>(".stage-log");
     if (isPast && log) {
-      const quote = section.querySelector<HTMLElement>(".sun-tzu");
+      const quote = section.querySelector<HTMLElement>(".sun-tzu:not([hidden])");
       const next = transits.slice(i + 1).find(n => n.dataset.transit);
       const end = (quote ?? next)?.getBoundingClientRect().top ?? log.getBoundingClientRect().bottom;
       if (end > mid) {
@@ -217,6 +217,13 @@ function applyAudience(): string | undefined {
 
   document.querySelectorAll<HTMLElement>("[data-subline]").forEach(el => {
     el.textContent = audience.subline;
+  });
+  // Audience-only copy replaces its default twin.
+  document.querySelectorAll<HTMLElement>("[data-audience]").forEach(el => {
+    el.hidden = el.dataset.audience !== audience.id;
+  });
+  document.querySelectorAll<HTMLElement>("[data-audience-default]").forEach(el => {
+    el.hidden = true;
   });
   document.querySelectorAll<HTMLElement>("[data-audience-label]").forEach(el => {
     el.textContent = `Prepared for ${audience.label}`;

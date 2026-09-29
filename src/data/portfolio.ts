@@ -25,6 +25,8 @@ export type Evidence = string | { label: string; url: string };
 
 export type Card = {
   id: string;
+  /** Title shown instead of `title` for a given audience id. */
+  titleFor?: Record<string, string>;
   stage: StageId;
   zone: ZoneId;
   title: string;
@@ -320,6 +322,7 @@ export const cards: Card[] = [
     stage: "build",
     zone: "test",
     title: "Ethereum Hoodi Validator on Private EKS",
+    titleFor: { "lightning-labs": "Stateful validator workload on private EKS" },
     summary:
       "Designed and ran a Hoodi testnet validator (Prysm, Nethermind) on a private EKS cluster: no public Kubernetes API, namespace isolation, workload identity, and private image delivery.",
     evidence: [
@@ -359,9 +362,8 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "2 vulnerabilities reported to Lightning Labs",
-    summary:
-      "Found two vulnerabilities in Lightning Labs products; both are under review. Product names and details stay private until fixes ship.",
+    title: "2 security reports submitted to Lightning Labs",
+    summary: "Both are under review. Product names and details stay private until fixes ship.",
     evidence: [],
   },
 
@@ -592,6 +594,7 @@ export const tiles: { id: TileId; title: string; stat: string; label: string }[]
 
 /** Hero tech stack, one row per area. */
 export const stack = [
+  { area: "Languages", items: ["Go", "Python", "Bash"] },
   { area: "Cloud", items: ["AWS", "Azure", "GCP"] },
   { area: "Container", items: ["Kubernetes (EKS)", "Helm", "Docker"] },
   { area: "CI/CD", items: ["GitHub Actions", "ArgoCD", "FluxCD"] },
@@ -609,7 +612,7 @@ export const traits = [
     name: "Self-starter",
     line: "I get to security problems before they ship.",
     proof:
-      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 2 vulnerability reports sent upstream.",
+      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 2 security reports sent upstream.",
   },
   {
     name: "Fast learner",
@@ -811,7 +814,7 @@ export const openSource: OpenSourceEntry[] = [
     name: "Coordinated disclosure",
     about: "Private reports to Lightning Labs, held until fixes ship.",
     did: "Product names and details stay private until fixes ship.",
-    headline: "2 vulnerabilities reported to Lightning Labs",
+    headline: "2 security reports submitted to Lightning Labs",
     kind: ["Blockchain", "Security"],
     tags: ["Responsible disclosure", "Lightning"],
     contributions: [
@@ -851,8 +854,7 @@ export const audiences: Audience[] = [
     id: "lightning-labs",
     label: "Lightning Labs",
     fairing: "LIGHTNING",
-    subline:
-      "Kubernetes in production, observability that operators can act on, and hands-on work with Aperture and the Lightning stack.",
+    subline: "I build secure, observable cloud-native platforms.",
     priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "gosentry"],
     ossPriority: ["lnd", "aperture", "disclosure"],
   },

@@ -619,6 +619,32 @@ html[data-bright] .meter a::before {
   font-size: 13px;
 }
 
+/* Lightning version: links to the work, right under the tech stack */
+.proof-strip ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.proof-strip li > * {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid rgb(255 138 61 / 0.55);
+  border-radius: 999px;
+  color: #ffe2cc;
+  font: 700 12px var(--font-space-mono), monospace;
+  text-decoration: none;
+}
+.proof-strip li > a:hover {
+  border-color: var(--accent-hot);
+  color: #fff;
+}
+[hidden] {
+  display: none !important;
+}
+
 /* ---------- stage header: the claim, then its support ---------- */
 
 .stage-head {
