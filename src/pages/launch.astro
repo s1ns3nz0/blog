@@ -26,6 +26,7 @@ import {
   highlights,
   traits,
   NODE_OPERATOR_COMMIT,
+  COMPLIANCE_OPS_LIVE,
   ssdfCoverage,
   stack,
   certifications,
@@ -180,6 +181,10 @@ const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flig
 const nodeOperatorFile = (path: string) =>
   `https://github.com/s1ns3nz0/node-operator/blob/${NODE_OPERATOR_COMMIT}/${path}`;
 const stageProof = Object.fromEntries(stages.map(s => [s.id, s.proof]));
+const complianceOpsHref = (requirementId: string) =>
+  COMPLIANCE_OPS_LIVE
+    ? `${COMPLIANCE_OPS_LIVE}/requirements/${requirementId}`
+    : "https://github.com/s1ns3nz0/compliance-ops";
 
 
 // Contact marks: official brand glyphs (Simple Icons, CC0) in brand colours.
@@ -501,6 +506,18 @@ const smokePuffs: [number, number][] = [
               </section>
             ))}
           </div>
+
+          {[stageProof[stage.id]].filter(p => p !== undefined).map(p => (
+            <a class="co-card" href={complianceOpsHref(p.requirementId)} target="_blank" rel="noopener noreferrer">
+              <span class="co-card-kicker">◆ Tracked in Compliance Ops</span>
+              <span class="co-card-title">
+                SSDF {p.practice} · {p.files.length} evidence files · {p.status}
+              </span>
+              <span class="co-card-go">
+                {COMPLIANCE_OPS_LIVE ? "Open the requirement" : "See Compliance Ops on GitHub"} ↗
+              </span>
+            </a>
+          ))}
 
           {stage.id === "operate" && (
             <figure class="sun-tzu" data-reveal>

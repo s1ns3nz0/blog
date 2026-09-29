@@ -53,6 +53,8 @@ export type Stage = {
       records as its evidence (paths at NODE_OPERATOR_COMMIT). */
   proof?: {
     practice: string;
+    /** Compliance Ops requirement id, for the live page once it is public. */
+    requirementId: string;
     title: string;
     status: "implemented" | "partial";
     files: string[];
@@ -101,6 +103,7 @@ export const stages: Stage[] = [
     name: "Design",
     proof: {
       practice: "PW.1",
+      requirementId: "4b9cc029-4c26-4132-a4cb-63ecb262a4d3",
       title: "Design software to meet security requirements and mitigate security risks",
       status: "implemented",
       files: [
@@ -130,6 +133,7 @@ export const stages: Stage[] = [
     name: "Build",
     proof: {
       practice: "PW.9",
+      requirementId: "04220fdf-9813-44c4-8fef-cae0e8f3a55e",
       title: "Configure software to have secure settings by default",
       status: "implemented",
       files: [
@@ -148,6 +152,7 @@ export const stages: Stage[] = [
     name: "Deploy",
     proof: {
       practice: "PS.2",
+      requirementId: "ca30a24f-3b2c-4bcc-95b6-da5f810649c0",
       title: "Provide a mechanism for verifying software release integrity",
       status: "implemented",
       files: [
@@ -166,6 +171,7 @@ export const stages: Stage[] = [
     name: "Operate",
     proof: {
       practice: "RV.2",
+      requirementId: "1955a73f-5003-4d9d-86ef-150204335907",
       title: "Assess, prioritize, and remediate vulnerabilities",
       status: "implemented",
       files: [
@@ -250,6 +256,11 @@ export const anomalies: Anomaly[] = [
 const GH = "https://github.com/s1ns3nz0";
 /** node-operator commit that Compliance Ops' SSDF evidence points at. */
 export const NODE_OPERATOR_COMMIT = "8f4121f184d2c01e3c248adbfb9c5091a256b284";
+/**
+ * Public read-only Compliance Ops. While unset, the stage cards link the
+ * GitHub repo; once set, each card deep-links its requirement page.
+ */
+export const COMPLIANCE_OPS_LIVE: string | undefined = undefined;
 /** SSDF coverage Compliance Ops recorded for node-operator at that commit. */
 export const ssdfCoverage = { implemented: 10, total: 19 };
 

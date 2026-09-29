@@ -752,6 +752,56 @@ html[data-daylight] .proof-status {
   text-underline-offset: 3px;
 }
 
+/* Per-stage link out to Compliance Ops: cyan, so it reads apart from the
+   orange accent and the green status colours. */
+.co-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: var(--hero-w);
+  margin-top: 6px;
+  padding: 14px 18px;
+  border: 1px solid rgb(34 211 238 / 0.55);
+  border-radius: 10px;
+  background: rgb(8 51 68 / 0.72);
+  box-shadow: 0 0 24px rgb(34 211 238 / 0.18);
+  color: #cffafe;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.co-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgb(34 211 238 / 0.35);
+}
+.co-card-kicker {
+  color: #22d3ee;
+  font: 700 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.co-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.co-card-go {
+  color: #67e8f9;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+html[data-daylight] .co-card {
+  border-color: rgb(8 145 178 / 0.6);
+  background: rgb(236 254 255 / 0.9);
+  color: #164e63;
+}
+html[data-daylight] .co-card-kicker,
+html[data-daylight] .co-card-go {
+  color: #0e7490;
+}
+
 /* Zone headings sit on the sky; each item below is its own card. */
 .stage-log {
   display: flex;
