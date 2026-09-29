@@ -388,19 +388,16 @@ const smokePuffs: [number, number][] = [
                   <button type="button" class="stat-card" data-open-dialog={`dlg-${t.id}`}>
                     <span class="stat-num display">{t.stat}</span>
                     <span class="stat-label">{t.label}</span>
-                    <span class="stat-open">View details →</span>
+                    <span class="stat-open">View →</span>
                   </button>
                 ))}
-              </div>
-              <p class="reach-title">Global reach</p>
-              <ul class="stat-cards hero-stats reach">
                 {reach.map(r => (
-                  <li class="stat-card">
+                  <div class="stat-card reach-card">
                     <span class="stat-num display">{r.stat}</span>
                     <span class="stat-label">{r.label}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
               <ul class="hero-orgs" aria-label="Worked at">
                 {career.filter(c => c.logo === "ibm" || c.logo === "deloitte").map(c => (
                   <li><Image src={orgLogos[c.logo as keyof typeof orgLogos]} alt={c.org} height={28} class="hero-org" /></li>
