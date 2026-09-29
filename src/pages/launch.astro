@@ -10,6 +10,8 @@ import logoIbm from "@/assets/images/orgs/ibm.webp";
 import logoDeloitte from "@/assets/images/orgs/deloitte.webp";
 import logoKitri from "@/assets/images/orgs/kitri.webp";
 import logoArmy from "@/assets/images/orgs/rok-army.webp";
+import proofComplianceOps from "@/assets/images/launch/compliance-ops-status.png";
+const proofImages = { "compliance-ops-status": proofComplianceOps };
 import IconGitHub from "@/assets/icons/brands/github.svg";
 import IconLinkedIn from "@/assets/icons/brands/linkedin.svg";
 import IconGmail from "@/assets/icons/brands/gmail.svg";
@@ -173,6 +175,10 @@ const traitList = traits.map(t => ({ ...t, proof: t.proof.replace("{oss}", Strin
 const highlightList = highlights.map(h => ({ ...h, detail: h.detail.replace("{oss}", String(ossTotal)) }));
 
 const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
+// Each stage's "compliance → code" pair; its source is validated like evidence.
+const stageProof = Object.fromEntries(
+  stages.map(s => [s.id, s.proof && { ...s.proof, link: resolveEvidence(s.proof.source) }])
+);
 
 
 // Contact marks: official brand glyphs (Simple Icons, CC0) in brand colours.
@@ -389,6 +395,33 @@ const smokePuffs: [number, number][] = [
           </div>
 
           <div class="stage-log">
+            {[stageProof[stage.id]].filter(p => p !== undefined).map(p => (
+              <figure class:list={["proof panel", { "proof-wide": p.to.image }]} aria-label="Compliance to code">
+                <div class="proof-from">
+                  <p class="proof-label">{p.from.label}</p>
+                  <p class="proof-text">{p.from.text}</p>
+                </div>
+                <span class="proof-arrow" aria-hidden="true">→</span>
+                <div class="proof-to">
+                  <p class="proof-label">{p.to.label}</p>
+                  {p.to.image ? (
+                    <Image
+                      src={proofImages[p.to.image as keyof typeof proofImages]}
+                      alt={p.to.alt ?? ""}
+                      widths={[520, 1040]}
+                      sizes="(min-width: 768px) 560px, 100vw"
+                      class="proof-shot"
+                    />
+                  ) : (
+                    <pre><code>{p.to.code}</code></pre>
+                  )}
+                </div>
+                <figcaption class="proof-source">
+                  <span>Compliance → code</span>
+                  <EvidenceLink {...p.link} />
+                </figcaption>
+              </figure>
+            ))}
             {lanesByStage[stage.id].map(lane => (
               <section class="log-zone" aria-label={lane.zone.name}>
                 <h3 class="log-zone-head">

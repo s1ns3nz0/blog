@@ -49,6 +49,13 @@ export type Stage = {
   flightRules?: FlightRule[];
   /** Green callout lines for a stage with no fault before it. */
   notes?: string[];
+  /** One real "compliance → code" pair: the clause, and what it became. */
+  proof?: {
+    from: { label: string; text: string };
+    /** Either a code snippet or a screenshot (a key in the page's proof images). */
+    to: { label: string; code?: string; image?: string; alt?: string };
+    source: Evidence;
+  };
 };
 
 export type Audience = {
@@ -77,8 +84,7 @@ export const identity = {
   },
   /** Painted on the rocket fairing: the thing that actually reaches orbit. */
   fairing: "PRODUCT",
-  subline:
-    "I build the platform, secure the pipeline that ships to it, and watch it once it's running.",
+  subline: "I turn security frameworks and compliance into platform code.",
   roles: ["Platform Engineer", "DevSecOps Engineer", "Security Engineer"],
 };
 
@@ -100,6 +106,14 @@ export const stages: Stage[] = [
       { label: "NIST SP 800-53" },
       { label: "OWASP ASVS" },
     ],
+    proof: {
+      from: { label: "NIST SP 800-53", text: "AC-3 Access Enforcement and AC-6 Least Privilege, for a multi-tenant SaaS." },
+      to: {
+        label: "Requirement",
+        code: "- id: REQ-TENANT-DDB-01\n  sources: [AC-3, AC-6]\n  threat_refs: [T-02]\n  verification:\n    method: negative_authorization_test",
+      },
+      source: "security-design-review-aws-ecs-saas-6",
+    },
     notes: [
       "Security requirements",
       "Service characteristics",
@@ -114,6 +128,17 @@ export const stages: Stage[] = [
     governing: "I build platforms that are secure before the first workload ships.",
     support:
       "I set up the organization, environment, and activities for building software securely, based on NIST SSDF and NIST SP 800-204.",
+    proof: {
+      from: {
+        label: "Key management policy, clause 17.1.1",
+        text: "Validator signing, withdrawal, treasury, and recovery authority shall be separately inventoried, classified, and governed.",
+      },
+      to: {
+        label: "OSCAL catalog",
+        code: '{\n  "id": "km-17.1.1",\n  "class": "policy-requirement",\n  "props": [{ "name": "source-classification",\n              "value": "web3-specific" }]\n}',
+      },
+      source: "converting-the-web3-key-management-policy-to-oscal",
+    },
   },
   {
     id: "ship",
@@ -122,6 +147,14 @@ export const stages: Stage[] = [
     governing: "I make pipelines prove their own integrity, and I fix what I find upstream.",
     support:
       "24 controls mapped to 12 threat areas in my own CI/CD, plus contributions to SEAL, and a fuzzer bug in Trail of Bits' Gosentry fixed the same day.",
+    proof: {
+      from: { label: "Control objective", text: "Require pinned, reproducible, and scan-verified release inputs." },
+      to: {
+        label: "Workflow",
+        code: "# CICD-02: every Action pinned to a full commit SHA\n- uses: actions/checkout@<40-char commit SHA>\n  with:\n    persist-credentials: false  # CICD-03",
+      },
+      source: "ci-cd-security-controls-implemented-in-the-pipeline-design",
+    },
   },
   {
     id: "operate",
@@ -130,6 +163,18 @@ export const stages: Stage[] = [
     governing: "I make running systems observable, and cheap enough to keep defending.",
     support:
       "Per-outcome L402 metrics for Lightning Labs' Aperture, a tamper-evident audit trail, and controls I cut when they cost more than they protected.",
+    proof: {
+      from: {
+        label: "NIST SP 800-218 (SSDF)",
+        text: "Imported as an OSCAL catalog, tracked per control with owner, status, and evidence, and assessed against a running application.",
+      },
+      to: {
+        label: "Compliance Ops dashboard (example data)",
+        image: "compliance-ops-status",
+        alt: "Compliance Ops status by framework: NIST SP 800-53 at 80%, NIST SP 800-218 SSDF at 53% with 10 of 19 implemented, and the node validator key management policy mapped with 195 requirements.",
+      },
+      source: { label: "compliance-ops on GitHub", url: "https://github.com/s1ns3nz0/compliance-ops" },
+    },
     flightRules: [
       { label: "MITRE ATT&CK", slug: "palantir-ads" },
       { label: "CACAO", slug: "cacao-playbook" },
