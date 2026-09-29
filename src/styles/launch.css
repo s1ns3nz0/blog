@@ -76,6 +76,29 @@
 .layer-dawn {
   background: linear-gradient(180deg, #0b1020 0%, #2a2350 45%, #7a4a6e 70%, #f59e6b 100%);
 }
+/* Pre-dawn stars over the pad: they fade as the day sky rises and thin out
+   toward the horizon glow. */
+.stars-dawn {
+  opacity: calc((1 - var(--day, 0)) * 0.85);
+  background-image:
+    radial-gradient(1px 1px at 8% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 22% 30%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 37% 8%, #cfe0ff 50%, transparent 51%),
+    radial-gradient(1px 1px at 51% 24%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 63% 14%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 36%, #cfe0ff 50%, transparent 51%),
+    radial-gradient(1px 1px at 90% 20%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 45% 44%, #fff 50%, transparent 51%);
+  background-size: 360px 300px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 40%, transparent 72%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 40%, transparent 72%);
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+@keyframes twinkle {
+  to {
+    filter: brightness(0.65);
+  }
+}
 .layer-day {
   opacity: var(--day, 0);
   background: linear-gradient(180deg, #1b4f9c 0%, #3f86d6 55%, #9cc8f0 100%);
@@ -644,6 +667,44 @@ html[data-bright] .meter a::before {
   width: 18px;
   height: 18px;
 }
+/* "View details" reads as the card's action: bold, bright, slides on hover */
+.hero-stats .stat-open {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 4px 10px;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 999px;
+  color: #fff;
+  font: 700 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.1em;
+  transition: background-color 0.15s ease;
+}
+.hero-stats .stat-card:hover .stat-open {
+  background: rgb(255 255 255 / 0.16);
+}
+/* second row: reach, informational (no action), so a lighter card */
+.reach-title {
+  margin: 10px 0 -4px;
+  color: rgb(230 237 247 / 0.7);
+  font: 700 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.stat-cards.hero-stats.reach {
+  padding: 0;
+  list-style: none;
+}
+.hero-stats.reach .stat-card {
+  background: rgb(255 255 255 / 0.04);
+  border-style: solid;
+}
+.hero-stats.reach .stat-card:hover {
+  transform: none;
+  background: rgb(255 255 255 / 0.04);
+  box-shadow: none;
+  border-color: rgb(255 255 255 / 0.18);
+}
 /* three equal cards spanning the headline's width */
 .stat-cards.hero-stats {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -677,15 +738,22 @@ html[data-bright] .meter a::before {
   }
   .hero-stats .stat-card {
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: baseline;
-    gap: 12px;
+    gap: 6px 12px;
     padding: 10px 14px;
+  }
+  .hero-stats .stat-label {
+    flex: 1 1 auto;
+    min-width: 55%; /* pushes the View pill onto its own line when needed */
   }
   .hero-stats .stat-num {
     font-size: 24px;
   }
   .hero-stats .stat-open {
-    display: none;
+    margin: 0 0 0 auto;
+    align-self: center;
+    white-space: nowrap;
   }
 }
 .hero-orgs {
@@ -1175,6 +1243,19 @@ html[data-daylight] .co-card-go {
     margin-right: 70px;
   }
 }
+.sun-tzu figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sun-tzu-byline {
+  color: rgb(230 237 247 / 0.55);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 /* The dashboard, just before Sun Tzu asks how well you know yourself. */
 .co-shot {
   display: flex;
@@ -1616,6 +1697,42 @@ html[data-stage="orbit"] .hud-wrap {
 }
 .orbit ul a:hover {
   text-decoration-color: currentColor;
+}
+
+/* "Field notes": posts above How I work, in the same hairline style */
+.field-notes {
+  display: grid;
+  gap: 0;
+  margin-top: 34px;
+}
+.field-note {
+  display: grid;
+  gap: 4px;
+  padding: 16px 0;
+  border-top: 1px solid rgb(15 23 42 / 0.1);
+  color: inherit;
+  text-decoration: none;
+}
+.field-note-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.field-note:hover .field-note-title {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.field-note-desc {
+  color: #475569;
+  line-height: 1.5;
+}
+.field-note-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  color: #64748b;
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 /* "How I work": three lines under the stat cards */
@@ -2167,6 +2284,7 @@ html[data-stage="orbit"] .sat-button {
   .layer-light {
     opacity: var(--light, 0);
   }
+  .stars-dawn,
   .rocket svg,
   .r-nozzle,
   .r-flame,

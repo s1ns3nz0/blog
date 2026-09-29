@@ -34,6 +34,8 @@ import {
   anomalies,
   zones,
   tiles,
+  reach,
+  fieldNotes,
   statusLabel,
   type Card,
   type Evidence,
@@ -160,6 +162,18 @@ const RESUME_PATH = "/resume/Jinsoo_Yang_Resume.pdf";
 const hasResume = existsSync(join(process.cwd(), "public", RESUME_PATH));
 
 const certCount = certifications.reduce((n, c) => n + c.count, 0);
+// Field notes: posts listed above How I work (must be published and listed).
+const fieldNoteList = fieldNotes.map(slug => {
+  const p = postById.get(slug);
+  if (!p) throw new Error(`portfolio: field note "${slug}" is not a published, listed post`);
+  return {
+    title: p.data.title,
+    description: p.data.description,
+    tags: p.data.tags,
+    url: getPostUrl(p.id, p.filePath),
+    minutes: Math.max(1, Math.round((p.body ?? "").split(/\s+/).length / 230)),
+  };
+});
 const tileList = tiles.map(t =>
   t.id === "oss"
     ? { ...t, stat: String(ossTotal) }
@@ -235,6 +249,7 @@ const smokePuffs: [number, number][] = [
 >
   <div class="sky" aria-hidden="true">
     <div class="layer-dawn"></div>
+    <div class="stars-dawn"></div>
     <div class="layer-day"></div>
     <div class="clouds">
       <div class="cloud" style="top:-18vh;left:38%;width:34vw;height:9vh"></div>
@@ -373,10 +388,19 @@ const smokePuffs: [number, number][] = [
                   <button type="button" class="stat-card" data-open-dialog={`dlg-${t.id}`}>
                     <span class="stat-num display">{t.stat}</span>
                     <span class="stat-label">{t.label}</span>
-                    <span class="stat-open">View ▸</span>
+                    <span class="stat-open">View details →</span>
                   </button>
                 ))}
               </div>
+              <p class="reach-title">Global reach</p>
+              <ul class="stat-cards hero-stats reach">
+                {reach.map(r => (
+                  <li class="stat-card">
+                    <span class="stat-num display">{r.stat}</span>
+                    <span class="stat-label">{r.label}</span>
+                  </li>
+                ))}
+              </ul>
               <ul class="hero-orgs" aria-label="Worked at">
                 {career.filter(c => c.logo === "ibm" || c.logo === "deloitte").map(c => (
                   <li><Image src={orgLogos[c.logo as keyof typeof orgLogos]} alt={c.org} height={28} class="hero-org" /></li>
@@ -540,7 +564,10 @@ const smokePuffs: [number, number][] = [
           {stage.id === "operate" && (
             <figure class="sun-tzu" data-reveal data-audience-default>
               <blockquote>“{identity.quote.text}”</blockquote>
-              <figcaption>{identity.quote.by}</figcaption>
+              <figcaption>
+                <span class="sun-tzu-name">{identity.quote.by}</span>
+                <span class="sun-tzu-byline">{identity.quote.byline}</span>
+              </figcaption>
               <p class="sun-tzu-q">{identity.quote.question}</p>
             </figure>
           )}
@@ -576,6 +603,19 @@ const smokePuffs: [number, number][] = [
         <h2 class="display text-2xl font-bold">{identity.name}</h2>
         <p class="meta"><span data-audience-default>{identity.title}</span>{audiences.filter(a => a.title).map(a => <span data-audience={a.id} hidden>{a.title}</span>)}</p>
         <p class="claim">{identity.closing}</p>
+        <section class="field-notes" aria-labelledby="field-notes-title">
+          <h3 id="field-notes-title" class="meta">Field notes</h3>
+          {fieldNoteList.map(n => (
+            <a class="field-note" href={n.url} data-reveal>
+              <span class="field-note-title">{n.title} →</span>
+              <span class="field-note-desc">{n.description}</span>
+              <span class="field-note-meta">
+                {n.tags.map(t => <span>{t}</span>)}
+                <span>{n.minutes} min read</span>
+              </span>
+            </a>
+          ))}
+        </section>
         <section class="traits" aria-labelledby="traits-title">
           <h3 id="traits-title" class="meta">How I work</h3>
           {traitList.map(t => (

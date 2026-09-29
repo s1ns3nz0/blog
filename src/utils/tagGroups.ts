@@ -25,7 +25,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "Kubernetes",
-    tags: ["Kubernetes", "CNCF"],
+    tags: ["Kubernetes", "K3s", "CNCF"],
   },
   {
     name: "DevSecOps",
@@ -84,6 +84,10 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   {
     name: "Tools",
     tags: ["Plugin", "MCP"],
+  },
+  {
+    name: "Study",
+    tags: ["Study"],
   },
   {
     name: "DoW",

@@ -85,6 +85,8 @@ export const identity = {
   quote: {
     text: "Know the enemy and know yourself, and you will not be imperiled in a hundred battles.",
     by: "Sun Tzu",
+    /** Who he was, for readers who don't know the name. */
+    byline: "Ancient Chinese military strategist, author of The Art of War",
     question: "How well do you know your organization's security activities?",
   },
   /** Painted on the rocket fairing: the thing that actually reaches orbit. */
@@ -511,6 +513,13 @@ export const education = [
  */
 export type TileId = "career" | "oss" | "credentials";
 
+/** Second hero row: the reach of the work, not clickable. */
+export const reach: { stat: string; label: string }[] = [
+  { stat: "33M+", label: "Users of services I've secured" },
+  { stat: "8", label: "Industries" },
+  { stat: "7", label: "Countries I've worked with" },
+];
+
 export const tiles: { id: TileId; title: string; stat: string; label: string }[] = [
   { id: "career", title: "Career", stat: "5+", label: "Years in security" },
   // oss and credentials stats are computed in the page
@@ -531,6 +540,9 @@ export const stack = [
   { area: "Observability", items: ["Prometheus", "Grafana", "Loki", "OpenTelemetry", "Fluent Bit"] },
   { area: "GRC", items: ["PKI", "ISO 27001", "ISMS-P", "EU CRA", "NIST CSF", "NIST SP 800-53", "NIST SP 800-30", "NIST SSDF", "NIST SP 800-204"] },
 ];
+
+/** "Field notes": posts shown above How I work in the summary (slugs). */
+export const fieldNotes = ["what-shouldnt-i-miss-in-the-ai-era", "open-source-contribution"];
 
 /** "How I work" lines under the stat cards; "{oss}" is the computed open-source total. */
 export const traits = [
