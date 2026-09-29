@@ -651,18 +651,19 @@ html[data-daylight] .stage-log {
   --panel-line: rgb(15 23 42 / 0.12);
 }
 /* Each stage closes with a link to its SSDF practice in Compliance Ops:
-   cyan, so it reads apart from the orange accent and the green status. */
+   violet, like the nebula glow, so it reads apart from the orange accent,
+   the green status and the red alarms. */
 .co-card {
   display: flex;
   flex-direction: column;
   gap: 4px;
   max-width: var(--hero-w);
   padding: 14px 18px;
-  border: 1px solid rgb(34 211 238 / 0.55);
+  border: 1px solid rgb(167 139 250 / 0.6);
   border-radius: 10px;
-  background: rgb(8 51 68 / 0.72);
-  box-shadow: 0 0 24px rgb(34 211 238 / 0.18);
-  color: #cffafe;
+  background: rgb(30 27 75 / 0.75);
+  box-shadow: 0 0 24px rgb(167 139 250 / 0.22);
+  color: #ede9fe;
   text-decoration: none;
   backdrop-filter: blur(8px);
   transition:
@@ -671,33 +672,33 @@ html[data-daylight] .stage-log {
 }
 .co-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 32px rgb(34 211 238 / 0.35);
+  box-shadow: 0 0 32px rgb(167 139 250 / 0.4);
 }
 .co-card-kicker {
-  color: #22d3ee;
+  color: #a78bfa;
   font: 700 11px var(--font-space-mono), monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 .co-card-go {
-  color: #cffafe;
+  color: #ede9fe;
   font-size: 1.05rem;
   font-weight: 600;
   text-decoration: underline;
-  text-decoration-color: rgb(103 232 249 / 0.6);
+  text-decoration-color: rgb(196 181 253 / 0.6);
   text-underline-offset: 4px;
 }
 html[data-daylight] .co-card {
-  border-color: rgb(8 145 178 / 0.6);
-  background: rgb(236 254 255 / 0.9);
-  color: #164e63;
+  border-color: rgb(109 40 217 / 0.45);
+  background: rgb(245 243 255 / 0.92);
+  color: #3b0764;
 }
 html[data-daylight] .co-card-kicker {
-  color: #0e7490;
+  color: #6d28d9;
 }
 html[data-daylight] .co-card-go {
-  color: #164e63;
-  text-decoration-color: rgb(14 116 144 / 0.5);
+  color: #3b0764;
+  text-decoration-color: rgb(109 40 217 / 0.45);
 }
 
 /* Zone headings sit on the sky; each item below is its own card. */
@@ -1183,12 +1184,12 @@ html[data-daylight] .co-card-go {
   display: block;
   width: 100%;
   height: auto;
-  border: 1px solid rgb(34 211 238 / 0.55);
+  border: 1px solid rgb(167 139 250 / 0.6);
   border-radius: 12px;
-  box-shadow: 0 0 40px rgb(34 211 238 / 0.2);
+  box-shadow: 0 0 40px rgb(167 139 250 / 0.25);
 }
 .co-shot figcaption {
-  color: #67e8f9;
+  color: #c4b5fd;
   font: 400 11px var(--font-space-mono), monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
