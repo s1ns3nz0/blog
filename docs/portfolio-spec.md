@@ -133,7 +133,6 @@ English only.
 | v1.30 | Compliance Ops card moves to the end of each stage (two lines: SSDF practice, 'See the code behind it, tracked live'); dashboard screenshot with 'Every control, its owner, and its evidence on one screen.' right before Sun Tzu, labeled example data |
 | v1.31 | Violet Compliance Ops cards; the three design-review cards merge into 'AWS SaaS Security Design Review'; the OSCAL catalog card and the Operate Compliance Ops card are removed |
 | v1.32 | Lightning version (?for=lightning-labs): Platform Engineering labels, platform-first hero, proof strip (LND, Aperture, security reports, EKS), stateful-workload card title, principle screen instead of Sun Tzu. Both: Languages row, '2 security reports' wording, assistant grounding note |
-| v1.33 | 'What I've done' list under the hero (five wins, each opening its card; Lightning-first order on ?for=lightning-labs, replacing the proof strip); stage cards start collapsed again |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

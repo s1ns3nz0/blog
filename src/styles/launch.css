@@ -619,37 +619,27 @@ html[data-bright] .meter a::before {
   font-size: 13px;
 }
 
-/* "What I've done": the short list a recruiter should see first */
-.wins {
-  margin: 4px 0 6px;
-}
-.wins ol {
-  display: grid;
-  gap: 6px;
-  margin: 8px 0 0;
+/* Lightning version: links to the work, right under the tech stack */
+.proof-strip ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 0;
   padding: 0;
   list-style: none;
 }
-.wins a {
-  display: inline-flex;
-  gap: 10px;
-  color: #fff;
-  font-size: 1.05rem;
-  font-weight: 600;
-  line-height: 1.35;
+.proof-strip li > * {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid rgb(255 138 61 / 0.55);
+  border-radius: 999px;
+  color: #ffe2cc;
+  font: 700 12px var(--font-space-mono), monospace;
   text-decoration: none;
 }
-.wins a::before {
-  content: "▸";
-  color: var(--accent-hot);
-}
-.wins a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-/* a card opened from the list lands below the HUD, not under it */
-.log-row {
-  scroll-margin-top: 25vh;
+.proof-strip li > a:hover {
+  border-color: var(--accent-hot);
+  color: #fff;
 }
 [hidden] {
   display: none !important;

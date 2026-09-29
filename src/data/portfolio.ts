@@ -63,12 +63,8 @@ export type Stage = {
   };
 };
 
-export type Win = { text: string; card: string };
-
 export type Audience = {
   id: string;
-  /** Replaces the default "What I've done" list, in this order. */
-  wins?: Win[];
   label: string;
   subline: string;
   /** Open-source entry ids shown first in the summary. */
@@ -596,15 +592,6 @@ export const tiles: { id: TileId; title: string; stat: string; label: string }[]
   { id: "credentials", title: "Credentials", stat: "", label: "Credentials" },
 ];
 
-/** "What I've done": the hero's short list; each line opens its card. */
-export const wins: Win[] = [
-  { text: "Maintainer, Supply Chain section of the SEAL Frameworks", card: "seal-registries" },
-  { text: "28 cloud security checks merged into Prowler", card: "prowler" },
-  { text: "Private EKS Ethereum validator, built and run end to end", card: "private-eks" },
-  { text: "EU CRA supply-chain assessments at IBM", card: "ibm-eu-cra" },
-  { text: "2 security reports submitted to Lightning Labs", card: "lightning-disclosures" },
-];
-
 /** Hero tech stack, one row per area. */
 export const stack = [
   { area: "Languages", items: ["Go", "Python", "Bash"] },
@@ -868,13 +855,6 @@ export const audiences: Audience[] = [
     label: "Lightning Labs",
     fairing: "LIGHTNING",
     subline: "I build secure, observable cloud-native platforms.",
-    wins: [
-      { text: "LND: short-read bug in address decoders reported (#11211)", card: "lnd-short-reads" },
-      { text: "Aperture: per-outcome L402 metrics (#286) and a flaky-test fix (PR #285)", card: "aperture-metrics" },
-      { text: "2 security reports submitted to Lightning Labs", card: "lightning-disclosures" },
-      { text: "Private EKS Ethereum validator, built and run end to end", card: "private-eks" },
-      { text: "28 cloud security checks merged into Prowler", card: "prowler" },
-    ],
     priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "gosentry"],
     ossPriority: ["lnd", "aperture", "disclosure"],
   },
