@@ -1,0 +1,103 @@
+---
+import { getEntry, render } from "astro:content";
+import { Image } from "astro:assets";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import IconRss from "@/assets/icons/IconRss.svg";
+import avatar from "@/assets/images/avatar.png";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Socials from "@/components/Socials.astro";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const { socials } = config;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const homePath = getRelativeLocaleUrl(locale, "blog/");
+
+const homeIntro = await getEntry("pages", "home-intro");
+
+if (!homeIntro) {
+  throw new Error(
+    "Missing content entry: `home-intro.md` or `home-intro.mdx` in `src/content/pages/`"
+  );
+}
+
+const { Content: HomeIntro } = await render(homeIntro);
+---
+
+<Layout>
+  <Header />
+  <main
+    id="main-content"
+    data-layout="index"
+    data-home-path={homePath}
+    class="app-layout"
+  >
+    <section id="hero" class="pt-10 pb-8">
+      <div class="flex items-center gap-3">
+        <p class="text-muted-foreground font-mono text-sm tracking-wide">
+          s1ns3nz0 / field notes
+        </p>
+        <a
+          target="_blank"
+          href={`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`}
+          class="inline-flex items-center"
+          aria-label="RSS Feed"
+          title="RSS Feed"
+        >
+          <IconRss
+            width={16}
+            height={16}
+            class="stroke-accent stroke-3 rtl:-rotate-90"
+          />
+          <span class="sr-only">RSS Feed</span>
+        </a>
+      </div>
+      <div class="my-4 flex items-center justify-between gap-4 sm:my-6">
+        <h1
+          class="text-6xl leading-[0.95] font-bold tracking-tight sm:text-8xl"
+        >
+          <span class="block">Known</span>
+          <span class="text-muted-foreground block">Unknowns</span>
+        </h1>
+        <Image
+          src={avatar}
+          alt="s1ns3nz0"
+          width={96}
+          height={96}
+          class="border-border h-16 w-16 shrink-0 rounded-full border object-cover sm:h-24 sm:w-24"
+        />
+      </div>
+
+      <div class="space-y-2 [&_p]:indent-4 [&_p:first-child]:indent-0">
+        <HomeIntro />
+      </div>
+      {
+        socials.length > 0 && (
+          <div class="mt-1 flex max-sm:flex-col sm:items-center">
+            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">
+              {t.home.socialLinks}:
+            </div>
+            <Socials />
+          </div>
+        )
+      }
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
+      ?.dataset;
+    const baseRoot = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+    if (indexLayout?.layout) {
+      sessionStorage.setItem("backUrl", indexLayout.homePath ?? baseRoot);
+    }
+  });
+</script>

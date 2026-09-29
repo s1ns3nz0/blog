@@ -10,11 +10,12 @@ export type StageId = "design" | "build" | "ship" | "operate";
 /** Where the work came from; each stage shows one lane per zone. */
 export type ZoneId = "test" | "oss";
 
-export type Zone = { id: ZoneId; name: string; icon: string; blurb: string };
+/** `name` is the plain label; `metaphor` is the flight-themed name shown small beside it. */
+export type Zone = { id: ZoneId; name: string; metaphor: string; icon: string };
 
 export const zones: Zone[] = [
-  { id: "test", name: "Test Flights", icon: "▲", blurb: "personal projects, built and run end to end" },
-  { id: "oss", name: "Proactive Minds", icon: "●", blurb: "open-source work, contributed or reported upstream" },
+  { id: "test", name: "Personal projects", metaphor: "test flights", icon: "▲" },
+  { id: "oss", name: "Open source", metaphor: "proactive minds", icon: "●" },
 ];
 
 export type FlightRule = { label: string; slug?: string };
@@ -68,6 +69,9 @@ export type Audience = {
   subline: string;
   /** Open-source entry ids shown first in the summary. */
   ossPriority?: string[];
+  /** Replaces identity.title and identity.openTo. */
+  title?: string;
+  openTo?: string;
   /** Replaces identity.fairing on the rocket. Keep it to ~9 characters. */
   fairing?: string;
   /** Card ids shown first, in this order. Others keep their default order. */
@@ -90,6 +94,10 @@ export const identity = {
   fairing: "PRODUCT",
   subline: "I turn security frameworks and compliance into platform code.",
   roles: ["Platform Engineer", "DevSecOps Engineer", "Security Engineer"],
+  /** The one title a recruiter sees; audiences can swap it. */
+  title: "DevSecOps Engineer",
+  openTo: "Open to remote and overseas DevSecOps roles",
+  available: "Available now",
 };
 
 /** Fairing lettering length in rocket viewBox units; the nose is narrow. */
@@ -256,7 +264,7 @@ export const anomalies: Anomaly[] = [
 
 const GH = "https://github.com/s1ns3nz0";
 /** Public read-only Compliance Ops; each stage card deep-links its requirement. */
-export const COMPLIANCE_OPS_LIVE: string | undefined = "http://193.122.146.187";
+export const COMPLIANCE_OPS_LIVE: string | undefined = "https://compliance-ops.miata.cloud";
 
 export const cards: Card[] = [
   // ---------- Design ----------
@@ -787,6 +795,8 @@ export const audiences: Audience[] = [
     label: "Lightning Labs",
     fairing: "LIGHTNING",
     subline: "I build secure, observable cloud-native platforms.",
+    title: "Platform Engineer",
+    openTo: "Open to remote and overseas Platform Engineering roles",
     priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "gosentry"],
     ossPriority: ["lnd", "aperture", "disclosure"],
   },

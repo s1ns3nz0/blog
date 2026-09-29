@@ -20,7 +20,7 @@ if (config.features.search !== "pagefind" && notFoundUrl) {
 
 const backUrl = config.features.showBackButton
   ? `${Astro.url.pathname}`
-  : getRelativeLocaleUrl(locale, "");
+  : getRelativeLocaleUrl(locale, "blog/");
 
 const pagefindBundlePath = getAssetPath("pagefind/");
 

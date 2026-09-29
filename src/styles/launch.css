@@ -575,6 +575,117 @@ html[data-bright] .meter a::before {
   letter-spacing: 0.02em;
 }
 
+/* ---------- hero: who, what I'm looking for, how to reach me ---------- */
+
+.hero-role {
+  margin: -6px 0 0;
+  color: #e6edf7;
+  font: 700 14px var(--font-space-mono), monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.hero-open {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+  color: #e6edf7;
+  font-weight: 600;
+}
+.hero-available {
+  padding: 1px 10px;
+  border: 1px solid rgb(74 222 128 / 0.6);
+  border-radius: 999px;
+  color: #4ade80;
+  font: 700 12px var(--font-space-mono), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hero-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hero-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  background: #fff;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+.hero-contact-link:hover {
+  transform: translateY(-1px);
+}
+.hero-contact-icon {
+  width: 18px;
+  height: 18px;
+}
+.hero-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 4px;
+}
+@media (max-width: 767px) {
+  /* narrow column: one compact row per stat */
+  .hero-stats {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .hero-stats .stat-card {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 14px;
+  }
+  .hero-stats .stat-num {
+    font-size: 24px;
+  }
+  .hero-stats .stat-open {
+    display: none;
+  }
+}
+.hero-orgs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 28px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-org {
+  width: auto;
+  height: 22px;
+  filter: grayscale(1) brightness(0) invert(1);
+  opacity: 0.7;
+}
+.stack-toggle > summary {
+  width: max-content;
+  cursor: pointer;
+  color: rgb(230 237 247 / 0.75);
+  font: 700 12px var(--font-space-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  list-style: none;
+}
+.stack-toggle > summary::-webkit-details-marker {
+  display: none;
+}
+.stack-toggle > summary::after {
+  content: " ▸";
+}
+.stack-toggle[open] > summary::after {
+  content: " ▾";
+}
+.stack-toggle > .stack {
+  margin-top: 12px;
+}
+
 /* ---------- hero tech stack: area label, then the tools ---------- */
 
 .stack {

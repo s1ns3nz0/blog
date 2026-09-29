@@ -134,6 +134,8 @@ English only.
 | v1.31 | Violet Compliance Ops cards; the three design-review cards merge into 'AWS SaaS Security Design Review'; the OSCAL catalog card and the Operate Compliance Ops card are removed |
 | v1.32 | Lightning version (?for=lightning-labs): Platform Engineering labels, platform-first hero, proof strip (LND, Aperture, security reports, EKS), stateful-workload card title, principle screen instead of Sun Tzu. Both: Languages row, '2 security reports' wording, assistant grounding note |
 | v1.33 | Field Missions removed from every stage (and the zone itself); career work lives only in the Career dialog; Design's support line drops the IBM reference |
+| v4 | Portfolio promoted to / (indexed, in the sitemap); the old blog home moves to /blog/ and the blog header, breadcrumbs and back links point there; /launch redirects to / on Vercel with the query kept (?for=lightning-labs still works) |
+| v4.1 | Second review: hero shows one title (DevSecOps / Platform Engineer), the claim, 'Open to remote and overseas ... roles' + Available now, GitHub/Email/LinkedIn (and resume when present) buttons, the stat cards (moved from the summary), IBM and Deloitte logos, and the tech stack behind a toggle; zone labels read plain first (Personal projects / Open source) with the metaphor small; og:image + Twitter card |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |

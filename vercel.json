@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/launch", "destination": "/", "permanent": true },
+    { "source": "/launch/", "destination": "/", "permanent": true }
+  ]
+}

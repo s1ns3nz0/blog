@@ -1,103 +1,867 @@
 ---
-import { getEntry, render } from "astro:content";
+import { getCollection } from "astro:content";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import LaunchLayout from "@/layouts/LaunchLayout.astro";
+import Rocket from "@/components/launch/Rocket.astro";
+import EvidenceLink from "@/components/launch/EvidenceLink.astro";
 import { Image } from "astro:assets";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import IconRss from "@/assets/icons/IconRss.svg";
-import avatar from "@/assets/images/avatar.png";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
-import { useTranslations } from "@/i18n";
+import logoIbm from "@/assets/images/orgs/ibm.webp";
+import logoDeloitte from "@/assets/images/orgs/deloitte.webp";
+import logoKitri from "@/assets/images/orgs/kitri.webp";
+import logoArmy from "@/assets/images/orgs/rok-army.webp";
+import complianceOpsDashboard from "@/assets/images/launch/compliance-ops-dashboard.png";
+import IconGitHub from "@/assets/icons/brands/github.svg";
+import IconLinkedIn from "@/assets/icons/brands/linkedin.svg";
+import IconGmail from "@/assets/icons/brands/gmail.svg";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostUrl } from "@/utils/getPostPaths";
+import { slugifyStr } from "@/utils/slugify";
 import config from "@/config";
+import {
+  identity,
+  stages,
+  cards,
+  career,
+  education,
+  highlights,
+  traits,
+  COMPLIANCE_OPS_LIVE,
+  stack,
+  certifications,
+  openSource,
+  audiences,
+  anomalies,
+  zones,
+  tiles,
+  statusLabel,
+  type Card,
+  type Evidence,
+  type FlightRule,
+} from "@/data/portfolio";
+import { chips, privacyNote, securityDesign } from "@/data/assistant";
+import "@/styles/launch.css";
 
-const { socials } = config;
-
-const locale = Astro.currentLocale ?? config.site.lang;
-const t = useTranslations(locale);
-
-const homePath = getRelativeLocaleUrl(locale, "");
-
-const homeIntro = await getEntry("pages", "home-intro");
-
-if (!homeIntro) {
-  throw new Error(
-    "Missing content entry: `home-intro.md` or `home-intro.mdx` in `src/content/pages/`"
-  );
+// Evidence must point at published, listed posts; fail the build otherwise
+// so a renamed or hidden post never ships as a dead link.
+const posts = getSortedPosts(await getCollection("posts")).filter(
+  p => !p.data.unlisted
+);
+const postById = new Map(posts.map(p => [p.id, p]));
+function post(slug: string) {
+  const p = postById.get(slug);
+  if (!p) {
+    throw new Error(
+      `portfolio: "${slug}" is not a published, listed post (src/data/portfolio.ts)`
+    );
+  }
+  return { title: p.data.title, url: getPostUrl(p.id, p.filePath) };
+}
+// Internal tag pages (a post series) must list at least one post.
+function tagPage(url: string) {
+  const slug = url.match(/^\/tags\/([^/]+)\/$/)?.[1];
+  const n = slug ? posts.filter(p => p.data.tags.some(t => slugifyStr(t) === slug)).length : 0;
+  if (!n) throw new Error(`portfolio: "${url}" is not a tag page with posts (src/data/portfolio.ts)`);
+  return n;
 }
 
-const { Content: HomeIntro } = await render(homeIntro);
+const cardIds = new Set(cards.map(c => c.id));
+if (cardIds.size !== cards.length) throw new Error("portfolio: duplicate card id");
+for (const a of audiences) {
+  for (const id of a.priority) {
+    if (!cardIds.has(id)) {
+      throw new Error(`portfolio: audience "${a.id}" lists unknown card "${id}"`);
+    }
+  }
+}
+
+const resolveEvidence = (e: Evidence) =>
+  typeof e === "string"
+    ? { ...post(e), external: false, series: 0 }
+    : e.url.startsWith("/tags/")
+      ? { title: `${e.label}: ${tagPage(e.url)} posts`, url: e.url, external: false, series: tagPage(e.url) }
+      : { title: e.label, url: e.url, external: true, series: 0 };
+const resolveRules = (rules: FlightRule[] = []) =>
+  rules.map(r => ({ label: r.label, url: r.slug ? post(r.slug).url : undefined }));
+// Collapsed-row meta parts, e.g. ["5 posts", "GitHub ↗"].
+function evidenceMeta(links: { url: string; external: boolean; series: number }[]) {
+  const posts = links.reduce((n, l) => n + (l.external ? 0 : l.series || 1), 0);
+  const external = links.filter(l => l.external);
+  const parts = [];
+  if (posts) parts.push(`${posts} post${posts > 1 ? "s" : ""}`);
+  if (external.some(l => l.url.includes("github.com"))) parts.push("GitHub ↗");
+  if (external.some(l => !l.url.includes("github.com"))) parts.push("Link ↗");
+  return parts;
+}
+const resolveCard = (c: Card) => {
+  const evidenceLinks = c.evidence.map(resolveEvidence);
+  // Expanded row: code/external links as short labels, write-ups by full title.
+  const code = evidenceLinks
+    .filter(l => l.external)
+    .map(l => ({ ...l, title: l.title.replace(/ on GitHub$/, "") }));
+  return {
+    ...c,
+    evidenceLinks,
+    code,
+    codeLabel: code.every(l => l.url.includes("github.com")) ? "Code" : "Links",
+    writeups: evidenceLinks.filter(l => !l.external),
+    meta: evidenceMeta(evidenceLinks),
+    rules: resolveRules(c.flightRules),
+  };
+};
+const cardsByStage = Object.fromEntries(
+  stages.map(s => [s.id, cards.filter(c => c.stage === s.id).map(resolveCard)])
+);
+// Lanes per stage, in zone order; empty lanes are dropped.
+const lanesByStage = Object.fromEntries(
+  stages.map(s => [
+    s.id,
+    zones
+      .map(z => ({ zone: z, cards: cardsByStage[s.id].filter(c => c.zone === z.id) }))
+      .filter(l => l.cards.length > 0),
+  ])
+);
+function statusBadges(contribs: { status: keyof typeof statusLabel; count?: number }[]) {
+  const counts = new Map<keyof typeof statusLabel, number>();
+  for (const c of contribs) counts.set(c.status, (counts.get(c.status) ?? 0) + (c.count ?? 1));
+  return [...counts].map(([st, n]) => `${n} ${statusLabel[st]}`);
+}
+// Contribution links: code (PR/issue, external) first, then blog write-ups.
+function linkChips(links: { title: string; url: string; external: boolean }[]) {
+  const code = links.filter(l => l.external).map(l => ({ ...l, label: `${l.title} ↗`, tip: undefined }));
+  const posts = links.filter(l => !l.external);
+  const writeups = posts.map((l, i) => ({
+    ...l,
+    label: posts.length > 1 ? `Write-up ${i + 1}` : "Write-up",
+    tip: l.title,
+  }));
+  return [...code, ...writeups];
+}
+const isDisclosure = (o: { contributions: { status: string }[] }) =>
+  o.contributions.every(c => c.status === "embargo");
+const ossEntriesAll = openSource.map(o => ({
+  ...o,
+  badges: statusBadges(o.contributions),
+  contributions: o.contributions.map(c => ({ ...c, chips: linkChips(c.links.map(resolveEvidence)) })),
+}));
+const disclosures = ossEntriesAll.filter(isDisclosure);
+const ossEntries = ossEntriesAll.filter(o => !isDisclosure(o));
+const ossIds = new Set(openSource.map(o => o.id));
+for (const a of audiences) {
+  for (const id of a.ossPriority ?? []) {
+    if (!ossIds.has(id)) throw new Error(`portfolio: audience "${a.id}" lists unknown open-source entry "${id}"`);
+  }
+}
+const orgLogos = { ibm: logoIbm, deloitte: logoDeloitte, kitri: logoKitri, "rok-army": logoArmy };
+
+// Open-source tile totals: every contribution counts, disclosures included.
+const allContribs = openSource.flatMap(o => o.contributions);
+const countOf = (c: (typeof allContribs)[number]) => c.count ?? 1;
+const ossTotal = allContribs.reduce((n, c) => n + countOf(c), 0);
+// Resume link appears only once the PDF is dropped into public/ (no dead link).
+// Publish a copy without a phone number or street address.
+const RESUME_PATH = "/resume/Jinsoo_Yang_Resume.pdf";
+const hasResume = existsSync(join(process.cwd(), "public", RESUME_PATH));
+
+const certCount = certifications.reduce((n, c) => n + c.count, 0);
+const tileList = tiles.map(t =>
+  t.id === "oss"
+    ? { ...t, stat: String(ossTotal) }
+    : t.id === "credentials"
+      ? { ...t, stat: `${certCount}+` } // "+": not every credential is listed
+      : t
+);
+const traitList = traits.map(t => ({ ...t, proof: t.proof.replace("{oss}", String(ossTotal)) }));
+const highlightList = highlights.map(h => ({ ...h, detail: h.detail.replace("{oss}", String(ossTotal)) }));
+
+const stageRules = Object.fromEntries(stages.map(s => [s.id, resolveRules(s.flightRules)]));
+// Each stage's SSDF practice and the node-operator files Compliance Ops
+// records as its evidence, linked at the pinned commit.
+const stageProof = Object.fromEntries(stages.map(s => [s.id, s.proof]));
+const complianceOpsHref = (requirementId: string) =>
+  COMPLIANCE_OPS_LIVE
+    ? `${COMPLIANCE_OPS_LIVE}/requirements/${requirementId}`
+    : "https://github.com/s1ns3nz0/compliance-ops";
+
+
+// Contact marks: official brand glyphs (Simple Icons, CC0) in brand colours.
+const brandIcons = { github: IconGitHub, linkedin: IconLinkedIn, mail: IconGmail };
+const brandMeta: Record<string, { label: string; color: string }> = {
+  github: { label: "GitHub", color: "#181717" },
+  linkedin: { label: "LinkedIn", color: "#0A66C2" },
+  mail: { label: "Email (Gmail)", color: "#EA4335" },
+};
+const contacts = config.socials
+  .filter(s => s.name in brandIcons)
+  .map(s => ({
+    url: s.url,
+    Icon: brandIcons[s.name as keyof typeof brandIcons],
+    ...brandMeta[s.name],
+  }));
+
+// One meter step per section, named like the stage headings.
+const meter = [
+  ...stages.map(s => ({ id: s.id, href: `#${s.id}`, label: s.name })),
+  { id: "summary", href: "#summary", label: "Orbit" },
+];
+
+const audienceIds = new Set(["default", ...audiences.map(a => a.id)]);
+const resolvedChips = chips.map(chip => {
+  for (const a of chip.audiences) {
+    if (!audienceIds.has(a)) {
+      throw new Error(`assistant: chip "${chip.id}" targets unknown audience "${a}"`);
+    }
+  }
+  return { ...chip, sourceLinks: chip.sources.map(post) };
+});
+
+// In-flight anomalies (their source posts are validated like any evidence).
+const anomalyLog = anomalies.map(a => ({
+  ...a,
+  url: post(a.source).url + (a.anchor ? `#${a.anchor}` : ""),
+}));
+const anomalyBefore = (stageId: string) => anomalyLog.find(a => a.resolvesAt === stageId);
+
+// Launch tower cross-bracing rows (pad viewBox units) and ignition smoke
+// puffs as [x offset in rocket units, final scale].
+const braceRows = Array.from({ length: 10 }, (_, i) => 30 + i * 29);
+const smokePuffs: [number, number][] = [
+  [-95, 1.8],
+  [-45, 2.4],
+  [0, 2.9],
+  [50, 2.3],
+  [100, 1.9],
+];
 ---
 
-<Layout>
-  <Header />
-  <main
-    id="main-content"
-    data-layout="index"
-    data-home-path={homePath}
-    class="app-layout"
-  >
-    <section id="hero" class="pt-10 pb-8">
-      <div class="flex items-center gap-3">
-        <p class="text-muted-foreground font-mono text-sm tracking-wide">
-          s1ns3nz0 / field notes
-        </p>
-        <a
-          target="_blank"
-          href={`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`}
-          class="inline-flex items-center"
-          aria-label="RSS Feed"
-          title="RSS Feed"
-        >
-          <IconRss
-            width={16}
-            height={16}
-            class="stroke-accent stroke-3 rtl:-rotate-90"
-          />
-          <span class="sr-only">RSS Feed</span>
-        </a>
-      </div>
-      <div class="my-4 flex items-center justify-between gap-4 sm:my-6">
-        <h1
-          class="text-6xl leading-[0.95] font-bold tracking-tight sm:text-8xl"
-        >
-          <span class="block">Known</span>
-          <span class="text-muted-foreground block">Unknowns</span>
-        </h1>
-        <Image
-          src={avatar}
-          alt="s1ns3nz0"
-          width={96}
-          height={96}
-          class="border-border h-16 w-16 shrink-0 rounded-full border object-cover sm:h-24 sm:w-24"
-        />
-      </div>
-
-      <div class="space-y-2 [&_p]:indent-4 [&_p:first-child]:indent-0">
-        <HomeIntro />
-      </div>
+<LaunchLayout
+  title={`${identity.name} | ${identity.headline}`}
+  description={identity.subline}
+>
+  <div class="sky" aria-hidden="true">
+    <div class="layer-dawn"></div>
+    <div class="layer-day"></div>
+    <div class="clouds">
+      <div class="cloud" style="top:-18vh;left:38%;width:34vw;height:9vh"></div>
+      <div class="cloud" style="top:-52vh;left:8%;width:28vw;height:7vh"></div>
+      <div class="cloud" style="top:-80vh;left:55%;width:40vw;height:10vh"></div>
+      <div class="cloud" style="top:-112vh;left:22%;width:30vw;height:8vh"></div>
+    </div>
+    <div class="layer-space"></div>
+    <div class="stars"></div>
+    <div class="earth"></div>
+    <div class="bloom"></div>
+    <div class="layer-light"></div>
+    <div class="ground">
+      <svg class="pad" viewBox="0 -60 190 420" xmlns="http://www.w3.org/2000/svg">
+        <rect class="solid" x="24" y="320" width="100" height="10" />
+        <line x1="50" y1="320" x2="50" y2="310" />
+        <line x1="90" y1="320" x2="90" y2="310" />
+        <line x1="134" y1="30" x2="134" y2="320" />
+        <line x1="174" y1="30" x2="174" y2="320" />
+        {
+          braceRows.map(y => (
+            <>
+              <line x1="134" y1={y} x2="174" y2={y} />
+              <line x1="134" y1={y} x2="174" y2={y + 29} />
+              <line x1="174" y1={y} x2="134" y2={y + 29} />
+            </>
+          ))
+        }
+        <rect class="solid" x="128" y="22" width="52" height="8" />
+        <line x1="154" y1="22" x2="154" y2="-40" />
+        <line x1="150" y1="-36" x2="188" y2="-36" />
+        <line x1="184" y1="-36" x2="184" y2="-24" />
+        <rect class="arm" x="91" y="103" width="43" height="5" />
+        <rect class="arm" x="91" y="223" width="43" height="5" />
+      </svg>
+      <p class="pad-label"><span>PAD 01</span><span class="pad-handle"><span data-audience-default>DEVSECOPS</span><span data-audience="lightning-labs" hidden>PLATFORM</span></span></p>
       {
-        socials.length > 0 && (
-          <div class="mt-1 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">
-              {t.home.socialLinks}:
-            </div>
-            <Socials />
+        smokePuffs.map(([dx, scale]) => (
+          <div class="smoke" style={`--dx: calc(${dx} * var(--u)); --s: ${scale}`} />
+        ))
+      }
+    </div>
+  </div>
+
+  <Rocket />
+
+  <!-- The parked satellite is the product: it opens the assistant. -->
+  <button
+    type="button"
+    class="sat-button"
+    data-open-assistant
+    aria-label={`Ask the AI assistant about ${identity.name}`}
+  >
+    <span class="sat-tag">Ask me</span>
+  </button>
+
+  <div class="hud-wrap">
+    <!-- The clock updates every frame, so it is not a live region. -->
+    <div class="hud" aria-label="Flight telemetry">
+      <span><b data-hud-t>T-00:10</b></span>
+      <span>ALT <b data-hud-alt>0.0</b> km</span>
+      <span class="hidden sm:inline"><b data-hud-stage>Pad</b></span>
+    </div>
+  </div>
+
+  <!-- In-flight caution callout above the rocket; launch.ts fills it. -->
+  <div class="flight-callout" data-callout data-state="idle" role="status" aria-live="polite">
+    <p class="flight-callout-title" data-callout-title></p>
+    <p class="flight-callout-text" data-callout-text></p>
+  </div>
+  <div class="alarm-vignette" aria-hidden="true"></div>
+  <div class="sparks" aria-hidden="true">
+    {Array.from({ length: 8 }, (_, i) => <span style={`--i: ${i}`} />)}
+  </div>
+
+  <nav class="meter" aria-label="Flight stages">
+    {
+      meter.map(m => (
+        <a href={m.href} data-meter={m.id}>
+          <span>{m.label}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <a class="skip" href="#summary">Skip to summary ↓</a>
+
+  <main class="flight">
+    {
+      stages.map((stage, i) => (
+        <section
+          id={stage.id}
+          data-stage={stage.rocketStage ?? stage.id}
+          data-label={stage.name}
+          class="flex min-h-[130vh] flex-col justify-center gap-6 py-24"
+        >
+          {i === 0 && (
+            <header class="mb-16 flex min-h-[70vh] flex-col justify-center gap-5">
+              <p class="telemetry spaced"><span>Mission <span data-audience-default>DevSecOps</span><span data-audience="lightning-labs" hidden>Platform Engineering</span></span><span>T-00:10</span></p>
+              <p class="telemetry" data-audience-label hidden />
+              <h1 class="hero-title display text-4xl leading-tight font-bold text-white sm:text-6xl">
+                {identity.headline}
+              </h1>
+              <p class="hero-role">
+                <span data-audience-default>{identity.title}</span>
+                {audiences.filter(a => a.title).map(a => <span data-audience={a.id} hidden>{a.title}</span>)}
+              </p>
+              <p class="text-base text-slate-200 sm:text-lg" data-subline>
+                {identity.subline}
+              </p>
+              <p class="text-sm text-slate-300 sm:text-base" data-audience="lightning-labs" hidden>
+                Kubernetes, AWS, CI/CD, and observability, with security built into the platform.
+              </p>
+              <p class="hero-open">
+                <span>
+                  <span data-audience-default>{identity.openTo}</span>
+                  {audiences.filter(a => a.openTo).map(a => <span data-audience={a.id} hidden>{a.openTo}</span>)}
+                </span>
+                <span class="hero-available">{identity.available}</span>
+              </p>
+              <nav class="hero-contact" aria-label="Contact">
+                {contacts.map(c => (
+                  <a class="hero-contact-link" href={c.url} target={c.url.startsWith("mailto:") ? undefined : "_blank"} rel="noopener noreferrer">
+                    <c.Icon class="hero-contact-icon" style={`color: ${c.color}`} />
+                    <span>{c.label.replace(" (Gmail)", "")}</span>
+                  </a>
+                ))}
+                {hasResume && (
+                  <a class="hero-contact-link" href={RESUME_PATH} target="_blank" rel="noopener">
+                    <span>Resume (PDF) ↗</span>
+                  </a>
+                )}
+              </nav>
+              <div class="stat-cards hero-stats">
+                {tileList.map(t => (
+                  <button type="button" class="stat-card" data-open-dialog={`dlg-${t.id}`}>
+                    <span class="stat-num display">{t.stat}</span>
+                    <span class="stat-label">{t.label}</span>
+                    <span class="stat-open">View ▸</span>
+                  </button>
+                ))}
+              </div>
+              <ul class="hero-orgs" aria-label="Worked at">
+                {career.filter(c => c.logo === "ibm" || c.logo === "deloitte").map(c => (
+                  <li><Image src={orgLogos[c.logo as keyof typeof orgLogos]} alt={c.org} height={28} class="hero-org" /></li>
+                ))}
+              </ul>
+              <details class="stack-toggle">
+                <summary>Tech stack</summary>
+                <dl class="stack" aria-label="Tech stack">
+                  {stack.map(row => (
+                    <div class="stack-row">
+                      <dt>{row.area}</dt>
+                      <dd>
+                        {row.items.map(i => (
+                          <span class="stack-item">{i}</span>
+                        ))}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </details>
+              <div class="proof-strip" data-audience="lightning-labs" hidden>
+                <p class="telemetry">Proof, not keywords</p>
+                <ul>
+                  <li><a href="https://github.com/lightningnetwork/lnd/issues/11211" target="_blank" rel="noopener noreferrer">LND #11211 ↗</a></li>
+                  <li><a href="https://github.com/lightninglabs/aperture/issues/286" target="_blank" rel="noopener noreferrer">Aperture #286 ↗</a></li>
+                  <li><a href="https://github.com/lightninglabs/aperture/pull/285" target="_blank" rel="noopener noreferrer">Aperture PR #285 ↗</a></li>
+                  <li><span>2 security reports (under review)</span></li>
+                  <li><a href="https://github.com/s1ns3nz0/node-operator-public" target="_blank" rel="noopener noreferrer">Private EKS validator ↗</a></li>
+                </ul>
+              </div>
+              <p class="telemetry mt-6 text-slate-300">Scroll to launch ↓</p>
+            </header>
+          )}
+
+          {anomalyBefore(stage.id) && (
+            <div
+              class="transit"
+              aria-hidden="true"
+              data-transit={anomalyBefore(stage.id)?.id}
+              data-motion={anomalyBefore(stage.id)?.motion}
+              data-caution={anomalyBefore(stage.id)?.caution}
+              data-resolution={anomalyBefore(stage.id)?.resolution.join("|")}
+             
+            />
+          )}
+
+          {!anomalyBefore(stage.id) && stage.notes && (
+            <div hidden data-notes data-callout-label="◆ Design review" data-resolution={stage.notes.join("|")} />
+          )}
+
+          <div class="stage-head" data-stage-head>
+            <p class="meta">{stage.event}</p>
+            <h2 class="display text-3xl font-bold text-white sm:text-4xl">{stage.name}</h2>
+            <p class="governing">{stage.governing}</p>
+            <p class="support">{stage.support}</p>
+            {stageRules[stage.id].length > 0 && (
+              <p class="meta rules">
+                Rules:{" "}
+                {stageRules[stage.id].map((r, i) => (
+                  <>
+                    {i > 0 && ", "}
+                    {r.url ? <a href={r.url}>{r.label}</a> : r.label}
+                  </>
+                ))}
+              </p>
+            )}
           </div>
+
+          <div class="stage-log">
+            {lanesByStage[stage.id].map(lane => (
+              <section class="log-zone" aria-label={lane.zone.name}>
+                <h3 class="log-zone-head">
+                  <span aria-hidden="true">{lane.zone.icon}</span>
+                  <span>{lane.zone.name}</span>
+                  <span class="log-zone-blurb">{lane.zone.metaphor}</span>
+                  <span>{lane.cards.length}</span>
+                </h3>
+                <ul class="log-list">
+                  {lane.cards.map(card => (
+                    <li id={card.id} data-card-id={card.id} class="log-row panel">
+                      {card.evidenceLinks.length > 0 ? (
+                        <details open>
+                          <summary>
+                            <span class="row-top">
+                              <span class="row-title">
+                  {card.titleFor ? (
+                    <>
+                      <span data-audience-default>{card.title}</span>
+                      {Object.entries(card.titleFor).map(([aud, t]) => (
+                        <span data-audience={aud} hidden>{t}</span>
+                      ))}
+                    </>
+                  ) : card.title}
+                </span>
+                              <span class="row-meta">{card.meta.map(m => <span>{m}</span>)}</span>
+                            </span>
+                            <span class="row-summary">{card.summary}</span>
+                          </summary>
+                          <dl class="row-body">
+                            {card.code.length > 0 && (
+                              <div class="row-links">
+                                <dt>{card.codeLabel}</dt>
+                                <dd class="code-links">
+                                  {card.code.map(e => (
+                                    <EvidenceLink {...e} />
+                                  ))}
+                                </dd>
+                              </div>
+                            )}
+                            {card.writeups.length > 0 && (
+                              <div class="row-links">
+                                <dt>Write-ups</dt>
+                                <dd>
+                                  <ul class="evidence">
+                                    {card.writeups.map(e => (
+                                      <li>
+                                        <EvidenceLink {...e} />
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </dd>
+                              </div>
+                            )}
+                            {card.rules.length > 0 && (
+                              <div class="row-links">
+                                <dt>Rules</dt>
+                                <dd class="rules">
+                                  {card.rules.map((r, i) => (
+                                    <>
+                                      {i > 0 && ", "}
+                                      {r.url ? <a href={r.url}>{r.label}</a> : r.label}
+                                    </>
+                                  ))}
+                                </dd>
+                              </div>
+                            )}
+                          </dl>
+                        </details>
+                      ) : (
+                        <div class="row-static">
+                          <span class="row-top">
+                            <span class="row-title">
+                  {card.titleFor ? (
+                    <>
+                      <span data-audience-default>{card.title}</span>
+                      {Object.entries(card.titleFor).map(([aud, t]) => (
+                        <span data-audience={aud} hidden>{t}</span>
+                      ))}
+                    </>
+                  ) : card.title}
+                </span>
+                          </span>
+                          <span class="row-summary">{card.summary}</span>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+
+
+          {[stageProof[stage.id]].filter(p => p !== undefined).map(p => (
+            <a class="co-card" href={complianceOpsHref(p.requirementId)} target="_blank" rel="noopener noreferrer">
+              <span class="co-card-kicker">NIST SSDF {p.practice}</span>
+              <span class="co-card-go">See the code behind it, tracked live ↗</span>
+            </a>
+          ))}
+          {stage.id === "operate" && (
+            <figure class="co-shot" data-reveal>
+              <p class="co-shot-line">Every control, its owner, and its evidence on one screen.</p>
+              <a href={COMPLIANCE_OPS_LIVE ?? "https://github.com/s1ns3nz0/compliance-ops"} target="_blank" rel="noopener noreferrer">
+                <Image
+                  src={complianceOpsDashboard}
+                  alt="Compliance Ops dashboard: 69% coverage, 966 of 1409 requirements implemented, and status by framework for NIST SP 800-53, NIST SSDF, and a key management policy."
+                  widths={[640, 1280, 2528]}
+                  sizes="(min-width: 1100px) 1060px, 100vw"
+                  class="co-shot-img"
+                />
+              </a>
+              <figcaption>Compliance Ops, example data</figcaption>
+            </figure>
+          )}
+          {stage.id === "operate" && (
+            <figure class="sun-tzu" data-reveal data-audience-default>
+              <blockquote>“{identity.quote.text}”</blockquote>
+              <figcaption>{identity.quote.by}</figcaption>
+              <p class="sun-tzu-q">{identity.quote.question}</p>
+            </figure>
+          )}
+          {stage.id === "operate" && (
+            <figure class="sun-tzu" data-reveal data-audience="lightning-labs" hidden>
+              <blockquote>Design for failure.<br />Automate the recovery.<br />Prove the control.</blockquote>
+            </figure>
+          )}
+        </section>
+      ))
+    }
+
+    <section
+      id="summary"
+      data-stage="orbit"
+      data-label="Orbit"
+      class="orbit flex min-h-screen flex-col justify-center gap-10 pt-12 pb-28"
+    >
+      {
+        anomalyBefore("orbit") && (
+          <div
+            class="transit"
+            aria-hidden="true"
+            data-transit={anomalyBefore("orbit")?.id}
+            data-motion={anomalyBefore("orbit")?.motion}
+            data-caution={anomalyBefore("orbit")?.caution}
+            data-resolution={anomalyBefore("orbit")?.resolution.join("|")}
+          />
         )
       }
+      <header class="summary-head" data-stage-head>
+        <p class="meta spaced"><span>T+09:00</span><span>Orbit achieved</span></p>
+        <h2 class="display text-2xl font-bold">{identity.name}</h2>
+        <p class="meta"><span data-audience-default>{identity.title}</span>{audiences.filter(a => a.title).map(a => <span data-audience={a.id} hidden>{a.title}</span>)}</p>
+        <p class="claim">{identity.claim}</p>
+        <section class="traits" aria-labelledby="traits-title">
+          <h3 id="traits-title" class="meta">How I work</h3>
+          {traitList.map(t => (
+            <div class="trait" data-reveal>
+              <p class="trait-name">{t.name}</p>
+              <p class="trait-line">{t.line}</p>
+              <p class="trait-proof">{t.proof}</p>
+            </div>
+          ))}
+        </section>
+        {hasResume && (
+          <a class="resume-link" href={RESUME_PATH} target="_blank" rel="noopener">
+            Resume (PDF) ↗
+          </a>
+        )}
+      </header>
+
+      <dialog id="dlg-career" class="sheet" aria-labelledby="dlg-career-title">
+        <div class="sheet-inner">
+          <header class="sheet-head">
+            <h3 id="dlg-career-title" class="display text-2xl font-bold">Career</h3>
+            <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
+          </header>
+          <ol class="timeline">
+            {
+              career.map(c => (
+                <li>
+                  <p class="tl-period">{c.period}</p>
+                  <p class="tl-org">
+                    <Image src={orgLogos[c.logo as keyof typeof orgLogos]} alt="" height={48} class="tl-logo" />
+                    <span>{c.org}</span>
+                  </p>
+                  <p class="tl-role">
+                    {c.role}
+                    <span class="chips">{c.keywords.map(k => <span class="chip-sm">{k}</span>)}</span>
+                  </p>
+                  <ul class="bullets">
+                    {c.bullets.map(b => <li>{b}</li>)}
+                  </ul>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </dialog>
+
+      <dialog id="dlg-oss" class="sheet" aria-labelledby="dlg-oss-title">
+        <div class="sheet-inner">
+          <header class="sheet-head">
+            <h3 id="dlg-oss-title" class="display text-2xl font-bold">Open source</h3>
+            <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
+          </header>
+          {disclosures.length > 0 && (
+            <section class="disclosures" aria-labelledby="disclosures-title">
+              <h4 id="disclosures-title" class="meta">Security disclosures</h4>
+              {disclosures.map(d => (
+                <div class="disclosure">
+                  <p class="disclosure-head">
+                    <span class="oss-row-did">{d.headline}</span>
+                    <span class="status-badges">
+                      {d.badges.map(b => <span class="status-badge">{b}</span>)}
+                    </span>
+                  </p>
+                  <p class="oss-row-about">{d.did}</p>
+                </div>
+              ))}
+            </section>
+          )}
+          <h4 class="meta contributions-title">Contributions</h4>
+          <ul class="oss-rows">
+            {
+              ossEntries.map(o => (
+                <li class="oss-row" data-oss-id={o.id}>
+                  <details>
+                    <summary>
+                      <span class="oss-row-top">
+                        <span class="oss-row-name">{o.name}</span>
+                        <span class="kind-badges">
+                          {o.kind.map(k => <span class="kind-badge">{k}</span>)}
+                        </span>
+                      </span>
+                      <span class="oss-row-about">{o.about}</span>
+                      <span class="oss-row-did">{o.did}</span>
+                      <span class="status-badges">
+                        {o.badges.map(b => <span class="status-badge">{b}</span>)}
+                      </span>
+                    </summary>
+                    <div class="oss-row-body">
+                      {o.url && (
+                        <p class="oss-repo">
+                          <a class="text-link" href={o.url} target="_blank" rel="noopener noreferrer">
+                            {o.url.replace(/^https:\/\/github\.com\//, "")} ↗
+                          </a>
+                        </p>
+                      )}
+                      <ul class="bullets">
+                        {o.contributions.map(c => (
+                          <li>
+                            <span class="oss-status">{statusLabel[c.status]}</span>{" "}
+                            {c.what}
+                            {c.chips.length > 0 && (
+                              <span class="text-links">
+                                {c.chips.map(l => (
+                                  <a
+                                    class="text-link"
+                                    href={l.url}
+                                    title={l.tip}
+                                    target={l.external ? "_blank" : undefined}
+                                    rel={l.external ? "noopener noreferrer" : undefined}
+                                  >
+                                    {l.label}
+                                  </a>
+                                ))}
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </details>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </dialog>
+
+      <dialog id="dlg-credentials" class="sheet" aria-labelledby="dlg-credentials-title">
+        <div class="sheet-inner">
+          <header class="sheet-head">
+            <h3 id="dlg-credentials-title" class="display text-2xl font-bold">Credentials</h3>
+            <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
+          </header>
+          <h4 class="meta mb-3">Certifications</h4>
+          <ul class="bullets">
+            {certifications.map(c => <li>{c.name}</li>)}
+          </ul>
+          <h4 class="meta mt-6 mb-3">Education</h4>
+          <ul class="bullets">
+            {
+              education.map(e => (
+                <li>
+                  <span class="font-semibold">{e.degree}</span>, {e.school}
+                  <span class="tl-period">{e.period}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <h4 class="meta mt-6 mb-3">Highlights</h4>
+          <ul class="bullets">
+            {
+              highlightList.map(h => (
+                <li>
+                  <span class="font-semibold">{h.title}</span>: {h.detail}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </dialog>
+
+      <nav class="contact" aria-label="Contact">
+        {
+          contacts.map(c => (
+            <a class="contact-link" href={c.url} aria-label={c.label} title={c.label}>
+              <c.Icon class="contact-icon" style={`color: ${c.color}`} />
+            </a>
+          ))
+        }
+        <a class="contact-blog" href="/blog/">Read the blog →</a>
+      </nav>
     </section>
   </main>
-  <Footer />
-</Layout>
 
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
-      ?.dataset;
-    const baseRoot = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-    if (indexLayout?.layout) {
-      sessionStorage.setItem("backUrl", indexLayout.homePath ?? baseRoot);
-    }
-  });
-</script>
+  <dialog id="assistant" class="assistant" aria-labelledby="assistant-title">
+    <div class="assistant-inner">
+      <header class="flex items-start justify-between gap-4">
+        <div>
+          <p class="telemetry">Payload online</p>
+          <h2 id="assistant-title" class="display text-xl font-bold">Ask the satellite</h2>
+          <p class="mt-1 text-sm text-slate-300">
+            The product this page launched: an assistant that answers questions
+            about {identity.name}.
+          </p>
+          <p class="mt-1 text-xs text-slate-400">Answers come only from this portfolio and the posts they link.</p>
+        </div>
+        <button type="button" class="assistant-close" data-close-assistant aria-label="Close">✕</button>
+      </header>
+
+      <ul class="flex flex-col gap-2" aria-label="Suggested questions">
+        {
+          resolvedChips.map(chip => (
+            <li data-chip-audiences={chip.audiences.join(" ")}>
+              <button type="button" class="chip" data-chip={chip.id} aria-pressed="false">
+                {chip.question}
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="answer-area" aria-live="polite">
+        <p class="text-sm text-slate-400" data-answer-empty>Pick a question above.</p>
+        {
+          resolvedChips.map(chip => (
+            <div class="answer" data-answer={chip.id} hidden>
+              <p class="text-sm leading-relaxed">{chip.answer}</p>
+              <ul class="evidence mt-3 flex flex-col gap-1 text-sm" aria-label="Sources">
+                {chip.sourceLinks.map(l => (
+                  <li>→ <a href={l.url}>{l.title}</a></li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <form class="flex gap-2">
+        <label class="sr-only" for="assistant-input">Your question</label>
+        <input
+          id="assistant-input"
+          class="assistant-input"
+          type="text"
+          maxlength="300"
+          placeholder="Free-form questions: coming soon"
+          disabled
+        />
+        <button type="submit" class="ask-button" disabled>Send</button>
+      </form>
+
+      <p class="text-xs text-slate-400">{privacyNote}</p>
+
+      <details class="text-sm">
+        <summary class="cursor-pointer font-semibold">How this assistant is secured</summary>
+        <div class="mt-3 flex flex-col gap-3">
+          {
+            securityDesign.map(group => (
+              <div>
+                <p class="telemetry mb-1">{group.title}</p>
+                <ul class="flex list-disc flex-col gap-1 pl-5 text-slate-300">
+                  {group.items.map(item => <li>{item}</li>)}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </details>
+    </div>
+  </dialog>
+
+  <script
+    is:inline
+    type="application/json"
+    id="launch-audiences"
+    set:html={JSON.stringify(audiences).replace(/</g, "\\u003c")}
+  />
+  <script>
+    import "@/scripts/launch";
+  </script>
+</LaunchLayout>
