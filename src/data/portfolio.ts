@@ -191,7 +191,7 @@ export const stages: Stage[] = [
     },
     governing: "I make running systems observable, and cheap enough to keep defending.",
     support:
-      "Per-outcome L402 metrics for Lightning Labs' Aperture, a tamper-evident audit trail, and controls I cut when they cost more than they protected.",
+      "Per-outcome L402 metrics and a security event proposal for Lightning Labs' Aperture, plus 28 cloud security checks in Prowler.",
     flightRules: [
       { label: "MITRE ATT&CK", slug: "palantir-ads" },
       { label: "CACAO", slug: "cacao-playbook" },
@@ -456,10 +456,10 @@ export const career = [
     org: "IBM Consulting Korea",
     logo: "ibm",
     bullets: [
-      "Led a product security maturity assessment and roadmap aligned with the EU Cyber Resilience Act, presented to C-level leadership",
+      "Led EU Cyber Resilience Act supply-chain assessments and roadmaps for a nuclear power company and a heavy-equipment maker, presented to C-level leadership",
       "Designed and deployed iDMZ and OT security across heavy-equipment, nuclear, and semiconductor sites",
       "Built detection logic and monitoring use cases with IBM's global OT SOC",
-      "Assessed AWS environments against ISMS-P",
+      "Assessed AWS environments for ISMS-P certification of a real-estate and a shared-office service, and built a Prowler-based assessment tool for consultants",
     ],
   },
   {
@@ -469,8 +469,8 @@ export const career = [
     org: "Deloitte Consulting Korea",
     logo: "deloitte",
     bullets: [
-      "Ran an ISO 27001 certification audit: gap analysis, control effectiveness, remediation validation",
-      "Assessed a digital signature and certificate service: cryptographic controls, access, key lifecycle",
+      "Ran an ISO 27001 certification audit for a global IoT service: gap analysis, control effectiveness, remediation validation",
+      "Audited Korean authentication services built on digital signatures: cryptographic controls, access, key lifecycle",
       "Drafted Appendices 2–3 of the Digital Signature Certification Service Evaluation Guide v1.4.0",
       "Reviewed AWS architecture and controls against compliance frameworks",
     ],
@@ -497,6 +497,9 @@ export const career = [
       "Selected for the Army's Elite 300 Cyber Warriors",
       "Tuned Splunk dashboards and detection rules, cutting false positives",
       "Ran first-line incident response: evidence, interviews, timelines, reports",
+      "Built a SIEM learning platform for new recruits and an assistant for writing Splunk SPL queries",
+      "Won the Ground Operations Command incident response CTF",
+      "Went through an internal security audit by the Defense Counterintelligence Command",
       "2nd place in a cybersecurity education competition with a web-based awareness game",
     ],
   },

@@ -363,7 +363,7 @@ const smokePuffs: [number, number][] = [
               <nav class="hero-contact" aria-label="Contact">
                 {contacts.map(c => (
                   <a class="hero-contact-link" href={c.url} target={c.url.startsWith("mailto:") ? undefined : "_blank"} rel="noopener noreferrer">
-                    <c.Icon class="hero-contact-icon" style={`color: ${c.color}`} />
+                    <c.Icon class="hero-contact-icon" style={`color: ${c.color === "#181717" ? "#fff" : c.color}`} />
                     <span>{c.label.replace(" (Gmail)", "")}</span>
                   </a>
                 ))}

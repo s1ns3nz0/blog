@@ -611,9 +611,11 @@ html[data-bright] .meter a::before {
   align-items: center;
   gap: 8px;
   padding: 7px 14px;
+  border: 1px solid var(--panel-line);
   border-radius: 8px;
-  background: #fff;
-  color: #0f172a;
+  background: var(--panel);
+  color: #e6edf7;
+  backdrop-filter: blur(8px);
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
@@ -621,6 +623,7 @@ html[data-bright] .meter a::before {
 }
 .hero-contact-link:hover {
   transform: translateY(-1px);
+  border-color: rgb(255 255 255 / 0.35);
 }
 .hero-contact-icon {
   width: 18px;
@@ -629,6 +632,24 @@ html[data-bright] .meter a::before {
 .hero-stats {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 4px;
+}
+/* On the night sky the hero cards and buttons use the same dark panel as
+   the stage cards, instead of the summary's light cards. */
+.hero-stats .stat-card {
+  border-color: var(--panel-line);
+  background: var(--panel);
+  color: #fff;
+  backdrop-filter: blur(8px);
+}
+.hero-stats .stat-card:hover {
+  border-color: rgb(255 255 255 / 0.35);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.35);
+}
+.hero-stats .stat-label {
+  color: rgb(230 237 247 / 0.85);
+}
+.hero-stats .stat-open {
+  color: rgb(230 237 247 / 0.55);
 }
 @media (max-width: 767px) {
   /* narrow column: one compact row per stat */
@@ -856,9 +877,6 @@ html[data-daylight] .co-card-go {
   text-transform: uppercase;
   text-shadow: 0 1px 8px rgb(0 0 0 / 0.35);
 }
-.log-zone-line {
-  display: none;
-}
 /* what the zone means, next to its name */
 .log-zone-blurb {
   flex: 1;
@@ -1014,13 +1032,6 @@ html[data-daylight] .co-card-go {
   text-decoration-color: currentColor;
 }
 
-.summary-zone {
-  margin: 10px 0 2px;
-  color: #64748b;
-  font: 700 10px var(--font-space-mono), monospace;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
 
 /* ---------- summary: teaser tiles, detail in dialogs ---------- */
 
@@ -1042,16 +1053,6 @@ html[data-daylight] .co-card-go {
 .timeline > li {
   position: relative;
   padding-bottom: 32px;
-}
-.tl-keywords {
-  color: #64748b;
-  font-weight: 400;
-}
-.edu-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 2px 12px;
 }
 .timeline > li:last-child {
   padding-bottom: 0;
@@ -1102,112 +1103,7 @@ html[data-daylight] .co-card-go {
   font-weight: 600;
 }
 
-/* open-source contributions: collapsed headline cards, expandable */
-.oss-grid {
-  display: grid;
-  grid-auto-flow: dense; /* an opened, full-width entry leaves no holes */
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-@media (min-width: 768px) {
-  .oss-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 @media (min-width: 1280px) {
-  .oss-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-.oss-entry {
-  border: 1px solid rgb(15 23 42 / 0.1);
-  border-radius: 10px;
-  background: rgb(255 255 255 / 0.6);
-}
-/* an opened entry spans the whole row so its detail has room */
-.oss-entry:has(details[open]) {
-  grid-column: 1 / -1;
-}
-.oss-entry summary {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 14px 34px 14px 16px;
-  position: relative;
-  cursor: pointer;
-  list-style: none;
-}
-.oss-entry summary::-webkit-details-marker {
-  display: none;
-}
-.oss-entry summary::after {
-  content: "▸";
-  position: absolute;
-  right: 14px;
-  top: 14px;
-  color: #94a3b8;
-  transition: transform 0.2s ease;
-}
-.oss-entry details[open] summary::after {
-  transform: rotate(90deg);
-}
-.oss-name {
-  color: #0f172a;
-  font-size: 15px;
-  font-weight: 700;
-}
-.oss-summary {
-  margin-top: 6px;
-  padding-top: 8px;
-  border-top: 1px solid rgb(15 23 42 / 0.08);
-}
-.oss-summary,
-.oss-tags {
-  color: #64748b;
-  font: 400 10px var(--font-space-mono), monospace;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.oss-headline {
-  color: #0f172a;
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.3;
-}
-.oss-entry summary:hover .oss-headline {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-.oss-body {
-  padding: 0 16px 16px;
-  border-top: 1px solid rgb(15 23 42 / 0.08);
-}
-.oss-about {
-  margin: 12px 0 0;
-  color: #64748b;
-  font-size: 13px;
-}
-.oss-contribs {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 10px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.oss-contribs li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 4px;
-}
-@media (min-width: 768px) {
-  .oss-contribs li {
-    grid-template-columns: 6.75rem minmax(0, 1fr);
-    gap: 2px 12px;
-  }
 }
 /* one status style for every state; the label carries the meaning */
 .oss-status {
@@ -1222,41 +1118,6 @@ html[data-daylight] .co-card-go {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
-}
-.oss-work {
-  color: #334155;
-  font-size: 14px;
-  line-height: 1.5;
-}
-.oss-links {
-  font-size: 13px;
-}
-@media (min-width: 768px) {
-  .oss-links {
-    grid-column: 2;
-  }
-}
-.orbit .oss-links a {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-decoration-color: rgb(15 23 42 / 0.3);
-  text-underline-offset: 3px;
-}
-.tl-detail {
-  margin: 6px 0 4px;
-  color: #475569;
-  font-size: 14px;
-  line-height: 1.5;
-}
-.side-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 14px;
-  line-height: 1.45;
 }
 
 .contact {
@@ -1604,11 +1465,6 @@ html[data-stage="orbit"] .hud-wrap {
   flex-wrap: wrap;
   column-gap: 1.1em;
 }
-.oss-links {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 14px;
-}
 .chips {
   display: inline-flex;
   flex-wrap: wrap;
@@ -1653,13 +1509,6 @@ html[data-stage="orbit"] .hud-wrap {
   display: inline-block;
   margin-right: 2px;
   vertical-align: 1px;
-}
-.bullets .oss-links {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 14px;
-  margin-top: 2px;
-  font-size: 13px;
 }
 
 /* detail dialogs: light, centered on desktop, bottom sheet on phones */
@@ -1711,23 +1560,8 @@ html[data-stage="orbit"] .hud-wrap {
   background: #fff;
   color: #0f172a;
 }
-.sheet .oss-grid {
-  grid-template-columns: minmax(0, 1fr);
-}
-@media (min-width: 768px) {
-  .sheet .oss-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 .sheet a {
   color: #1e293b;
-}
-.sheet .oss-links a,
-.sheet .oss-about a {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-decoration-color: rgb(15 23 42 / 0.3);
-  text-underline-offset: 3px;
 }
 @media (max-width: 767px) {
   .sheet {
@@ -1867,6 +1701,36 @@ html[data-stage="orbit"] .hud-wrap {
   overflow-wrap: anywhere; /* last resort for one long word in a narrow column */
   font-weight: 700;
   line-height: 1.2;
+}
+/* Phones: the column is too narrow to keep the callout clear of the text,
+   so it becomes a one-line bar pinned under the HUD. */
+@media (max-width: 767px) {
+  .flight-callout {
+    left: 12px;
+    right: 12px;
+    top: 50px;
+    bottom: auto;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    max-width: none;
+    padding: 6px 12px;
+    transform: translateY(-6px);
+  }
+  .flight-callout::before {
+    display: none;
+  }
+  .flight-callout-title {
+    flex: none;
+    font-size: 10px;
+  }
+  .flight-callout-text {
+    margin: 0;
+    overflow: hidden;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 .flight-callout[data-state="caution"],
 .flight-callout[data-state="resolved"] {
