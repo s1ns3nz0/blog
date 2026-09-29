@@ -592,14 +592,28 @@ html[data-bright] .meter a::before {
   color: #e6edf7;
   font-weight: 600;
 }
+/* frosted-glass pill with a small green "online" dot */
 .hero-available {
-  padding: 1px 10px;
-  border: 1px solid rgb(74 222 128 / 0.6);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 12px;
+  border: 1px solid rgb(255 255 255 / 0.18);
   border-radius: 999px;
-  color: #4ade80;
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
   font: 700 12px var(--font-space-mono), monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+.hero-available::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
 }
 .hero-contact {
   display: flex;
@@ -611,10 +625,10 @@ html[data-bright] .meter a::before {
   align-items: center;
   gap: 8px;
   padding: 7px 14px;
-  border: 1px solid var(--panel-line);
+  border: 1px solid rgb(255 255 255 / 0.18);
   border-radius: 8px;
-  background: var(--panel);
-  color: #e6edf7;
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
   backdrop-filter: blur(8px);
   font-size: 14px;
   font-weight: 600;
@@ -623,42 +637,31 @@ html[data-bright] .meter a::before {
 }
 .hero-contact-link:hover {
   transform: translateY(-1px);
-  border-color: rgb(255 255 255 / 0.35);
+  border-color: rgb(255 255 255 / 0.4);
+  background: rgb(255 255 255 / 0.12);
 }
 .hero-contact-icon {
   width: 18px;
   height: 18px;
 }
-/* compact: each card only as wide as its number and label */
+/* three equal cards spanning the headline's width */
 .stat-cards.hero-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: var(--hero-w);
   margin-top: 4px;
 }
+/* On the dusk sky the hero cards and buttons are frosted glass, so the
+   gradient shows through. */
 .hero-stats .stat-card {
-  padding: 12px 18px;
-}
-.hero-stats .stat-num {
-  font-size: 36px;
-}
-.hero-stats .stat-label {
-  font-size: 13px;
-}
-.hero-stats .stat-open {
-  margin-top: 4px;
-}
-/* On the night sky the hero cards and buttons use the same dark panel as
-   the stage cards, instead of the summary's light cards. */
-.hero-stats .stat-card {
-  border-color: var(--panel-line);
-  background: var(--panel);
+  border-color: rgb(255 255 255 / 0.18);
+  background: rgb(255 255 255 / 0.08);
   color: #fff;
   backdrop-filter: blur(8px);
 }
 .hero-stats .stat-card:hover {
-  border-color: rgb(255 255 255 / 0.35);
-  box-shadow: 0 10px 24px rgb(0 0 0 / 0.35);
+  border-color: rgb(255 255 255 / 0.4);
+  background: rgb(255 255 255 / 0.12);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.25);
 }
 .hero-stats .stat-label {
   color: rgb(230 237 247 / 0.85);
@@ -668,8 +671,8 @@ html[data-bright] .meter a::before {
 }
 @media (max-width: 767px) {
   /* narrow column: one compact row per stat */
-  .hero-stats {
-    flex-direction: column;
+  .stat-cards.hero-stats {
+    grid-template-columns: minmax(0, 1fr);
     gap: 6px;
   }
   .hero-stats .stat-card {
