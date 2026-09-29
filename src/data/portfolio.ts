@@ -15,7 +15,7 @@ export type Zone = { id: ZoneId; name: string; metaphor: string; icon: string };
 
 export const zones: Zone[] = [
   { id: "test", name: "Personal projects", metaphor: "test flights", icon: "▲" },
-  { id: "oss", name: "Open source", metaphor: "proactive minds", icon: "●" },
+  { id: "oss", name: "Open source contributions", metaphor: "proactive minds", icon: "●" },
 ];
 
 /** A blog post slug, or an external link. */
