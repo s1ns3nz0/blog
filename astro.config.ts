@@ -29,9 +29,6 @@ export default defineConfig({
       filter: page => {
         if (config.features?.showArchives === false && page.endsWith("/archives/"))
           return false;
-        // Unlisted: kept out of crawl/listing surfaces but still reachable
-        // by direct URL (e.g. a link already handed out elsewhere).
-        if (page.endsWith("/posts/hello-offchain/")) return false;
         return true;
       },
     }),

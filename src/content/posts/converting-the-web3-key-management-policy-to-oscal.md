@@ -100,4 +100,3 @@ The catalog is version `0.1.0` right now, and its own `control-mapping-status` s
 
 - [kms-policy repository](https://github.com/s1ns3nz0/kms-policy)
 - [OSCAL Catalog model, release 1.2.3](https://github.com/usnistgov/OSCAL/releases/tag/v1.2.3)
-- [Hello, Offchain!!](/posts/hello-offchain/)
