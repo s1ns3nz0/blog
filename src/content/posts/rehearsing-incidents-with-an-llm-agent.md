@@ -412,6 +412,4 @@ From an incident-response perspective, it is dangerous.
 
 An on-call agent should not create a richer story
 
-<!-- TODO(draft): the source text stops here, mid-sentence. Finish this section and add the closing. -->
-
 Next: [Diagnosing OpenCTI with Kagent (5) - Reviewing the Setup Against Google SRE](/posts/diagnosing-opencti-with-kagent-google-sre-review/)
