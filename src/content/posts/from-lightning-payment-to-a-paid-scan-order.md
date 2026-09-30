@@ -17,7 +17,7 @@ The customer now has a Lightning invoice and a macaroon. The order is still `awa
 
 The next steps connect the Lightning payment to the application’s business state: verifying the proof, confirming settlement, and queuing the scan.
 
-This walkthrough follows the implementation. The examples use placeholders rather than live payment credentials.
+This walkthrough follows the implementation. The examples use placeholders rather than live payment credentials. The two screenshots come from an end-to-end run on testnet, with the preimage and invoice blurred.
 
 ## 1. The customer pays the invoice
 
@@ -123,6 +123,10 @@ invoice.amt_paid_sat == saved_order_amount
 
 For example, if the order costs 250 sats, the merchant invoice must be settled for exactly 250 sats.
 
+![lncli lookupinvoice on the merchant LND node in testnet: memo L402, value 250, settled true, state SETTLED, amt_paid_sat 250, one HTLC settled; the r_preimage and payment_request values are blurred](../../assets/images/lightning-opencti/merchant-invoice-settled.png)
+
+*The merchant invoice for a 250-sat order, looked up on the merchant LND node by its payment hash during a testnet run: `state` is `SETTLED` and `amt_paid_sat` is `250`, the two conditions the receipt service requires. The preimage and invoice are blurred.*
+
 Any routing fee paid by the customer is separate from the amount received against the merchant’s invoice.
 
 The service records an accepted receipt and rejects attempts to reuse that payment against a different resource path or amount.
@@ -182,6 +186,10 @@ On success, the endpoint returns:
 ```
 
 `paid` means the payment has been accepted and scan work has been queued. It does not mean the scan has finished.
+
+![paid-scan-api logs for one order: GET workspace and order return 200, the first POST to /payment/l402 returns 402 Payment Required, the next POST to the same endpoint returns 200 OK, then a GET of the order returns 200](../../assets/images/lightning-opencti/paid-scan-api-402-then-200.png)
+
+*The API logs for the same testnet run. The first `POST .../payment/l402` has no proof and gets `402 Payment Required` with the invoice; after the wallet pays, the retry with the macaroon and preimage gets `200 OK`, and the order reads back as `paid`.*
 
 ```text
 Payment accepted
