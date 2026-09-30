@@ -1,5 +1,5 @@
 ---
-title: "Rehearsing Incidents with an LLM Agent: Kagent, L402, and Playbooks"
+title: "Diagnosing OpenCTI with Kagent (4) - Rehearsing Incidents with an LLM Agent"
 description: I rehearsed incidents against a Kagent on-call agent watching an Aperture L402 payment gate, then scored it against a playbook. The exercise found gaps in my own alerts too.
 pubDatetime: 2026-09-30T14:00:00+09:00
 draft: false
@@ -16,6 +16,8 @@ tags:
   - MCP
   - Kagent
 ---
+
+*Part 4 of the series. [Part 1](/posts/diagnosing-opencti-with-kagent-architecture/) covered the architecture, [Part 2](/posts/diagnosing-opencti-with-kagent-tools/) the tools and read-only access, and [Part 3](/posts/diagnosing-opencti-with-kagent-access-control/) access control in a GitOps setup.*
 
 I built a Kubernetes-native AI agent using **Kagent** to monitor an **L402 payment gate powered by Aperture** in front of a paid security-scanning service.
 

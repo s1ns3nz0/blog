@@ -25,7 +25,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "Kubernetes",
-    tags: ["Kubernetes", "K3s", "CNCF"],
+    tags: ["Kubernetes", "K3s", "Helm", "RBAC", "CNCF"],
   },
   {
     name: "DevSecOps",
@@ -33,7 +33,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "DevSecOps", "CI/CD", "CI/CD Security", "GitHub Action", "GitHub Actions",
       "Code Commits", "Pull-Push", "Build", "CD", "Policy as Code", "SSDF",
       "Supply Chain Security", "NIST SP 800-204", "NIST SP 800-218", "NIST SP 800-204D",
-      "Microservices", "Malware", "Fuzzing", "Gosentry",
+      "Microservices", "Malware", "Fuzzing", "Gosentry", "GitOps",
     ],
   },
   {
