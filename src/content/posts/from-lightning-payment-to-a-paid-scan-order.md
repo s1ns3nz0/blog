@@ -172,6 +172,16 @@ Mark the receipt processing record as committed
 
 The dispatch record is another durable handoff. It tells the execution workflow that scan work is ready to be dispatched.
 
+Here is what those records looked like for the testnet order, read back from the application database after the payment:
+
+![Order inspection output for the testnet order: the challenge in state settled with amount_sats 250, the payment hash, the resource path, and a redacted macaroon; the order in state paid with paid_at set. The invoice values are blurred](../../assets/images/lightning-opencti/order-record-after-payment.png)
+
+*The payment challenge is `settled` and the order is `paid`, both at 09:28:16 UTC. The invoice is blurred and the macaroon is already redacted by the inspection script.*
+
+![Continuation of the output: a payment event of 250 testnet sats on bitcoin:testnet from Aperture v0.5.0, whose receipt evidence shows invoice_state SETTLED, amount_sats 250, the same resource path, and settlement_source merchant_lnd_lookup_invoice; the payment receipt outbox in state committed; and the saved quote for 250 testnet satoshis](../../assets/images/lightning-opencti/payment-event-and-receipt.png)
+
+*The payment event carries the receipt evidence from section 5: `invoice_state` `SETTLED`, `amount_sats` `250`, the same resource path as the challenge, and `settlement_source` `merchant_lnd_lookup_invoice`. The receipt outbox is `committed`, and the amount matches the saved quote.*
+
 The payment endpoint does not run the scanner itself.
 
 ## 7. The customer receives the updated order state

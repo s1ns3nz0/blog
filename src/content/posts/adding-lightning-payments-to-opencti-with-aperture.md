@@ -19,6 +19,12 @@ Paid features extend the basic workflow with additional verification or deeper s
 
 Aperture provides the Lightning payment gate for this workflow. Our application remains responsible for user authentication, scan authorization, and order processing.
 
+By the end of this series, a single scan order ends up in this state: paid, with the time it was paid recorded.
+
+![The order record after a testnet run: created_at, id, paid_at, quote_id, request_digest, and state "paid"](../../assets/images/lightning-opencti/order-paid-teaser.png)
+
+*The order record after an end-to-end testnet run. [Part 3](/posts/from-lightning-payment-to-a-paid-scan-order/) shows every record that changes to get it here.*
+
 ## What is Aperture?
 
 Aperture is a reverse proxy that can require Lightning payment credentials before forwarding a request to a backend service.
