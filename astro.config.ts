@@ -19,7 +19,18 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { remarkMermaid } from "./src/utils/remark/remarkMermaid";
 import { rehypeExternalLinks } from "./src/utils/rehype/rehypeExternalLinks";
+import { readdirSync, readFileSync } from "node:fs";
 import config from "./astro-paper.config";
+
+// Unlisted posts stay reachable by URL but are left out of the sitemap.
+const POSTS_DIR = "src/content/posts";
+const unlistedPaths = readdirSync(POSTS_DIR)
+  .filter(
+    f =>
+      /\.mdx?$/.test(f) &&
+      /^unlisted:\s*true/m.test(readFileSync(`${POSTS_DIR}/${f}`, "utf8"))
+  )
+  .map(f => `/posts/${f.replace(/\.mdx?$/, "")}/`);
 
 export default defineConfig({
   site: config.site.url,
@@ -29,6 +40,7 @@ export default defineConfig({
       filter: page => {
         if (config.features?.showArchives === false && page.endsWith("/archives/"))
           return false;
+        if (unlistedPaths.some(path => page.endsWith(path))) return false;
         return true;
       },
     }),
