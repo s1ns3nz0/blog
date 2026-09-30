@@ -1,5 +1,5 @@
 /**
- * Single source of truth for the /launch portfolio page (and later the AI
+ * Single source of truth for the portfolio home page (and later the AI
  * assistant context). Evidence is either a blog post slug (the build fails
  * if it is missing, draft, or unlisted) or an external link.
  * See docs/portfolio-spec.md.

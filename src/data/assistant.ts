@@ -1,5 +1,5 @@
 /**
- * The satellite assistant on /launch. v2 serves reviewed, pre-written
+ * The satellite assistant on the home page. v2 serves reviewed, pre-written
  * answers only: no model call, nothing typed leaves the browser. Sources
  * are blog post slugs, validated at build like the portfolio evidence.
  * Placeholder content until the full resume upload; see

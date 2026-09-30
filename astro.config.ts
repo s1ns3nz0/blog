@@ -89,7 +89,7 @@ export default defineConfig({
       styles: ["normal"],
       formats: ["woff2", "woff"],
     },
-    // /launch portfolio only: space / mission-control type.
+    // Portfolio home page only: space / mission-control type.
     {
       name: "Orbitron",
       cssVariable: "--font-orbitron",

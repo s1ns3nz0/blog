@@ -8,7 +8,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
 
-  /* Type roles, shared with /launch:
+  /* Type roles, shared with the home page:
      - app (body) and display: Space Grotesk; Korean falls back to Pretendard
      - mono: Space Mono — dates, tags, meta */
   --font-app: var(--font-space-grotesk), "Pretendard Variable", "Apple SD Gothic Neo", sans-serif;
@@ -17,7 +17,7 @@
 }
 
 /*
- * Palette shared with /launch: slate ink, one orange accent, one hairline.
+ * Palette shared with the home page: slate ink, one orange accent, one hairline.
  * The accent marks the current state and primary actions only. On light
  * backgrounds it is a darker orange so it passes contrast as text.
  */

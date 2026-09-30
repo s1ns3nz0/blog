@@ -139,6 +139,7 @@ English only.
 | v4.2 | Review pass: dark hero cards and buttons; phone alert becomes a one-line bar under the HUD; Operate support line matches its cards; career details from the removed field missions folded into Career; unused CSS removed |
 | v4.3 | Hero stat cards span the headline width in frosted glass, 'Available now' is a glass pill with a green dot; summary closes on 'Security controls you can read, run, and prove.' instead of repeating the hero claim; RULES lines removed from stage headings and cards |
 | v4.4 | Hero: 'View details' pill on the three stat cards, 'Global reach' cards (33M+ users, 8 industries, 7 countries) right under the summary's closing line; pre-dawn stars over the pad; Sun Tzu byline; 'Field notes' (AI-era essay, Open Source Contribution) above How I work. Blog: four new posts (LND on local Kubernetes; three under Study) |
+| v4.5 | /launch retired: the Vercel redirect is removed, so /launch returns 404; the portfolio lives only at / (and /?for=lightning-labs) |
 | v2 | Satellite becomes a button that opens the assistant panel (drawer on desktop, sheet on mobile) with reviewed chip answers, a disabled input, privacy note, and "How this assistant is secured"; the summary gets an "Ask the satellite" button |
 | v3 | Live free-form questions (OpenRouter, rate limits, serverless route) |
 | v4 | Promote to `/`, move blog home to `/posts` |
