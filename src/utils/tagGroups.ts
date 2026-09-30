@@ -14,6 +14,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "Blockchain", "Hoodi", "Validator", "Ethereum", "Vault",
       "Secrets Management", "PKI", "PostgreSQL", "Architecture",
       "Lightning Network", "lnd", "Routing", "Aperture", "L402",
+      "OpenCTI Payments",
     ],
   },
   {

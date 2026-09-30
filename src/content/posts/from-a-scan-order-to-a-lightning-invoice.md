@@ -7,6 +7,7 @@ tags:
   - lnd
   - L402
   - Aperture
+  - OpenCTI Payments
   - Blockchain
 ---
 
