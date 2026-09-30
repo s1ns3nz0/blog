@@ -1,5 +1,5 @@
 ---
-title: "Adding Lightning Payments to an OpenCTI and ASM Service with Aperture"
+title: "Lightning Payments for OpenCTI (1) - Aperture as a Payment Gate"
 description: How Aperture's L402 payment gate works, from a simple paid API to our OpenCTI and ASM service with order-based pricing and receipt verification, and where Aperture's job ends.
 pubDatetime: 2026-09-30T15:45:00+09:00
 tags:
@@ -244,3 +244,5 @@ Aperture handles payment-based access control. Our application handles the meani
 Adding Aperture does not automatically implement “one payment, one scan.” The application must define how payment credentials map to orders and how repeated requests are handled.
 
 For our service, the next step is to trace one scan order through pricing, invoice creation, payment verification, and order completion. That shows how the configuration becomes an actual paid-service workflow.
+
+Next: [Lightning Payments for OpenCTI (2) - From a Scan Order to a Lightning Invoice](/posts/from-a-scan-order-to-a-lightning-invoice/)
