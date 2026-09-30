@@ -50,7 +50,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     name: "Resilience",
     tags: [
       "HA", "Backup", "Recovery", "DisasterRecovery", "AccessReview", "Rotation",
-      "Prometheus", "Logging",
+      "Prometheus", "Logging", "SRE", "SLO", "Grafana",
     ],
   },
   {

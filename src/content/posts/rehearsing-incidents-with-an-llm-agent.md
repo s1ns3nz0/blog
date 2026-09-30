@@ -1,7 +1,7 @@
 ---
 title: "Diagnosing OpenCTI with Kagent (4) - Rehearsing Incidents with an LLM Agent"
 description: I rehearsed incidents against a Kagent on-call agent watching an Aperture L402 payment gate, then scored it against a playbook. The exercise found gaps in my own alerts too.
-pubDatetime: 2026-09-30T14:00:00+09:00
+pubDatetime: 2026-09-30T17:55:00+09:00
 draft: false
 tags:
   - AI
@@ -414,3 +414,5 @@ From an incident-response perspective, it is dangerous.
 An on-call agent should not create a richer story
 
 <!-- TODO(draft): the source text stops here, mid-sentence. Finish this section and add the closing. -->
+
+Next: [Diagnosing OpenCTI with Kagent (5) - Reviewing the Setup Against Google SRE](/posts/diagnosing-opencti-with-kagent-google-sre-review/)
