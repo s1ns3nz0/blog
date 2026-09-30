@@ -336,6 +336,7 @@ const smokePuffs: [number, number][] = [
   </nav>
 
   <a class="skip" href="#summary">Skip to summary ↓</a>
+  <a class="to-profile" href="#profile" data-to-profile>↑ Profile</a>
 
   <main class="flight">
     {
@@ -347,7 +348,7 @@ const smokePuffs: [number, number][] = [
           class="flex min-h-[130vh] flex-col justify-center gap-6 py-24"
         >
           {i === 0 && (
-            <header class="mb-16 flex min-h-[70vh] flex-col justify-center gap-5">
+            <header id="profile" class="mb-16 flex min-h-[70vh] flex-col justify-center gap-5">
               <p class="telemetry spaced"><span>Mission <span data-audience-default>DevSecOps</span><span data-audience="lightning-labs" hidden>Platform Engineering</span></span><span>T-00:10</span></p>
               <p class="telemetry" data-audience-label hidden />
               <h1 class="hero-title display text-4xl leading-tight font-bold text-white sm:text-6xl">

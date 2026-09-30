@@ -385,7 +385,22 @@ function setupReveal() {
   });
 }
 
+// "↑ Profile" shows once the hero is out of view and jumps straight back to
+// it: no smooth scroll, so the flight doesn't replay in reverse.
+function setupToProfile() {
+  const hero = document.getElementById("profile");
+  const link = document.querySelector<HTMLAnchorElement>("[data-to-profile]");
+  if (!hero || !link) return;
+  const root = document.documentElement;
+  new IntersectionObserver(([e]) => root.toggleAttribute("data-past-hero", !e.isIntersecting)).observe(hero);
+  link.addEventListener("click", event => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: "instant" });
+  });
+}
+
 setupReveal();
+setupToProfile();
 setupAssistant(applyAudience());
 setupDetailDialogs();
 update();

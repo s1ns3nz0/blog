@@ -514,6 +514,37 @@ html[data-stage="orbit"] .skip {
   pointer-events: none;
 }
 
+/* Back to the hero's specs: glass, stacked above Skip; takes Skip's spot in orbit */
+.to-profile {
+  position: fixed;
+  z-index: 3;
+  right: 12px;
+  bottom: 56px;
+  padding: 8px 12px;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 6px;
+  background: rgb(5 8 20 / 0.55);
+  color: #fff;
+  backdrop-filter: blur(6px);
+  font: 600 11px var(--font-space-mono), ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    opacity 0.3s ease,
+    bottom 0.3s ease;
+}
+.to-profile:hover {
+  border-color: rgb(255 255 255 / 0.5);
+}
+html:not([data-past-hero]) .to-profile {
+  opacity: 0;
+  visibility: hidden; /* out of the tab order too */
+}
+html[data-stage="orbit"] .to-profile {
+  bottom: 14px;
+}
+
 html[data-bright] .hud {
   color: #334155;
   background: rgb(255 255 255 / 0.7);
