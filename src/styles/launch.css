@@ -2240,15 +2240,15 @@ html[data-stage="orbit"] .sat-button {
   background: transparent;
   color: var(--ink);
 }
+/* compact pills that wrap, so the panel stays short */
 .chip {
-  width: 100%;
-  padding: 10px 12px;
+  padding: 6px 12px;
   border: 1px solid var(--panel-line);
-  border-radius: 8px;
+  border-radius: 999px;
   background: transparent;
   color: var(--ink);
   text-align: left;
-  font-size: 14px;
+  font-size: 13px;
 }
 .chip:hover {
   border-color: rgb(255 255 255 / 0.4);

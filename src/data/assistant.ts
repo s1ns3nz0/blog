@@ -125,27 +125,7 @@ export const chips: Chip[] = [
   },
 ];
 
-export const privacyNote =
-  "Suggested answers are pre-written and reviewed. Typed questions go to Anthropic's Claude to be answered and are not stored here, so please don't enter personal information.";
+export const privacyNote = "Typed questions go to Claude and aren't stored. No personal info, please.";
 
-/** "How this assistant is secured": the product's own security design. */
-export const securityDesign = [
-  {
-    title: "Suggested questions",
-    items: [
-      "No model call: every answer is written in advance, reviewed, and shipped with the page.",
-      "Every answer cites blog posts, and the build fails if a cited post is missing or unpublished.",
-    ],
-  },
-  {
-    title: "Typed questions",
-    items: [
-      "One serverless function holds the API key; the browser never sees it.",
-      "Same-origin check and Vercel BotID before anything else runs.",
-      "300-character cap, 10 questions per visitor and 60 in total per day, which keeps the month under $10. Past that, the suggested answers still work.",
-      "The model sees only public facts from this page and a few matching posts, answers in plain text, and refuses off-topic questions.",
-      "Sources are checked on the server: only posts the model was actually given can be cited.",
-      "One question, one answer: no history is kept, and prompts are not logged.",
-    ],
-  },
-];
+/** One line under the panel title. */
+export const assistantKeywords = ["Portfolio only", "Cited posts", "Claude Haiku", "No history"];
