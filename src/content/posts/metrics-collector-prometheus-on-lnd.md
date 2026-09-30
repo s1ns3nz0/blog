@@ -6,7 +6,6 @@ tags:
   - Prometheus
   - lnd
   - Lightning Network
-  - Lightning Labs
   - Kubernetes
   - CNCF
 ---

@@ -4,7 +4,6 @@ description: Using two testnet LND nodes on a Mac and in WSL, a 10-sat self-paym
 pubDatetime: 2026-09-30T20:20:00+09:00
 tags:
   - Lightning Network
-  - Lightning Labs
   - lnd
   - Kubernetes
 ---

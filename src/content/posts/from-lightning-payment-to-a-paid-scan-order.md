@@ -4,7 +4,6 @@ description: How a paid Lightning invoice becomes a paid scan order, from the pr
 pubDatetime: 2026-09-30T16:25:00+09:00
 tags:
   - Lightning Network
-  - Lightning Labs
   - lnd
   - L402
   - Aperture

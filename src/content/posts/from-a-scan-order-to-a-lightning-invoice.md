@@ -4,7 +4,6 @@ description: How our OpenCTI and ASM service turns a scan order into a Lightning
 pubDatetime: 2026-09-30T16:15:00+09:00
 tags:
   - Lightning Network
-  - Lightning Labs
   - lnd
   - L402
   - Aperture

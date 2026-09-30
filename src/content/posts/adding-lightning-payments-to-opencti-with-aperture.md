@@ -4,7 +4,6 @@ description: How Aperture's L402 payment gate works, from a simple paid API to o
 pubDatetime: 2026-09-30T15:45:00+09:00
 tags:
   - Lightning Network
-  - Lightning Labs
   - lnd
   - L402
   - Aperture

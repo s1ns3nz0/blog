@@ -3,7 +3,10 @@ title: "Introduction to Lightning Node Operations"
 description: Payment channels, HTLCs, directional liquidity, and where LND and Aperture fit, as the groundwork for operating a Lightning node.
 pubDatetime: 2026-09-30T01:00:00+09:00
 tags:
-  - Study
+  - Lightning Network
+  - lnd
+  - Aperture
+  - L402
 ---
 
 ## What is the Lightning Network?

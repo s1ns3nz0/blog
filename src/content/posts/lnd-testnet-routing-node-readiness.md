@@ -4,7 +4,6 @@ description: Before changing any fee policy, a read-only check of a testnet LND 
 pubDatetime: 2026-09-30T19:45:00+09:00
 tags:
   - Lightning Network
-  - Lightning Labs
   - lnd
   - Kubernetes
 ---

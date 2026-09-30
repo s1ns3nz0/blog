@@ -6,7 +6,6 @@ tags:
   - Lightning Network
   - lnd
   - Aperture
-  - Lightning Labs
   - L402
 ---
 

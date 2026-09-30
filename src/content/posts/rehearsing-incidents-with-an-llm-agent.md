@@ -11,7 +11,6 @@ tags:
   - Prometheus
   - Incident Response
   - Playbook
-  - Lightning Labs
   - Lightning Network
   - MCP
   - Kagent
