@@ -22,6 +22,8 @@ After the first rehearsal, I reviewed the whole setup around the L402 payment ga
 
 For each practice below: what Google recommends, what the review found, what I changed, and the result. Findings are numbered F1 to F10 as they came up in the review.
 
+One caveat up front: this is not a live service. It runs in a rehearsal lab with synthetic traffic and no customers, so a lot still needs work before it would hold up in production, especially the numbers. The SLO target, the error budget, and the burn-rate thresholds below are standard starting points checked with real arithmetic, but they haven't been tuned against real traffic, and the lab's own availability figures mean little because every drill breaks something on purpose.
+
 ## 1. Playbooks: mitigate first, find the root cause later
 
 **Google SRE.** A playbook should help the on-call engineer stop the customer impact first and debug second. Every alert should link to one.
@@ -66,6 +68,53 @@ For each practice below: what Google recommends, what the review found, what I c
 The long window shows the budget is really burning; the short window makes the alert stop soon after recovery.
 
 **Result.** Measured in a rehearsal, detection went from 16 min 22 s to 5 min 14 s.
+
+### SLI, SLO, and SLA in numbers
+
+**SLI: what is measured.**
+
+| SLI | Definition | Used for |
+|---|---|---|
+| Component health probe (main) | Every 60 s, the blackbox exporter checks 3 components. A minute counts as good only if all 3 pass: `l402_probe:up = min(probe_success)` | SLO and alerts |
+| Real-traffic invoice success | Invoices issued vs requests without a token (Aperture counters) | Reporting only, no target: too noisy at low traffic |
+
+The three probe checks:
+
+- `pricer`: `GET payment-aperture-services:8090/health` returns 200.
+- `lnd_merchant`: `GET https://lnd-merchant:8080/v1/state` returns `SERVER_ACTIVE`.
+- `aperture`: a TCP connection to `l402-aperture:8081` succeeds.
+
+**SLO: the target.**
+
+| Item | Value |
+|---|---|
+| Target | 99.5% probe availability |
+| Window | Rolling 30 days |
+| Error budget | 0.5% = 216 minutes (3.6 h) of downtime per 30 days |
+| Why not 99.9% | At 60 probes an hour, a single failed probe would page. Too sensitive for a single-replica MVP |
+
+The 99.9% point is plain arithmetic. With a 0.1% budget, the fast-burn threshold is 14.4 × 0.1% = 1.44% errors over an hour. One failed probe out of 60 is already 1.67%.
+
+**Alerts on the budget.** The burn rate is how many times faster than allowed the budget is being spent. At a burn rate of 1, the budget lasts exactly 30 days.
+
+| Alert | Condition | Error ratio | What it means | Severity |
+|---|---|---|---|---|
+| `ProbeFastBurn` | Burn ≥ 14.4 over 1 h and 5 m | ≥ 7.2% | 2% of the monthly budget gone in 1 hour; a full outage pages in about 5 min | Critical (page) |
+| `ProbeSlowBurn` | Burn ≥ 6 over 6 h and 30 m, for 5 m | ≥ 3% | 5% of the budget gone in 6 hours; a persistent partial failure | Warning (ticket) |
+| `ProbeAbsent` | No probe data for 10 m | — | Unobserved, which is not the same as healthy | Warning |
+
+The 14.4 and 6 multipliers and the 1 h + 5 m and 6 h + 30 m windows are the Google SRE Workbook's standard multiwindow numbers. They're a starting point, not values tuned for this service.
+
+**SLA: the promise to customers.** None is defined. An SLA is a contract with customers, with refunds or credits if it's missed. That's a business decision, not something monitoring sets, and OpenCTI is still an MVP with no customer contract. When one comes, the SLA should be looser than the SLO, for example an SLA of 99.0% against an SLO of 99.5%, so internal alerts fire well before a contract is breached.
+
+**The lab's current numbers.**
+
+| Metric | Value |
+|---|---|
+| Probe availability | 86.6% (about 11 h of lab history, not 30 days) |
+| Error budget remaining | −2,576% (about 26× overspent) |
+
+That's expected in the lab, where every drill breaks something on purpose. In production, a single incident like drill 2, about 26 minutes down, would use 12% of the monthly budget. These figures show the arithmetic works; they say nothing yet about how the service would do under real load.
 
 ## 4. No data is not healthy
 
