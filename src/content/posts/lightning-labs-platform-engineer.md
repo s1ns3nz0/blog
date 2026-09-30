@@ -1,12 +1,12 @@
 ---
 title: "Application notes: Platform Engineer at Lightning Labs"
-description: A cover letter for the Platform Engineer (Remote) role at Lightning Labs, and the details of the Lightning nodes I run.
+description: My application notes for the Platform Engineer (Remote) role at Lightning Labs. A cover letter, my Bitcoin and Lightning experience, why I want the role, and the nodes I run.
 pubDatetime: 2026-09-30T22:00:00+09:00
 unlisted: true
 tags: []
 ---
 
-*These are my notes for the Platform Engineer (Remote) role at Lightning Labs: a cover letter, and the details of the Lightning nodes I run.*
+*These are my notes for the Platform Engineer (Remote) role at Lightning Labs: a cover letter, my experience with Bitcoin and Lightning, why I want to work there, and the details of the nodes I run.*
 
 ## Cover letter
 
@@ -26,6 +26,29 @@ I am based in Seoul and can work US hours.
 
 Jinsoo Yang
 
+## My experience with Bitcoin and Lightning
+
+My Lightning experience is recent. It started in September 2026. I was reading about AI agents paying per API call (Coinbase's x402), found L402, and from there Lightning.
+
+Since then:
+
+- I run two LND testnet nodes [on Kubernetes (K3s) from one Helm chart](/posts/running-an-lnd-lightning-node-on-local-kubernetes/), plus a regtest setup with Bitcoin Core and two nodes. I opened public channels, [routed a payment through my own node](/posts/lnd-testnet-routing-practice/), and matched the forward and its 1,005 msat fee in `fwdinghistory`.
+- I put [Aperture in front of a paid API as an L402 gate](/tags/opencti-payments/), with order-based pricing over gRPC and a receipt check against the merchant LND node.
+- In lnd, I reported that the NodeAnnouncement2 address decoders accept short reads ([#11211](https://github.com/lightningnetwork/lnd/issues/11211)). A maintainer confirmed it and credited me as co-author on the fix, [PR #11219](https://github.com/lightningnetwork/lnd/pull/11219).
+- In Aperture, I opened [PR #285](https://github.com/lightninglabs/aperture/pull/285) (a test flake), proposed mint and verify counters ([#286](https://github.com/lightninglabs/aperture/issues/286)) with [a Go implementation on my fork](/posts/aperture-l402-metrics-before-and-after/), and proposed [security event logging](/posts/aperture-l402-security-events-monitoring-proposal/) ([#291](https://github.com/lightninglabs/aperture/issues/291)).
+
+I have not run a mainnet node or held funds in channels. Before this, my crypto experience was DeFi and trading, and running an Ethereum validator stack on the Hoodi testnet.
+
+## Why I want to work at Lightning Labs
+
+I spent the last few years as a security consultant at IBM and Deloitte, assessing other people's systems and writing recommendations. What I wanted was to own the security and operations of a system myself, to a standard I would be comfortable showing anyone. So I earned the Kubernetes and AWS certifications while consulting, and started building and operating things on my own time.
+
+I picked blockchain nodes to practice on because I could run them alone, and because availability and security failures there cost money directly. That led to [an Ethereum validator platform](https://github.com/s1ns3nz0/node-operator-public), and then to LND.
+
+That work already runs on your software. I run lnd, lndmon and Aperture, and the gaps I hit as an operator became issues and a PR in your repositories. I would rather do that full time, on the platform those services run on.
+
+I also think AI agents and stablecoins will move a lot of payment volume onto open networks, and that bitcoin's proof of work and fixed supply give it a position other networks do not have. L402 and Taproot Assets are built for that kind of payment.
+
 ## The Lightning nodes I run
 
 I run LND on testnet and regtest. I do not run a mainnet node yet.
@@ -34,7 +57,7 @@ I run LND on testnet and regtest. I do not run a mainnet node yet.
 - Both use [the same Helm chart](/posts/running-an-lnd-lightning-node-on-local-kubernetes/): a single-replica StatefulSet, a PVC for wallet and channel state, the Neutrino backend, and default-deny NetworkPolicy. P2P is exposed through an opt-in NodePort, and gRPC and REST stay inside the cluster.
 - I manage the nodes with `lncli` through `kubectl exec`. I unlock the wallet by hand after each restart and have not adopted `lndinit` yet. The Static Channel Backup is encrypted and copied off the volume, and the seed is kept offline.
 - Monitoring is [lndmon with Prometheus](/posts/metrics-collector-prometheus-on-lnd/), Alertmanager and Grafana. `loopd` runs alongside.
-- The WSL node has [seven channels](/posts/lnd-testnet-routing-node-readiness/), including public channels to two testnet peers and one to my Mac node. I [routed a test payment](/posts/lnd-testnet-routing-practice/) through it.
+- The WSL node has [seven channels](/posts/lnd-testnet-routing-node-readiness/), including public channels to two testnet peers and one to my Mac node.
 - Regtest runs Bitcoin Core with two LND nodes, for tests I want to repeat.
 
 The chart and the tests are in [github.com/s1ns3nz0/lnd-ops](https://github.com/s1ns3nz0/lnd-ops).
