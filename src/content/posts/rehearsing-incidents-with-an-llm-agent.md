@@ -2,7 +2,7 @@
 title: "Rehearsing Incidents with an LLM Agent: Kagent, L402, and Playbooks"
 description: I rehearsed incidents against a Kagent on-call agent watching an Aperture L402 payment gate, then scored it against a playbook. The exercise found gaps in my own alerts too.
 pubDatetime: 2026-09-30T14:00:00+09:00
-draft: true
+draft: false
 tags:
   - AI
   - Kubernetes
