@@ -4,8 +4,6 @@
 @import "./typography.css";
 @import "rehype-callouts/theme/obsidian";
 
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-
 @layer base {
   * {
     @apply border-border outline-accent/75;
@@ -46,12 +44,32 @@
   scroll-margin-block: 1rem;
 }
 
+/* Earth's limb along the bottom edge, as in the home page's orbit stage. */
+body:not(.launch-body)::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  top: calc(100% - 10vh);
+  left: 50%;
+  width: 260vw;
+  height: 260vw;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  opacity: 0.6; /* dimmed so body text stays readable where it overlaps */
+  background: radial-gradient(circle at 50% 0%, #3b82c4 0%, #1e4f86 8%, #0f2a4a 30%, #07121f 60%);
+  box-shadow:
+    0 0 0 2px rgb(150 205 255 / 0.55),
+    0 -10px 40px 8px rgb(90 170 255 / 0.45),
+    0 -30px 120px 30px rgb(60 130 255 / 0.25);
+  pointer-events: none;
+}
+
 /*
- * Dark theme: the launch page's night sky behind the blog. Two faint
+ * The launch page's night sky behind the blog. Two faint
  * nebula glows and three star layers tiled at co-prime sizes so the
  * pattern does not visibly repeat. Pure CSS, fixed to the viewport.
  */
-[data-theme="dark"] body:not(.launch-body) {
+body:not(.launch-body) {
   background-image:
     radial-gradient(ellipse 60% 45% at 85% -5%, rgb(99 102 241 / 0.16), transparent 70%),
     radial-gradient(ellipse 55% 40% at -5% 105%, rgb(255 138 61 / 0.07), transparent 70%),

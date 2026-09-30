@@ -36,7 +36,8 @@ const rssHref = getRelativeLocaleUrl(
 <html
   dir={site.dir ?? "ltr"}
   lang={Astro.currentLocale ?? site.lang}
-  class="overflow-y-scroll scroll-smooth"
+  class="dark overflow-y-scroll scroll-smooth"
+  data-theme="dark"
 >
   <head>
     <meta charset="UTF-8" />
@@ -83,8 +84,8 @@ const rssHref = getRelativeLocaleUrl(
       href={new URL(rssHref, Astro.site)}
     />
 
-    <!-- Filled at runtime by theme.ts to match the current background colour -->
-    <meta name="theme-color" content="" />
+    <!-- Matches the space background (--background in theme.css) -->
+    <meta name="theme-color" content="#0a0f1f" />
 
     <!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->
     <slot name="head" />
@@ -98,25 +99,6 @@ const rssHref = getRelativeLocaleUrl(
       )
     }
 
-    <!--
-      Inline FOUC-prevention script: sets data-theme on <html> before
-      the browser paints. Runs synchronously, no defer/async.
-    -->
-    <script is:inline>
-      (function () {
-        const stored = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-        const theme = stored ?? (prefersDark ? "dark" : "light");
-        const root = document.firstElementChild;
-        root?.setAttribute("data-theme", theme);
-        root?.classList.toggle("dark", theme === "dark");
-        // Expose value so theme.ts can skip re-detection.
-        window.__theme = { value: theme };
-      })();
-    </script>
-
     <ClientRouter />
   </head>
   <body
@@ -125,9 +107,6 @@ const rssHref = getRelativeLocaleUrl(
     <Sidebar />
     <slot />
     <Analytics />
-    <script>
-      import "@/scripts/theme";
-    </script>
     <script>
       import "@/scripts/mermaid";
     </script>

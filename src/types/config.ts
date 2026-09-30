@@ -32,8 +32,6 @@ interface PostsConfig {
 }
 
 interface FeaturesConfig {
-  /** Enable light/dark mode toggle. Defaults to true. */
-  lightAndDarkMode?: boolean;
   /**
    * Generate dynamic OG images per post and provide `/og.png` when the static
    * `public/{site.ogImage}` file is absent. When false, that file is required

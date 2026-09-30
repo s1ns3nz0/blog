@@ -17,12 +17,12 @@
 }
 
 /*
- * Palette shared with the home page: slate ink, one orange accent, one hairline.
- * The accent marks the current state and primary actions only. On light
- * backgrounds it is a darker orange so it passes contrast as text.
+ * Baseline palette, used by the home page (its layout sets no data-theme):
+ * slate ink, one orange accent, one hairline. The accent marks the current
+ * state and primary actions only. On light backgrounds it is a darker orange
+ * so it passes contrast as text.
  */
-:root,
-[data-theme="light"] {
+:root {
   --background: #f5f7fa;
   --foreground: #0f172a;
   --accent: #c2410c;
@@ -32,7 +32,7 @@
   --border: #e2e8f0;
 }
 
-/* Dark: the launch page's night sky */
+/* Blog: the launch page's night sky. Layout.astro sets data-theme="dark" on every blog page. */
 [data-theme="dark"] {
   --background: #0a0f1f;
   --foreground: #e6edf7;
