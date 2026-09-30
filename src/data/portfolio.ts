@@ -562,11 +562,53 @@ export const education = [
  */
 export type TileId = "career" | "oss" | "credentials";
 
-/** Second hero row: the reach of the work, not clickable. */
-export const reach: { stat: string; label: string }[] = [
-  { stat: "33M+", label: "Users of services I've secured" },
-  { stat: "8", label: "Industries" },
-  { stat: "7", label: "Countries I've worked with" },
+/** Second hero row: the reach of the work. Each card opens a short detail dialog. */
+export const reach: {
+  id: string;
+  stat: string;
+  label: string;
+  note?: string;
+  items: string[];
+}[] = [
+  {
+    id: "users",
+    stat: "33M+",
+    label: "Users of services I've secured",
+    note: "Counted from publicly available figures. Client names are withheld.",
+    items: [
+      "A global IoT service",
+      "A telecom carrier's identity verification service, built on PKI digital signatures",
+    ],
+  },
+  {
+    id: "industries",
+    stat: "8",
+    label: "Industries",
+    items: [
+      "Defense",
+      "Semiconductors",
+      "Heavy equipment",
+      "Energy",
+      "Telecommunications",
+      "Real estate",
+      "IoT",
+      "Mobile",
+    ],
+  },
+  {
+    id: "countries",
+    stat: "7",
+    label: "Countries I've worked with",
+    items: [
+      "South Korea",
+      "United States",
+      "United Kingdom",
+      "Israel",
+      "Czech Republic",
+      "India",
+      "Singapore",
+    ],
+  },
 ];
 
 export const tiles: { id: TileId; title: string; stat: string; label: string }[] = [
