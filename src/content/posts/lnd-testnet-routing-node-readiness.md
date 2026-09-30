@@ -270,4 +270,6 @@ So the node is up, synced, and has enabled public channels, which is the minimum
 
 Still unverified: an actual forward through the node, and inbound P2P reachability at the advertised address.
 
-The next step is to bring the three public channels to the same fee policy and check the result again.
+The next step is to route a real test payment through the node.
+
+Next: [Relaying a Test Payment Through a Testnet LND Node](/posts/lnd-testnet-routing-practice/)
