@@ -1,3 +1,4 @@
+import { initBotId } from "botid/client/core";
 /**
  * Drives the /launch scene from scroll position: stage state, sky layer
  * fades, parallax, telemetry, and the altitude meter. Also applies the
@@ -300,6 +301,63 @@ function setupAssistant(audienceId: string | undefined) {
       if (empty) empty.hidden = true;
     });
   }
+  setupAsk(dialog);
+}
+
+/** Free-form questions (v3): one question, one answer, rendered as text only. */
+function setupAsk(dialog: HTMLDialogElement) {
+  const form = dialog.querySelector<HTMLFormElement>("[data-ask-form]");
+  const input = form?.querySelector("input");
+  const button = form?.querySelector("button");
+  const result = dialog.querySelector<HTMLElement>("[data-ask-result]");
+  const text = dialog.querySelector<HTMLElement>("[data-ask-text]");
+  const list = dialog.querySelector<HTMLElement>("[data-ask-sources]");
+  if (!form || !input || !button || !result || !text || !list) return;
+
+  initBotId({ protect: [{ path: "/api/ask", method: "POST" }] });
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    const question = input.value.trim();
+    if (!question) return;
+    button.disabled = true;
+    result.hidden = false;
+    result.setAttribute("aria-busy", "true");
+    text.textContent = "Signal sent. Waiting for the satellite…";
+    list.replaceChildren();
+    try {
+      const res = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
+      const data = (await res.json()) as {
+        answer?: string;
+        sources?: { title: string; url: string }[];
+        message?: string;
+      };
+      if (data.answer) {
+        text.textContent = data.answer;
+        for (const s of data.sources ?? []) {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = s.url;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.textContent = s.title;
+          li.append("→ ", a);
+          list.append(li);
+        }
+      } else {
+        text.textContent = `${data.message ?? "No answer this time."} The suggested questions above still work.`;
+      }
+    } catch {
+      text.textContent = "The satellite lost signal. The suggested questions above still work.";
+    } finally {
+      button.disabled = false;
+      result.removeAttribute("aria-busy");
+    }
+  });
 }
 
 // Summary cards and "How I work" lines rise into place once, staggered per group.

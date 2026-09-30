@@ -734,12 +734,19 @@ html[data-bright] .meter a::before {
     white-space: nowrap;
   }
 }
+/* contact buttons, then the IBM and Deloitte marks on the same line */
+.hero-contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+}
 .hero-orgs {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 18px 28px;
-  margin: 4px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }

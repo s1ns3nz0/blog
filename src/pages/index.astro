@@ -370,6 +370,7 @@ const smokePuffs: [number, number][] = [
                 </span>
                 <span class="hero-available">{identity.available}</span>
               </p>
+              <div class="hero-contact-row">
               <nav class="hero-contact" aria-label="Contact">
                 {contacts.map(c => (
                   <a class="hero-contact-link" href={c.url} target={c.url.startsWith("mailto:") ? undefined : "_blank"} rel="noopener noreferrer">
@@ -383,6 +384,12 @@ const smokePuffs: [number, number][] = [
                   </a>
                 )}
               </nav>
+              <ul class="hero-orgs" aria-label="Worked at">
+                {career.filter(c => c.logo === "ibm" || c.logo === "deloitte").map(c => (
+                  <li><Image src={orgLogos[c.logo as keyof typeof orgLogos]} alt={c.org} height={28} class="hero-org" /></li>
+                ))}
+              </ul>
+              </div>
               <div class="stat-cards hero-stats">
                 {tileList.map(t => (
                   <button type="button" class="stat-card" data-open-dialog={`dlg-${t.id}`}>
@@ -392,11 +399,6 @@ const smokePuffs: [number, number][] = [
                   </button>
                 ))}
               </div>
-              <ul class="hero-orgs" aria-label="Worked at">
-                {career.filter(c => c.logo === "ibm" || c.logo === "deloitte").map(c => (
-                  <li><Image src={orgLogos[c.logo as keyof typeof orgLogos]} alt={c.org} height={28} class="hero-org" /></li>
-                ))}
-              </ul>
               <details class="stack-toggle">
                 <summary>Tech stack</summary>
                 <dl class="stack" aria-label="Tech stack">
@@ -835,18 +837,23 @@ const smokePuffs: [number, number][] = [
         }
       </div>
 
-      <form class="flex gap-2">
+      <form class="flex gap-2" data-ask-form>
         <label class="sr-only" for="assistant-input">Your question</label>
         <input
           id="assistant-input"
           class="assistant-input"
           type="text"
           maxlength="300"
-          placeholder="Free-form questions: coming soon"
-          disabled
+          required
+          autocomplete="off"
+          placeholder="Ask anything about his work"
         />
-        <button type="submit" class="ask-button" disabled>Send</button>
+        <button type="submit" class="ask-button">Send</button>
       </form>
+      <div class="answer" data-ask-result aria-live="polite" hidden>
+        <p class="text-sm leading-relaxed" data-ask-text></p>
+        <ul class="evidence mt-3 flex flex-col gap-1 text-sm" aria-label="Sources" data-ask-sources></ul>
+      </div>
 
       <p class="text-xs text-slate-400">{privacyNote}</p>
 

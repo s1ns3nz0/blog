@@ -1,9 +1,8 @@
 /**
- * The satellite assistant on the home page. v2 serves reviewed, pre-written
- * answers only: no model call, nothing typed leaves the browser. Sources
- * are blog post slugs, validated at build like the portfolio evidence.
- * Placeholder content until the full resume upload; see
- * docs/portfolio-spec.md.
+ * The satellite assistant on the home page. Chips serve reviewed,
+ * pre-written answers with no model call; typed questions go to api/ask.ts
+ * (v3). Chip sources are blog post slugs, validated at build like the
+ * portfolio evidence. See docs/portfolio-spec.md.
  */
 
 export type Chip = {
@@ -45,7 +44,7 @@ export const chips: Chip[] = [
     audiences: ["default", "lightning-labs"],
     question: "What open source has he contributed to?",
     answer:
-      "28 Azure and GCP checks for Prowler, Policy as Code and private-registry guidance for the SEAL frameworks, a fuzzer bug report in Trail of Bits' Gosentry (fixed the same day), and per-outcome L402 metrics for Lightning Labs' Aperture.",
+      "28 Azure and GCP checks for Prowler, Policy as Code and private-registry guidance for the SEAL frameworks, a fuzzer bug report in Trail of Bits' Gosentry (fixed the same day), and for Lightning Labs: per-outcome L402 metrics and a flaky-test fix in Aperture, plus a short-read report in LND's address decoders.",
     sources: [
       "reporting-a-libafl-corpus-id-bug-in-gosentry",
       "aperture-l402-metrics-before-and-after",
@@ -62,6 +61,30 @@ export const chips: Chip[] = [
       "vault-secret-management-for-hoodi-validator",
       "validator-key-types-and-key-management-policy-for-a-hoodi-validator",
       "converting-the-web3-key-management-policy-to-oscal",
+    ],
+  },
+  {
+    id: "lightning-node",
+    audiences: ["default"],
+    question: "Has he run a Lightning node?",
+    answer:
+      "Yes, on testnet. He runs LND on K3s as a stateful workload, checked its routing readiness, found a channel direction still advertised as disabled after a peer reconnected, re-enabled it, and relayed a real payment for a 1.005-sat fee. On top of it he built an Aperture L402 payment gate for a paid scan service.",
+    sources: [
+      "running-an-lnd-lightning-node-on-local-kubernetes",
+      "lnd-testnet-routing-practice",
+      "adding-lightning-payments-to-opencti-with-aperture",
+    ],
+  },
+  {
+    id: "on-call",
+    audiences: ["default"],
+    question: "How does he handle on-call and incidents?",
+    answer:
+      "He built a read-only Kagent diagnosis agent for the L402 payment gate and reviewed the setup against Google SRE. SLO burn-rate alerts cut detection from 16 to 5 minutes, and blind drills grade the agent against the playbook, which is how he caught it skipping a required tool and inventing commands.",
+    sources: [
+      "diagnosing-opencti-with-kagent-google-sre-review",
+      "diagnosing-opencti-with-kagent-drill-2",
+      "rehearsing-incidents-with-an-llm-agent",
     ],
   },
 
@@ -103,25 +126,26 @@ export const chips: Chip[] = [
 ];
 
 export const privacyNote =
-  "Answers here are pre-written and reviewed. Free-form questions (coming soon) will go to a free third-party model that may log prompts, so please don't enter personal information.";
+  "Suggested answers are pre-written and reviewed. Typed questions go to Anthropic's Claude to be answered and are not stored here, so please don't enter personal information.";
 
 /** "How this assistant is secured": the product's own security design. */
 export const securityDesign = [
   {
-    title: "Now",
+    title: "Suggested questions",
     items: [
       "No model call: every answer is written in advance, reviewed, and shipped with the page.",
       "Every answer cites blog posts, and the build fails if a cited post is missing or unpublished.",
-      "Nothing you do in this panel is sent anywhere.",
     ],
   },
   {
-    title: "Planned for free-form questions",
+    title: "Typed questions",
     items: [
       "One serverless function holds the API key; the browser never sees it.",
-      "Per-IP and global daily limits kept below the provider quota, with a graceful fallback to these answers.",
-      "Input length cap, off-topic refusal, and answers that must cite posts.",
-      "Prompts are not stored beyond what abuse limiting needs.",
+      "Same-origin check and Vercel BotID before anything else runs.",
+      "300-character cap, 10 questions per visitor and 60 in total per day, which keeps the month under $10. Past that, the suggested answers still work.",
+      "The model sees only public facts from this page and a few matching posts, answers in plain text, and refuses off-topic questions.",
+      "Sources are checked on the server: only posts the model was actually given can be cited.",
+      "One question, one answer: no history is kept, and prompts are not logged.",
     ],
   },
 ];

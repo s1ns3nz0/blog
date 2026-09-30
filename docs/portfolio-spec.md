@@ -85,8 +85,8 @@ English only.
 ## AI assistant (v2, v3)
 
 - Suggested-question chips: answers are drafted, reviewed, and committed in `src/data/assistant.ts` with cited post slugs (validated at build). v2 drafts them by hand; v3 adds a generation script. Zero runtime calls.
-- Free-form questions only: OpenRouter free models with a fallback chain, small context (resume summary, stage cards, 3-5 posts picked by a build-time keyword index), answers must cite posts.
-- Limits: per-IP daily cap and a global daily cap below the account quota, both configurable. On exhaustion, fall back to chip answers and contact links.
+- Free-form questions (v3, `api/ask.ts`): Claude Haiku 4.5, one question per call with no history, context = fact sheet from `portfolio.ts` + 6 posts picked by keyword from `/assistant-index.json` (built with the site); cited slugs are checked against the posts given. Budget $10/month.
+- Limits: same-origin check, Vercel BotID, 300-char cap, 10 per IP and 60 global per day (Upstash Redis). On exhaustion, fall back to chip answers and contact links.
 - Privacy notice (free providers may log prompts), input length cap, off-topic refusal, API key only in the serverless function.
 - A short "How this assistant is secured" section on the page.
 - Rate-limit counters in a free-tier store (for example Upstash Redis).
