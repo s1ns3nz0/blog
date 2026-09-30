@@ -79,7 +79,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "AI",
-    tags: ["AI", "AI SOC", "AI Supply Chain", "Slopsquatting"],
+    tags: ["AI", "AI SOC", "AI Supply Chain", "Slopsquatting", "Kagent"],
   },
   {
     name: "Tools",
