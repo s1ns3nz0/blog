@@ -5,6 +5,7 @@ pubDatetime: 2026-09-30T19:45:00+09:00
 tags:
   - Lightning Network
   - lnd
+  - Routing
   - Kubernetes
 ---
 
