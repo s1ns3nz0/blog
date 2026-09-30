@@ -74,7 +74,7 @@ The SLO alerts started moving at the same time:
 
 ![Alertmanager showing one alert in the local-only group: alertname OpenCTIL402InvoiceIssuanceFailing, starting 2026-09-30T12:00:53Z, severity critical](../../assets/images/kagent-drill2/alertmanager-invoice-critical.png)
 
-*The page as it arrived in Alertmanager. It reached the UI and nowhere else, which is gap F8 from Part 5.*
+*The page as it arrived in Alertmanager. It went no further than the UI: no receiver is configured. That was deliberate, because this drill exercises the agent, not paging. In a real setup this is gap F8 from Part 5.*
 
 | Alert | Measured | Playbook timing fact | Verdict |
 |---|---|---|---|
@@ -96,6 +96,8 @@ The Grafana dashboard from Part 5 is laid out in triage order. Its clock is in l
 ![Grafana funnel over 15-minute windows with no-token requests climbing at the right edge while invoices issued levels off, and the security signal row: rejected tokens by reason flat at 0, rejected per 15 minutes against a 24 h baseline 3.2](../../assets/images/kagent-drill2/grafana-funnel-security.png)
 
 *The funnel and the security signal. Rejected tokens stay flat, so this isn't an attack; per the playbook, the security signal is noted and not chased mid-outage.*
+
+One thing in the funnel I can't explain yet. "Invoices issued" starts falling around 20:40 local time, about 18 minutes before the fault was injected at 20:58. Either something in the synthetic exporter's workload changed before the drill, or the clocks behind the panels don't line up. I've left the screenshot as it is. Two lessons from it: always check that the clocks agree before reading a timeline off a dashboard, and look at the workload behind a panel when a signal moves before the event it's supposed to reflect.
 
 ![Grafana row "Is it observed?": Aperture metrics scraped 1, probe scraped 3](../../assets/images/kagent-drill2/grafana-is-it-observed.png)
 
@@ -161,10 +163,11 @@ Not run yet: drill 2's second question to `lnd-ops-runbook-agent`, "Is the merch
 | P3 | Invented `kubectl -l app=lnd-merchant` and `lnd listchaintxsummary` | Model / playbook | "Confirm with" gives exact commands: `kubectl -n opencti-paid-scan-e2e get deploy lnd-merchant`, `kubectl -n opencti-paid-scan-e2e logs deploy/lnd-merchant --previous` | Medium |
 | E1 | No eval scenario for invoice failure | Eval | Add `tabletop4-invoice-failure`; `required_tools` includes `get_opencti_workload_status`; `must_not` covers invented thresholds | Medium |
 | W1 | No worked example for `lnd-merchant` down with measured times | Playbook | Add "Worked example: merchant LND down (drill 2)" with this timeline | Low |
+| O1 | "Invoices issued" falls about 18 min before the fault, unexplained | Lab / observability | Check the synthetic exporter's workload for changes before 11:58 UTC, and confirm that Grafana, Prometheus, and the lab share the same clock | Medium |
 | R1 | Recovery half not run | Drill | Restore `lnd-merchant`; the operator verifies with new invoices, not the alert clearing; record the clearing time | Next |
 
 T1 and T2 follow the lesson from Part 5: at this model size, a fact in the tool output works better than another rule in the prompt. The system message already told the agent to call the workload tool, and it didn't. A `next_check` field in the result it just read is harder to skip.
 
 ## What's next
 
-The recovery half of the drill: restore `lnd-merchant`, confirm recovery from new invoices rather than from the alert clearing, and record how long the alerts take to clear. Then the action items above, starting with T1 and P1.
+The recovery half of the drill: restore `lnd-merchant`, confirm recovery from new invoices rather than from the alert clearing, and record how long the alerts take to clear. Then the action items above, starting with T1 and P1, plus a look at the exporter workload and the clocks for O1.
