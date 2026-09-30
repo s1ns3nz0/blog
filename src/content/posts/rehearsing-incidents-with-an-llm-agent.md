@@ -410,6 +410,4 @@ From a language-model perspective, this behavior makes sense.
 
 From an incident-response perspective, it is dangerous.
 
-An on-call agent should not create a richer story
-
 Next: [Diagnosing OpenCTI with Kagent (5) - Reviewing the Setup Against Google SRE](/posts/diagnosing-opencti-with-kagent-google-sre-review/)
