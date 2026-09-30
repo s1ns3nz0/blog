@@ -602,10 +602,18 @@ const smokePuffs: [number, number][] = [
           <ul class="reach-cards">
             {reach.map(r => (
               <li data-reveal>
-                <button type="button" class="reach-card" data-open-dialog={`dlg-reach-${r.id}`}>
-                  <span class="stat-num display">{r.stat}</span>
-                  <span class="stat-label">{r.label}</span>
-                  <span class="stat-open">View details →</span>
+                <button type="button" class="reach-flip" data-flip aria-pressed="false">
+                  <span class="reach-in">
+                    <span class="reach-card reach-front">
+                      <span class="stat-num display">{r.stat}</span>
+                      <span class="stat-label">{r.label}</span>
+                      <span class="stat-open">Flip ↻</span>
+                    </span>
+                    <span class="reach-card reach-back">
+                      <span class="reach-list">{r.items.map(item => <span>{item}</span>)}</span>
+                      {r.note && <span class="reach-note">{r.note}</span>}
+                    </span>
+                  </span>
                 </button>
               </li>
             ))}
@@ -640,21 +648,6 @@ const smokePuffs: [number, number][] = [
           </a>
         )}
       </header>
-
-      {reach.map(r => (
-        <dialog id={`dlg-reach-${r.id}`} class="sheet" aria-labelledby={`dlg-reach-${r.id}-title`}>
-          <div class="sheet-inner">
-            <header class="sheet-head">
-              <h3 id={`dlg-reach-${r.id}-title`} class="display text-2xl font-bold">{r.label}</h3>
-              <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
-            </header>
-            {r.note && <p class="reach-note">{r.note}</p>}
-            <ul class="bullets">
-              {r.items.map(item => <li>{item}</li>)}
-            </ul>
-          </div>
-        </dialog>
-      ))}
 
       <dialog id="dlg-career" class="sheet" aria-labelledby="dlg-career-title">
         <div class="sheet-inner">

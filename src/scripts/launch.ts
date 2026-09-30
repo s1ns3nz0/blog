@@ -264,6 +264,15 @@ function setupDetailDialogs() {
   });
 }
 
+/** "Global reach" cards turn over on click to show what the number covers. */
+function setupFlipCards() {
+  document.querySelectorAll<HTMLButtonElement>("[data-flip]").forEach(card => {
+    card.addEventListener("click", () => {
+      card.setAttribute("aria-pressed", String(card.getAttribute("aria-pressed") !== "true"));
+    });
+  });
+}
+
 /** Satellite assistant: native <dialog>, pre-written answers only (v2). */
 function setupAssistant(audienceId: string | undefined) {
   const dialog = document.getElementById("assistant");
@@ -403,6 +412,7 @@ setupReveal();
 setupToProfile();
 setupAssistant(applyAudience());
 setupDetailDialogs();
+setupFlipCards();
 update();
 window.addEventListener("scroll", schedule, { passive: true });
 window.addEventListener("resize", schedule);

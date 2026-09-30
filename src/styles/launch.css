@@ -1783,28 +1783,71 @@ html[data-stage="orbit"] .hud-wrap {
   background: rgb(255 255 255 / 0.7);
   color: #0f172a;
 }
-.reach-card {
-  width: 100%;
-  height: 100%;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-}
-.reach-card:hover {
-  transform: translateY(-2px);
-  border-color: rgb(15 23 42 / 0.25);
-  box-shadow: 0 10px 24px rgb(15 23 42 / 0.1);
-}
 .reach-card .stat-label {
   color: #334155;
 }
-.reach-note {
-  margin: 0 0 10px;
+/* Each card flips on click: the stat on the front, what it covers on the back.
+   Both faces share one grid cell, so the card is as tall as its taller face. */
+.reach-flip {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  perspective: 900px;
+}
+.reach-in {
+  display: grid;
+  height: 100%;
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+}
+.reach-flip[aria-pressed="true"] .reach-in {
+  transform: rotateY(180deg);
+}
+.reach-front,
+.reach-back {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+}
+.reach-front .stat-open {
+  margin-top: auto;
+  padding-top: 10px;
+  align-self: flex-end;
+}
+.reach-back {
+  justify-content: center;
+  gap: 10px;
+  border-color: #0f172a;
+  background: #0f172a;
+  color: #e6edf7;
+  font-size: 14px;
+  line-height: 1.7;
+  transform: rotateY(180deg);
+}
+/* entries never break mid-name; a dot separates them */
+.reach-list span {
+  white-space: nowrap;
+}
+.reach-list span:not(:last-child)::after {
+  content: " · ";
+  white-space: normal;
   color: #64748b;
-  font-size: 13px;
+}
+.reach-note {
+  color: #94a3b8;
+  font: 400 11px var(--font-space-mono), monospace;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reach-in {
+    transition: none;
+  }
 }
 
 /* "How I work": three lines under the stat cards */

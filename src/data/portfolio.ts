@@ -576,8 +576,11 @@ export const reach: {
     label: "Users of services I've secured",
     note: "Counted from publicly available figures. Client names are withheld.",
     items: [
-      "A global IoT service",
-      "A telecom carrier's identity verification service, built on PKI digital signatures",
+      "Global IT services",
+      "Digital signature services",
+      "Automotive IoT services",
+      "OT security",
+      "…",
     ],
   },
   {
