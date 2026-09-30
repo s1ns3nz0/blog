@@ -216,3 +216,5 @@ Payment challenge updated: issued
 At this point, an invoice exists, but the order is still unpaid. Issuing payment instructions is different from receiving payment.
 
 The next part follows the customer’s payment: obtaining the preimage, retrying with L402 credentials, verifying settlement, and marking the order as paid.
+
+Next: [Lightning Payments for OpenCTI (3) - From Lightning Payment to a Paid Scan Order](/posts/from-lightning-payment-to-a-paid-scan-order/)
