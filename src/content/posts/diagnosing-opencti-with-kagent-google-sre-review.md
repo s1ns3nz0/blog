@@ -146,3 +146,5 @@ F8 comes first. A fast-burn page that nobody receives only makes the detection t
 Following Google SRE practice, I reworked the documentation, detection, dashboard, practice, and testing around the payment gate. Detection went from 16 minutes to 5, and the agent's accuracy is now measured instead of eyeballed, and higher.
 
 What's left is the human side of incident response: notification, roles, postmortems, and escalation.
+
+Next: [Diagnosing OpenCTI with Kagent (6) - Drill 2: Invoice Failure After the SRE Upgrades](/posts/diagnosing-opencti-with-kagent-drill-2/)
