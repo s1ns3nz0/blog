@@ -1210,6 +1210,12 @@ html[data-daylight] .co-card-go {
   width: 22px;
   height: 22px;
 }
+.contact-resume {
+  width: auto;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
 .contact-blog {
   margin-left: 8px;
   font-weight: 600;
