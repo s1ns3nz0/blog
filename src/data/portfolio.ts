@@ -185,7 +185,7 @@ export const stages: Stage[] = [
     },
     governing: "I make running systems observable, and cheap enough to keep defending.",
     support:
-      "Per-outcome L402 metrics and a security event proposal for Lightning Labs' Aperture, plus 28 cloud security checks in Prowler.",
+      "A read-only on-call agent with SLO alerts and drills for a Lightning payment gate, per-outcome L402 metrics upstream in Aperture, and 28 cloud security checks in Prowler.",
   },
 ];
 
@@ -304,6 +304,28 @@ export const cards: Card[] = [
     ],
   },
   {
+    id: "lnd-kubernetes",
+    stage: "build",
+    zone: "test",
+    title: "LND node on Kubernetes",
+    summary:
+      "Ran LND on local K3s as state, not just a process: a StatefulSet with persistent volumes, default-deny networking, and RPC kept apart from P2P.",
+    evidence: ["running-an-lnd-lightning-node-on-local-kubernetes"],
+  },
+  {
+    id: "lightning-payments-opencti",
+    stage: "build",
+    zone: "test",
+    title: "Lightning payments for OpenCTI",
+    summary:
+      "An Aperture L402 payment gate in front of a paid scan service, from scan order to Lightning invoice to merchant settlement checks, durable receipts, and retry-safe paid orders.",
+    evidence: [
+      "adding-lightning-payments-to-opencti-with-aperture",
+      "from-a-scan-order-to-a-lightning-invoice",
+      "from-lightning-payment-to-a-paid-scan-order",
+    ],
+  },
+  {
     id: "oscal-compass",
     stage: "build",
     zone: "oss",
@@ -396,6 +418,33 @@ export const cards: Card[] = [
   },
 
   // ---------- Operate ----------
+  {
+    id: "lnd-routing",
+    stage: "operate",
+    zone: "test",
+    title: "Routing a testnet LND node",
+    summary:
+      "Checked liquidity, SCIDs, and fee policies, found a direction still advertised as disabled after the peer reconnected, re-enabled it, and relayed a real testnet payment for a 1.005-sat fee.",
+    evidence: ["lnd-testnet-routing-node-readiness", "lnd-testnet-routing-practice"],
+  },
+  {
+    id: "kagent-oncall",
+    stage: "operate",
+    zone: "test",
+    title: "Kagent on-call agent for the L402 gate",
+    summary:
+      "A read-only AI diagnosis agent for the payment gate, reviewed against Google SRE: SLO burn-rate alerts cut detection from 16 to 5 minutes, and blind drills grade the agent against the playbook.",
+    evidence: [
+      "diagnosing-opencti-with-kagent-architecture",
+      "diagnosing-opencti-with-kagent-tools",
+      "diagnosing-opencti-with-kagent-access-control",
+      "rehearsing-incidents-with-an-llm-agent",
+      "diagnosing-opencti-with-kagent-google-sre-review",
+      "diagnosing-opencti-with-kagent-drill-2",
+      "metrics-collector-prometheus-on-lnd",
+      "prometheus-alert-rules-helm-values-vs-prometheusrule",
+    ],
+  },
   {
     id: "aperture-metrics",
     stage: "operate",

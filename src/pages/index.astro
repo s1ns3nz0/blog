@@ -608,7 +608,7 @@ const smokePuffs: [number, number][] = [
         <section class="field-notes" aria-labelledby="field-notes-title">
           <h3 id="field-notes-title" class="meta">Field notes</h3>
           {fieldNoteList.map(n => (
-            <a class="field-note" href={n.url} data-reveal>
+            <a class="field-note" href={n.url} target="_blank" rel="noopener" data-reveal>
               <span class="field-note-title">{n.title} →</span>
               <span class="field-note-desc">{n.description}</span>
               <span class="field-note-meta">
@@ -725,8 +725,8 @@ const smokePuffs: [number, number][] = [
                                     class="text-link"
                                     href={l.url}
                                     title={l.tip}
-                                    target={l.external ? "_blank" : undefined}
-                                    rel={l.external ? "noopener noreferrer" : undefined}
+                                    target="_blank"
+                                    rel={l.external ? "noopener noreferrer" : "noopener"}
                                   >
                                     {l.label}
                                   </a>
@@ -782,12 +782,12 @@ const smokePuffs: [number, number][] = [
       <nav class="contact" aria-label="Contact">
         {
           contacts.map(c => (
-            <a class="contact-link" href={c.url} aria-label={c.label} title={c.label}>
+            <a class="contact-link" href={c.url} target={c.url.startsWith("mailto:") ? undefined : "_blank"} rel="noopener noreferrer" aria-label={c.label} title={c.label}>
               <c.Icon class="contact-icon" style={`color: ${c.color}`} />
             </a>
           ))
         }
-        <a class="contact-blog" href="/blog/">Read the blog →</a>
+        <a class="contact-blog" href="/blog/" target="_blank" rel="noopener">Read the blog →</a>
       </nav>
     </section>
   </main>
@@ -827,7 +827,7 @@ const smokePuffs: [number, number][] = [
               <p class="text-sm leading-relaxed">{chip.answer}</p>
               <ul class="evidence mt-3 flex flex-col gap-1 text-sm" aria-label="Sources">
                 {chip.sourceLinks.map(l => (
-                  <li>→ <a href={l.url}>{l.title}</a></li>
+                  <li>→ <a href={l.url} target="_blank" rel="noopener">{l.title}</a></li>
                 ))}
               </ul>
             </div>

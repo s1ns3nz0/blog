@@ -1,5 +1,5 @@
 ---
-/** An evidence link: a blog post, or an external page opened in a new tab. */
+/** An evidence link, opened in a new tab so the flight keeps its place; external pages get ↗. */
 type Props = { title: string; url: string; external: boolean };
 const { title, url, external } = Astro.props;
 ---
@@ -10,6 +10,6 @@ const { title, url, external } = Astro.props;
       {title} <span aria-label="(opens in a new tab)">↗</span>
     </a>
   ) : (
-    <a href={url}>{title}</a>
+    <a href={url} target="_blank" rel="noopener">{title}</a>
   )
 }
