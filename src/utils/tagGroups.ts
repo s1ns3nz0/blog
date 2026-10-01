@@ -84,7 +84,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "Tools",
-    tags: ["Plugin", "MCP"],
+    tags: ["Plugin", "MCP", "Linux", "systemd"],
   },
   {
     name: "Study",
