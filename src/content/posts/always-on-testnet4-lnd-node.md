@@ -550,3 +550,4 @@ The testnet4 stack runs next to the regtest one, sharing nothing but the binarie
 
 `bitcoind-testnet4` is still working through its initial download, and LND is connected to it, following along and waiting to be in sync. The next part picks up once the chain is caught up: enabling LND for boot, confirming `synced_to_chain`, and bringing the testnet4 node into lndmon, Prometheus, and Grafana.
 
+Next: [Moving the monitoring to testnet4](/posts/always-on-testnet4-lnd-node-monitoring/).
