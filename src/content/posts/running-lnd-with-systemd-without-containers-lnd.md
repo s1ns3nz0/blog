@@ -124,4 +124,4 @@ This time the checks are in the screenshot too. `getent passwd` prints the accou
 
 `id lnd` shows that `lnd` belongs only to its own group. In particular, it isn't in the `bitcoin` group, so it can't read anything inside `/var/lib/bitcoind`, including the RPC `.cookie`. That's deliberate, and it means LND needs its own credentials for `bitcoind`'s RPC, which comes next.
 
-Next: connecting LND to `bitcoind` over RPC and ZMQ.
+Next: [Preparing bitcoind for LND: rpcauth and ZMQ](/posts/running-lnd-with-systemd-without-containers-lnd-bitcoind/).
