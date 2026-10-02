@@ -415,3 +415,5 @@ lnb walletbalance
 | Channels | None | None |
 
 The starting position for a channel is set. The nodes are peers, neither has a channel yet, and the funds are on the `lnc` side, which is the side that will open the channel and commit those funds to it.
+
+Next: [Opening a channel and sending a payment](/posts/running-lnd-with-systemd-without-containers-channel-payment/).
