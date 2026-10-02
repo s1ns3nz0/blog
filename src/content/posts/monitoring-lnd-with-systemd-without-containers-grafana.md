@@ -206,5 +206,5 @@ That agreement is the baseline. When node B is stopped later, these three panels
 
 The monitoring chain runs end to end: two LND nodes, one lndmon each, Prometheus scraping both, and Grafana drawing what Prometheus stored, all bound to loopback inside the VM. The dashboard so far shows the healthy baseline: one peer and one active channel per node, scraping working, and the channel balance split 986,530 to 10,000.
 
-The next step moves the lab from regtest to testnet, where the chain has other nodes and blocks arrive on their own, and continues the dashboard there.
+This series stops here, on regtest. The next step is testnet, where the chain has other nodes and blocks arrive on their own, and that gets a series of its own: a node that stays up and runs continuously, with this monitoring stack carried over and the dashboard finished there.
 
