@@ -119,4 +119,4 @@ systemctl --failed --no-pager
 
 `command -v` prints the path of each command it finds and nothing for the ones it doesn't, which makes empty output the expected result here. `--no-pager` keeps `systemctl` from opening `less`, so the output stays in the terminal and in the screenshot.
 
-Next: installing and configuring Bitcoin Core.
+Next: [Installing and configuring Bitcoin Core](/posts/running-lnd-with-systemd-without-containers-bitcoin-core/).
