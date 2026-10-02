@@ -248,4 +248,4 @@ systemctl is-enabled bitcoind
 
 `enable` doesn't start anything. It creates a symlink in `multi-user.target.wants/`, the directory systemd reads to decide what to start when the system reaches its normal multi-user state at boot. That's the `WantedBy=multi-user.target` line from the unit's `[Install]` section taking effect. `is-enabled` now answers `enabled`, where `systemctl status` showed `disabled` earlier.
 
-Next: LND.
+Next: [Installing LND and its service account](/posts/running-lnd-with-systemd-without-containers-lnd/).
