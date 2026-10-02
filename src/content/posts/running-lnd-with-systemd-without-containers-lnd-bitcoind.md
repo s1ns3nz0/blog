@@ -151,7 +151,9 @@ sudo cat /etc/bitcoin/bitcoin.conf | grep zmq
 | `zmqpubrawblock=tcp://127.0.0.1:28332` | Every new block, in full, as soon as it's connected to the chain |
 | `zmqpubrawtx=tcp://127.0.0.1:28333` | Every transaction entering its mempool, and those in new blocks |
 
-`bitcoind` pushes, LND listens. Both sockets are on `127.0.0.1`, like RPC, so nothing outside the VM can subscribe.
+Bitcoin Core is the publisher and LND is the subscriber. Each side has its ZMQ component built in, `bitcoind`'s publisher and LND's subscriber, and those handle the connection and the message traffic on their own. Beyond these two lines here and the matching addresses in LND's configuration later, there's nothing to set up, no broker or extra service to run.
+
+ZMQ is also a separate path from RPC. The `rpcauth` login above covers RPC only; the ZMQ sockets don't use it and have no login of their own. What keeps them private is where they listen: both are on `127.0.0.1`, like RPC, so nothing outside the VM can subscribe.
 
 ### Restarting and checking the sockets
 
@@ -171,6 +173,26 @@ sudo -u bitcoin bitcoin-cli \
 Both sockets are there, at the addresses from the configuration. `-rpcwait` covers the few seconds after the restart before RPC is back, as in Part 3.
 
 `hwm` is the high-water mark: up to 1,000 messages can queue for a subscriber that falls behind. Past that, ZMQ drops new messages instead of letting memory grow. On a quiet regtest chain with a local subscriber, that limit won't come close.
+
+`getzmqnotifications` is `bitcoind`'s own account of its sockets. `ss` asks the kernel instead, which shows what is really listening and on which address:
+
+```bash
+sudo ss -lntp '( sport = :28332 or sport = :28333 )'
+```
+
+![sudo ss -lntp '( sport = :28332 or sport = :28333 )' shows two LISTEN sockets, 127.0.0.1:28332 and 127.0.0.1:28333, peer 0.0.0.0:*, both owned by users:(("bitcoind",pid=13005)) with fd 19 and fd 21](../../assets/images/lnd-without-containers/ss-zmq-ports.png)
+
+| Flag or field | Meaning |
+|---|---|
+| `-l` | Only listening sockets |
+| `-n` | Show numeric addresses and ports instead of resolving names |
+| `-t` | TCP only |
+| `-p` | Show the owning process; this needs `sudo` because the process belongs to `bitcoin` |
+| `'( sport = :28332 or sport = :28333 )'` | Filter on the local (source) port, so only the two ZMQ sockets appear |
+| `127.0.0.1:28332`, `127.0.0.1:28333` | Bound to loopback only. A socket open to the network would show `0.0.0.0` or the VM's own address here |
+| `users:(("bitcoind",pid=13005,…))` | Both sockets belong to the running `bitcoind` |
+
+The kernel agrees with `bitcoind`: both ZMQ sockets exist, both belong to `bitcoind`, and both accept connections only from inside the VM. That loopback binding is the only protection ZMQ has here, and this is the check that confirms it.
 
 With the RPC login and both ZMQ feeds in place, `bitcoind` is ready for LND.
 
