@@ -196,4 +196,4 @@ The kernel agrees with `bitcoind`: both ZMQ sockets exist, both belong to `bitco
 
 With the RPC login and both ZMQ feeds in place, `bitcoind` is ready for LND.
 
-Next: configuring LND and running it as a systemd service.
+Next: [Configuring LND and running it as a service](/posts/running-lnd-with-systemd-without-containers-lnd-service/).
