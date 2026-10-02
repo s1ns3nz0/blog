@@ -1,6 +1,6 @@
 ---
 title: "Running LND with systemd, Without Containers (6) - Configuring LND and Running It as a Service"
-description: Writing lnd.conf against the regtest bitcoind, locking down the file that holds the RPC password, and running LND under systemd.
+description: Writing lnd.conf against the regtest bitcoind, running LND under systemd, creating its wallet, proving the RPC and ZMQ paths, funding it with 1 BTC, and connecting a second node as a peer.
 pubDatetime: 2026-10-02T15:50:00+09:00
 tags:
   - Lightning Network
@@ -380,4 +380,38 @@ The two wallets describe the same transaction from opposite ends. `bitcoind`'s `
 
 LND is now a working regtest node: managed by systemd, logged in to Bitcoin Core over RPC with its own credentials, following the chain over ZMQ, and holding 1 BTC of confirmed funds.
 
-Opening a channel needs a second node. Set up another LND the same way somewhere else, or in the same VM with its own user, directories, and ports, point it at a `bitcoind` on the same regtest chain, connect the two, and the funds above can open a regtest channel. "Same chain" matters: each regtest `bitcoind` starts its own private chain, so a second node either uses this `bitcoind` or runs one that's peered with it. Two things change on the LND side too: the second node has to reach this one's Lightning port, so `listen` can't stay loopback-only (see "Beyond the lab" above), and each node needs its own wallet and funds. Since the setup is the same as what this series has already walked through, I'm not repeating it here.
+### A second node, connected
+
+Opening a channel needs a second node. I set one up in the same VM by repeating this series' steps with its own user, directories, and ports, pointed at the same `bitcoind`, and with its own `lncli` shortcut, `lnb`. Since the setup is identical, I'm not walking through it again; the result is what matters. The two nodes are connected as peers:
+
+```bash
+lnc listpeers
+lnb listpeers
+```
+
+![lnc listpeers shows one peer, pub_key 0361b96b91bebec401db5195f81eec0c34d66c15f01b9439820bb199804ac34191 at address 127.0.0.1:9736](../../assets/images/lnd-without-containers/lnc-listpeers.png)
+
+![lnb listpeers shows one peer, pub_key 031a76d50a872eb93b7dae92756c2b669f3c3a78de4bcb0da6f79ae2bbd0120b0d at address 127.0.0.1:35388](../../assets/images/lnd-without-containers/lnb-listpeers.png)
+
+| Node | Sees peer | At address | Meaning |
+|---|---|---|---|
+| `lnc` (this series' node) | `0361b9…4191` | `127.0.0.1:9736` | The second node's Lightning port. `lnc` dialed out to it |
+| `lnb` (second node) | `031a76…0b0d` | `127.0.0.1:35388` | `lnc`'s identity key from its `getinfo` above. The port is the temporary one `lnc`'s outgoing connection came from, not a listening port |
+
+Each node lists the other's public key, so the connection runs both ways. Both nodes share the VM and one `bitcoind`, which is why loopback addresses work here; nodes on separate machines would need the reachable Lightning port described in "Beyond the lab".
+
+```bash
+lnc walletbalance
+lnb listchannels
+lnc listchannels
+lnb walletbalance
+```
+
+![lnc walletbalance shows confirmed_balance 100000000; lnb listchannels and lnc listchannels both return an empty channels list; lnb walletbalance shows total_balance 0](../../assets/images/lnd-without-containers/two-nodes-balances-channels.png)
+
+| | `lnc` | `lnb` |
+|---|---|---|
+| Confirmed on-chain balance | 100,000,000 sat | 0 |
+| Channels | None | None |
+
+The starting position for a channel is set. The nodes are peers, neither has a channel yet, and the funds are on the `lnc` side, which is the side that will open the channel and commit those funds to it.
