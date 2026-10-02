@@ -272,3 +272,5 @@ The `node` target is up, so the worry from the sample configuration didn't apply
 ## Where this part ends
 
 Prometheus is collecting from four targets every 15 seconds: both lndmon exporters, labeled `node="a"` and `node="b"`, the VM's own metrics through node exporter, and itself. Everything listens on loopback only. The data is there; what's missing is a view of it, which is Grafana, next.
+
+Next: [Dashboards with Grafana](/posts/monitoring-lnd-with-systemd-without-containers-grafana/).

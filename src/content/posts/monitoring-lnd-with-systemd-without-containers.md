@@ -24,6 +24,37 @@ The stack has three pieces:
 | Prometheus | Scrapes those metrics on a schedule and stores them as time series |
 | Grafana | Draws dashboards from Prometheus, so the state of each node is visible at a glance |
 
+Put together, inside the one Lima VM:
+
+```mermaid
+flowchart LR
+  subgraph VM["Lima VM: everything on 127.0.0.1"]
+    direction LR
+    LA["lnd (node A)<br/>gRPC :10009"]
+    LB["lnd-b (node B)<br/>gRPC :10010"]
+    MA["lndmon-a<br/>metrics :9092"]
+    MB["lndmon-b<br/>metrics :9093"]
+    P["Prometheus<br/>:9090"]
+    G["Grafana<br/>:3000"]
+    MA -- "gRPC + TLS<br/>readonly.macaroon" --> LA
+    MB -- "gRPC + TLS<br/>readonly.macaroon" --> LB
+    P -- "HTTP GET /metrics<br/>every 15s" --> MA
+    P -- "HTTP GET /metrics<br/>every 15s" --> MB
+    G -- "PromQL queries" --> P
+  end
+  U["Browser on the Mac"] --> G
+```
+
+Each arrow points from the side that starts the connection. Three things the diagram makes explicit:
+
+| Point | Why it matters |
+|---|---|
+| One lndmon per node | An lndmon instance watches a single LND. Two nodes means two exporters, `lndmon-a` and `lndmon-b`, each with its own node's certificate and macaroon |
+| lndmon calls LND over gRPC | The same TLS-protected API `lncli` uses, authenticated with the read-only macaroon. lndmon can read the node's state but can't change anything |
+| Prometheus pulls, lndmon doesn't push | lndmon only serves its current numbers at `/metrics`. Prometheus fetches them on its own schedule and keeps the history. If Prometheus stops, lndmon keeps running and nothing is sent anywhere |
+
+Grafana never talks to the nodes or to lndmon. It only asks Prometheus, so everything on a dashboard comes from what Prometheus has stored.
+
 lndmon on its own doesn't store or display anything; it turns a node's state into numbers Prometheus can collect. Together, the three make it easy to see a node's current status and spot abnormal activity, and later to alert on it. I covered the Kubernetes version of the same idea in [Metrics Collector: Prometheus on LND](/posts/metrics-collector-prometheus-on-lnd/).
 
 ## Installing lndmon
