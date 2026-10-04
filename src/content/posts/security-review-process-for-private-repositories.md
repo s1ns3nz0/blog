@@ -3,6 +3,7 @@ title: "Private Repositories Security Review Process"
 description: "A practical process for reviewing, approving, and continuously reassessing third-party artifacts before internal use."
 pubDatetime: 2026-09-13T00:00:00+09:00
 tags:
+  - Pipeline Controls
   - Private Repository
   - DevSecOps
   - Supply Chain Security

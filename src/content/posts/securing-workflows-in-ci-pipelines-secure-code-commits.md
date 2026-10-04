@@ -3,6 +3,7 @@ title: Securing Workflows in CI Pipelines - Secure Code Commits
 description: Appropriate forms of testing should be performed before code commits
 pubDatetime: 2026-07-26T10:04:28+09:00
 tags:
+  - Pipeline Controls
   - NIST SP 800-204D
   - CI/CD
   - CI/CD Security

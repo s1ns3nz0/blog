@@ -9,12 +9,18 @@ export type TagGroupConfig = {
  */
 export const TAG_GROUPS: TagGroupConfig[] = [
   {
+    name: "Projects",
+    tags: [
+      "Security Requirements Plugin", "Hoodi", "LND on Kubernetes", "OpenCTI Payments",
+      "Pipeline Controls", "Kagent",
+    ],
+  },
+  {
     name: "Blockchain",
     tags: [
-      "Blockchain", "Hoodi", "Validator", "Ethereum", "Vault",
+      "Blockchain", "Validator", "Ethereum", "Vault",
       "Secrets Management", "PKI", "PostgreSQL", "Architecture",
       "Lightning Network", "lnd", "Routing", "Aperture", "L402",
-      "OpenCTI Payments",
     ],
   },
   {
@@ -80,7 +86,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "AI",
-    tags: ["AI", "AI SOC", "AI Supply Chain", "Slopsquatting", "Kagent"],
+    tags: ["AI", "AI SOC", "AI Supply Chain", "Slopsquatting"],
   },
   {
     name: "Tools",

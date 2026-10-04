@@ -3,6 +3,7 @@ title: "CI/CD Security Controls and Implementation in the Pipeline Design"
 description: "A technical overview of the CI/CD security controls implemented across the pipeline design, from token permissions to release signing, paired with concrete threat-mapped implementation detail."
 pubDatetime: 2026-09-16T20:40:00+09:00
 tags:
+  - Pipeline Controls
   - CI/CD
   - CI/CD Security
   - GitHub Actions

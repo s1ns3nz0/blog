@@ -3,6 +3,7 @@ title: Securing Workflows in CI Pipelines - Secure Build
 description: Introduce the requirements for secure build and associated tools to secure your build stage in CI/CD pipeline.
 pubDatetime: 2026-07-23T12:52:14+09:00
 tags:
+  - Pipeline Controls
   - NIST SP 800-204D
   - CI/CD
   - CI/CD Security

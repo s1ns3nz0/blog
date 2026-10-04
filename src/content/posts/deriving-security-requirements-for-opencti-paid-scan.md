@@ -3,6 +3,7 @@ title: "Deriving Security Requirements for a Lightning-Paid Scan Service"
 description: "Running my security-requirements plugin on the OpenCTI paid scan service: a confirmed profile, a FIPS 199 impact, eleven service-specific threats, a confirmed risk batch, and nineteen verifiable requirements, three of which no baseline control would have produced."
 pubDatetime: 2026-10-04T19:50:00+09:00
 tags:
+  - Security Requirements Plugin
   - Security Requirements
   - Security Design
   - threat-modeling

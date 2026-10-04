@@ -3,6 +3,7 @@ title: "Running an LND Lightning Node on Local Kubernetes: Designing for State, 
 description: A Lightning node is state, not just a process. How I mapped LND's wallet, channel, and recovery model onto StatefulSets, PVCs, NetworkPolicy, and tests on local K3s.
 pubDatetime: 2026-09-30T01:30:00+09:00
 tags:
+  - LND on Kubernetes
   - Lightning Network
   - Kubernetes
   - K3s

@@ -28,7 +28,13 @@ export type Card = {
   stage: StageId;
   zone: ZoneId;
   title: string;
+  /** Collapsed row text. For a card with a story, the result in one line. */
   summary: string;
+  /** Personal projects: the four-part story shown when the row is expanded. */
+  story?: { problem: string; solution: string; result: string; lesson: string };
+  /** Post tag that collects every post of this project; links "All N posts". */
+  tag?: string;
+  /** For a card with a story, the key posts (two) plus code links. */
   evidence: Evidence[];
 };
 
@@ -263,12 +269,22 @@ export const cards: Card[] = [
     zone: "test",
     title: "Security Requirements plugin",
     summary:
-      "An AI plugin that derives service-specific security requirements from a service's context, users, and compliance obligations, with Kubernetes analysis and blast-radius mapping.",
+      `Run on a Lightning-paid scan service: 11 service-specific threats, 19 verifiable requirements, 3 that no NIST baseline control expresses.`,
+    story: {
+      problem:
+        `DevSecOps preaches shift left, but requirements analysis, the first stage of the lifecycle, has almost no tooling. Nothing states what a service must satisfy before code exists.`,
+      solution:
+        `A Claude Code plugin that derives requirements from the service's characteristics, operating environment, compliance obligations, and stack: FIPS 199 impact, an 800-53B baseline, STRIDE and LINDDUN threats, regulatory overlays, and verifiable requirements.`,
+      result:
+        `Ran on the Lightning-paid OpenCTI scan service: 11 service-specific threats, 19 verifiable requirements, 3 of them for risks no NIST baseline control expresses.`,
+      lesson:
+        `Let the model interpret; let scripts own control IDs, baselines, and approvals. A wrong recovery objective quietly rewrites dozens of requirements.`,
+    },
+    tag: "Security Requirements Plugin",
     evidence: [
       { label: "security-requirements on GitHub", url: `${GH}/security-requirements` },
       "security-requirements-plugin",
-      "security-requirements-plugin-kubernetes-analysis",
-      "security-requirements-plugin-blast-radius",
+      "deriving-security-requirements-for-opencti-paid-scan",
     ],
   },
   {
@@ -277,7 +293,17 @@ export const cards: Card[] = [
     zone: "test",
     title: "AWS SaaS Security Design Review",
     summary:
-      "Three AWS reference architectures (ECS SaaS, EKS SaaS, and a serverless app) taken from service profile through STRIDE, blast radius, and CI/CD gates to ISMS-P and GDPR overlays.",
+      `Three AWS architectures reviewed end to end: 13, 10, and 8 service-specific threats, and different failure points on ECS and EKS.`,
+    story: {
+      problem:
+        `A requirements plugin is only as good as the architectures it has been run on. I needed to see it handle three different deployment models end to end, not one demo.`,
+      solution:
+        `Ran the Security Requirements plugin through its whole lifecycle on three AWS reference architectures (ECS SaaS, EKS SaaS, and a serverless movie-voting API): impact, threats, blast radius, responsibility, requirements, refresh, evidence, CI/CD verification, and regulatory overlays.`,
+      result:
+        `Three reviews in 29 posts, with threat models of 13 (ECS), 10 (EKS), and 8 (serverless). In the serverless review, a route-dispatch mismatch surfaced as a threat-only requirement the 800-53 baseline doesn't express.`,
+      lesson:
+        `The deployment model changes the threat model, even between two container platforms. On ECS, tenant isolation broke at the routing layer: a shared mapping Lambda that could rewrite any tenant's routes, and services trusting a forged tenant header. On EKS, it broke at boundaries ECS didn't have: ingress rules routing into another tenant's namespace, namespace isolation without NetworkPolicy, and a service account picking up the wrong AWS role. One requirement set copied across all three would have missed each of these.`,
+    },
     evidence: [
       { label: "ECS SaaS series", url: "/tags/ecs-saas/" },
       { label: "EKS SaaS series", url: "/tags/eks-saas/" },
@@ -290,17 +316,25 @@ export const cards: Card[] = [
     id: "private-eks",
     stage: "build",
     zone: "test",
-    title: "Ethereum Hoodi Validator on Private EKS",
     titleFor: { "lightning-labs": "Stateful validator workload on private EKS" },
+    title: "Ethereum Hoodi Validator on Private EKS",
     summary:
-      "Designed and ran a Hoodi testnet validator (Prysm, Nethermind) on a private EKS cluster: no public Kubernetes API, namespace isolation, workload identity, and private image delivery.",
+      `Validator 1559065 active on Hoodi from private EKS; a revocation drill stopped signing at once, and the next attestation after recovery finalized.`,
+    story: {
+      problem:
+        `Staking operators run consensus and validator clients pulled from public registries, right next to the signing key, so a swapped image or a stolen credential means a slashable signature. Running the hardware yourself adds patching, uptime, and key custody on top.`,
+      solution:
+        `Moved the node to a private EKS cluster with no public API endpoint. Every upstream client image is reviewed, pinned by digest, checked against an allowlist, and mirrored into private ECR with immutable tags and KMS encryption, published through GitHub OIDC with a single-purpose role. Kyverno admission blocks workloads that don't meet the baseline.`,
+      result:
+        `Validator 1559065 went active on Hoodi and had attestations included on chain. During live rollout, admission rejected a sidecar image pinned by tag instead of digest until it was re-pinned. In a revocation drill, pulling the signer's Vault role stopped signing at once; after reactivation with the same slashing-protection volume, its next attestation was finalized.`,
+      lesson:
+        `Every control has a cost. I started with about ten private registries and every scanner I could add, then cut back to the controls that answer a real risk.`,
+    },
+    tag: "Hoodi",
     evidence: [
       { label: "node-operator-public on GitHub", url: `${GH}/node-operator-public` },
-      "hoodi-node-validator-aws-architecture-overview",
-      "securing-a-hoodi-ethereum-testnet-validator-on-aws-eks",
-      "eks-security-controls-implemented-in-the-cluster-design",
-      "kubernetes-namespace-design-for-a-hoodi-validator",
       "private-ecr-delivery-architecture-for-private-eks",
+      "prioritizing-security-controls-hoodi-validator-lessons",
     ],
   },
   {
@@ -309,8 +343,22 @@ export const cards: Card[] = [
     zone: "test",
     title: "LND node on Kubernetes",
     summary:
-      "Ran LND on local K3s as state, not just a process: a StatefulSet with persistent volumes, default-deny networking, and RPC kept apart from P2P.",
-    evidence: ["running-an-lnd-lightning-node-on-local-kubernetes"],
+      `A learning project: after a forced Pod replacement and a Helm upgrade, the same node identity, channels, and backups came back.`,
+    story: {
+      problem:
+        `A learning project: I wanted to see what Kubernetes actually guarantees for a stateful node, and what it doesn't. A Lightning node is its wallet, channel database, and static channel backups, so a Pod that restarts successfully can still come back as a different node.`,
+      solution:
+        `Packaged LND as a Helm chart: a StatefulSet with per-node volumes, default-deny NetworkPolicy, RPC kept apart from P2P, wallet unlock left as an operator step, and optional monitoring sidecars. Then wrote a test for every claim the chart makes.`,
+      result:
+        `After a forced Pod replacement and a helm upgrade, the same node identity, channels, volumes, and SCB hash came back. Reproduced on macOS arm64 and WSL amd64 from the same revision, with a synced testnet node, an active public channel, and payments both ways.`,
+      lesson:
+        `For stateful workloads, Running is only where testing starts. Kubernetes gives scheduling and storage; LND still owns identity and channel state, and the operator still owns the seed.`,
+    },
+    tag: "LND on Kubernetes",
+    evidence: [
+      "running-an-lnd-lightning-node-on-local-kubernetes",
+      "metrics-collector-prometheus-on-lnd",
+    ],
   },
   {
     id: "lightning-payments-opencti",
@@ -318,10 +366,20 @@ export const cards: Card[] = [
     zone: "test",
     title: "Lightning payments for OpenCTI",
     summary:
-      "An Aperture L402 payment gate in front of a paid scan service, from scan order to Lightning invoice to merchant settlement checks, durable receipts, and retry-safe paid orders.",
+      `L402 practice: a 250-sat testnet invoice settled, the API went from 402 to 200, and the order, challenge, and receipt committed as paid.`,
+    story: {
+      problem:
+        `A practice project for L402. Getting a Lightning payment to unlock an API call is easy; making it count once, for the right order, is the part to learn. The payment and the order database are separate systems, so a settled invoice can leave an order unpaid or be replayed against another.`,
+      solution:
+        `Put Aperture in front of the scan API as an L402 gate, then checked the preimage and challenge, looked the settlement up on the merchant node, wrote receipts through a durable outbox, and made claims safe to retry.`,
+      result:
+        `On testnet, a 250-sat invoice settled, the API went from 402 to 200, and the order, challenge, and receipt all committed as paid.`,
+      lesson:
+        `A 200 OK isn't proof of payment; the receipt has to match the order it pays for.`,
+    },
+    tag: "OpenCTI Payments",
     evidence: [
       "adding-lightning-payments-to-opencti-with-aperture",
-      "from-a-scan-order-to-a-lightning-invoice",
       "from-lightning-payment-to-a-paid-scan-order",
     ],
   },
@@ -365,13 +423,21 @@ export const cards: Card[] = [
     zone: "test",
     title: "Pipeline security controls",
     summary:
-      "Controls from token permissions to release signing, each paired with the threat it answers and how it's implemented.",
+      `24 controls from SSDF and SP 800-204D; every Action and image pinned, 25 workflows consolidated into 8.`,
+    story: {
+      problem:
+        `The pipeline that builds and ships the validator is itself an attack path: a stolen token, a swapped action, or a forged evidence file reaches the production cluster without touching application code. NIST SP 800-218 (SSDF) and SP 800-204D say what to protect, not which controls one repository needs.`,
+      solution:
+        `Mapped SSDF practices and 800-204D's CI/CD threats to 24 controls in the node-operator pipeline, each tied to the threat it answers: default-deny token permissions and SHA-pinned actions, untrusted PR code treated as data, fail-closed scanner gates, OPA policy-as-code, GitHub OIDC instead of long-lived keys, and digest-bound SBOM and provenance.`,
+      result:
+        `Controls enforced in CI and release workflows, with evidence bound to the exact commit. OpenSSF Scorecard: all 84 GitHub Actions and 39 container images pinned, least-privilege tokens, no dangerous workflow patterns, and 30 of 30 merged PRs CI-tested. Consolidated 25 workflows into 8. A mirror step shown to accept a wrong image digest now rejects it.`,
+      lesson:
+        `More scanners slowed delivery without making it safer; fewer tools, containerized and pinned, did more. A control earns its place by the threat it answers.`,
+    },
+    tag: "Pipeline Controls",
     evidence: [
       "ci-cd-security-controls-implemented-in-the-pipeline-design",
-      "secure-build",
-      "securing-workflows-in-ci-pipelines-secure-code-commits",
-      "securing-workflows-in-cd-pipelines",
-      "security-review-process-for-private-repositories",
+      "relationship-between-nist-sp-800-218-and-sp-800-204-d",
     ],
   },
   {
@@ -419,30 +485,26 @@ export const cards: Card[] = [
 
   // ---------- Operate ----------
   {
-    id: "lnd-routing",
-    stage: "operate",
-    zone: "test",
-    title: "Routing a testnet LND node",
-    summary:
-      "Checked liquidity, SCIDs, and fee policies, found a direction still advertised as disabled after the peer reconnected, re-enabled it, and relayed a real testnet payment for a 1.005-sat fee.",
-    evidence: ["lnd-testnet-routing-node-readiness", "lnd-testnet-routing-practice"],
-  },
-  {
     id: "kagent-oncall",
     stage: "operate",
     zone: "test",
     title: "Kagent on-call agent for the L402 gate",
     summary:
-      "A read-only AI diagnosis agent for the payment gate, reviewed against Google SRE: SLO burn-rate alerts cut detection from 16 to 5 minutes, and blind drills grade the agent against the playbook.",
+      `Detection cut from 16 to 5 minutes; in a blind drill the page fired in 2 min 21 s and the agent named the broken component.`,
+    story: {
+      problem:
+        `The L402 payment gate had no playbooks and no automated first responder, and its alerts took 16 minutes to notice a dead component on low traffic. Every diagnosis started from a blank terminal.`,
+      solution:
+        `Put a Kagent agent on call with read-only, code-first diagnosis tools and GitOps-managed access, then reviewed the whole setup against the Google SRE Book: playbooks that mitigate first, an SLO with burn-rate alerts on a synthetic probe, a dashboard, and an eval harness that grades the agent against the playbook.`,
+      result:
+        `Detection went from 16 min 22 s to 5 min 14 s. In a blind drill after the upgrade, pages fired in 2 min 21 s and the agent named the broken component, lnd-merchant. The agent's pass rate on the eval set rose from 47% to 72–80%.`,
+      lesson:
+        `At this model size, a fact in the tool output beat another rule in the prompt. The agent skipped a tool the system message told it to call; a next_check field in the result it had just read is harder to skip.`,
+    },
+    tag: "Kagent",
     evidence: [
-      "diagnosing-opencti-with-kagent-architecture",
-      "diagnosing-opencti-with-kagent-tools",
-      "diagnosing-opencti-with-kagent-access-control",
-      "rehearsing-incidents-with-an-llm-agent",
       "diagnosing-opencti-with-kagent-google-sre-review",
       "diagnosing-opencti-with-kagent-drill-2",
-      "metrics-collector-prometheus-on-lnd",
-      "prometheus-alert-rules-helm-values-vs-prometheusrule",
     ],
   },
   {

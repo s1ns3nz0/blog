@@ -1094,6 +1094,15 @@ html[data-daylight] .co-card-go {
 .row-links dd {
   margin: 0;
 }
+.row-story dd {
+  color: rgb(var(--log-ink) / 0.82);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.row-all {
+  color: rgb(var(--log-ink) / 0.9);
+  font: 400 13px var(--font-space-mono), monospace;
+}
 .code-links {
   display: flex;
   flex-wrap: wrap;

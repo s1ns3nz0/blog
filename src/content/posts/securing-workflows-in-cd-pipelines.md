@@ -3,6 +3,7 @@ title: Securing Workflows in CD Pipelines
 description: Supply chain security measures also apply to controls during the CD process.
 pubDatetime: 2026-07-26T18:32:11+09:00
 tags:
+  - Pipeline Controls
   - NIST SP 800-204D
   - CI/CD
   - CI/CD Security

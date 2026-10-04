@@ -3,6 +3,7 @@ title: "Security Requirements Plugin - Kubernetes Analysis Added"
 description: Turning Kubernetes manifests into a security graph so RBAC, NetworkPolicy, service mesh, and cloud IAM relationships feed blast-radius and requirements analysis.
 pubDatetime: 2026-08-19T07:10:00+09:00
 tags:
+  - Security Requirements Plugin
   - Security Design
   - Security Requirements
   - Plugin
