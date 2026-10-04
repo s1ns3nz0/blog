@@ -3,6 +3,7 @@ title: "Prometheus Alert Rules: Helm Values or PrometheusRule Files?"
 description: Where Prometheus alerts come from in kube-prometheus-stack, and why I keep the install in Helm values but each service's alerts in its own PrometheusRule file.
 pubDatetime: 2026-09-30T14:45:00+09:00
 tags:
+  - Kagent
   - Prometheus
   - Kubernetes
   - Helm

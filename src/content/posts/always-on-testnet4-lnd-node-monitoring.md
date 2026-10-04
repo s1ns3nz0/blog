@@ -545,9 +545,27 @@ The data needs a closer look, though:
 | Each legend name three times (`conf_sat`, `conf_sat`, `conf_sat`) | One series per node: regtest A, regtest B, and testnet4, with nothing in the legend to tell them apart |
 | Gaps before 20:00 | The same setup gaps as in the monitoring series, when nothing was being scraped |
 
-So the dashboards work, but they're showing every node Prometheus has ever recorded under `job="lndmon"`, regtest history included. The copy script pointed them at the right data source; it didn't narrow their queries to the testnet4 node. That's exactly the case the `network` label was added for: adding `network="testnet4"` to the dashboards' queries would leave only the testnet4 series. Until then, the regtest lines will scroll out of view as the time range moves past 22:10.
+So the dashboards work, but they're showing every node Prometheus has ever recorded under `job="lndmon"`, regtest history included. The copy script pointed them at the right data source; it didn't narrow their queries to the testnet4 node. That's exactly the case the `network` label was added for: adding `network="testnet4"` to the dashboards' queries would leave only the testnet4 series. The next section does that.
 
 One display detail is misleading too. The axis reads `฿100M` for what is 100 million sat, about 1 BTC: the panel labels satoshi values with a bitcoin sign. The number is right; the unit symbol isn't.
+
+### Narrowing the dashboards to testnet4
+
+A closer look at the dashboards explained the mixed lines. lndmon's dashboards were written for its Kubernetes deployment: their template variables and queries filter on `namespace` and `pod` labels, which exist when Prometheus scrapes pods in a cluster. My scrape configuration doesn't produce those labels, so the filters matched everything, and every node Prometheus had ever recorded under `job="lndmon"` showed up together. It's the same assumption as the `http://prometheus:9090` in `datasource.yaml`: these files expect the environment lndmon ships for, not a VM with plain systemd services.
+
+<!-- TODO: how the variables/queries were changed (namespace/pod → network/node, network="testnet4") -->
+
+After filtering on the labels this setup does have, the wallet panel shows the testnet4 node alone:
+
+![On-Chain Wallet Balance panel from 16:45 to 22:40 with the y-axis now labeled in sat (0 to 600000 sat): the legend shows only conf_sat and unconf_sat once each; both lines sit at 0 from about 22:15, then unconf_sat jumps to about 700,000 sat at about 22:33 while conf_sat stays at 0](../../assets/images/lnd-testnet4/grafana-wallet-filtered.png)
+
+| Before | After |
+|---|---|
+| `conf_sat` and `unconf_sat` three times each, one per node | Each once: only the testnet4 node |
+| Regtest node A's 100M sat filling the afternoon | Nothing before about 22:15, when the testnet4 exporter was first scraped |
+| Axis labeled `฿100M` for satoshis | Axis labeled in `sat` |
+
+What's left is the testnet4 wallet's own short history: empty from the first scrape, then a step in `unconf_sat` to about 700,000 at about 22:33. That step is the faucet's 702,158 sat arriving unconfirmed, the deposit covered in the next part, seen on the dashboard at the moment it happened. `conf_sat` stays at 0 until a block confirms it.
 
 ## Where this part ends
 
@@ -557,7 +575,7 @@ The monitoring stack now follows the testnet4 node:
 |---|---|
 | lndmon | `lndmon-testnet4.service`, as `lnd-t4`, metrics on `127.0.0.1:9094`, enabled |
 | Prometheus | The `lndmon` job scrapes 9094, with `network: testnet4` and `node: t4` labels; the regtest targets are commented out |
-| Grafana | lndmon's seven dashboards, adjusted to the existing data source, provisioned read-only into the `LND Testnet4` folder |
+| Grafana | lndmon's seven dashboards, adjusted to the existing data source, narrowed to the testnet4 node, and provisioned read-only into the `LND Testnet4` folder |
 
-What's left is narrowing the dashboards to `network="testnet4"`, and then letting the node finish its initial sync, so the panels show a node that's caught up rather than one that's still replaying 2024.
+What's left is letting the node finish its initial sync, so the panels show a node that's caught up rather than one that's still replaying 2024.
 

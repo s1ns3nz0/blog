@@ -34,3 +34,5 @@ compose.override.yaml
 
 # posts kept on this machine only (not published, not committed)
 local-only/
+.vercel
+.env*

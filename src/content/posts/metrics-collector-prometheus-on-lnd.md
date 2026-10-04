@@ -3,6 +3,7 @@ title: "Metrics Collector: Prometheus on LND"
 description: Before an incident-response drill, the node needs metrics. How lndmon turns LND's state into Prometheus metrics, and how to read the /metrics format by hand.
 pubDatetime: 2026-09-30T14:40:00+09:00
 tags:
+  - Kagent
   - LND on Kubernetes
   - Prometheus
   - lnd
