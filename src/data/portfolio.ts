@@ -30,6 +30,10 @@ export type Card = {
   title: string;
   /** Collapsed row text. For a card with a story, the result in one line. */
   summary: string;
+  /** Personal projects: the problem in one line, shown above the result when collapsed. */
+  hook?: string;
+  /** Marks a learning or practice project so the result isn't read as production. */
+  badge?: "learning" | "practice";
   /** Personal projects: the four-part story shown when the row is expanded. */
   story?: { problem: string; solution: string; result: string; lesson: string };
   /** Post tag that collects every post of this project; links "All N posts". */
@@ -268,8 +272,8 @@ export const cards: Card[] = [
     stage: "design",
     zone: "test",
     title: "Security Requirements plugin",
-    summary:
-      `Run on a Lightning-paid scan service: 11 service-specific threats, 19 verifiable requirements, 3 that no NIST baseline control expresses.`,
+    hook: "Shift-left tooling skips the first stage: what a service must satisfy",
+    summary: "19 verifiable requirements for a paid service, 3 no NIST baseline covers",
     story: {
       problem:
         `DevSecOps preaches shift left, but requirements analysis, the first stage of the lifecycle, has almost no tooling. Nothing states what a service must satisfy before code exists.`,
@@ -292,8 +296,8 @@ export const cards: Card[] = [
     stage: "design",
     zone: "test",
     title: "AWS SaaS Security Design Review",
-    summary:
-      `Three AWS architectures reviewed end to end: 13, 10, and 8 service-specific threats, and different failure points on ECS and EKS.`,
+    hook: "One requirement set doesn't fit every AWS deployment model",
+    summary: "3 architectures, 31 threats; ECS and EKS broke at different boundaries",
     story: {
       problem:
         `A requirements plugin is only as good as the architectures it has been run on. I needed to see it handle three different deployment models end to end, not one demo.`,
@@ -318,8 +322,8 @@ export const cards: Card[] = [
     zone: "test",
     titleFor: { "lightning-labs": "Stateful validator workload on private EKS" },
     title: "Ethereum Hoodi Validator on Private EKS",
-    summary:
-      `Validator 1559065 active on Hoodi from private EKS; a revocation drill stopped signing at once, and the next attestation after recovery finalized.`,
+    hook: "Public client images run right next to a slashable signing key",
+    summary: "Validator active on Hoodi; revoking the signer's role stopped signing at once",
     story: {
       problem:
         `Staking operators run consensus and validator clients pulled from public registries, right next to the signing key, so a swapped image or a stolen credential means a slashable signature. Running the hardware yourself adds patching, uptime, and key custody on top.`,
@@ -342,8 +346,9 @@ export const cards: Card[] = [
     stage: "build",
     zone: "test",
     title: "LND node on Kubernetes",
-    summary:
-      `A learning project: after a forced Pod replacement and a Helm upgrade, the same node identity, channels, and backups came back.`,
+    hook: "A Running Pod can come back as a different Lightning node",
+    badge: "learning",
+    summary: "Same identity, channels, and backups after Pod replacement and Helm upgrade",
     story: {
       problem:
         `A learning project: I wanted to see what Kubernetes actually guarantees for a stateful node, and what it doesn't. A Lightning node is its wallet, channel database, and static channel backups, so a Pod that restarts successfully can still come back as a different node.`,
@@ -365,8 +370,9 @@ export const cards: Card[] = [
     stage: "build",
     zone: "test",
     title: "Lightning payments for OpenCTI",
-    summary:
-      `L402 practice: a 250-sat testnet invoice settled, the API went from 402 to 200, and the order, challenge, and receipt committed as paid.`,
+    hook: "A settled invoice can leave an order unpaid, or pay for two",
+    badge: "practice",
+    summary: "250 sat on testnet: 402 → 200, order and receipt committed as paid",
     story: {
       problem:
         `A practice project for L402. Getting a Lightning payment to unlock an API call is easy; making it count once, for the right order, is the part to learn. The payment and the order database are separate systems, so a settled invoice can leave an order unpaid or be replayed against another.`,
@@ -422,8 +428,8 @@ export const cards: Card[] = [
     stage: "ship",
     zone: "test",
     title: "Pipeline security controls",
-    summary:
-      `24 controls from SSDF and SP 800-204D; every Action and image pinned, 25 workflows consolidated into 8.`,
+    hook: "The pipeline itself can ship a forged artifact to production",
+    summary: "24 controls; every Action and image pinned; 25 workflows → 8",
     story: {
       problem:
         `The pipeline that builds and ships the validator is itself an attack path: a stolen token, a swapped action, or a forged evidence file reaches the production cluster without touching application code. NIST SP 800-218 (SSDF) and SP 800-204D say what to protect, not which controls one repository needs.`,
@@ -489,8 +495,8 @@ export const cards: Card[] = [
     stage: "operate",
     zone: "test",
     title: "Kagent on-call agent for the L402 gate",
-    summary:
-      `Detection cut from 16 to 5 minutes; in a blind drill the page fired in 2 min 21 s and the agent named the broken component.`,
+    hook: "Alerts took 16 min to notice a dead component",
+    summary: "Detection 5 min; blind drill paged in 2 min 21 s",
     story: {
       problem:
         `The L402 payment gate had no playbooks and no automated first responder, and its alerts took 16 minutes to notice a dead component on low traffic. Every diagnosis started from a blank terminal.`,

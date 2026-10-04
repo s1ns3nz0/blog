@@ -480,7 +480,7 @@ const smokePuffs: [number, number][] = [
                   {lane.cards.map(card => (
                     <li id={card.id} data-card-id={card.id} class="log-row panel">
                       {card.evidenceLinks.length > 0 ? (
-                        <details open={!card.story}>
+                        <details open={!card.story} class:list={[card.story && "has-story"]}>
                           <summary>
                             <span class="row-top">
                               <span class="row-title">
@@ -493,9 +493,23 @@ const smokePuffs: [number, number][] = [
                     </>
                   ) : card.title}
                 </span>
-                              <span class="row-meta">{card.meta.map(m => <span>{m}</span>)}</span>
+                              <span class="row-meta">
+                                {card.badge && <span class="row-badge">{card.badge}</span>}
+                                {card.meta.map(m => <span>{m}</span>)}
+                              </span>
                             </span>
-                            <span class="row-summary">{card.summary}</span>
+                            {card.hook ? (
+                              <>
+                                <span class="row-hook"><span aria-hidden="true">✕</span> {card.hook}</span>
+                                <span class="row-result"><span aria-hidden="true">✓</span> {card.summary}</span>
+                                <span class="row-cta">
+                                  <span class="cta-closed">How it was solved: Problem → Solution → Result → Lesson ▾</span>
+                                  <span class="cta-open">Hide ▴</span>
+                                </span>
+                              </>
+                            ) : (
+                              <span class="row-summary">{card.summary}</span>
+                            )}
                           </summary>
                           <dl class="row-body">
                             {card.storyRows.map(([label, text]) => (

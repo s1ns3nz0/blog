@@ -2435,3 +2435,55 @@ html[data-stage="orbit"] .sat-button {
     animation: none !important;
   }
 }
+
+/* Story cards: problem and result lines, and a full-width toggle. */
+.row-hook,
+.row-result {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.row-hook {
+  color: rgb(var(--log-ink) / 0.6);
+}
+.row-hook > span {
+  color: #e8746a;
+}
+.row-result {
+  color: rgb(var(--log-ink) / 0.92);
+  font-weight: 600;
+}
+.row-result > span {
+  color: #5fd38a;
+}
+.row-cta {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgb(var(--log-ink) / 0.22);
+  border-radius: 6px;
+  color: rgb(var(--log-ink) / 0.85);
+  font: 400 12px var(--font-space-mono), monospace;
+  letter-spacing: 0.04em;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.log-row summary:hover .row-cta {
+  border-color: rgb(var(--log-ink) / 0.5);
+  background: rgb(var(--log-ink) / 0.06);
+}
+.row-cta .cta-open,
+.log-row details[open] .row-cta .cta-closed {
+  display: none;
+}
+.log-row details[open] .row-cta .cta-open {
+  display: inline;
+}
+.log-row details.has-story summary::after {
+  display: none;
+}
+.has-story summary {
+  padding-right: 0;
+}
+.row-badge {
+  padding: 0 6px;
+  border: 1px solid rgb(var(--log-ink) / 0.35);
+  border-radius: 4px;
+}
