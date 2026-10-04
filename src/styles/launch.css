@@ -2455,9 +2455,17 @@ html[data-stage="orbit"] .sat-button {
 .row-result > span {
   color: #5fd38a;
 }
+.row-result-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 16px;
+}
 .row-cta {
-  align-self: flex-end;
-  margin-top: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
   padding: 6px 16px;
   border-radius: 999px;
   background: var(--accent-hot);

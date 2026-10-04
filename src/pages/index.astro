@@ -501,10 +501,12 @@ const smokePuffs: [number, number][] = [
                             {card.hook ? (
                               <>
                                 <span class="row-hook"><span aria-hidden="true">✕</span> {card.hook}</span>
+                                <span class="row-result-line">
                                 <span class="row-result"><span aria-hidden="true">✓</span> {card.summary}</span>
                                 <span class="row-cta">
                                   <span class="cta-closed">{card.badge ? "See what I learned" : "See how I fixed it"} <span class="cta-arrow" aria-hidden="true">▾</span></span>
                                   <span class="cta-open">Hide <span aria-hidden="true">▴</span></span>
+                                </span>
                                 </span>
                               </>
                             ) : (
