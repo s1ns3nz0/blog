@@ -1,7 +1,8 @@
 ---
 title: "web3-utils: An RPC Retry That web3 7 Quietly Broke"
-description: "In stakefish/web3-utils.py, RPC timeout retries checked for ValueError, but web3 7 raises Web3RPCError, which isn't one. Reproducing it by mocking at the provider instead of the call, and the PR that fixes it."
+description: "In stakefish/web3-utils.py, RPC timeout retries checked for ValueError, but web3 7 raises Web3RPCError. Reproducing it by mocking at the provider, then a review that showed the fix would also retry transaction submission, and the allowlist that followed."
 pubDatetime: 2026-10-06T15:00:00+09:00
+modDatetime: 2026-10-06T19:30:00+09:00
 tags:
   - Contribution
   - Python
@@ -210,6 +211,88 @@ fix: retry RPC timeout errors raised as Web3RPCError
 
 That's [PR #52](https://github.com/stakefish/web3-utils.py/pull/52). It changes four files: the retry condition, its test, and the version in `setup.cfg` and `.bumpversion.cfg`.
 
+## Review: fixing the check switched retries on for everything
+
+A maintainer's review came back with a blocking issue I hadn't considered.
+
+Under `web3>=7`, the old timeout check had never matched anything, so in practice timeout retries were off. My fix turned them on, and the retry wrapper applies to `retrieve_caller_fn`, which every `Eth` method goes through. There was no list of which methods it should cover, and the default stop condition is `stop_never`. That meant transaction submission would now be retried too.
+
+The review explained why that's dangerous. A `-32603 "request failed or timed out"` response doesn't mean the node rejected the transaction; it may well have accepted and broadcast it.
+
+| Method | What a retry after a timeout does |
+|---|---|
+| `eth_sendTransaction` | The node signs again with the next nonce and can broadcast a second, duplicate transaction |
+| `eth_sendRawTransaction` | The same signed transaction is sent again, so a broadcast that succeeded comes back as `already known` or `nonce too low` |
+
+The request was to exclude state-changing methods, or retry only read-only ones. The non-blocking points:
+
+- matching a substring of `str(e)` is loose: also check that `e.rpc_response` has error code `-32603`;
+- consider web3's `RequestTimedOut`, the subclass it raises for messages it recognises as timeouts;
+- the test covers only sync `get_block`, so add an `AsyncEth` case and a case proving `send_raw_transaction` is not retried.
+
+That second point was the same thing I'd noticed while tracing web3's validation code: a geth `"request timed out"` message produces `RequestTimedOut`, which my string check wouldn't have caught.
+
+The blocking point was the bigger lesson. A condition that never matched was hiding how wide the retry reached. Making it match turned on every path behind it, including ones that must never repeat.
+
+## The second commit
+
+I pushed [`7bee864`](https://github.com/stakefish/web3-utils.py/pull/52/commits/7bee864), "fix: restrict RPC retries to safe methods".
+
+**An allowlist of 31 RPC methods.** `RETRYABLE_RPC_METHODS` lists the read-only and simulation calls: node and fee queries, block and transaction queries, receipts, account state, logs, and `eth_call`, `eth_estimateGas`, `eth_createAccessList`, `eth_simulateV1`. Transaction submission, signing, filter creation and polling, subscriptions, and any method not on the list are excluded.
+
+**The allowlist gates every retry condition, not just timeouts.** The wrapper now combines them with `retry_all`:
+
+```python
+retry=retry_all(
+    retry_if_exception(lambda e: method.json_rpc_method in RETRYABLE_RPC_METHODS),
+    retry_any(
+        retry_if_exception_type((BlockNotFound, TransactionNotFound, ConnectionError, ...)),
+        retry_if_exception(is_retryable_http_error),
+        retry_if_exception(is_timeout_value_error),
+    ),
+)
+```
+
+That's a wider change than the review strictly asked for. Before this commit, a `ConnectionError` on `send_raw_transaction` was already retried. A dropped connection after the request was sent leaves the same uncertainty as a timeout, so it's excluded now as well, and a test pins that down.
+
+**A stricter timeout check:**
+
+```python
+def is_timeout_value_error(e) -> bool:
+    if isinstance(e, RequestTimedOut):
+        return True
+    if not isinstance(e, Web3RPCError):
+        return False
+    response = e.rpc_response or {}
+    error = response.get("error", {})
+    return error.get("code") == -32603 and "request failed or timed out" in error.get("message", "")
+```
+
+`RequestTimedOut` counts on its own. Any other `Web3RPCError` needs both the `-32603` code and the message, read from the structured response instead of the exception's string form.
+
+## Verifying the review's points
+
+The tests grew to match each point in the review:
+
+| Review point | Test |
+|---|---|
+| Only read-only methods retry | `test_rpc_retry_policy`, run over 44 method cases × both timeout types (`rpc_response` and `RequestTimedOut`) |
+| Transaction submission never retries | `test_send_raw_transaction_timeout_does_not_retry`, `test_send_raw_transaction_connection_error_does_not_retry` |
+| Filter polling isn't retried | `test_get_filter_changes_timeout_does_not_retry` |
+| Code and message must both match | `test_timeout_message_with_other_rpc_code_does_not_retry` |
+| `get_block` picks its RPC method from its argument | `test_rpc_timeout_error_retry`, with a block number and a block hash |
+| Async is covered | async read cases |
+
+The `get_block` case matters because its RPC method isn't fixed: a number calls `eth_getBlockByNumber` and a hash calls `eth_getBlockByHash`. The allowlist check has to see whichever one is actually sent, and the test runs both.
+
+The suite went from 44 tests to 140, all passing along with the formatting checks. I re-ran it on `7bee864` while writing this:
+
+```text
+140 passed in 105.66s
+```
+
+I replied on the PR with what changed and asked for another look. The PR is still open.
+
 ## What I took from it
 
 When a library changes major versions, it's not just function signatures that move; exception types can change too. Code that doesn't follow can receive the same error message and behave differently.
@@ -217,3 +300,5 @@ When a library changes major versions, it's not just function signatures that mo
 A test also has to recreate the conditions the code really runs under. Here that meant returning a response dict and letting web3 build the exception, instead of building the exception myself.
 
 And for anything where the count matters, like retries, "was it called" isn't enough. The test has to check both that the real exception came out and how many requests were made.
+
+The review added one more. Before making a dead condition work again, ask what it guards. A retry is only safe for a request that can be repeated, and the code has to say which requests those are.
