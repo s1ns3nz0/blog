@@ -417,8 +417,8 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "2 security reports submitted to a blockchain company",
-    summary: "Both are under review. Product names and details stay private until fixes ship.",
+    title: "2 security reports confirmed by a blockchain company",
+    summary: "Both confirmed by the vendor, with fixes scheduled for the next release. Product names and details stay private until fixes ship.",
     evidence: [],
   },
 
@@ -748,7 +748,7 @@ export const certifications = [
 ];
 
 /** Open-source work, one entry per project, shown in the summary. */
-export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo";
+export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed";
 
 export const statusLabel: Record<ContributionStatus, string> = {
   merged: "Merged",
@@ -757,6 +757,7 @@ export const statusLabel: Record<ContributionStatus, string> = {
   reported: "Reported",
   fixed: "Fixed upstream",
   embargo: "Under embargo",
+  confirmed: "Confirmed, fix in next release",
 };
 
 export type Contribution = {
@@ -913,15 +914,15 @@ export const openSource: OpenSourceEntry[] = [
     id: "disclosure",
     name: "Coordinated disclosure",
     about: "Private reports to a blockchain company, held until fixes ship.",
-    did: "Product names and details stay private until fixes ship.",
-    headline: "2 security reports submitted to a blockchain company",
+    did: "Both confirmed by the vendor; fixes are scheduled for the next release. Product names and details stay private until fixes ship.",
+    headline: "2 security reports confirmed by a blockchain company",
     kind: ["Blockchain", "Security"],
     tags: ["Responsible disclosure"],
     contributions: [
       {
         what: "Details will be added once fixes ship and disclosure is agreed.",
         count: 2,
-        status: "embargo",
+        status: "confirmed",
         links: [],
       },
     ],

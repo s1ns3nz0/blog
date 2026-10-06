@@ -151,7 +151,7 @@ function linkChips(links: { title: string; url: string; external: boolean }[]) {
   return [...code, ...writeups];
 }
 const isDisclosure = (o: { contributions: { status: string }[] }) =>
-  o.contributions.every(c => c.status === "embargo");
+  o.contributions.every(c => c.status === "embargo" || c.status === "confirmed");
 const ossEntriesAll = openSource.map(o => ({
   ...o,
   badges: statusBadges(o.contributions),
@@ -436,7 +436,7 @@ const smokePuffs: [number, number][] = [
                   <li><a href="https://github.com/lightningnetwork/lnd/issues/11211" target="_blank" rel="noopener noreferrer">LND #11211 ↗</a></li>
                   <li><a href="https://github.com/lightninglabs/aperture/issues/286" target="_blank" rel="noopener noreferrer">Aperture #286 ↗</a></li>
                   <li><a href="https://github.com/lightninglabs/aperture/pull/285" target="_blank" rel="noopener noreferrer">Aperture PR #285 ↗</a></li>
-                  <li><span>2 security reports (under review)</span></li>
+                  <li><span>2 security reports (confirmed, fix in next release)</span></li>
                   <li><a href="https://github.com/s1ns3nz0/node-operator-public" target="_blank" rel="noopener noreferrer">Private EKS validator ↗</a></li>
                 </ul>
               </div>
