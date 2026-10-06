@@ -2,7 +2,7 @@
 title: "web3-utils: An RPC Retry That web3 7 Quietly Broke"
 description: "In stakefish/web3-utils.py, RPC timeout retries checked for ValueError, but web3 7 raises Web3RPCError. Reproducing it by mocking at the provider, then a review that showed the fix would also retry transaction submission, and the allowlist that followed."
 pubDatetime: 2026-10-06T15:00:00+09:00
-modDatetime: 2026-10-06T19:30:00+09:00
+modDatetime: 2026-10-06T18:55:00+09:00
 tags:
   - Contribution
   - Python
