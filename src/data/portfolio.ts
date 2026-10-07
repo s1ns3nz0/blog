@@ -490,6 +490,7 @@ export const cards: Card[] = [
     evidence: [
       { label: "Issue #11211", url: "https://github.com/lightningnetwork/lnd/issues/11211" },
       { label: "PR #11219 (merged)", url: "https://github.com/lightningnetwork/lnd/pull/11219" },
+      "lnd-node-announcement-2-address-short-reads",
     ],
   },
 
@@ -881,7 +882,7 @@ export const openSource: OpenSourceEntry[] = [
       {
         what: "Found that the fixed-width NodeAnnouncement2 address decoders accept short reads. Fixed in PR #11219 (LND 0.22.0), co-authored.",
         status: "fixed",
-        links: [ISSUE("lightningnetwork/lnd", 11211), PR("lightningnetwork/lnd", 11219)],
+        links: [ISSUE("lightningnetwork/lnd", 11211), PR("lightningnetwork/lnd", 11219), "lnd-node-announcement-2-address-short-reads"],
       },
     ],
   },
