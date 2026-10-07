@@ -770,6 +770,8 @@ export const statusLabel: Record<ContributionStatus, string> = {
 
 export type Contribution = {
   what: string;
+  /** A few words for the grouped open-source list; `what` is the tooltip. */
+  short?: string;
   /** How many PRs/reports this line stands for (default 1). */
   count?: number;
   /** Checked against GitHub; update when a PR or issue changes state. */
@@ -809,6 +811,7 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["Azure", "GCP", "CSPM"],
     contributions: [
       {
+        short: "Azure & GCP checks: AKS, Cosmos DB, Entra ID, Secret Manager",
         what:
           "28 Azure and GCP checks: AKS (Defender, auto-upgrade, local accounts, monitoring), Cosmos DB (TLS, failover, backup, public access), Databricks, Entra ID, MySQL and PostgreSQL HA and geo-backup, Recovery Vault, NSG, DDoS, Cloud Functions, Cloud SQL, and Secret Manager.",
         count: 28,
@@ -834,16 +837,19 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["Policy as Code", "Supply chain", "Incident response"],
     contributions: [
       {
+        short: "Policy as Code section",
         what: "Policy as Code enforced through the CI/CD pipeline.",
         status: "merged",
         links: [PR("security-alliance/frameworks", 592), "policy-as-code-seal-frameworks"],
       },
       {
+        short: "Private registries section",
         what: "Private registries and package mirrors, so builds pull only reviewed artifacts.",
         status: "merged",
         links: [PR("security-alliance/frameworks", 627), "private-registries-and-mirrors-seal-frameworks"],
       },
       {
+        short: "Endpoint compromise runbook",
         what: "An endpoint compromise runbook for incident management.",
         status: "open",
         links: [PR("security-alliance/frameworks", 647)],
@@ -861,11 +867,13 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["OSCAL", "Compliance as Code", "CI/CD"],
     contributions: [
       {
+        short: "KeyError fix in compliance-trestle",
         what: "Fixed an ssp-generate KeyError on a missing profile-param-value-origin in compliance-trestle.",
         status: "merged",
         links: [PR("oscal-compass/compliance-trestle", 2222)],
       },
       {
+        short: "GitHub Actions plugin for compliance-to-policy",
         what: "A GitHub Actions DevSecOps pipeline plugin for compliance-to-policy.",
         status: "open",
         links: [PR("oscal-compass/compliance-to-policy", 51), "nist-oscal-and-associated-projects"],
@@ -883,6 +891,7 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["Lightning", "Go", "Input validation"],
     contributions: [
       {
+        short: "Short-read fix in address decoders (LND 0.22.0)",
         what: "Found that the fixed-width NodeAnnouncement2 address decoders accept short reads. Fixed in PR #11219 (LND 0.22.0), co-authored.",
         status: "coauthored",
         links: [ISSUE("lightningnetwork/lnd", 11211), PR("lightningnetwork/lnd", 11219), "lnd-node-announcement-2-address-short-reads"],
@@ -900,16 +909,19 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["Lightning", "L402", "Observability"],
     contributions: [
       {
+        short: "Per-outcome L402 metrics",
         what: "Per-outcome Prometheus counters for the L402 mint and verify paths.",
         status: "proposed",
         links: [ISSUE("lightninglabs/aperture", 286), "aperture-l402-metrics-before-and-after"],
       },
       {
+        short: "Security event log",
         what: "Dedicated security event logging that keeps raw macaroons and preimages out of logs.",
         status: "proposed",
         links: [ISSUE("lightninglabs/aperture", 291), "aperture-l402-security-events-monitoring-proposal"],
       },
       {
+        short: "Flaky TestTamperedL402 fix",
         what: "A fix for a rare (1 in 256) flake in TestTamperedL402.",
         status: "open",
         links: [PR("lightninglabs/aperture", 285)],
@@ -982,11 +994,13 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["Payments", "Python", "Go"],
     contributions: [
       {
+        short: "V1 payloads get a 402, not a 500",
         what: "Python resource server rejects V1 payloads with a 402 instead of failing with a 500.",
         status: "review",
         links: [PR("x402-foundation/x402", 3715), "x402-python-reject-v1-payment-payload"],
       },
       {
+        short: "skipHandler requests settle",
         what: "Requests that skip the handler settle like normal requests, checked against real escrow programs on forked chains.",
         status: "review",
         links: [PR("x402-foundation/x402", 3718), "x402-skip-handler-settlement"],
@@ -1004,21 +1018,25 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["Ethereum", "Python", "Go"],
     contributions: [
       {
+        short: "eth2-monitor: replay restart loop",
         what: "eth2-monitor: completed epoch replays no longer restart forever.",
         status: "review",
         links: [PR("stakefish/eth2-monitor", 33), "eth2-monitor-epoch-replay-restart-loop"],
       },
       {
+        short: "eth2-monitor: release binaries overwrite",
         what: "eth2-monitor: release binaries for every OS were written to the same two file names.",
-        status: "review",
+        status: "reported",
         links: [ISSUE("stakefish/eth2-monitor", 32), "eth2-monitor-release-binaries-overwrite"],
       },
       {
+        short: "web3-utils: RPC timeout retry",
         what: "web3-utils: RPC timeout retries restored for web3 7, limited to read-only methods after review.",
         status: "review",
         links: [PR("stakefish/web3-utils.py", 52), "web3-utils-rpc-timeout-retry-web3rpcerror"],
       },
       {
+        short: "web3-utils: prerelease version gate",
         what: "web3-utils: the CI version gate compares prerelease versions correctly.",
         status: "review",
         links: [PR("stakefish/web3-utils.py", 51), "web3-utils-version-gate-prerelease"],
@@ -1036,6 +1054,7 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["Fuzzing", "Go", "LibAFL"],
     contributions: [
       {
+        short: "Silent LibAFL fuzzer failure",
         what: "Reported a LibAFL corpus bug where fuzzing stopped while go test still passed; fixed in #212.",
         status: "fixed",
         links: [
