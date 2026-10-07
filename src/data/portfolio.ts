@@ -484,9 +484,13 @@ export const cards: Card[] = [
     id: "lnd-short-reads",
     stage: "ship",
     zone: "oss",
-    title: "LND: short reads in address decoders",
-    summary: "Reported that LND's fixed-width node announcement address decoders accept short reads.",
-    evidence: [{ label: "Issue #11211", url: "https://github.com/lightningnetwork/lnd/issues/11211" }],
+    title: "LND: short reads in address decoders, fixed",
+    summary:
+      "Reported that NodeAnnouncement2's fixed-width address decoders accept short reads. Fixed upstream in PR #11219 for LND 0.22.0, with a co-author credit on the fix.",
+    evidence: [
+      { label: "Issue #11211", url: "https://github.com/lightningnetwork/lnd/issues/11211" },
+      { label: "PR #11219 (merged)", url: "https://github.com/lightningnetwork/lnd/pull/11219" },
+    ],
   },
 
   // ---------- Operate ----------
@@ -869,15 +873,15 @@ export const openSource: OpenSourceEntry[] = [
     name: "LND",
     about: "Lightning Labs' implementation of a Lightning Network node.",
     url: "https://github.com/lightningnetwork/lnd",
-    did: "Reported that the fixed-width decoders for node announcement addresses accept short reads.",
-    headline: "Short-read bug in address decoders",
+    did: "Reported that the fixed-width decoders for node announcement addresses accept short reads; the fix was merged with a co-author credit.",
+    headline: "Short-read bug in address decoders, fixed",
     kind: ["Blockchain"],
     tags: ["Lightning", "Go", "Input validation"],
     contributions: [
       {
-        what: "Found that the fixed-width node announcement address decoders accept short reads.",
-        status: "reported",
-        links: [ISSUE("lightningnetwork/lnd", 11211)],
+        what: "Found that the fixed-width NodeAnnouncement2 address decoders accept short reads. Fixed in PR #11219 (LND 0.22.0), co-authored.",
+        status: "fixed",
+        links: [ISSUE("lightningnetwork/lnd", 11211), PR("lightningnetwork/lnd", 11219)],
       },
     ],
   },
