@@ -753,7 +753,7 @@ export const certifications = [
 ];
 
 /** Open-source work, one entry per project, shown in the summary. */
-export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed";
+export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed" | "coauthored";
 
 export const statusLabel: Record<ContributionStatus, string> = {
   merged: "Merged",
@@ -763,6 +763,7 @@ export const statusLabel: Record<ContributionStatus, string> = {
   fixed: "Fixed upstream",
   embargo: "Under embargo",
   confirmed: "Confirmed, fix in next release",
+  coauthored: "Co-authored fix merged",
 };
 
 export type Contribution = {
@@ -881,7 +882,7 @@ export const openSource: OpenSourceEntry[] = [
     contributions: [
       {
         what: "Found that the fixed-width NodeAnnouncement2 address decoders accept short reads. Fixed in PR #11219 (LND 0.22.0), co-authored.",
-        status: "fixed",
+        status: "coauthored",
         links: [ISSUE("lightningnetwork/lnd", 11211), PR("lightningnetwork/lnd", 11219), "lnd-node-announcement-2-address-short-reads"],
       },
     ],
