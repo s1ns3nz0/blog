@@ -417,8 +417,8 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "2 security reports confirmed by a blockchain company",
-    summary: "Both confirmed by the vendor, with fixes scheduled for the next release. Product names and details stay private until fixes ship.",
+    title: "13 security reports submitted to blockchain companies",
+    summary: "2 confirmed by the vendor with fixes scheduled for the next release; 11 submitted and under review. Product names and details stay private until fixes ship.",
     evidence: [],
   },
 
@@ -717,7 +717,7 @@ export const traits = [
     name: "Self-starter",
     line: "I get to security problems before they ship.",
     proof:
-      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 2 security reports sent upstream.",
+      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 13 security reports sent upstream.",
   },
   {
     name: "Fast learner",
@@ -753,7 +753,7 @@ export const certifications = [
 ];
 
 /** Open-source work, one entry per project, shown in the summary. */
-export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed" | "coauthored";
+export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed" | "coauthored" | "review" | "submitted";
 
 export const statusLabel: Record<ContributionStatus, string> = {
   merged: "Merged",
@@ -764,6 +764,8 @@ export const statusLabel: Record<ContributionStatus, string> = {
   embargo: "Under embargo",
   confirmed: "Confirmed, fix in next release",
   coauthored: "Co-authored fix merged",
+  review: "Under review",
+  submitted: "Submitted, under review",
 };
 
 export type Contribution = {
@@ -930,6 +932,96 @@ export const openSource: OpenSourceEntry[] = [
         count: 2,
         status: "confirmed",
         links: [],
+      },
+    ],
+  },
+  {
+    // Undisclosed reports: vendor only, as above.
+    id: "disclosure-3",
+    name: "Coordinated disclosure",
+    about: "Private reports to a blockchain company, held until fixes ship.",
+    did: "Submitted and under review by the vendor. Product names and details stay private until fixes ship.",
+    headline: "3 security reports submitted to a blockchain company",
+    kind: ["Blockchain", "Security"],
+    tags: ["Responsible disclosure"],
+    contributions: [
+      {
+        what: "Details will be added once fixes ship and disclosure is agreed.",
+        count: 3,
+        status: "submitted",
+        links: [],
+      },
+    ],
+  },
+  {
+    // Undisclosed reports: vendor only, as above.
+    id: "disclosure-8",
+    name: "Coordinated disclosure",
+    about: "Private reports to a blockchain company, held until fixes ship.",
+    did: "Submitted and under review by the vendor. Product names and details stay private until fixes ship.",
+    headline: "8 security reports submitted to a blockchain company",
+    kind: ["Blockchain", "Security"],
+    tags: ["Responsible disclosure"],
+    contributions: [
+      {
+        what: "Details will be added once fixes ship and disclosure is agreed.",
+        count: 8,
+        status: "submitted",
+        links: [],
+      },
+    ],
+  },
+  {
+    id: "x402",
+    name: "x402",
+    about: "An open protocol for paying for HTTP resources, with TypeScript, Python, and Go SDKs.",
+    url: "https://github.com/x402-foundation/x402",
+    did: "Fixed a V1 payment header that crashed the Python server, and a skipHandler path that skipped settlement across all three SDKs.",
+    headline: "Payment-flow fixes across SDKs",
+    kind: ["Blockchain"],
+    tags: ["Payments", "Python", "Go"],
+    contributions: [
+      {
+        what: "Python resource server rejects V1 payloads with a 402 instead of failing with a 500.",
+        status: "review",
+        links: [PR("x402-foundation/x402", 3715), "x402-python-reject-v1-payment-payload"],
+      },
+      {
+        what: "Requests that skip the handler settle like normal requests, checked against real escrow programs on forked chains.",
+        status: "review",
+        links: [PR("x402-foundation/x402", 3718), "x402-skip-handler-settlement"],
+      },
+    ],
+  },
+  {
+    id: "stakefish",
+    name: "stakefish",
+    about: "An Ethereum staking provider's open-source validator monitor and Python web3 utilities.",
+    url: "https://github.com/stakefish",
+    did: "Fixed an epoch replay that never finished, RPC retries web3 7 broke, and a version gate that misread prereleases; reported release binaries that overwrite each other.",
+    headline: "Validator monitoring & web3 utility fixes",
+    kind: ["Blockchain"],
+    tags: ["Ethereum", "Python", "Go"],
+    contributions: [
+      {
+        what: "eth2-monitor: completed epoch replays no longer restart forever.",
+        status: "review",
+        links: [PR("stakefish/eth2-monitor", 33), "eth2-monitor-epoch-replay-restart-loop"],
+      },
+      {
+        what: "eth2-monitor: release binaries for every OS were written to the same two file names.",
+        status: "review",
+        links: [ISSUE("stakefish/eth2-monitor", 32), "eth2-monitor-release-binaries-overwrite"],
+      },
+      {
+        what: "web3-utils: RPC timeout retries restored for web3 7, limited to read-only methods after review.",
+        status: "review",
+        links: [PR("stakefish/web3-utils.py", 52), "web3-utils-rpc-timeout-retry-web3rpcerror"],
+      },
+      {
+        what: "web3-utils: the CI version gate compares prerelease versions correctly.",
+        status: "review",
+        links: [PR("stakefish/web3-utils.py", 51), "web3-utils-version-gate-prerelease"],
       },
     ],
   },

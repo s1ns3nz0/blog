@@ -2516,3 +2516,40 @@ html[data-stage="orbit"] .sat-button {
   border: 1px solid rgb(var(--log-ink) / 0.35);
   border-radius: 4px;
 }
+
+/* Open-source dialog: each contribution as status | text, links under the text. */
+.oss-row-body .bullets {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 14px;
+  margin: 10px 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+.oss-row-body .bullets li {
+  display: contents;
+}
+.oss-row-body .bullets .oss-status {
+  grid-column: 1;
+  justify-self: start;
+  align-self: start;
+  margin: 2px 0 0;
+}
+.oss-row-body .bullets .oss-what {
+  grid-column: 2;
+  line-height: 1.5;
+}
+.oss-row-body .bullets .text-links {
+  grid-column: 2;
+  margin: -2px 0 8px;
+}
+@media (max-width: 640px) {
+  .oss-row-body .bullets {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .oss-row-body .bullets .oss-status,
+  .oss-row-body .bullets .oss-what,
+  .oss-row-body .bullets .text-links {
+    grid-column: 1;
+  }
+}
