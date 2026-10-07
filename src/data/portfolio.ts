@@ -417,8 +417,8 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "14 security reports submitted to blockchain companies",
-    summary: "2 confirmed by the vendor with fixes scheduled for the next release; 12 submitted and under review. Product names and details stay private until fixes ship.",
+    title: "16 security reports submitted to blockchain companies",
+    summary: "2 confirmed by the vendor with fixes scheduled for the next release; 14 submitted and under review. Product names and details stay private until fixes ship.",
     evidence: [],
   },
 
@@ -717,7 +717,7 @@ export const traits = [
     name: "Self-starter",
     line: "I get to security problems before they ship.",
     proof:
-      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 14 security reports sent upstream.",
+      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 16 security reports sent upstream.",
   },
   {
     name: "Fast learner",
@@ -967,17 +967,17 @@ export const openSource: OpenSourceEntry[] = [
   },
   {
     // Undisclosed reports: vendor only, as above.
-    id: "disclosure-9",
+    id: "disclosure-11",
     name: "Coordinated disclosure",
     about: "Private reports to a blockchain company, held until fixes ship.",
     did: "Submitted and under review by the vendor. Product names and details stay private until fixes ship.",
-    headline: "9 security reports submitted to a blockchain company",
+    headline: "11 security reports submitted to a blockchain company",
     kind: ["Blockchain", "Security"],
     tags: ["Responsible disclosure"],
     contributions: [
       {
         what: "Details will be added once fixes ship and disclosure is agreed.",
-        count: 9,
+        count: 11,
         status: "submitted",
         links: [],
       },
