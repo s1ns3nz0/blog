@@ -157,9 +157,6 @@ const ossEntriesAll = openSource.map(o => ({
 }));
 // Open-source dialog: grouped by how far each contribution got, then by project.
 const OSS_GROUPS = [
-  { id: "merged", title: "Merged", unit: "merged", statuses: ["merged", "coauthored"] },
-  { id: "review", title: "In review", unit: "in review", statuses: ["open", "review"] },
-  { id: "reported", title: "Reported", unit: "reported", statuses: ["reported", "proposed", "fixed"] },
   {
     id: "disclosure",
     title: "Security disclosures",
@@ -167,6 +164,9 @@ const OSS_GROUPS = [
     statuses: ["confirmed", "submitted", "embargo"],
     note: "Private reports to blockchain companies. Product names and details stay private until fixes ship.",
   },
+  { id: "merged", title: "Merged", unit: "merged", statuses: ["merged", "coauthored"] },
+  { id: "review", title: "In review", unit: "in review", statuses: ["open", "review"] },
+  { id: "reported", title: "Reported", unit: "reported", statuses: ["reported", "proposed", "fixed"] },
 ] as const;
 // Badges for statuses that need more than the group title says.
 const partBadge: Partial<Record<string, string>> = {
@@ -188,16 +188,19 @@ const ossGroups = OSS_GROUPS.map(g => {
         about: o.about,
         url: disclosure ? undefined : o.url,
         count: cs.reduce((n, c) => n + (c.count ?? 1), 0),
+        kind: disclosure ? [] : o.kind,
         parts: cs.map(c => ({
           short: disclosure ? `${c.count ?? 1} reports` : (c.short ?? c.what),
           what: disclosure ? o.did : c.what,
           badge: partBadge[c.status],
+          chips: c.chips,
         })),
-        chips: cs.flatMap(c => c.chips),
       };
     })
     .filter(r => r !== null)
-    .sort((a, b) => b.count - a.count);
+    .sort((a, b) => b.count - a.count)
+    // Unnamed vendors are lettered top to bottom: Company A, B, C.
+    .map((r, i) => (g.id === "disclosure" ? { ...r, name: `Blockchain Company ${String.fromCharCode(65 + i)}` } : r));
   return { ...g, rows, total: rows.reduce((n, r) => n + r.count, 0) };
 }).filter(g => g.rows.length > 0);
 const ossIds = new Set(openSource.map(o => o.id));
@@ -787,29 +790,36 @@ const smokePuffs: [number, number][] = [
                       ) : (
                         <span title={r.about}>{r.name}</span>
                       )}
+                      <span class="kind-badges">
+                        {r.kind.map(k => <span class="kind-badge" data-kind={k}>{k}</span>)}
+                      </span>
                     </span>
                     <span class="oss-item-count">{r.count}</span>
-                    <span class="oss-item-text">
+                    <ul class="oss-parts">
                       {r.parts.map(p => (
-                        <span class="oss-part" title={p.what}>
-                          {p.short}
-                          {p.badge && <span class="oss-part-badge">{p.badge}</span>}
-                        </span>
+                        <li class="oss-part">
+                          <span class="oss-part-text" title={p.what}>
+                            {p.short}
+                            {p.badge && <span class="oss-part-badge">{p.badge}</span>}
+                          </span>
+                          {p.chips.length > 0 && (
+                            <span class="oss-item-links">
+                              {p.chips.map(l => (
+                                <a
+                                  class="text-link"
+                                  href={l.url}
+                                  title={l.tip}
+                                  target="_blank"
+                                  rel={l.external ? "noopener noreferrer" : "noopener"}
+                                >
+                                  {l.label}
+                                </a>
+                              ))}
+                            </span>
+                          )}
+                        </li>
                       ))}
-                    </span>
-                    <span class="oss-item-links">
-                      {r.chips.map(l => (
-                        <a
-                          class="text-link"
-                          href={l.url}
-                          title={l.tip}
-                          target="_blank"
-                          rel={l.external ? "noopener noreferrer" : "noopener"}
-                        >
-                          {l.label}
-                        </a>
-                      ))}
-                    </span>
+                    </ul>
                   </li>
                 ))}
               </ul>

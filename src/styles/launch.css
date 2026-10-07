@@ -2590,7 +2590,7 @@ html[data-stage="orbit"] .sat-button {
 }
 .oss-item {
   display: grid;
-  grid-template-columns: 9.5rem 2.25rem minmax(0, 1fr);
+  grid-template-columns: 12rem 2.25rem minmax(0, 1fr);
   align-items: baseline;
   gap: 4px 14px;
   padding: 9px 0;
@@ -2620,9 +2620,31 @@ html[data-stage="orbit"] .sat-button {
   color: #334155;
   line-height: 1.5;
 }
-.oss-part:not(:last-child)::after {
-  content: " · ";
-  color: #94a3b8;
+.oss-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.oss-part {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #334155;
+  line-height: 1.5;
+}
+.oss-item-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.oss-item-name .kind-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 .oss-part-badge {
   margin-left: 6px;
@@ -2636,7 +2658,6 @@ html[data-stage="orbit"] .sat-button {
   white-space: nowrap;
 }
 .oss-item-links {
-  grid-column: 3;
   display: flex;
   flex-wrap: wrap;
   gap: 2px 12px;
@@ -2649,8 +2670,37 @@ html[data-stage="orbit"] .sat-button {
   .oss-item {
     grid-template-columns: minmax(0, 1fr) auto;
   }
-  .oss-item-text,
-  .oss-item-links {
+  .oss-parts {
     grid-column: 1 / -1;
   }
+  .oss-item-name {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 8px;
+  }
+}
+.oss-item-name .kind-badge {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgb(100 116 139 / 0.12);
+  color: #475569;
+  font-size: 9.5px;
+  font-weight: 600;
+}
+.oss-item-name .kind-badge[data-kind="Blockchain"] {
+  background: rgb(245 158 11 / 0.16);
+  color: #92400e;
+}
+.oss-item-name .kind-badge[data-kind="Cloud"] {
+  background: rgb(59 130 246 / 0.14);
+  color: #1e40af;
+}
+.oss-item-name .kind-badge[data-kind="Security"] {
+  background: rgb(239 68 68 / 0.13);
+  color: #991b1b;
+}
+.oss-item-name .kind-badge[data-kind="Compliance"] {
+  background: rgb(16 185 129 / 0.15);
+  color: #065f46;
 }
