@@ -190,7 +190,7 @@ const ossGroups = OSS_GROUPS.map(g => {
         count: cs.reduce((n, c) => n + (c.count ?? 1), 0),
         kind: disclosure ? [] : o.kind,
         parts: cs.map(c => ({
-          short: disclosure ? `${c.count ?? 1} reports` : (c.short ?? c.what),
+          short: disclosure ? `${c.count ?? 1} report${(c.count ?? 1) === 1 ? "" : "s"}` : (c.short ?? c.what),
           what: disclosure ? o.did : c.what,
           badge: partBadge[c.status],
           chips: c.chips,
@@ -480,7 +480,7 @@ const smokePuffs: [number, number][] = [
                   <li><a href="https://github.com/lightningnetwork/lnd/pull/11219" target="_blank" rel="noopener noreferrer">LND #11219 merged ↗</a></li>
                   <li><a href="https://github.com/lightninglabs/aperture/issues/286" target="_blank" rel="noopener noreferrer">Aperture #286 ↗</a></li>
                   <li><a href="https://github.com/lightninglabs/aperture/pull/285" target="_blank" rel="noopener noreferrer">Aperture PR #285 ↗</a></li>
-                  <li><span>16 security reports (2 confirmed, 14 under review)</span></li>
+                  <li><span>4 security reports (under review)</span></li>
                   <li><a href="https://github.com/s1ns3nz0/node-operator-public" target="_blank" rel="noopener noreferrer">Private EKS validator ↗</a></li>
                 </ul>
               </div>
