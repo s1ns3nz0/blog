@@ -465,8 +465,11 @@ export const cards: Card[] = [
     stage: "ship",
     zone: "oss",
     title: "Aperture: flaky L402 test fix",
-    summary: "Opened a fix for a rare (1 in 256) flake in TestTamperedL402 that could fail CI at random.",
-    evidence: [{ label: "PR #285", url: "https://github.com/lightninglabs/aperture/pull/285" }],
+    summary: "Fixed a rare (1 in 256) flake in TestTamperedL402 that could fail CI at random. Merged with authorship kept via #292.",
+    evidence: [
+      { label: "PR #285", url: "https://github.com/lightninglabs/aperture/pull/285" },
+      { label: "Merged via PR #292", url: "https://github.com/lightninglabs/aperture/pull/292" },
+    ],
   },
   {
     id: "gosentry",
@@ -903,7 +906,7 @@ export const openSource: OpenSourceEntry[] = [
     name: "Aperture",
     about: "Lightning Labs' reverse proxy that gates APIs behind L402 payments.",
     url: "https://github.com/lightninglabs/aperture",
-    did: "Proposed per-outcome Prometheus metrics and a dedicated security event log. Opened a fix for a flaky test.",
+    did: "Proposed per-outcome Prometheus metrics and a dedicated security event log. Fixed a flaky test, merged via #292.",
     headline: "L402 metrics & security events",
     kind: ["Blockchain"],
     tags: ["Lightning", "L402", "Observability"],
@@ -923,8 +926,8 @@ export const openSource: OpenSourceEntry[] = [
       {
         short: "Flaky TestTamperedL402 fix",
         what: "A fix for a rare (1 in 256) flake in TestTamperedL402.",
-        status: "open",
-        links: [PR("lightninglabs/aperture", 285)],
+        status: "merged",
+        links: [PR("lightninglabs/aperture", 285), PR("lightninglabs/aperture", 292)],
       },
     ],
   },
