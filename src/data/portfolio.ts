@@ -417,8 +417,8 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "4 security reports submitted to blockchain companies",
-    summary: "All 4 submitted and under review. Product names and details stay private until fixes ship.",
+    title: "6 security reports submitted to blockchain companies",
+    summary: "2 confirmed by the vendor with fixes scheduled for the next release; 4 submitted and under review. Product names and details stay private until fixes ship.",
     evidence: [],
   },
 
@@ -717,7 +717,7 @@ export const traits = [
     name: "Self-starter",
     line: "I get to security problems before they ship.",
     proof:
-      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 4 security reports sent upstream.",
+      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 6 security reports sent upstream.",
   },
   {
     name: "Fast learner",
@@ -930,7 +930,25 @@ export const openSource: OpenSourceEntry[] = [
   },
   {
     // Undisclosed reports: vendor only. No product, date, severity, or link
-    // until fixes ship and disclosure is agreed.
+    // until fixes ship and disclosure is agreed. Listed in Company A, B, C order.
+    id: "disclosure-3",
+    name: "Coordinated disclosure",
+    about: "Private reports to a blockchain company, held until fixes ship.",
+    did: "Submitted and under review by the vendor. Product names and details stay private until fixes ship.",
+    headline: "3 security reports submitted to a blockchain company",
+    kind: ["Blockchain", "Security"],
+    tags: ["Responsible disclosure"],
+    contributions: [
+      {
+        what: "Details will be added once fixes ship and disclosure is agreed.",
+        count: 3,
+        status: "submitted",
+        links: [],
+      },
+    ],
+  },
+  {
+    // Undisclosed reports: vendor only, as above.
     id: "disclosure-1",
     name: "Coordinated disclosure",
     about: "Private reports to a blockchain company, held until fixes ship.",
@@ -949,18 +967,18 @@ export const openSource: OpenSourceEntry[] = [
   },
   {
     // Undisclosed reports: vendor only, as above.
-    id: "disclosure-3",
+    id: "disclosure",
     name: "Coordinated disclosure",
     about: "Private reports to a blockchain company, held until fixes ship.",
-    did: "Submitted and under review by the vendor. Product names and details stay private until fixes ship.",
-    headline: "3 security reports submitted to a blockchain company",
+    did: "Both confirmed by the vendor; fixes are scheduled for the next release. Product names and details stay private until fixes ship.",
+    headline: "2 security reports confirmed by a blockchain company",
     kind: ["Blockchain", "Security"],
     tags: ["Responsible disclosure"],
     contributions: [
       {
         what: "Details will be added once fixes ship and disclosure is agreed.",
-        count: 3,
-        status: "submitted",
+        count: 2,
+        status: "confirmed",
         links: [],
       },
     ],
@@ -1058,6 +1076,6 @@ export const audiences: Audience[] = [
     title: "Platform Engineer",
     openTo: "Open to remote and overseas Platform Engineering roles",
     priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "gosentry"],
-    ossPriority: ["lnd", "aperture", "disclosure-3"],
+    ossPriority: ["lnd", "aperture", "disclosure"],
   },
 ];
