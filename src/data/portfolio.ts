@@ -863,7 +863,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/oscal-compass",
     did: "Fixed a KeyError in compliance-trestle's SSP generation (merged). Opened a GitHub Actions plugin for compliance-to-policy.",
     headline: "Compliance-as-Code fix & CI plugin",
-    kind: ["Compliance"],
+    kind: ["Security"],
     tags: ["OSCAL", "Compliance as Code", "CI/CD"],
     contributions: [
       {
