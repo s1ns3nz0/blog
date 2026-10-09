@@ -7,7 +7,10 @@ tags:
   - lnd
   - Aperture
   - L402
+modDatetime: 2026-10-09T22:00:00+09:00
 ---
+
+*Update, 9 October 2026: a maintainer reviewed this write-up and asked for a pull request. The counters are now in [PR #297](https://github.com/lightninglabs/aperture/pull/297), with two design changes from the review. [What changed in the PR](#what-changed-in-the-pr) covers them. Sections 1 to 4 describe the original fork branch.*
 
 [Aperture](https://github.com/lightninglabs/aperture) is Lightning Labs' reverse proxy for L402, the HTTP 402 scheme that gates an API behind a Lightning payment: a client pays an invoice, gets back a macaroon and preimage, and presents both on later requests. Aperture already logs why a request was accepted or rejected. What it didn't have was a way to count those outcomes over time without parsing log lines. [Issue #286](https://github.com/lightninglabs/aperture/issues/286) asks for that: per-outcome Prometheus counters on the minting and verification paths, so an operator can see the failure mix on `/metrics` instead of grepping DEBUG logs.
 
@@ -539,8 +542,46 @@ Code tests exercised authentication functions, not the full proxy. Identifier ge
 
 The regtest driver encountered a script-parsing error after measurements completed. A separate report generator re-evaluated the 30 saved runs; the reported result is based on that re-evaluation.
 
+## What changed in the PR
+
+Clara van Staden, an Aperture maintainer, checked out the fork branch and [replied on #286](https://github.com/lightninglabs/aperture/issues/286) with two suggestions and two nits. [PR #297](https://github.com/lightninglabs/aperture/pull/297) applies all of them. The metric names and most labels stayed the same.
+
+### 1. `macaroon_valid` is gone
+
+`VerifyL402` has one caller, `Accept`, so every `macaroon_valid` was followed by either `accepted` or `invoice_unsettled`. The label added nothing those two didn't already say, and it was the reason a successful request counted twice. Without it, each verify attempt adds exactly one sample, and the sum across reasons is the number of attempts. The double-counting rules in sections 2 and 3 no longer apply.
+
+### 2. Counters are recorded once, at the caller
+
+The fork recorded outcomes inside `mint`, at each exit of `MintL402` and `VerifyL402`. In the PR, `mint` only classifies the error and the two callers in `auth` record it:
+
+| Path | `mint` returns | `auth` records in |
+|---|---|---|
+| Minting | A sentinel error per failed step, wrapping the original, e.g. `fmt.Errorf("%w: %w", ErrMintSecretFailed, err)` | `FreshChallengeHeader` |
+| Verification | A `*VerifyError` carrying a `VerifyReason` | `Accept` |
+
+The caller reads the step with `errors.Is` or `errors.As` and records `ok` or `accepted` on success. An error it can't classify is counted as `unknown`, so a new exit path can't slip through uncounted. `mint` no longer imports Prometheus, and the auth-only outcomes (`accepted`, `malformed_header`, `invoice_unsettled`) are defined in `auth`.
+
+The labels in the PR:
+
+| Counter | Labels |
+|---|---|
+| `aperture_l402_mint_total{result}` | `ok`, `challenge_failed`, `identifier_failed`, `secret_failed`, `macaroon_failed`, `caveat_failed`, `unknown` |
+| `aperture_l402_verify_total{reason}` | `accepted`, `malformed_header`, `malformed_macaroon`, `bad_preimage`, `secret_not_found`, `secret_lookup_error`, `bad_signature`, `caveat_unsatisfied`, `invoice_unsettled`, `unknown` |
+
+### The nits, and what was left out
+
+`make lint` flagged a `copyloopvar` in `mint/metrics_test.go`; that file no longer exists after the move. One commit message line was over 72 characters and is now shorter. The repository-local Codex harness commit on the fork branch is not part of the PR.
+
+### Still open
+
+Two questions are listed at the end of the PR for review:
+
+- `invoice_unsettled` covers every `VerifyInvoiceStatus` error, lnd lookup timeouts included. Should it be split the way the secret lookup is?
+- `malformed_header` also counts requests with no credential at all, which includes the normal first request before payment.
+
 ## References
 
+- [Aperture PR #297](https://github.com/lightninglabs/aperture/pull/297)
 - [Aperture issue #286](https://github.com/lightninglabs/aperture/issues/286)
 - [Aperture repository (Lightning Labs)](https://github.com/lightninglabs/aperture)
 - [auth/authenticator.go](https://github.com/s1ns3nz0/aperture/blob/78cacdd05c673312bfb80d4efcd96e015a9a12c7/auth/authenticator.go)

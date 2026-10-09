@@ -526,10 +526,11 @@ export const cards: Card[] = [
     stage: "operate",
     zone: "oss",
     title: "Aperture: L402 metrics",
-    summary: "Per-outcome Prometheus counters for Aperture's L402 mint and verify paths (issue #286).",
+    summary: "Per-outcome Prometheus counters for Aperture's L402 mint and verify paths. A maintainer reviewed the proposal and asked for a PR; it's open as #297.",
     evidence: [
       "aperture-l402-metrics-before-and-after",
       { label: "Issue #286", url: "https://github.com/lightninglabs/aperture/issues/286" },
+      { label: "PR #297", url: "https://github.com/lightninglabs/aperture/pull/297" },
     ],
   },
   {
@@ -906,16 +907,16 @@ export const openSource: OpenSourceEntry[] = [
     name: "Aperture",
     about: "Lightning Labs' reverse proxy that gates APIs behind L402 payments.",
     url: "https://github.com/lightninglabs/aperture",
-    did: "Proposed per-outcome Prometheus metrics and a dedicated security event log. Fixed a flaky test, merged via #292.",
+    did: "Opened a PR for per-outcome Prometheus metrics after a maintainer reviewed the proposal. Proposed a dedicated security event log. Fixed a flaky test, merged via #292.",
     headline: "L402 metrics & security events",
     kind: ["Blockchain"],
     tags: ["Lightning", "L402", "Observability"],
     contributions: [
       {
         short: "Per-outcome L402 metrics",
-        what: "Per-outcome Prometheus counters for the L402 mint and verify paths.",
-        status: "proposed",
-        links: [ISSUE("lightninglabs/aperture", 286), "aperture-l402-metrics-before-and-after"],
+        what: "Per-outcome Prometheus counters for the L402 mint and verify paths, reworked after maintainer review.",
+        status: "open",
+        links: [PR("lightninglabs/aperture", 297), ISSUE("lightninglabs/aperture", 286), "aperture-l402-metrics-before-and-after"],
       },
       {
         short: "Security event log",

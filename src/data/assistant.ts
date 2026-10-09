@@ -106,7 +106,7 @@ export const chips: Chip[] = [
     audiences: ["lightning-labs"],
     question: "What has he done with Aperture and L402?",
     answer:
-      "He added per-outcome Prometheus counters to Aperture's L402 mint and verify paths (issue #286), and proposed structured security events that keep raw macaroons and preimages out of logs.",
+      "He proposed per-outcome Prometheus counters for Aperture's L402 mint and verify paths (issue #286). A maintainer reviewed the write-up and asked for a pull request, so the counters are now in PR #297 with the review's design changes. He also proposed structured security events that keep raw macaroons and preimages out of logs.",
     sources: [
       "aperture-l402-metrics-before-and-after",
       "aperture-l402-security-events-monitoring-proposal",
