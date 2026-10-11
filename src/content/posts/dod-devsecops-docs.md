@@ -4,7 +4,6 @@ description: DevSecOps documents structure of U.S Department of Defense.
 pubDatetime: 2026-07-18T17:17:43+09:00
 tags:
   - DevSecOps
-  - DoD
 featured: true
 ---
 Whenever I tried to study DevSecOps, I found myself confused by the sheer number of security tools and projects involved, and I often lost sight of how to actually implement it. Can I meet the requirements simply by deploying this tool within a CI/CD environment? Could I recommend these tools to my clients to help them achieve supply chain compliance? These were the questions that ran through my mind whenever I dealt with this issue. I believe that designing and implementing a solution based on the DoD's playbook would also help ensure compliance with other industries's requirements. This article provides a brief summary of the structure of the DoD's DevSecOps documentation. I will explore this area in greater depth through my own projects in future posts.

@@ -79,14 +79,14 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   {
     name: "Threat Operations",
     tags: [
-      "SOC", "Red Team", "F3EAD", "threat-modeling", "STRIDE", "Incident Response",
-      "Vulnerability Response", "Playbook", "CACAO Playbook", "OASIS", "CISA", "Detection",
+      "SOC", "threat-modeling", "STRIDE", "Incident Response",
+      "Vulnerability Response", "Playbook", "CISA", "Detection",
       "Detection as Code",
     ],
   },
   {
     name: "AI",
-    tags: ["AI", "AI SOC", "AI Supply Chain", "Slopsquatting"],
+    tags: ["AI", "AI Supply Chain", "Slopsquatting"],
   },
   {
     name: "Tools",
@@ -95,9 +95,5 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   {
     name: "Study",
     tags: ["Study"],
-  },
-  {
-    name: "DoW",
-    tags: ["DoD", "DoDD 3000.09", "Army FM 3-60", "meta"],
   },
 ];
