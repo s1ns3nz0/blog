@@ -835,7 +835,7 @@ export const openSource: OpenSourceEntry[] = [
     name: "SEAL Frameworks",
     about: "Security Alliance's open-source security framework for blockchain teams.",
     url: "https://github.com/security-alliance/frameworks",
-    did: "Maintainer of the Supply Chain section. Wrote the Policy as Code and private registries sections, both merged. An endpoint compromise runbook is in review.",
+    did: "Maintainer of the Supply Chain section. Wrote the Policy as Code and private registries sections and an endpoint compromise runbook, all merged.",
     headline: "Policy as Code & supply-chain guidance",
     kind: ["Blockchain", "Security"],
     tags: ["Policy as Code", "Supply chain", "Incident response"],
@@ -855,7 +855,7 @@ export const openSource: OpenSourceEntry[] = [
       {
         short: "Endpoint compromise runbook",
         what: "An endpoint compromise runbook for incident management.",
-        status: "open",
+        status: "merged",
         links: [PR("security-alliance/frameworks", 647)],
       },
     ],
