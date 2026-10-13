@@ -3,7 +3,7 @@ title: "Lineth L2 Lab Postmortems (4) - Alive but Dead: 12 Hours Without Grafana
 description: "A supervised kubectl port-forward lost its stream during a node memory stall and logged the same error 1,929 times over 12 hours. The process stayed alive, so its supervisor never restarted it. A Google SRE format postmortem on monitoring the monitoring, with the logs and a fix tested by injecting the failure."
 pubDatetime: 2026-10-13T22:30:00+09:00
 tags:
-  - SRE Incident
+  - SRE Postmortem
   - SRE
   - Postmortem
   - Incident Response
@@ -116,6 +116,7 @@ Nothing watched the local port, so detection depended on someone opening Grafana
 | 1 | Health-checked forward wrapper under launchd | mitigate | done |
 | 2 | Remove the trigger: node memory headroom for the prover | prevent | done (Part 2: normal-mode batches, VM sized for the host) |
 | 3 | Ad-hoc port-forwards can wedge the same way: kill and re-create rather than trust an existing one | process | documented |
+| 4 | Monitor the operator path itself: alert when the local Grafana endpoint stops answering, not only when the process exits | detect | open |
 
 ## Timeline (UTC)
 

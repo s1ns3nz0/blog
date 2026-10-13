@@ -3,7 +3,7 @@ title: "Lineth L2 Lab Postmortems (1) - A BigInt Bug That Broke the Bridge's Sel
 description: "Deposits from L1 to L2 went unclaimed for 1 h 46 min. The postman had a repair path for exactly this failure, and it crashed 1,125 times on a string that should have been a bigint. A blameless postmortem in the Google SRE format, with the logs, the fix, and the upstream PR."
 pubDatetime: 2026-10-13T22:00:00+09:00
 tags:
-  - SRE Incident
+  - SRE Postmortem
   - SRE
   - Postmortem
   - Incident Response
@@ -160,6 +160,7 @@ The alert was correct, but it went to a webhook that logged it and to nobody els
 | 5 | Make the deposit SLI count deposits that have *not* completed (age of the oldest unclaimed message), not only finished traces | detect | open |
 | 6 | Exercise the cancel path on purpose: drop a pending claim and watch it repair itself | test | open |
 | 7 | Find why two messages got a second claim during the re-claim | prevent | open |
+| 8 | Alert on an ERROR that repeats (here 1,125 identical lines in 75 min) | detect | open |
 
 ## Timeline (UTC, 2026-10-13)
 

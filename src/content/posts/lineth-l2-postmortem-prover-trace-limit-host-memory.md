@@ -3,7 +3,7 @@ title: "Lineth L2 Lab Postmortems (2) - Two Counters, One Limit: Every Batch Pro
 description: "Settlement fell 1,087 blocks behind. Every batch had been failing the prover's normal mode for days because the coordinator and the prover counted the same trace module differently, and the Mac under the cluster was swapping the prover's memory. A Google SRE format postmortem with the logs and the arithmetic."
 pubDatetime: 2026-10-13T22:10:00+09:00
 tags:
-  - SRE Incident
+  - SRE Postmortem
   - SRE
   - Postmortem
   - Incident Response
@@ -118,7 +118,9 @@ The effect, from the prover's own log:
 04:51:42  7092-7171  took 201.0 s   exit 0
 ```
 
-Finalization went from 341 to 720 blocks per 30 minutes; the lag was back to its structural minimum (one or two batches) by ~05:23.
+Across batches, proof times went from 509–605 s to 188–239 s. Finalization went from 341 to 720 blocks per 30 minutes; the lag was back to its structural minimum (one or two batches) by ~05:23.
+
+Time to detect: ~48 min, by hand. Time to mitigate after detection: ~1 h 30 min, for two batch-size iterations and the VM change.
 
 ## Detection
 

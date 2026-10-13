@@ -59,7 +59,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     tags: [
       "HA", "Backup", "Recovery", "DisasterRecovery", "AccessReview", "Rotation",
       "Prometheus", "Logging", "SRE", "SLO", "Grafana",
-      "SRE Incident", "Postmortem", "Observability", "Capacity Planning",
+      "SRE Postmortem", "Postmortem", "Observability", "Capacity Planning",
     ],
   },
   {

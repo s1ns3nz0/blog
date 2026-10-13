@@ -3,7 +3,7 @@ title: "Lineth L2 Lab Postmortems (5) - An L1 Deadlock the Engine API Made Perma
 description: "The lab's local L1 stopped producing blocks for 3 h 14 min: after a one-slot re-org, the beacon node asked the execution client to build on a block's parent, and the Engine API says it must not. Settlement stopped behind it and the coordinator wedged. A Google SRE format postmortem with the logs, the one-RPC fix, and an SLI that hid the worst withdrawals."
 pubDatetime: 2026-10-13T22:40:00+09:00
 tags:
-  - SRE Incident
+  - SRE Postmortem
   - SRE
   - Postmortem
   - Incident Response
