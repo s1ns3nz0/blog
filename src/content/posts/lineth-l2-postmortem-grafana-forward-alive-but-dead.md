@@ -1,5 +1,5 @@
 ---
-title: "Lineth L2 Lab Postmortems (4) - Alive but Dead: 12 Hours Without Grafana"
+title: "Lineth L2 Incident Management: Postmortem (4) - Alive but Dead: 12 Hours Without Grafana"
 description: "A supervised kubectl port-forward lost its stream during a node memory stall and logged the same error 1,929 times over 12 hours. The process stayed alive, so its supervisor never restarted it. A Google SRE format postmortem on monitoring the monitoring, with the logs and a fix tested by injecting the failure."
 pubDatetime: 2026-10-13T22:30:00+09:00
 tags:

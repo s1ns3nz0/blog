@@ -5,6 +5,7 @@ pubDatetime: 2026-10-13T22:50:00+09:00
 tags:
   - Contribution
   - Ethereum
+  - Layer 2
   - PostgreSQL
 ---
 

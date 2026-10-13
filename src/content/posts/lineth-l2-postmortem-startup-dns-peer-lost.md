@@ -1,5 +1,5 @@
 ---
-title: "Lineth L2 Lab Postmortems (3) - Started Before DNS: An RPC Node With No Peer for 49 Minutes"
+title: "Lineth L2 Incident Management: Postmortem (3) - Started Before DNS: An RPC Node With No Peer for 49 Minutes"
 description: "After a planned restart, the L2's public RPC node came up a few seconds before cluster DNS, failed to resolve its only peer once, and never tried again. It looked healthy for 49 minutes while no user transaction reached the sequencer. A Google SRE format postmortem with the logs and a one-probe fix."
 pubDatetime: 2026-10-13T22:20:00+09:00
 tags:

@@ -1,5 +1,5 @@
 ---
-title: "Lineth L2 Lab Postmortems (2) - Two Counters, One Limit: Every Batch Proven Twice"
+title: "Lineth L2 Incident Management: Postmortem (2) - Two Counters, One Limit: Every Batch Proven Twice"
 description: "Settlement fell 1,087 blocks behind. Every batch had been failing the prover's normal mode for days because the coordinator and the prover counted the same trace module differently, and the Mac under the cluster was swapping the prover's memory. A Google SRE format postmortem with the logs and the arithmetic."
 pubDatetime: 2026-10-13T22:10:00+09:00
 tags:

@@ -195,7 +195,7 @@ export const stages: Stage[] = [
     },
     governing: "I make running systems observable, and cheap enough to keep defending.",
     support:
-      "A read-only on-call agent with SLO alerts and drills for a Lightning payment gate, per-outcome L402 metrics upstream in Aperture, and 28 cloud security checks in Prowler.",
+      "An incident console for an L2 rollup I run, per-outcome L402 metrics upstream in Aperture, and 28 cloud security checks in Prowler.",
   },
 ];
 
@@ -499,26 +499,29 @@ export const cards: Card[] = [
 
   // ---------- Operate ----------
   {
-    id: "kagent-oncall",
+    id: "sre-ops",
     stage: "operate",
     zone: "test",
-    title: "Kagent on-call agent for the L402 gate",
-    hook: "Alerts took 16 min to notice a dead component",
-    summary: "Detection 5 min; blind drill paged in 2 min 21 s",
+    title: "AI SRE Ops: incident console for an L2 rollup",
+    hook: "Alerts fired, but nobody saw them for 47 min",
+    summary: "One console from alert to postmortem; 5 postmortems and a fix sent upstream",
     story: {
       problem:
-        `The L402 payment gate had no playbooks and no automated first responder, and its alerts took 16 minutes to notice a dead component on low traffic. Every diagnosis started from a blank terminal.`,
+        `On one day in my Lineth L2 lab, three incidents overlapped in two hours. The alerts were right and early, but they went to a webhook that reached no one: 41 deposits waited up to 1 h 46 min, and a human found it by hand. The same problems I had met on call before came back: clocks across time zones, alerts at once, handoffs, and rules nobody owned.`,
       solution:
-        `Put a Kagent agent on call with read-only, code-first diagnosis tools and GitOps-managed access, then reviewed the whole setup against the Google SRE Book: playbooks that mitigate first, an SLO with burn-rate alerts on a synthetic probe, a dashboard, and an eval harness that grades the agent against the playbook.`,
+        `Built AI SRE Ops against the lab's L1 (Besu, Teku) and L2 (sequencer, coordinator, prover, bridge): alerts grouped by service topology into a queue ranked by a readable score, an AI briefing tied to runbook steps that changes nothing without approval, a fixed shift handoff, and postmortems in the Google SRE format kept in Git.`,
       result:
-        `Detection went from 16 min 22 s to 5 min 14 s. In a blind drill after the upgrade, pages fired in 2 min 21 s and the agent named the broken component, lnd-merchant. The agent's pass rate on the eval set rose from 47% to 72–80%.`,
+        `Alerts now page a person. The day became five blameless postmortems, and one root cause, a BigInt bug in the bridge's repair path, went upstream as Lineth PR #4201. The console runs live with sample data.`,
       lesson:
-        `At this model size, a fact in the tool output beat another rule in the prompt. The agent skipped a tool the system message told it to call; a next_check field in the result it had just read is harder to skip.`,
+        `An SLI built from completed requests is blind exactly when requests stop completing: the deposit SLO moved 1% while 41 deposits sat stuck. Measure what hasn't finished, not only what has.`,
     },
-    tag: "Kagent",
+    tag: "SRE Postmortem",
     evidence: [
-      "diagnosing-opencti-with-kagent-google-sre-review",
-      "diagnosing-opencti-with-kagent-drill-2",
+      "lineth-l2-postmortem-postman-bigint-nonce-gap",
+      "lineth-l2-homelab-kubernetes-architecture-and-monitoring",
+      { label: "The SRE page", url: "/sre" },
+      { label: "Live console", url: "https://ops.miata.cloud/sre" },
+      { label: "ai-sre-ops-public on GitHub", url: "https://github.com/s1ns3nz0/ai-sre-ops-public" },
     ],
   },
   {
@@ -569,7 +572,7 @@ export const career = [
     bullets: [
       "Led EU Cyber Resilience Act supply-chain assessments and roadmaps for a nuclear power company and a heavy-equipment maker, presented to C-level leadership",
       "Designed and deployed iDMZ and OT security across heavy-equipment, nuclear, and semiconductor sites",
-      "Built detection logic and monitoring use cases with IBM's global OT SOC",
+      "Built and tuned detection logic with IBM's global OT SOC, working incidents across time zones",
       "Assessed AWS environments for ISMS-P certification of a real-estate and a shared-office service, and built a Prowler-based assessment tool for consultants",
     ],
   },
@@ -607,7 +610,7 @@ export const career = [
     bullets: [
       "Selected for the Army's Elite 300 Cyber Warriors",
       "Tuned Splunk dashboards and detection rules, cutting false positives",
-      "Ran first-line incident response: evidence, interviews, timelines, reports",
+      "Ran cyber operations and first-line incident response for a ~10,000-member coastal and border defense command, in a country still under armistice",
       "Built a SIEM learning platform for new recruits and an assistant for writing Splunk SPL queries",
       "Won the Ground Operations Command incident response CTF",
       "Went through an internal security audit by the Defense Counterintelligence Command",

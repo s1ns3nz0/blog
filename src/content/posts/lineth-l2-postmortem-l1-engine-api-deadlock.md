@@ -1,5 +1,5 @@
 ---
-title: "Lineth L2 Lab Postmortems (5) - An L1 Deadlock the Engine API Made Permanent"
+title: "Lineth L2 Incident Management: Postmortem (5) - An L1 Deadlock the Engine API Made Permanent"
 description: "The lab's local L1 stopped producing blocks for 3 h 14 min: after a one-slot re-org, the beacon node asked the execution client to build on a block's parent, and the Engine API says it must not. Settlement stopped behind it and the coordinator wedged. A Google SRE format postmortem with the logs, the one-RPC fix, and an SLI that hid the worst withdrawals."
 pubDatetime: 2026-10-13T22:40:00+09:00
 tags:
@@ -24,7 +24,7 @@ The L2 settles on a local L1 that is as small as an Ethereum chain can be: one e
 | | |
 |---|---|
 | Incident | INC-2026-10-13-15 |
-| Status | Mitigated 10:52 UTC; resolved when the settlement backlog drained |
+| Status | Resolved 14:25 UTC (mitigated 10:52; settlement backlog drained by 14:25) |
 | Severity | SEV-2: settlement (finalization, withdrawals, message anchoring) stopped; L1 produced no blocks |
 | Impact | No L1 blocks for **3 h 14 min**; settlement lag up to **3,184** L2 blocks; 57 withdrawals waiting > 30 min |
 | Trigger | A one-slot re-org on L1 that orphaned a block the execution client had already made canonical |
@@ -37,7 +37,7 @@ The L2 settles on a local L1 that is as small as an Ethereum chain can be: one e
 | what | how much |
 |---|---|
 | L1 | no blocks 07:30:57 → 10:45; L1 finality stuck; beacon chain in inactivity leak |
-| L2 finalization | stopped; lag up to 3,184 blocks, drained over the afternoon |
+| L2 finalization | stopped; lag up to 3,184 blocks, drained by 14:25 (6 h 55 min after the last L1 block) |
 | L2 → L1 withdrawals | 57 waiting > 30 min at detection; all claimed by 13:55 |
 | L1 → L2 deposits | none possible (no L1 blocks) |
 | Not affected | L2 block production and user transactions |
@@ -141,7 +141,7 @@ Every alert was right and on time. They went to a log and a console nobody was w
 | # | action | type | status |
 |---|---|---|---|
 | 1 | Route lab alerts to a person (Telegram) | detect | done |
-| 2 | Coordinator liveness probe on `/health` (5 min of no answer → restart) | mitigate | applied after catch-up |
+| 2 | Coordinator liveness probe on `/health` (5 min of no answer → restart) | mitigate | done (5 min of no answer → restart) |
 | 3 | Runbook for an L1 stall: deadlock check (FCU head = parent of EL head), `debug_setHead`, then the coordinator | process | done |
 | 4 | Before restarting a wedged JVM, take a thread dump (`kill -3 1` prints it to the container log) | process | done (runbook) |
 | 5 | Latency SLIs: total = `le="+Inf"`, not the largest finite bucket | detect | open |
@@ -166,6 +166,9 @@ Every alert was right and on time. They went to a log and a console nobody was w
 | 11:38 | Two traffic generators paused to slow L2 growth |
 | 12:40–13:30 | Mac memory pressure slows proofs to 360–485 s; apps closed, back to ~180–200 s |
 | 13:55 | All withdrawals claimed; lag 955 and falling |
+| 14:25 | Lag 383: caught up. RPC node restarted to drop one transaction stuck in its pool since the generator pause |
+| 14:26 | Generators back (user transfers every 60 s instead of 10, to keep prover headroom); coordinator liveness probe on |
+| 14:28 | Every workflow check passes (11/11) |
 
 ## Takeaways
 

@@ -1,5 +1,5 @@
 ---
-title: "Lineth L2 Lab Postmortems (1) - A BigInt Bug That Broke the Bridge's Self-Repair"
+title: "Lineth L2 Incident Management: Postmortem (1) - A BigInt Bug That Broke the Bridge's Self-Repair"
 description: "Deposits from L1 to L2 went unclaimed for 1 h 46 min. The postman had a repair path for exactly this failure, and it crashed 1,125 times on a string that should have been a bigint. A blameless postmortem in the Google SRE format, with the logs, the fix, and the upstream PR."
 pubDatetime: 2026-10-13T22:00:00+09:00
 tags:

@@ -98,6 +98,25 @@ export default defineConfig({
       styles: ["normal"],
       formats: ["woff2", "woff"],
     },
+    // /sre only: the AI SRE Ops console's type.
+    {
+      name: "IBM Plex Sans",
+      cssVariable: "--font-plex-sans",
+      provider: fontProviders.google(),
+      fallbacks: ["Pretendard Variable", "sans-serif"],
+      weights: [400, 500, 600, 700],
+      styles: ["normal"],
+      formats: ["woff2"],
+    },
+    {
+      name: "IBM Plex Mono",
+      cssVariable: "--font-plex-mono",
+      provider: fontProviders.google(),
+      fallbacks: ["monospace"],
+      weights: [400, 600],
+      styles: ["normal"],
+      formats: ["woff2"],
+    },
     // Portfolio home page only: space / mission-control type.
     {
       name: "Orbitron",

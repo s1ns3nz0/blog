@@ -1,0 +1,40 @@
+---
+import Analytics from "@vercel/analytics/astro";
+import { Font } from "astro:assets";
+import { getAssetPath } from "@/utils/withBase";
+import "@/styles/global.css";
+
+type Props = { title: string; description: string };
+
+const { title, description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const og = new URL("/og-home.png", Astro.site ?? Astro.url).href;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={getAssetPath("favicon.svg")} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <Font cssVariable="--font-plex-sans" preload={[{ subset: "latin", weight: 600, style: "normal" }]} />
+    <Font cssVariable="--font-plex-mono" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={og} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={og} />
+    <meta name="theme-color" content="#0f172a" />
+  </head>
+  <body class="sre-body">
+    <slot />
+    <Analytics />
+  </body>
+</html>
