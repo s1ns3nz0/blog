@@ -294,6 +294,7 @@ const cta = [
             <h4>{n.name}</h4>
             <p class="rig-where">{n.facts[0].v} · {n.facts[1].v}</p>
             <p class="rig-what">{n.facts[2].v}</p>
+            {n.external && <a class="rig-ext" href={n.external.url} target="_blank" rel="noopener noreferrer">{n.external.label} ↗</a>}
             <details class="rig-posts">
               <summary>{n.count} posts</summary>
               {n.featured.length > 0 && <ul>{n.featured.map(p => <li><a href={p.url}>{p.title}</a></li>)}</ul>}
@@ -305,7 +306,6 @@ const cta = [
               ))}
               <a href={n.tagUrl}>All {n.count} posts →</a>
             </details>
-            {n.external && <a class="rig-ext" href={n.external.url} target="_blank" rel="noopener noreferrer">{n.external.label} ↗</a>}
           </li>
         ))}
       </ul>

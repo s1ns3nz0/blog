@@ -35,7 +35,7 @@ export type Card = {
   /** Marks a learning or practice project so the result isn't read as production. */
   badge?: "learning" | "practice";
   /** Personal projects: the four-part story shown when the row is expanded. */
-  story?: { problem: string; solution: string; result: string; lesson: string };
+  story?: { problem: string; solution: string; result: string; lesson?: string };
   /** Post tag that collects every post of this project; links "All N posts". */
   tag?: string;
   /** For a card with a story, the key posts (two) plus code links. */
@@ -503,17 +503,15 @@ export const cards: Card[] = [
     stage: "operate",
     zone: "test",
     title: "AI SRE Ops: incident console for an L2 rollup",
-    hook: "Alerts fired, but nobody saw them for 47 min",
-    summary: "One console from alert to postmortem; 5 postmortems and a fix sent upstream",
+    hook: "The same on-call problems came back on every shift",
+    summary: "Built one console that handles them, from alert to postmortem",
     story: {
       problem:
-        `On one day in my Lineth L2 lab, three incidents overlapped in two hours. The alerts were right and early, but they went to a webhook that reached no one: 41 deposits waited up to 1 h 46 min, and a human found it by hand. The same problems I had met on call before came back: clocks across time zones, alerts at once, handoffs, and rules nobody owned.`,
+        `On call in the army and with IBM's global SOC, the same problems came back whoever was on shift: time zones, alerts arriving all at once, handoffs that needed a phone call, and detection rules nobody owned.`,
       solution:
-        `Built AI SRE Ops against the lab's L1 (Besu, Teku) and L2 (sequencer, coordinator, prover, bridge): alerts grouped by service topology into a queue ranked by a readable score, an AI briefing tied to runbook steps that changes nothing without approval, a fixed shift handoff, and postmortems in the Google SRE format kept in Git.`,
+        `Built AI SRE Ops, a platform that manages them across the incident lifecycle, and ran it against a real L1 and L2 rollup in my lab.`,
       result:
-        `Alerts now page a person. The day became five blameless postmortems, and one root cause, a BigInt bug in the bridge's repair path, went upstream as Lineth PR #4201. The console runs live with sample data.`,
-      lesson:
-        `An SLI built from completed requests is blind exactly when requests stop completing: the deposit SLO moved 1% while 41 deposits sat stuck. Measure what hasn't finished, not only what has.`,
+        `The SRE page walks through each problem and the screen that solves it; the live console and code are linked below.`,
     },
     tag: "SRE Postmortem",
     evidence: [

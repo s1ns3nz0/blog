@@ -118,7 +118,7 @@ const resolveCard = (c: Card) => {
           ["Solution", c.story.solution],
           ["Result", c.story.result],
           ["Lesson", c.story.lesson],
-        ] as const)
+        ] as const).filter(([, text]) => text) // an empty part is left out
       : [],
   };
 };
