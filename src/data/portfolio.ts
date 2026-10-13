@@ -1048,6 +1048,28 @@ export const openSource: OpenSourceEntry[] = [
     ],
   },
   {
+    id: "lineth",
+    name: "Lineth",
+    about: "An EVM layer 2 framework under LF Decentralized Trust, with a postman that relays L1 to L2 messages.",
+    url: "https://github.com/LFDT-Lineth/lineth-monorepo",
+    did: "Fixed the postman's cancel path for stuck claims, which crashed on Postgres fees read as strings and left deposits unclaimed.",
+    headline: "Bridge postman: stuck-claim recovery fix",
+    kind: ["Blockchain"],
+    tags: ["Layer 2", "TypeScript", "PostgreSQL"],
+    contributions: [
+      {
+        short: "postman: stuck claims never cancelled",
+        what: "postman: claim tx fees read from Postgres as strings are converted to bigint, so a stuck claim can be cancelled and reset.",
+        status: "review",
+        links: [
+          PR("LFDT-Lineth/lineth-monorepo", 4201),
+          ISSUE("LFDT-Lineth/lineth-monorepo", 4200),
+          "lineth-postman-stuck-claim-cancel-bigint",
+        ],
+      },
+    ],
+  },
+  {
     id: "gosentry",
     name: "Gosentry",
     about: "Trail of Bits' security-focused Go toolchain for fuzzing.",

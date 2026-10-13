@@ -21,6 +21,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
       "Blockchain", "Validator", "Ethereum", "Vault",
       "Secrets Management", "PKI", "PostgreSQL", "Architecture",
       "Lightning Network", "lnd", "Routing", "Aperture", "L402", "x402",
+      "Layer 2", "Consensus", "Besu", "Teku", "Zero Knowledge",
     ],
   },
   {
@@ -58,6 +59,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
     tags: [
       "HA", "Backup", "Recovery", "DisasterRecovery", "AccessReview", "Rotation",
       "Prometheus", "Logging", "SRE", "SLO", "Grafana",
+      "SRE Incident", "Postmortem", "Observability", "Capacity Planning",
     ],
   },
   {
@@ -90,7 +92,7 @@ export const TAG_GROUPS: TagGroupConfig[] = [
   },
   {
     name: "Tools",
-    tags: ["Plugin", "MCP", "Linux", "systemd"],
+    tags: ["Plugin", "MCP", "Linux", "systemd", "TypeScript", "macOS"],
   },
   {
     name: "Study",
