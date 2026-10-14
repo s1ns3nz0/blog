@@ -109,9 +109,18 @@ const resolveCard = (c: Card) => {
     code,
     codeLabel: code.every(l => l.url.includes("github.com")) ? "Code" : "Links",
     writeups: evidenceLinks.filter(l => !l.external),
-    meta: metaWithTag,
+    // A grouped card counts the posts it lists; the tag page can hold a different set.
+    meta: c.groups ? [`${c.groups.reduce((n, g) => n + g.posts.length, 0)} posts`] : metaWithTag,
     tagUrl,
     tagCount,
+    groups: (c.groups ?? []).map(g => ({
+      title: g.title,
+      // "Lineth L2 Transaction Lifecycle (3) - Inside…" → "(3) Inside…"; the group title names the series.
+      posts: g.posts.map(id => {
+        const p = post(id);
+        return { ...p, external: false, title: p.title.replace(/^Lineth L2 (?:Transaction Lifecycle|Incident Management: Postmortem) (\(\d+\)) - /, "$1 ") };
+      }),
+    })),
     storyRows: c.story
       ? ([
           ["Problem", c.story.problem],
@@ -525,14 +534,14 @@ const smokePuffs: [number, number][] = [
                   {lane.cards.map(card => (
                     <li id={card.id} data-card-id={card.id} class="log-row panel">
                       {card.href ? (
-                        <a class="row-static row-jump" href={card.href}>
+                        <a class="row-static row-jump" href={card.href} target={card.href.startsWith("http") ? "_blank" : undefined} rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}>
                           <span class="row-top">
                             <span class="row-title">{card.title}</span>
                           </span>
                           <span class="row-summary">{card.summary}</span>
                         </a>
-                      ) : card.evidenceLinks.length > 0 ? (
-                        <details open={!card.story} class:list={[card.story && "has-story"]}>
+                      ) : card.evidenceLinks.length > 0 || card.groups.length > 0 ? (
+                        <details open={!card.story && card.groups.length === 0} class:list={[(card.story || card.groups.length > 0) && "has-story"]}>
                           <summary>
                             <span class="row-top">
                               <span class="row-title">
@@ -572,6 +581,26 @@ const smokePuffs: [number, number][] = [
                                 <dd>{text}</dd>
                               </div>
                             ))}
+                            {card.groups.map(g => (
+                              <div class="row-links">
+                                <dt>{g.title}</dt>
+                                <dd>
+                                  <ul class="evidence">
+                                    {g.posts.map(e => (
+                                      <li>
+                                        <EvidenceLink {...e} />
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </dd>
+                              </div>
+                            ))}
+                            {card.groups.length > 0 && card.tagUrl && (
+                              <div class="row-links">
+                                <dt></dt>
+                                <dd><a class="row-all" href={card.tagUrl}>All {card.tag} posts →</a></dd>
+                              </div>
+                            )}
                             {card.code.length > 0 && (
                               <div class="row-links">
                                 <dt>{card.codeLabel}</dt>

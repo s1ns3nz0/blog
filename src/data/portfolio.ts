@@ -42,6 +42,8 @@ export type Card = {
   evidence: Evidence[];
   /** The whole row links here instead of expanding. */
   href?: string;
+  /** Expanded row: posts under a heading per group (shown after the story). */
+  groups?: { title: string; posts: string[] }[];
 };
 
 export type Stage = {
@@ -319,11 +321,20 @@ export const cards: Card[] = [
 
   // ---------- Build ----------
   {
+    id: "hoodi-local",
+    stage: "build",
+    zone: "test",
+    title: "Ethereum Hoodi Validator, running locally",
+    summary: "Validator 1645272 on a local Kubernetes cluster: Besu, Teku, and Web3Signer, watched in Grafana.",
+    href: "https://hoodi.beaconcha.in/validator/1645272",
+    evidence: [],
+  },
+  {
     id: "private-eks",
     stage: "build",
     zone: "test",
     titleFor: { "lightning-labs": "Stateful validator workload on private EKS" },
-    title: "Ethereum Hoodi Validator on Private EKS",
+    title: "Ethereum Hoodi Validator on Private EKS (earlier build)",
     hook: "Public client images run right next to a slashable signing key",
     summary: "Validator active on Hoodi; revoking the signer's role stopped signing at once",
     story: {
@@ -365,30 +376,6 @@ export const cards: Card[] = [
     evidence: [
       "running-an-lnd-lightning-node-on-local-kubernetes",
       "metrics-collector-prometheus-on-lnd",
-    ],
-  },
-  {
-    id: "lightning-payments-opencti",
-    stage: "build",
-    zone: "test",
-    title: "Lightning payments for OpenCTI",
-    hook: "A settled invoice can leave an order unpaid, or pay for two",
-    badge: "practice",
-    summary: "250 sat on testnet: 402 → 200, order and receipt committed as paid",
-    story: {
-      problem:
-        `A practice project for L402. Getting a Lightning payment to unlock an API call is easy; making it count once, for the right order, is the part to learn. The payment and the order database are separate systems, so a settled invoice can leave an order unpaid or be replayed against another.`,
-      solution:
-        `Put Aperture in front of the scan API as an L402 gate, then checked the preimage and challenge, looked the settlement up on the merchant node, wrote receipts through a durable outbox, and made claims safe to retry.`,
-      result:
-        `On testnet, a 250-sat invoice settled, the API went from 402 to 200, and the order, challenge, and receipt all committed as paid.`,
-      lesson:
-        `A 200 OK isn't proof of payment; the receipt has to match the order it pays for.`,
-    },
-    tag: "OpenCTI Payments",
-    evidence: [
-      "adding-lightning-payments-to-opencti-with-aperture",
-      "from-lightning-payment-to-a-paid-scan-order",
     ],
   },
   {
@@ -501,6 +488,42 @@ export const cards: Card[] = [
 
   // ---------- Operate ----------
   {
+    id: "lineth-l2",
+    stage: "operate",
+    zone: "test",
+    title: "Lineth L2: a full rollup I run and watch",
+    summary: "A local L1 and a zk-rollup L2 on one Kubernetes node, how a transaction moves through it, and five postmortems.",
+    tag: "Layer 2",
+    evidence: [],
+    groups: [
+      {
+        title: "Workflow process",
+        posts: [
+          "lineth-l2-following-a-transaction-through-besu-and-maru",
+          "lineth-l2-from-blocks-to-execution-proofs-trace-and-conflation",
+          "lineth-l2-inside-the-prover-from-request-to-proof-response",
+          "lineth-l2-following-a-blob-from-creation-to-finalization-on-l1",
+          "lineth-l2-web3signer-signing-https-and-l1-sender-verification",
+          "lineth-l2-following-a-message-to-a-successful-claim-on-l1",
+        ],
+      },
+      {
+        title: "Incident management",
+        posts: ["lineth-l2-homelab-kubernetes-architecture-and-monitoring", "lineth-postman-stuck-claim-cancel-bigint"],
+      },
+      {
+        title: "Postmortems",
+        posts: [
+          "lineth-l2-postmortem-postman-bigint-nonce-gap",
+          "lineth-l2-postmortem-prover-trace-limit-host-memory",
+          "lineth-l2-postmortem-startup-dns-peer-lost",
+          "lineth-l2-postmortem-grafana-forward-alive-but-dead",
+          "lineth-l2-postmortem-l1-engine-api-deadlock",
+        ],
+      },
+    ],
+  },
+  {
     id: "sre-ops",
     stage: "operate",
     zone: "test",
@@ -508,6 +531,18 @@ export const cards: Card[] = [
     summary: "One console for the on-call problems that came back every shift, from alert to postmortem.",
     href: "/sre",
     evidence: [],
+  },
+  {
+    id: "lineth-postman",
+    stage: "operate",
+    zone: "oss",
+    title: "Lineth: stuck-claim recovery fix in the bridge postman",
+    summary: "The postman's cancel path for stuck claims crashed on Postgres fees read as strings, leaving deposits unclaimed. Reported and fixed; the PR is in review.",
+    evidence: [
+      "lineth-postman-stuck-claim-cancel-bigint",
+      { label: "Issue #4200", url: "https://github.com/LFDT-Lineth/lineth-monorepo/issues/4200" },
+      { label: "PR #4201", url: "https://github.com/LFDT-Lineth/lineth-monorepo/pull/4201" },
+    ],
   },
   {
     id: "aperture-metrics",

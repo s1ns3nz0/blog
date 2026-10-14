@@ -131,8 +131,8 @@ export const nodes = [
     name: "Hoodi",
     facts: [
       { k: "Network", v: "Ethereum Hoodi testnet" },
-      { k: "Runs on", v: "Private AWS EKS" },
-      { k: "Operate", v: "Nethermind, Prysm, Web3Signer; validator keys in Vault; audit logging" },
+      { k: "Runs on", v: "Local Kubernetes on WSL" },
+      { k: "Operate", v: "Besu, Teku, Web3Signer; Grafana dashboards" },
     ],
     posts: [
       "securing-a-hoodi-ethereum-testnet-validator-on-aws-eks",
