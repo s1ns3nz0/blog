@@ -349,7 +349,7 @@ const cta = [
         ))}
       </ol>
 
-      <h3 class="operator-sub">Certifications · {certCount}</h3>
+      <h3 class="operator-sub">Credentials · {certCount} certifications</h3>
       <dl class="certs">
         {certGroups.map(g => (
           <div class="cert-row">
@@ -370,10 +370,21 @@ const cta = [
             </dd>
           </div>
         ))}
+        <div class="cert-row">
+          <dt>Education</dt>
+          <dd>
+            <ul class="edu-lines">
+              {education.map(e => (
+                <li>
+                  <b>{e.degree}</b> · {e.school} · <i>{e.period}{Number(e.period.slice(-4)) > new Date().getFullYear() ? ", in progress" : ""}</i>
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
       </dl>
 
-      <h3 class="operator-sub">Education</h3>
-      <ul class="edu">{education.map(e => <li><b>{e.degree}</b><span>{e.school}</span><i>{e.period}</i></li>)}</ul>
+
 
       <p class="operator-foot"><a href="/">{profile.more} →</a></p>
     </div>
