@@ -29,6 +29,11 @@ const nodeCards = nodes.map(n => ({
   count: posts.filter(p => n.tags.some(t => p.data.tags.includes(t))).length,
   tagUrl: `/tags/${slugifyStr(n.tags[0])}/`,
 }));
+const mainNode = nodeCards.find(n => n.id === "l2")!;
+const otherNodes = ["hoodi", "lnd"].map(id => nodeCards.find(n => n.id === id)!);
+// "Lineth L2 Transaction Lifecycle (3) - Inside…" → "(3) Inside…"; the group heading names the series.
+const shortTitle = (t: string) =>
+  t.replace(/^Lineth L2 (?:Transaction Lifecycle|Incident Management: Postmortem) (\(\d+\)) - /, "$1 ");
 
 // Same contacts as the home page.
 const brandIcons = { github: IconGitHub, linkedin: IconLinkedIn, mail: IconGmail };
@@ -287,24 +292,34 @@ const cta = [
       </header>
 
       <h3 class="operator-sub">Nodes I run</h3>
-      <ul class="rigs">
-        {nodeCards.map(n => (
-          <li class="rig">
-            <p class="rig-kind"><i aria-hidden="true"></i>{n.kind}</p>
-            <h4>{n.name}</h4>
-            <p class="rig-where">{n.facts[0].v} · {n.facts[1].v}</p>
-            <p class="rig-what">{n.facts[2].v}</p>
-            {n.external && <a class="rig-ext" href={n.external.url} target="_blank" rel="noopener noreferrer">{n.external.label} ↗</a>}
-            <details class="rig-posts">
-              <summary>{n.count} posts</summary>
-              {n.featured.length > 0 && <ul>{n.featured.map(p => <li><a href={p.url}>{p.title}</a></li>)}</ul>}
-              {n.grouped.map(g => (
-                <>
-                  <p class="rig-group">{g.title}</p>
-                  <ul>{g.posts.map(p => <li><a href={p.url}>{p.title.replace(/^Lineth L2 Incident Management: /, "")}</a></li>)}</ul>
-                </>
-              ))}
-              <a href={n.tagUrl}>All {n.count} posts →</a>
+      <article class="rig rig-main">
+        <p class="rig-kind"><i aria-hidden="true"></i>{mainNode.kind}</p>
+        <h4>{mainNode.name}</h4>
+        <p class="rig-where">{mainNode.facts[0].v} · {mainNode.facts[1].v}</p>
+        <p class="rig-what">{mainNode.facts[2].v}</p>
+        <div class="rig-groups">
+          {mainNode.grouped.map(g => (
+            <section>
+              <p class="rig-group">{g.title}</p>
+              <ul>{g.posts.map(p => <li><a href={p.url}>{shortTitle(p.title)}</a></li>)}</ul>
+            </section>
+          ))}
+        </div>
+        <a class="rig-all" href={mainNode.tagUrl}>All {mainNode.count} posts →</a>
+      </article>
+
+      <h3 class="operator-sub">Also running</h3>
+      <ul class="rig-rows">
+        {otherNodes.map(n => (
+          <li>
+            <details class="rig-row">
+              <summary>
+                <b>{n.name}</b> · {n.kind} · {n.facts[1].v} · {n.count} posts
+              </summary>
+              <p class="rig-what">{n.facts[2].v}</p>
+              {n.external && <a class="rig-ext" href={n.external.url} target="_blank" rel="noopener noreferrer">{n.external.label} ↗</a>}
+              <ul>{n.featured.map(p => <li><a href={p.url}>{p.title}</a></li>)}</ul>
+              <a class="rig-all" href={n.tagUrl}>All {n.count} posts →</a>
             </details>
           </li>
         ))}

@@ -106,7 +106,7 @@ export const builtOn = {
   ],
 };
 
-/** 03: the nodes I run, one card each. `posts` are featured slugs; a post with any of `tags` counts, and the first tag lists them. */
+/** 03: the nodes I run. Lineth L2 is the main card; the rest are one-line rows, in this order. `posts` are featured slugs; a post with any of `tags` counts, and the first tag lists them. */
 export const nodes = [
   {
     id: "lnd",
@@ -157,6 +157,17 @@ export const nodes = [
     /** Grouped list instead of `posts`: a heading per group. */
     groups: [
       {
+        title: "Workflow process",
+        posts: [
+          "lineth-l2-following-a-transaction-through-besu-and-maru",
+          "lineth-l2-from-blocks-to-execution-proofs-trace-and-conflation",
+          "lineth-l2-inside-the-prover-from-request-to-proof-response",
+          "lineth-l2-following-a-blob-from-creation-to-finalization-on-l1",
+          "lineth-l2-web3signer-signing-https-and-l1-sender-verification",
+          "lineth-l2-following-a-message-to-a-successful-claim-on-l1",
+        ],
+      },
+      {
         title: "Incident management",
         posts: ["lineth-l2-homelab-kubernetes-architecture-and-monitoring", "lineth-postman-stuck-claim-cancel-bigint"],
       },
@@ -171,7 +182,7 @@ export const nodes = [
         ],
       },
     ],
-    tags: ["Layer 2", "SRE Postmortem"],
+    tags: ["Layer 2", "SRE Postmortem", "Lineth L2 Lifecycle"],
   },
 ];
 
