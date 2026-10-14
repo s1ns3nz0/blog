@@ -9,6 +9,8 @@ tags:
   - SRE
 ---
 
+*Part of the [Lineth L2 Transaction Lifecycle](/tags/lineth-l2-lifecycle/) series. The component map is in [part 0](/posts/lineth-l2-lab-architecture/).*
+
 The [previous post](/posts/lineth-l2-from-blocks-to-execution-proofs-trace-and-conflation/) watched a proof from the Coordinator's side: a request written, a result picked up 3 minutes 24 seconds later. This one looks at what happens in between, inside the Prover.
 
 The range is L2 blocks 26,605 through 26,684, separate from the earlier ranges. I connect the Coordinator's request, the Prover's trace processing, the response files, and the Coordinator's completion records.

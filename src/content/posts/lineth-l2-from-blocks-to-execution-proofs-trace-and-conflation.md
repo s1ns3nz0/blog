@@ -9,6 +9,8 @@ tags:
   - SRE
 ---
 
+*Part of the [Lineth L2 Transaction Lifecycle](/tags/lineth-l2-lifecycle/) series. The component map is in [part 0](/posts/lineth-l2-lab-architecture/).*
+
 In the [previous post](/posts/lineth-l2-following-a-transaction-through-besu-and-maru/), I followed an execution payload from Sequencer Besu to RPC Besu and confirmed the transaction through its receipt.
 
 This post covers the next stage. The Coordinator groups L2 blocks into proof work, creates batches and blobs, and picks up the execution-proof results.

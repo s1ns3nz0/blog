@@ -9,6 +9,8 @@ tags:
   - SRE
 ---
 
+*Part of the [Lineth L2 Transaction Lifecycle](/tags/lineth-l2-lifecycle/) series. The component map is in [part 0](/posts/lineth-l2-lab-architecture/).*
+
 The [previous post](/posts/lineth-l2-following-a-blob-from-creation-to-finalization-on-l1/) showed the blob transaction and the finalization transaction coming from two different accounts. This post explains why: both are signed by Web3Signer, with a different key for each.
 
 It covers what Web3Signer signs, how the Coordinator reaches it over HTTPS, and a check that the configured keys match the senders in the L1 receipts. I look at the two paths that submit to the rollup contract, blob submission and aggregation submission. Message anchoring uses a separate signing path and isn't covered here.

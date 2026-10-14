@@ -9,6 +9,8 @@ tags:
   - SRE
 ---
 
+*Part of the [Lineth L2 Transaction Lifecycle](/tags/lineth-l2-lifecycle/) series. The component map is in [part 0](/posts/lineth-l2-lab-architecture/).*
+
 The [previous post](/posts/lineth-l2-inside-the-prover-from-request-to-proof-response/) followed the proofs inside the Prover. This one follows a range the rest of the way: out of the Coordinator and into the rollup contract on L1.
 
 The range is L2 blocks 25,805 through 25,884, which is 80 blocks:

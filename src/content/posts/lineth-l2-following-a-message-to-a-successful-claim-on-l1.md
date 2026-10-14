@@ -9,6 +9,8 @@ tags:
   - SRE
 ---
 
+*Part of the [Lineth L2 Transaction Lifecycle](/tags/lineth-l2-lifecycle/) series. The component map is in [part 0](/posts/lineth-l2-lab-architecture/).*
+
 In [part 1](/posts/lineth-l2-following-a-transaction-through-besu-and-maru/), I followed a transaction into L2 block 23,851 and stopped at its receipt:
 
 ```text

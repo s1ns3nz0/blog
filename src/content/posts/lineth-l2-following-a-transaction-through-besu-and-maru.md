@@ -9,6 +9,8 @@ tags:
   - SRE
 ---
 
+*Part of the [Lineth L2 Transaction Lifecycle](/tags/lineth-l2-lifecycle/) series. The component map is in [part 0](/posts/lineth-l2-lab-architecture/).*
+
 A transaction being accepted, included in a block, and served by an RPC node are three separate events. An RPC call that returns a transaction hash proves only the first.
 
 I traced one block through my local [Lineth L2 lab](/posts/lineth-l2-homelab-kubernetes-architecture-and-monitoring/) with Kubernetes logs and JSON-RPC queries. The path runs from Sequencer Besu, through Maru, to RPC Besu, and ends at a transaction receipt.
