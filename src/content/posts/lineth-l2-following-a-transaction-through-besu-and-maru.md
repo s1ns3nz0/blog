@@ -1,8 +1,9 @@
 ---
-title: "Following an L2 Transaction Through Besu and Maru"
+title: "Lineth L2 Transaction Lifecycle (1) - Following an L2 Transaction Through Besu and Maru"
 description: "A transaction that is accepted, one that is included in a block, and one an RPC node can serve are three separate events. I followed L2 block 23,851 in my Lineth lab from the sequencer's payload, through the RPC node's import and head update, to a successful receipt, using only Kubernetes logs and JSON-RPC."
 pubDatetime: 2026-10-14T13:50:00+09:00
 tags:
+  - Lineth L2 Lifecycle
   - Ethereum
   - Layer 2
   - SRE
@@ -263,4 +264,4 @@ Block query named the transaction
 Receipt showed status 0x1
 ```
 
-That proves the transaction was included on L2 and executed successfully. It stops at L2: proof generation, settlement on L1, and L1 finality are separate stages with their own evidence.
+That proves the transaction was included on L2 and executed successfully. It stops at L2: proof generation, settlement on L1, and L1 finality are separate stages with their own evidence. The [next post](/posts/lineth-l2-from-blocks-to-execution-proofs-trace-and-conflation/) starts down that path: how the Coordinator groups blocks into proof work.

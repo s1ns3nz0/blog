@@ -1,8 +1,9 @@
 ---
-title: "From L2 Blocks to Execution Proofs: Trace and Conflation in the Lineth Coordinator"
+title: "Lineth L2 Transaction Lifecycle (2) - From L2 Blocks to Execution Proofs: Trace and Conflation in the Coordinator"
 description: "How the Coordinator turns L2 blocks into proof work. I followed blocks 24,205 to 24,284 in my Lineth lab: an 80-block batch closed by a trace limit, a one-batch blob, an execution-proof request, and its result 3 minutes 24 seconds later."
 pubDatetime: 2026-10-14T15:50:00+09:00
 tags:
+  - Lineth L2 Lifecycle
   - Ethereum
   - Layer 2
   - SRE
@@ -244,4 +245,4 @@ Execution-proof request written
 Result picked up 3 min 24 s later
 ```
 
-The blocks now have an execution proof. Publishing the blob, aggregating proofs, and settling on L1 come next.
+The blocks now have an execution proof. The [next post](/posts/lineth-l2-inside-the-prover-from-request-to-proof-response/) looks at what the Prover did during those 3 minutes 24 seconds.
