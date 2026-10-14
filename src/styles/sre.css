@@ -966,10 +966,14 @@
 }
 .rig-main ul {
   display: grid;
-  gap: 6px;
+  gap: 10px;
   margin: 0;
   padding-left: 18px;
   line-height: 1.4;
+  list-style: disc;
+}
+.rig-main li::marker {
+  color: var(--accent);
 }
 .rig-all,
 .rig-ext {
