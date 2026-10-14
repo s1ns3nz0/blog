@@ -40,6 +40,8 @@ export type Card = {
   tag?: string;
   /** For a card with a story, the key posts (two) plus code links. */
   evidence: Evidence[];
+  /** The whole row links here instead of expanding. */
+  href?: string;
 };
 
 export type Stage = {
@@ -503,24 +505,9 @@ export const cards: Card[] = [
     stage: "operate",
     zone: "test",
     title: "AI SRE Ops: incident console for an L2 rollup",
-    hook: "The same on-call problems came back on every shift",
-    summary: "Built one console that handles them, from alert to postmortem",
-    story: {
-      problem:
-        `On call in the army and with IBM's global SOC, the same problems came back whoever was on shift: time zones, alerts arriving all at once, handoffs that needed a phone call, and detection rules nobody owned.`,
-      solution:
-        `Built AI SRE Ops, a platform that manages them across the incident lifecycle, and ran it against a real L1 and L2 rollup in my lab.`,
-      result:
-        `The SRE page walks through each problem and the screen that solves it; the live console and code are linked below.`,
-    },
-    tag: "SRE Postmortem",
-    evidence: [
-      "lineth-l2-postmortem-postman-bigint-nonce-gap",
-      "lineth-l2-homelab-kubernetes-architecture-and-monitoring",
-      { label: "The SRE page", url: "/sre" },
-      { label: "Live console", url: "https://ops.miata.cloud/sre" },
-      { label: "ai-sre-ops-public on GitHub", url: "https://github.com/s1ns3nz0/ai-sre-ops-public" },
-    ],
+    summary: "One console for the on-call problems that came back every shift, from alert to postmortem.",
+    href: "/sre",
+    evidence: [],
   },
   {
     id: "aperture-metrics",

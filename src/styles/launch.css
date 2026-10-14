@@ -1038,6 +1038,14 @@ html[data-daylight] .co-card-go {
 .log-row details[open] summary::after {
   transform: rotate(90deg);
 }
+.row-jump::after {
+  content: "→";
+  position: absolute;
+  right: 4px;
+  top: 14px;
+  color: rgb(var(--log-ink) / 0.5);
+}
+.row-jump:hover .row-title,
 .log-row summary:hover .row-title {
   color: rgb(var(--log-ink));
   text-decoration: underline;

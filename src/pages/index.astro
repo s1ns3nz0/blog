@@ -524,7 +524,14 @@ const smokePuffs: [number, number][] = [
                 <ul class="log-list">
                   {lane.cards.map(card => (
                     <li id={card.id} data-card-id={card.id} class="log-row panel">
-                      {card.evidenceLinks.length > 0 ? (
+                      {card.href ? (
+                        <a class="row-static row-jump" href={card.href}>
+                          <span class="row-top">
+                            <span class="row-title">{card.title}</span>
+                          </span>
+                          <span class="row-summary">{card.summary}</span>
+                        </a>
+                      ) : card.evidenceLinks.length > 0 ? (
                         <details open={!card.story} class:list={[card.story && "has-story"]}>
                           <summary>
                             <span class="row-top">
