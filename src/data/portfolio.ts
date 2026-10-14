@@ -796,7 +796,7 @@ export type OpenSourceEntry = {
   did: string;
   /** 2-3 technology keywords recruiters can match against a JD. */
   tags: string[];
-  /** Broad domain badges shown on the row, e.g. Cloud, Security, Blockchain. */
+  /** Domain badges shown on the row, e.g. Cloud, CSPM, Layer 2. */
   kind: string[];
   contributions: Contribution[];
 };
@@ -812,7 +812,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/prowler-cloud/prowler",
     did: "Added 28 checks for Azure and GCP services, including AKS, Cosmos DB, Entra ID, and Secret Manager. All merged.",
     headline: "28 cloud security checks",
-    kind: ["Cloud", "Security"],
+    kind: ["Cloud", "CSPM"],
     tags: ["Azure", "GCP", "CSPM"],
     contributions: [
       {
@@ -838,7 +838,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/security-alliance/frameworks",
     did: "Maintainer of the Supply Chain section. Wrote the Policy as Code and private registries sections and an endpoint compromise runbook, all merged.",
     headline: "Policy as Code & supply-chain guidance",
-    kind: ["Blockchain", "Security"],
+    kind: ["Web3", "Compliance"],
     tags: ["Policy as Code", "Supply chain", "Incident response"],
     contributions: [
       {
@@ -868,7 +868,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/oscal-compass",
     did: "Fixed a KeyError in compliance-trestle's SSP generation (merged). Opened a GitHub Actions plugin for compliance-to-policy.",
     headline: "Compliance-as-Code fix & CI plugin",
-    kind: ["Security"],
+    kind: ["Compliance"],
     tags: ["OSCAL", "Compliance as Code", "CI/CD"],
     contributions: [
       {
@@ -892,7 +892,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/lightningnetwork/lnd",
     did: "Reported that the fixed-width decoders for node announcement addresses accept short reads; the fix was merged with a co-author credit.",
     headline: "Short-read bug in address decoders, fixed",
-    kind: ["Blockchain"],
+    kind: ["Lightning"],
     tags: ["Lightning", "Go", "Input validation"],
     contributions: [
       {
@@ -910,7 +910,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/lightninglabs/aperture",
     did: "Opened a PR for per-outcome Prometheus metrics after a maintainer reviewed the proposal. Proposed a dedicated security event log. Fixed a flaky test, merged via #292.",
     headline: "L402 metrics & security events",
-    kind: ["Blockchain"],
+    kind: ["Lightning"],
     tags: ["Lightning", "L402", "Observability"],
     contributions: [
       {
@@ -995,7 +995,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/x402-foundation/x402",
     did: "Fixed a V1 payment header that crashed the Python server, and a skipHandler path that skipped settlement across all three SDKs.",
     headline: "Payment-flow fixes across SDKs",
-    kind: ["Blockchain"],
+    kind: ["Payments"],
     tags: ["Payments", "Python", "Go"],
     contributions: [
       {
@@ -1019,7 +1019,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/stakefish",
     did: "Fixed an epoch replay that never finished, RPC retries web3 7 broke, and a version gate that misread prereleases; reported release binaries that overwrite each other.",
     headline: "Validator monitoring & web3 utility fixes",
-    kind: ["Blockchain"],
+    kind: ["Staking"],
     tags: ["Ethereum", "Python", "Go"],
     contributions: [
       {
@@ -1055,7 +1055,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/LFDT-Lineth/lineth-monorepo",
     did: "Fixed the postman's cancel path for stuck claims, which crashed on Postgres fees read as strings and left deposits unclaimed.",
     headline: "Bridge postman: stuck-claim recovery fix",
-    kind: ["Blockchain"],
+    kind: ["Layer 2"],
     tags: ["Layer 2", "TypeScript", "PostgreSQL"],
     contributions: [
       {
@@ -1077,7 +1077,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/trailofbits/gosentry",
     did: "Found a LibAFL bug that stopped fuzzing while go test still passed. Fixed upstream the same day.",
     headline: "Silent fuzzer failure, fixed upstream",
-    kind: ["Security"],
+    kind: ["Fuzzer"],
     tags: ["Fuzzing", "Go", "LibAFL"],
     contributions: [
       {
