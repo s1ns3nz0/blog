@@ -964,8 +964,7 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
-.rig-main ul,
-.rig-row ul {
+.rig-main ul {
   display: grid;
   gap: 6px;
   margin: 0;
@@ -982,29 +981,100 @@
 .rig-ext {
   font-size: 0.92rem;
 }
-.rig-rows {
+.also {
+  margin-top: 16px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 12px;
+}
+.also > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 14px 18px;
+  cursor: pointer;
+}
+.also > summary::-webkit-details-marker {
+  display: none;
+}
+.also > summary::before {
+  content: "▸";
+  color: rgb(231 236 245 / 0.6);
+  transition: transform 0.2s ease;
+}
+.also[open] > summary::before {
+  transform: rotate(90deg);
+}
+.also-label {
+  color: rgb(231 236 245 / 0.85);
+  font: 600 12px var(--font-plex-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.also-list {
+  color: rgb(231 236 245 / 0.65);
+}
+.also-cards {
   display: grid;
-  gap: 8px;
+  gap: 12px;
+  margin: 0;
+  padding: 0 12px 12px;
+  list-style: none;
+}
+@media (min-width: 900px) {
+  .also-cards {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+  }
+}
+.also-card h4 {
+  font-size: 1.2rem;
+}
+.also-card.is-past .rig-kind i {
+  background: transparent;
+  border: 1px solid rgb(231 236 245 / 0.6);
+  box-shadow: none;
+}
+.stack-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.rig-row {
-  padding: 12px 16px;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  border-radius: 10px;
+.stack-chips li {
+  padding: 2px 8px;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.04);
+  font: 600 12px var(--font-plex-mono), monospace;
 }
-.rig-row summary {
-  cursor: pointer;
-  color: rgb(231 236 245 / 0.75);
-}
-.rig-row summary b {
-  color: inherit;
-  filter: brightness(1.3);
-}
-.rig-row[open] {
+.proofs {
   display: grid;
-  gap: 10px;
+  gap: 6px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  line-height: 1.4;
+}
+.proofs li {
+  position: relative;
+  padding-left: 20px;
+}
+.proofs li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #34d399;
+}
+.also-links {
+  display: flex;
+  gap: 16px;
+  margin: auto 0 0;
+  padding-top: 10px;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+  font-weight: 600;
 }
 
 /* experience: a timeline, oldest on the left */
@@ -1065,30 +1135,38 @@
   font-style: normal;
 }
 
-.cv-row {
+.certs {
   display: grid;
-  gap: 0 40px;
+  gap: 12px;
 }
 @media (min-width: 900px) {
-  .cv-row {
-    grid-template-columns: 1.6fr 1fr;
+  .certs {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: start;
   }
 }
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.cert-group {
+  padding: 16px 18px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015));
+}
+.cert-group > ul {
+  display: grid;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.badges li {
-  padding: 6px 10px;
-  border: 1px solid rgb(255 255 255 / 0.18);
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.04);
+.cert-group li {
+  display: grid;
+  gap: 6px;
+  line-height: 1.35;
+}
+.cert-group li > span {
+  margin-top: -4px;
+  color: rgb(231 236 245 / 0.6);
   font-size: 0.9rem;
-  font-weight: 600;
 }
 .edu li {
   display: grid;

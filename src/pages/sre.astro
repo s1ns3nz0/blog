@@ -9,8 +9,8 @@ import config from "@/config";
 import IconGitHub from "@/assets/icons/brands/github.svg";
 import IconLinkedIn from "@/assets/icons/brands/linkedin.svg";
 import IconGmail from "@/assets/icons/brands/gmail.svg";
-import { career, certifications, education } from "@/data/portfolio";
-import { sreIdentity, stages, shifts, zones, findings, builtOn, nodes, profile, SKY_TZ, SRE_OPS_LIVE, SRE_OPS_REPO } from "@/data/sre";
+import { career, education } from "@/data/portfolio";
+import { sreIdentity, stages, shifts, zones, findings, builtOn, nodes, alsoRunning, certGroups, profile, SKY_TZ, SRE_OPS_LIVE, SRE_OPS_REPO } from "@/data/sre";
 import "@/styles/sre.css";
 
 // Node cards: featured posts must be published and listed (drafts drop out until they are);
@@ -30,7 +30,6 @@ const nodeCards = nodes.map(n => ({
   tagUrl: `/tags/${slugifyStr(n.tags[0])}/`,
 }));
 const mainNode = nodeCards.find(n => n.id === "l2")!;
-const otherNodes = ["hoodi", "lnd"].map(id => nodeCards.find(n => n.id === id)!);
 // "Lineth L2 Transaction Lifecycle (3) - Inside…" → "(3) Inside…"; the group heading names the series.
 const shortTitle = (t: string) =>
   t.replace(/^Lineth L2 (?:Transaction Lifecycle|Incident Management: Postmortem) (\(\d+\)) - /, "$1 ");
@@ -41,7 +40,9 @@ const brandLabel: Record<string, string> = { github: "GitHub", linkedin: "Linked
 const contacts = config.socials
   .filter(s => s.name in brandIcons)
   .map(s => ({ url: s.url, label: brandLabel[s.name], Icon: brandIcons[s.name as keyof typeof brandIcons] }));
-const certs = certifications.slice(0, 4).map(c => c.name);
+const certCount = certGroups.flatMap(g => g.items).reduce((n, c) => n + (c.chips?.length ?? 1), 0);
+const tagCount = (tag: string) => posts.filter(p => p.data.tags.includes(tag)).length;
+const others = alsoRunning.map(n => ({ ...n, count: n.tag ? tagCount(n.tag) : 0, tagUrl: n.tag ? `/tags/${slugifyStr(n.tag)}/` : "" }));
 
 // Clocks and sky for each point, computed here so the page needs no Intl at runtime.
 const DAY = "2026-10-13";
@@ -308,22 +309,33 @@ const cta = [
         <a class="rig-all" href={mainNode.tagUrl}>All {mainNode.count} posts →</a>
       </article>
 
-      <h3 class="operator-sub">Also running</h3>
-      <ul class="rig-rows">
-        {otherNodes.map(n => (
-          <li>
-            <details class="rig-row">
-              <summary>
-                <b>{n.name}</b> · {n.kind} · {n.facts[1].v} · {n.count} posts
-              </summary>
-              <p class="rig-what">{n.facts[2].v}</p>
-              {n.external && <a class="rig-ext" href={n.external.url} target="_blank" rel="noopener noreferrer">{n.external.label} ↗</a>}
-              <ul>{n.featured.map(p => <li><a href={p.url}>{p.title}</a></li>)}</ul>
-              <a class="rig-all" href={n.tagUrl}>All {n.count} posts →</a>
-            </details>
-          </li>
-        ))}
-      </ul>
+      <details class="also">
+        <summary>
+          <span class="also-label">Also running</span>
+          <span class="also-list">{others.map(n => `${n.name} (${n.env === "AWS" ? "AWS, earlier build" : n.env.toLowerCase()})`).join(" · ")}</span>
+        </summary>
+        <ul class="also-cards">
+          {others.map(n => (
+            <li class:list={["rig", "also-card", n.status !== "Running" && "is-past"]}>
+              <p class="rig-kind"><i aria-hidden="true"></i>{n.status} · {n.env}</p>
+              <h4>{n.name}</h4>
+              <p class="rig-where">{n.where}</p>
+              <ul class="stack-chips">{n.stack.map(t => <li>{t}</li>)}</ul>
+              <ul class="proofs">
+                {n.proofs.map(p => (
+                  <li>{p.url ? <a href={p.url} target="_blank" rel="noopener noreferrer">{p.text} ↗</a> : p.text}</li>
+                ))}
+              </ul>
+              {(n.tag || n.links.length > 0) && (
+                <p class="also-links">
+                  {n.tag && <a href={n.tagUrl}>{n.count} posts →</a>}
+                  {n.links.map(l => <a href={l.url} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>)}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </details>
 
       <h3 class="operator-sub">Experience</h3>
       <ol class="timeline">
@@ -337,16 +349,26 @@ const cta = [
         ))}
       </ol>
 
-      <div class="cv-row">
-        <div>
-          <h3 class="operator-sub">Certifications</h3>
-          <ul class="badges">{certs.map(c => <li>{c}</li>)}</ul>
-        </div>
-        <div>
-          <h3 class="operator-sub">Education</h3>
-          <ul class="edu">{education.map(e => <li><b>{e.degree}</b><span>{e.school}</span><i>{e.period}</i></li>)}</ul>
-        </div>
+      <h3 class="operator-sub">Certifications · {certCount}</h3>
+      <div class="certs">
+        {certGroups.map(g => (
+          <section class="cert-group">
+            <p class="rig-group">{g.issuer}</p>
+            <ul>
+              {g.items.map(c => (
+                <li>
+                  <b>{c.name}</b>
+                  {c.ko && <span lang="ko">{c.ko}</span>}
+                  {c.chips && <ul class="stack-chips">{c.chips.map(t => <li>{t}</li>)}</ul>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
+
+      <h3 class="operator-sub">Education</h3>
+      <ul class="edu">{education.map(e => <li><b>{e.degree}</b><span>{e.school}</span><i>{e.period}</i></li>)}</ul>
 
       <p class="operator-foot"><a href="/">{profile.more} →</a></p>
     </div>

@@ -106,44 +106,8 @@ export const builtOn = {
   ],
 };
 
-/** 03: the nodes I run. Lineth L2 is the main card; the rest are one-line rows, in this order. `posts` are featured slugs; a post with any of `tags` counts, and the first tag lists them. */
+/** 03: the main node card (Lineth L2). `posts` are featured slugs; a post with any of `tags` counts, and the first tag lists them. */
 export const nodes = [
-  {
-    id: "lnd",
-    kind: "Lightning",
-    name: "LND",
-    facts: [
-      { k: "Network", v: "Bitcoin testnet4, regtest" },
-      { k: "Runs on", v: "Linux and systemd; local Kubernetes" },
-      { k: "Operate", v: "bitcoind, LND, channels and routing, lndmon to Prometheus and Grafana" },
-    ],
-    posts: [
-      "always-on-testnet4-lnd-node",
-      "running-lnd-with-systemd-without-containers",
-      "monitoring-lnd-with-systemd-without-containers",
-      "lnd-testnet-routing-practice",
-    ],
-    tags: ["lnd"],
-  },
-  {
-    id: "hoodi",
-    kind: "Ethereum validator",
-    name: "Hoodi",
-    facts: [
-      { k: "Network", v: "Ethereum Hoodi testnet" },
-      { k: "Runs on", v: "Local Kubernetes on WSL" },
-      { k: "Operate", v: "Besu, Teku, Web3Signer; Grafana dashboards" },
-    ],
-    posts: [
-      "securing-a-hoodi-ethereum-testnet-validator-on-aws-eks",
-      "vault-secret-management-for-hoodi-validator",
-      "validator-key-types-and-key-management-policy-for-a-hoodi-validator",
-      "prioritizing-security-controls-hoodi-validator-lessons",
-    ],
-    tags: ["Hoodi"],
-    /** Public proof the node is real: the validator on a block explorer. */
-    external: { label: "Validator 1645272 on beaconcha.in", url: "https://hoodi.beaconcha.in/validator/1645272" },
-  },
   {
     id: "l2",
     kind: "L2 rollup",
@@ -185,6 +149,92 @@ export const nodes = [
     tags: ["Layer 2", "SRE Postmortem", "Lineth L2 Lifecycle"],
   },
 ];
+
+/**
+ * 03, under the main card: the other nodes, behind one "Also running" toggle.
+ * `proofs` are things I verified on the node; leave an entry out until it's true.
+ * `tag` adds a posts link with its count.
+ */
+export const alsoRunning: {
+  id: string;
+  name: string;
+  status: "Running" | "Earlier build";
+  env: string;
+  where: string;
+  stack: string[];
+  proofs: { text: string; url?: string }[];
+  tag?: string;
+  links: { label: string; url: string }[];
+}[] = [
+  {
+    id: "hoodi-local",
+    name: "Hoodi validator",
+    status: "Running",
+    env: "Local",
+    where: "Kubernetes on WSL",
+    stack: ["Besu", "Teku", "Web3Signer", "Grafana"],
+    proofs: [
+      { text: "Validator 1645272 active on Hoodi", url: "https://hoodi.beaconcha.in/validator/1645272" },
+      { text: "Besu and Teku, signing through Web3Signer, watched in Grafana" },
+      // more to come: uptime, attestation effectiveness, drills
+    ],
+    links: [],
+  },
+  {
+    id: "hoodi-eks",
+    name: "Hoodi validator",
+    status: "Earlier build",
+    env: "AWS",
+    where: "Private EKS",
+    stack: ["Nethermind", "Prysm", "Web3Signer", "Vault", "Kyverno"],
+    proofs: [
+      { text: "Validator 1559065 went active; attestations included on chain" },
+      { text: "Revoking the signer's Vault role stopped signing at once" },
+      { text: "Admission blocked a sidecar image pinned by tag, not digest" },
+    ],
+    tag: "Hoodi",
+    links: [{ label: "Code", url: "https://github.com/s1ns3nz0/node-operator-public" }],
+  },
+  {
+    id: "lnd",
+    name: "LND",
+    status: "Running",
+    env: "Local",
+    where: "Bitcoin testnet4 · systemd and Kubernetes",
+    stack: ["bitcoind", "LND", "lndmon", "Prometheus"],
+    proofs: [
+      { text: "Same identity, channels, and backups after Pod replacement and Helm upgrade" },
+      { text: "Relayed a test payment through the node" },
+    ],
+    tag: "lnd",
+    links: [],
+  },
+];
+
+/** Certifications by issuer, all of them; `chips` are the exams inside one title. */
+export const certGroups = [
+  {
+    issuer: "Kubernetes",
+    items: [{ name: "Kubestronaut", chips: ["CKA", "CKAD", "CKS", "KCNA", "KCSA"] }],
+  },
+  {
+    issuer: "AWS",
+    items: [
+      { name: "Security – Specialty" },
+      { name: "Solutions Architect – Professional" },
+      { name: "CloudOps Engineer – Associate" },
+    ],
+  },
+  {
+    issuer: "Korea (national)",
+    items: [
+      { name: "Engineer Information Security", ko: "정보보안기사" },
+      { name: "Engineer Information Processing", ko: "정보처리기사" },
+      { name: "Engineer Information & Communication", ko: "정보통신기사" },
+      { name: "CPPG", ko: "개인정보관리사" },
+    ],
+  },
+] as { issuer: string; items: { name: string; chips?: string[]; ko?: string }[] }[];
 
 /** 04: a short profile for readers who arrive from an SRE application. */
 export const profile = {
