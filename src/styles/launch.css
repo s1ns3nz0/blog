@@ -2712,3 +2712,7 @@ html[data-stage="orbit"] .sat-button {
   background: rgb(16 185 129 / 0.15);
   color: #065f46;
 }
+/* A "\n" in a part's short text starts a new line, e.g. "(under embargo)". */
+.oss-part-text {
+  white-space: pre-line;
+}
