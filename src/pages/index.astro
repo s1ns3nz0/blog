@@ -199,7 +199,7 @@ const ossGroups = OSS_GROUPS.map(g => {
         count: cs.reduce((n, c) => n + (c.count ?? 1), 0),
         kind: disclosure ? [] : o.kind,
         parts: cs.map(c => ({
-          short: disclosure ? `${c.count ?? 1} report${(c.count ?? 1) === 1 ? "" : "s"}` : (c.short ?? c.what),
+          short: disclosure ? c.short ?? `${c.count ?? 1} report${(c.count ?? 1) === 1 ? "" : "s"}` : (c.short ?? c.what),
           what: disclosure ? o.did : c.what,
           badge: partBadge[c.status],
           chips: c.chips,

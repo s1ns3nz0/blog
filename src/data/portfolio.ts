@@ -1003,8 +1003,14 @@ export const openSource: OpenSourceEntry[] = [
     tags: ["Responsible disclosure"],
     contributions: [
       {
+        short: "Identified a vulnerability in a digital asset issuance platform (under embargo)",
         what: "Details will be added once fixes ship and disclosure is agreed.",
-        count: 2,
+        status: "confirmed",
+        links: [],
+      },
+      {
+        short: "Identified a vulnerability in a blockchain payment platform (under embargo)",
+        what: "Details will be added once fixes ship and disclosure is agreed.",
         status: "confirmed",
         links: [],
       },
