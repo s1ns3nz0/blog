@@ -820,6 +820,8 @@ export type OpenSourceEntry = {
   tags: string[];
   /** Domain badges shown on the row, e.g. Cloud, CSPM, Layer 2. */
   kind: string[];
+  /** Standing role in the project, shown bold above the contributions. */
+  role?: string;
   contributions: Contribution[];
 };
 
@@ -862,6 +864,7 @@ export const openSource: OpenSourceEntry[] = [
     headline: "Policy as Code & supply-chain guidance",
     kind: ["Web3", "Compliance"],
     tags: ["Policy as Code", "Supply chain", "Incident response"],
+    role: "Software Supply Chain Maintainer",
     contributions: [
       {
         short: "Policy as Code section",

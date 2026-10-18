@@ -169,13 +169,13 @@ const OSS_GROUPS = [
   {
     id: "disclosure",
     title: "Security disclosures",
-    unit: "disclosures",
+   
     statuses: ["confirmed", "submitted", "embargo"],
     note: "Private reports to blockchain companies. Product names and details stay private until fixes ship.",
   },
-  { id: "merged", title: "Merged", unit: "merged", statuses: ["merged", "coauthored"] },
-  { id: "review", title: "In review", unit: "in review", statuses: ["open", "review"] },
-  { id: "reported", title: "Reported", unit: "reported", statuses: ["reported", "proposed", "fixed"] },
+  { id: "merged", title: "Merged", statuses: ["merged", "coauthored"] },
+  { id: "review", title: "In review", statuses: ["open", "review"] },
+  { id: "reported", title: "Reported", statuses: ["reported", "proposed", "fixed"] },
 ] as const;
 // Badges for statuses that need more than the group title says.
 const partBadge: Partial<Record<string, string>> = {
@@ -198,6 +198,7 @@ const ossGroups = OSS_GROUPS.map(g => {
         url: disclosure ? undefined : o.url,
         count: cs.reduce((n, c) => n + (c.count ?? 1), 0),
         kind: disclosure ? [] : o.kind,
+        role: disclosure ? undefined : o.role,
         parts: cs.map(c => ({
           short: disclosure ? c.short ?? `${c.count ?? 1} report${(c.count ?? 1) === 1 ? "" : "s"}` : (c.short ?? c.what),
           what: disclosure ? o.did : c.what,
@@ -213,6 +214,13 @@ const ossGroups = OSS_GROUPS.map(g => {
     .map((r, i) => (g.id === "disclosure" ? { ...r, name: `Blockchain Company ${String.fromCharCode(65 + i)}` } : r));
   return { ...g, rows, total: rows.reduce((n, r) => n + r.count, 0) };
 }).filter(g => g.rows.length > 0);
+// Two sections in the dialog: private disclosures, then public contributions by status.
+const ossSections = [
+  { id: "disclosures", title: "Security disclosures", groups: ossGroups.filter(g => g.id === "disclosure") },
+  { id: "contributions", title: "Contributions", groups: ossGroups.filter(g => g.id !== "disclosure") },
+]
+  .map(sec => ({ ...sec, total: sec.groups.reduce((n, g) => n + g.total, 0) }))
+  .filter(sec => sec.groups.length > 0);
 const ossIds = new Set(openSource.map(o => o.id));
 for (const a of audiences) {
   for (const id of a.ossPriority ?? []) {
@@ -807,16 +815,18 @@ const smokePuffs: [number, number][] = [
             <h3 id="dlg-oss-title" class="display text-2xl font-bold">Open source</h3>
             <button type="button" class="sheet-close" data-close-dialog aria-label="Close">✕</button>
           </header>
-          <p class="oss-totals">
-            {ossGroups.map(g => (
-              <span>
-                <strong>{g.total}</strong> {g.unit}
-              </span>
-            ))}
-          </p>
-          {ossGroups.map(g => (
+          {ossSections.map(sec => (
+          <section class="oss-section" aria-labelledby={`oss-section-${sec.id}`}>
+          <h4 id={`oss-section-${sec.id}`} class="oss-section-title">
+            {sec.title} <span class="oss-section-count">{sec.total}</span>
+          </h4>
+          {sec.groups.map(g => (
             <section class="oss-group" aria-labelledby={`oss-group-${g.id}`}>
-              <h4 id={`oss-group-${g.id}`} class="meta oss-group-title">{g.title}</h4>
+              {sec.groups.length > 1 && (
+                <h5 id={`oss-group-${g.id}`} class="meta oss-group-title">
+                  {g.title} · {g.total}
+                </h5>
+              )}
               {"note" in g && <p class="oss-group-note">{g.note}</p>}
               <ul class="oss-list">
                 {g.rows.map(r => (
@@ -833,6 +843,7 @@ const smokePuffs: [number, number][] = [
                     </span>
                     <span class="oss-item-count">{r.count}</span>
                     <ul class="oss-parts">
+                      {r.role && <li class="oss-part oss-part-role">{r.role}</li>}
                       {r.parts.map(p => (
                         <li class="oss-part">
                           <span class="oss-part-text" title={p.what}>
@@ -861,6 +872,8 @@ const smokePuffs: [number, number][] = [
                 ))}
               </ul>
             </section>
+          ))}
+          </section>
           ))}
         </div>
       </dialog>

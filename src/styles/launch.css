@@ -2563,18 +2563,24 @@ html[data-stage="orbit"] .sat-button {
 }
 
 /* Open-source dialog, grouped by outcome. */
-.oss-totals {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 18px;
-  margin: 0 0 18px;
-  color: #475569;
-  font: 400 12px var(--font-space-mono), monospace;
-  letter-spacing: 0.04em;
+.oss-section + .oss-section {
+  margin-top: 32px;
 }
-.oss-totals strong {
+.oss-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #0f172a;
   color: #0f172a;
-  font-size: 15px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.oss-section-count {
+  color: #64748b;
+  font: 400 14px var(--font-space-mono), monospace;
 }
 .oss-group + .oss-group {
   margin-top: 22px;
@@ -2715,4 +2721,8 @@ html[data-stage="orbit"] .sat-button {
 /* A "\n" in a part's short text starts a new line, e.g. "(under embargo)". */
 .oss-part-text {
   white-space: pre-line;
+}
+.oss-part-role {
+  font-weight: 700;
+  color: #0f172a;
 }
