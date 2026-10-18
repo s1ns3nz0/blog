@@ -226,9 +226,9 @@ const allContribs = openSource.flatMap(o => o.contributions);
 const countOf = (c: (typeof allContribs)[number]) => c.count ?? 1;
 const ossTotal = allContribs.reduce((n, c) => n + countOf(c), 0);
 // Resume link appears only once the PDF is dropped into public/ (no dead link).
-// Publish a copy without a phone number or street address.
-const RESUME_PATH = "/resume/Jinsoo_Yang_Resume.pdf";
-const hasResume = existsSync(join(process.cwd(), "public", RESUME_PATH));
+const RESUME_FILE = "/resume/Jinsoo Yang_Information Security Engineer.pdf";
+const hasResume = existsSync(join(process.cwd(), "public", RESUME_FILE));
+const RESUME_PATH = encodeURI(RESUME_FILE);
 
 const certCount = certifications.reduce((n, c) => n + c.count, 0);
 // Field notes: posts listed above How I work (must be published and listed).
