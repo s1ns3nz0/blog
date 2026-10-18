@@ -864,7 +864,7 @@ export const openSource: OpenSourceEntry[] = [
     headline: "Policy as Code & supply-chain guidance",
     kind: ["Web3", "Compliance"],
     tags: ["Policy as Code", "Supply chain", "Incident response"],
-    role: "Software Supply Chain Maintainer",
+    role: "Secure Software Supply Chain section maintainer",
     contributions: [
       {
         short: "Policy as Code section",
