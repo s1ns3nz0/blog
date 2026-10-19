@@ -406,9 +406,9 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "6 security reports submitted to blockchain companies",
-    summary: "2 confirmed by the vendor with fixes scheduled for the next release; 4 submitted and under review. Product names and details stay private until fixes ship.",
-    evidence: [],
+    title: "4 security reports to blockchain companies",
+    summary: "Web3Signer: the slashing-protection database took its genesis validators root from the first signing request, from any caller. Classed as informational hardening; PR #1260 sets the root at startup. Of the other 3, 2 are confirmed with fixes scheduled for the next release and 1 is under review; those products stay private until fixes ship.",
+    evidence: [{ label: "Web3Signer PR #1260", url: "https://github.com/Consensys-Incorporated/web3signer/pull/1260" }],
   },
 
   // ---------- Deploy ----------
@@ -744,7 +744,7 @@ export const traits = [
     name: "Self-starter",
     line: "I get to security problems before they ship.",
     proof:
-      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 6 security reports sent upstream.",
+      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 4 security reports sent upstream.",
   },
   {
     name: "Fast learner",
@@ -780,7 +780,7 @@ export const certifications = [
 ];
 
 /** Open-source work, one entry per project, shown in the summary. */
-export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed" | "coauthored" | "review" | "submitted";
+export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed" | "coauthored" | "review" | "submitted" | "accepted";
 
 export const statusLabel: Record<ContributionStatus, string> = {
   merged: "Merged",
@@ -793,6 +793,7 @@ export const statusLabel: Record<ContributionStatus, string> = {
   coauthored: "Co-authored fix merged",
   review: "Under review",
   submitted: "Submitted, under review",
+  accepted: "Accepted, fix in PR",
 };
 
 export type Contribution = {
@@ -959,26 +960,27 @@ export const openSource: OpenSourceEntry[] = [
     ],
   },
   {
-    // Undisclosed reports: vendor only. No product, date, severity, or link
-    // until fixes ship and disclosure is agreed. Listed in Company A, B, C order.
-    id: "disclosure-3",
-    name: "Coordinated disclosure",
-    about: "Private reports to a blockchain company, held until fixes ship.",
-    did: "Submitted and under review by the vendor. Product names and details stay private until fixes ship.",
-    headline: "3 security reports submitted to a blockchain company",
-    kind: ["Blockchain", "Security"],
-    tags: ["Responsible disclosure"],
+    // Public: the vendor classed it informational (no CVE) and opened a hardening PR.
+    id: "web3signer",
+    name: "Web3Signer",
+    about: "Consensys' remote signer for Ethereum validators, with a database-backed slashing protection.",
+    url: "https://github.com/Consensys-Incorporated/web3signer",
+    did: "Reported that the slashing-protection database stored the genesis validators root from the first ATTESTATION or BLOCK request, from any caller, so one early request could lock out every later signing. Classed as informational hardening under Web3Signer's trust model; PR #1260 sets the root at startup.",
+    headline: "Slashing-protection hardening report",
+    kind: ["Staking"],
+    tags: ["Responsible disclosure", "Slashing protection"],
     contributions: [
       {
-        what: "Details will be added once fixes ship and disclosure is agreed.",
-        count: 3,
-        status: "submitted",
-        links: [],
+        short: "First caller sets the slashing-protection genesis validators root",
+        what: "The first signing request's genesis validators root was stored for good; a mismatched root then got 412 on every later request. PR #1260 sets it at startup from --network or --genesis-state.",
+        status: "accepted",
+        links: [PR("Consensys-Incorporated/web3signer", 1260)],
       },
     ],
   },
   {
-    // Undisclosed reports: vendor only, as above.
+    // Undisclosed reports: vendor only. No product, date, severity, or link
+    // until fixes ship and disclosure is agreed. Listed in Company A, B order.
     id: "disclosure-1",
     name: "Coordinated disclosure",
     about: "Private reports to a blockchain company, held until fixes ship.",

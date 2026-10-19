@@ -170,8 +170,8 @@ const OSS_GROUPS = [
     id: "disclosure",
     title: "Security disclosures",
    
-    statuses: ["confirmed", "submitted", "embargo"],
-    note: "Private reports to blockchain companies. Product names and details stay private until fixes ship.",
+    statuses: ["accepted", "confirmed", "submitted", "embargo"],
+    note: "Reports to blockchain companies. Unnamed products stay private until fixes ship.",
   },
   { id: "merged", title: "Merged", statuses: ["merged", "coauthored"] },
   { id: "review", title: "In review", statuses: ["open", "review"] },
@@ -184,13 +184,15 @@ const partBadge: Partial<Record<string, string>> = {
   fixed: "fixed by maintainers",
   confirmed: "confirmed, fix in next release",
   submitted: "submitted",
+  accepted: "accepted, fix in PR",
 };
 const ossGroups = OSS_GROUPS.map(g => {
   const rows = ossEntriesAll
     .map(o => {
       const cs = o.contributions.filter(c => (g.statuses as readonly string[]).includes(c.status));
       if (!cs.length) return null;
-      const disclosure = g.id === "disclosure";
+      // Disclosures without a public URL stay anonymous.
+      const disclosure = g.id === "disclosure" && !o.url;
       return {
         id: o.id,
         name: disclosure ? "Blockchain company" : o.name,
@@ -210,8 +212,13 @@ const ossGroups = OSS_GROUPS.map(g => {
     .filter(r => r !== null)
     // Disclosures keep portfolio order so vendor letters stay fixed; the rest sort by count.
     .sort((a, b) => (g.id === "disclosure" ? 0 : b.count - a.count))
-    // Unnamed vendors are lettered top to bottom: Company A, B, C.
-    .map((r, i) => (g.id === "disclosure" ? { ...r, name: `Blockchain Company ${String.fromCharCode(65 + i)}` } : r));
+    // Unnamed vendors are lettered top to bottom: Company A, B, …
+    .map(
+      (
+        letter => r =>
+          g.id === "disclosure" && !r.url ? { ...r, name: `Blockchain Company ${String.fromCharCode(65 + letter++)}` } : r
+      )(0)
+    );
   return { ...g, rows, total: rows.reduce((n, r) => n + r.count, 0) };
 }).filter(g => g.rows.length > 0);
 // Two sections in the dialog: private disclosures, then public contributions by status.
@@ -498,7 +505,8 @@ const smokePuffs: [number, number][] = [
                   <li><a href="https://github.com/lightningnetwork/lnd/pull/11219" target="_blank" rel="noopener noreferrer">LND #11219 merged ↗</a></li>
                   <li><a href="https://github.com/lightninglabs/aperture/pull/297" target="_blank" rel="noopener noreferrer">Aperture metrics PR #297 ↗</a></li>
                   <li><a href="https://github.com/lightninglabs/aperture/pull/292" target="_blank" rel="noopener noreferrer">Aperture fix merged via #292 ↗</a></li>
-                  <li><span>6 security reports (2 confirmed, 4 under review)</span></li>
+                  <li><a href="https://github.com/Consensys-Incorporated/web3signer/pull/1260" target="_blank" rel="noopener noreferrer">Web3Signer hardening PR #1260 ↗</a></li>
+                  <li><span>3 more security reports (2 confirmed, 1 under review)</span></li>
                   <li><a href="https://github.com/s1ns3nz0/node-operator-public" target="_blank" rel="noopener noreferrer">Private EKS validator ↗</a></li>
                 </ul>
               </div>
