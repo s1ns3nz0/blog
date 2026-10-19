@@ -406,9 +406,9 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "4 security reports to blockchain companies",
-    summary: "Web3Signer: the slashing-protection database took its genesis validators root from the first signing request, from any caller. Classed as informational hardening; PR #1260 sets the root at startup. Of the other 3, 2 are confirmed with fixes scheduled for the next release and 1 is under review; those products stay private until fixes ship.",
-    evidence: [{ label: "Web3Signer PR #1260", url: "https://github.com/Consensys-Incorporated/web3signer/pull/1260" }],
+    title: "5 security reports submitted to blockchain companies",
+    summary: "2 confirmed by the vendor with fixes scheduled for the next release; 3 submitted and under review. Product names and details stay private until fixes ship.",
+    evidence: [],
   },
 
   // ---------- Deploy ----------
@@ -744,7 +744,7 @@ export const traits = [
     name: "Self-starter",
     line: "I get to security problems before they ship.",
     proof:
-      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 4 security reports sent upstream.",
+      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 5 security reports sent upstream.",
   },
   {
     name: "Fast learner",
@@ -819,7 +819,7 @@ export type OpenSourceEntry = {
   did: string;
   /** 2-3 technology keywords recruiters can match against a JD. */
   tags: string[];
-  /** Domain badges shown on the row, e.g. Cloud, CSPM, Layer 2. */
+  /** Row badges: [ecosystem, work type], e.g. ["Cloud", "CSPM"]. Ecosystem is colored. */
   kind: string[];
   /** Standing role in the project, shown bold above the contributions. */
   role?: string;
@@ -863,7 +863,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/security-alliance/frameworks",
     did: "Maintainer of the Supply Chain section. Wrote the Policy as Code and private registries sections and an endpoint compromise runbook, all merged.",
     headline: "Policy as Code & supply-chain guidance",
-    kind: ["Web3", "Compliance"],
+    kind: ["Web3", "Supply chain"],
     tags: ["Policy as Code", "Supply chain", "Incident response"],
     role: "Secure Software Supply Chain section maintainer",
     contributions: [
@@ -894,7 +894,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/oscal-compass",
     did: "Fixed a KeyError in compliance-trestle's SSP generation (merged). Opened a GitHub Actions plugin for compliance-to-policy.",
     headline: "Compliance-as-Code fix & CI plugin",
-    kind: ["Compliance"],
+    kind: ["CNCF", "Compliance"],
     tags: ["OSCAL", "Compliance as Code", "CI/CD"],
     contributions: [
       {
@@ -918,7 +918,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/lightningnetwork/lnd",
     did: "Reported that the fixed-width decoders for node announcement addresses accept short reads; the fix was merged with a co-author credit.",
     headline: "Short-read bug in address decoders, fixed",
-    kind: ["Lightning"],
+    kind: ["Bitcoin", "Hardening"],
     tags: ["Lightning", "Go", "Input validation"],
     contributions: [
       {
@@ -936,7 +936,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/lightninglabs/aperture",
     did: "Opened a PR for per-outcome Prometheus metrics after a maintainer reviewed the proposal. Proposed a dedicated security event log. Fixed a flaky test, merged via #292.",
     headline: "L402 metrics & security events",
-    kind: ["Lightning"],
+    kind: ["Bitcoin", "Reliability"],
     tags: ["Lightning", "L402", "Observability"],
     contributions: [
       {
@@ -960,14 +960,14 @@ export const openSource: OpenSourceEntry[] = [
     ],
   },
   {
-    // Public: the vendor classed it informational (no CVE) and opened a hardening PR.
+    // Accepted as hardening (informational, no CVE); the maintainers' PR adds the fix.
     id: "web3signer",
     name: "Web3Signer",
     about: "Consensys' remote signer for Ethereum validators, with a database-backed slashing protection.",
     url: "https://github.com/Consensys-Incorporated/web3signer",
     did: "Reported that the slashing-protection database stored the genesis validators root from the first ATTESTATION or BLOCK request, from any caller, so one early request could lock out every later signing. Classed as informational hardening under Web3Signer's trust model; PR #1260 sets the root at startup.",
     headline: "Slashing-protection hardening report",
-    kind: ["Staking"],
+    kind: ["Ethereum", "Hardening"],
     tags: ["Responsible disclosure", "Slashing protection"],
     contributions: [
       {
@@ -980,7 +980,25 @@ export const openSource: OpenSourceEntry[] = [
   },
   {
     // Undisclosed reports: vendor only. No product, date, severity, or link
-    // until fixes ship and disclosure is agreed. Listed in Company A, B order.
+    // until fixes ship and disclosure is agreed. Listed in Company A, B, C order.
+    id: "disclosure-3",
+    name: "Coordinated disclosure",
+    about: "Private reports to a blockchain company, held until fixes ship.",
+    did: "Submitted and under review by the vendor. Product names and details stay private until fixes ship.",
+    headline: "2 security reports submitted to a blockchain company",
+    kind: ["Blockchain", "Security"],
+    tags: ["Responsible disclosure"],
+    contributions: [
+      {
+        what: "Details will be added once fixes ship and disclosure is agreed.",
+        count: 2,
+        status: "submitted",
+        links: [],
+      },
+    ],
+  },
+  {
+    // Undisclosed reports: vendor only, as above.
     id: "disclosure-1",
     name: "Coordinated disclosure",
     about: "Private reports to a blockchain company, held until fixes ship.",
@@ -1028,7 +1046,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/x402-foundation/x402",
     did: "Fixed a V1 payment header that crashed the Python server, and a skipHandler path that skipped settlement across all three SDKs.",
     headline: "Payment-flow fixes across SDKs",
-    kind: ["Payments"],
+    kind: ["Web3", "Hardening"],
     tags: ["Payments", "Python", "Go"],
     contributions: [
       {
@@ -1052,7 +1070,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/stakefish",
     did: "Fixed an epoch replay that never finished, RPC retries web3 7 broke, and a version gate that misread prereleases; reported release binaries that overwrite each other.",
     headline: "Validator monitoring & web3 utility fixes",
-    kind: ["Staking"],
+    kind: ["Ethereum", "Reliability"],
     tags: ["Ethereum", "Python", "Go"],
     contributions: [
       {
@@ -1088,7 +1106,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/LFDT-Lineth/lineth-monorepo",
     did: "Fixed the postman's cancel path for stuck claims, which crashed on Postgres fees read as strings and left deposits unclaimed.",
     headline: "Bridge postman: stuck-claim recovery fix",
-    kind: ["Layer 2"],
+    kind: ["Ethereum", "Reliability"],
     tags: ["Layer 2", "TypeScript", "PostgreSQL"],
     contributions: [
       {
@@ -1110,7 +1128,7 @@ export const openSource: OpenSourceEntry[] = [
     url: "https://github.com/trailofbits/gosentry",
     did: "Found a LibAFL bug that stopped fuzzing while go test still passed. Fixed upstream the same day.",
     headline: "Silent fuzzer failure, fixed upstream",
-    kind: ["Fuzzer"],
+    kind: ["Go", "Fuzzing"],
     tags: ["Fuzzing", "Go", "LibAFL"],
     contributions: [
       {

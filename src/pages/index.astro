@@ -169,12 +169,11 @@ const OSS_GROUPS = [
   {
     id: "disclosure",
     title: "Security disclosures",
-   
-    statuses: ["accepted", "confirmed", "submitted", "embargo"],
-    note: "Reports to blockchain companies. Unnamed products stay private until fixes ship.",
+    statuses: ["confirmed", "submitted", "embargo"],
+    note: "Private reports to blockchain companies. Product names and details stay private until fixes ship.",
   },
   { id: "merged", title: "Merged", statuses: ["merged", "coauthored"] },
-  { id: "review", title: "In review", statuses: ["open", "review"] },
+  { id: "review", title: "In review", statuses: ["open", "review", "accepted"] },
   { id: "reported", title: "Reported", statuses: ["reported", "proposed", "fixed"] },
 ] as const;
 // Badges for statuses that need more than the group title says.
@@ -506,7 +505,7 @@ const smokePuffs: [number, number][] = [
                   <li><a href="https://github.com/lightninglabs/aperture/pull/297" target="_blank" rel="noopener noreferrer">Aperture metrics PR #297 ↗</a></li>
                   <li><a href="https://github.com/lightninglabs/aperture/pull/292" target="_blank" rel="noopener noreferrer">Aperture fix merged via #292 ↗</a></li>
                   <li><a href="https://github.com/Consensys-Incorporated/web3signer/pull/1260" target="_blank" rel="noopener noreferrer">Web3Signer hardening PR #1260 ↗</a></li>
-                  <li><span>3 more security reports (2 confirmed, 1 under review)</span></li>
+                  <li><span>5 security reports (2 confirmed, 3 under review)</span></li>
                   <li><a href="https://github.com/s1ns3nz0/node-operator-public" target="_blank" rel="noopener noreferrer">Private EKS validator ↗</a></li>
                 </ul>
               </div>
