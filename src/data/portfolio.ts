@@ -406,8 +406,8 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "5 security reports submitted to blockchain companies",
-    summary: "2 confirmed by the vendor with fixes scheduled for the next release; 3 submitted and under review. Product names and details stay private until fixes ship.",
+    title: "3 security reports submitted to blockchain companies",
+    summary: "2 confirmed by the vendor with fixes scheduled for the next release; 1 submitted and under review. Product names and details stay private until fixes ship.",
     evidence: [],
   },
 
@@ -744,7 +744,7 @@ export const traits = [
     name: "Self-starter",
     line: "I get to security problems before they ship.",
     proof:
-      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 5 security reports sent upstream.",
+      "Maintainer of the Supply Chain section of the SEAL Frameworks, with {oss} contributions and 3 security reports and 3 hardening reports sent upstream.",
   },
   {
     name: "Fast learner",
@@ -780,7 +780,7 @@ export const certifications = [
 ];
 
 /** Open-source work, one entry per project, shown in the summary. */
-export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed" | "coauthored" | "review" | "submitted" | "accepted";
+export type ContributionStatus = "merged" | "open" | "proposed" | "reported" | "fixed" | "embargo" | "confirmed" | "coauthored" | "review" | "submitted" | "accepted" | "planned";
 
 export const statusLabel: Record<ContributionStatus, string> = {
   merged: "Merged",
@@ -794,6 +794,7 @@ export const statusLabel: Record<ContributionStatus, string> = {
   review: "Under review",
   submitted: "Submitted, under review",
   accepted: "Accepted, fix in PR",
+  planned: "Hardening, fix planned in a public PR",
 };
 
 export type Contribution = {
@@ -960,13 +961,14 @@ export const openSource: OpenSourceEntry[] = [
     ],
   },
   {
-    // Accepted as hardening (informational, no CVE); the maintainers' PR adds the fix.
+    // All three classed as hardening (informational, no CVE) under Web3Signer's trust model;
+    // fixes land in public PRs. Keep the unfixed two to a one-line summary until their PRs open.
     id: "web3signer",
     name: "Web3Signer",
     about: "Consensys' remote signer for Ethereum validators, with a database-backed slashing protection.",
     url: "https://github.com/Consensys-Incorporated/web3signer",
-    did: "Reported that the slashing-protection database stored the genesis validators root from the first ATTESTATION or BLOCK request, from any caller, so one early request could lock out every later signing. Classed as informational hardening under Web3Signer's trust model; PR #1260 sets the root at startup.",
-    headline: "Slashing-protection hardening report",
+    did: "Reported three issues in slashing protection and the Key Manager API. The maintainers classed all three as hardening under Web3Signer's trust model, with fixes in public PRs and reporter credit.",
+    headline: "3 hardening reports",
     kind: ["Ethereum", "Hardening"],
     tags: ["Responsible disclosure", "Slashing protection"],
     contributions: [
@@ -976,29 +978,23 @@ export const openSource: OpenSourceEntry[] = [
         status: "accepted",
         links: [PR("Consensys-Incorporated/web3signer", 1260)],
       },
-    ],
-  },
-  {
-    // Undisclosed reports: vendor only. No product, date, severity, or link
-    // until fixes ship and disclosure is agreed. Listed in Company A, B, C order.
-    id: "disclosure-3",
-    name: "Coordinated disclosure",
-    about: "Private reports to a blockchain company, held until fixes ship.",
-    did: "Submitted and under review by the vendor. Product names and details stay private until fixes ship.",
-    headline: "2 security reports submitted to a blockchain company",
-    kind: ["Blockchain", "Security"],
-    tags: ["Responsible disclosure"],
-    contributions: [
       {
-        what: "Details will be added once fixes ship and disclosure is agreed.",
-        count: 2,
-        status: "submitted",
+        short: "Slashing-protection low watermark has no upper bound",
+        what: "Classed as hardening; the fix will land in a public PR. Details follow once it opens.",
+        status: "planned",
+        links: [],
+      },
+      {
+        short: "Key Manager import has no upper bound on KDF cost",
+        what: "Under analysis by the maintainers as hardening; the fix will land in a public PR. Details follow once it opens.",
+        status: "review",
         links: [],
       },
     ],
   },
   {
-    // Undisclosed reports: vendor only, as above.
+    // Undisclosed reports: vendor only. No product, date, severity, or link
+    // until fixes ship and disclosure is agreed. Listed in Company A, B order.
     id: "disclosure-1",
     name: "Coordinated disclosure",
     about: "Private reports to a blockchain company, held until fixes ship.",
