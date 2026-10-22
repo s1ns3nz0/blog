@@ -1048,7 +1048,7 @@ export const openSource: OpenSourceEntry[] = [
       {
         short: "V1 payloads get a 402, not a 500",
         what: "Python resource server rejects V1 payloads with a 402 instead of failing with a 500.",
-        status: "review",
+        status: "merged",
         links: [PR("x402-foundation/x402", 3715), "x402-python-reject-v1-payment-payload"],
       },
       {
