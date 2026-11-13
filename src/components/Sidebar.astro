@@ -115,23 +115,23 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
 <script type="application/json" id="sidebar-tag-names" set:html={JSON.stringify(tagNameBySlug)} />
 
 <script>
-  // Multi-tag AND filter, driven from the sidebar. Selection persists in
-  // sessionStorage across soft navigations. A click only filters in place
-  // when the current page already renders a post list ([data-post-list]);
-  // otherwise it falls through to the tag's own /tags/{slug}/ page.
-  const STORAGE_KEY = "sidebar-selected-tags";
+  // Multi-tag AND filter, driven from the sidebar. The selection lives in
+  // the URL (?tags=a,b), so Back restores it and a plain /posts/ link always
+  // shows every post. A click only filters in place when the current page
+  // already renders a post list ([data-post-list]); otherwise it falls
+  // through to the tag's own /tags/{slug}/ page.
+  const PARAM = "tags";
 
   function getSelected(): Set<string> {
-    try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
-      return new Set(raw ? (JSON.parse(raw) as string[]) : []);
-    } catch {
-      return new Set();
-    }
+    const raw = new URLSearchParams(window.location.search).get(PARAM);
+    return new Set(raw ? raw.split(",").filter(Boolean) : []);
   }
 
   function setSelected(selected: Set<string>) {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify([...selected]));
+    const url = new URL(window.location.href);
+    if (selected.size > 0) url.searchParams.set(PARAM, [...selected].join(","));
+    else url.searchParams.delete(PARAM);
+    history.replaceState(history.state, "", url);
   }
 
   function getTagNames(): Record<string, string> {
@@ -148,7 +148,10 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
       .querySelectorAll<HTMLAnchorElement>("aside a[data-tag]")
       .forEach(link => {
         const tag = link.dataset.tag;
-        link.setAttribute("aria-pressed", String(!!tag && selected.has(tag)));
+        const pressed = !!tag && selected.has(tag);
+        link.setAttribute("aria-pressed", String(pressed));
+        // Keep a selected tag visible: open the group that holds it.
+        if (pressed) link.closest("details")?.setAttribute("open", "");
       });
   }
 

@@ -34,6 +34,7 @@ const unlistedPaths = readdirSync(POSTS_DIR)
 
 export default defineConfig({
   site: config.site.url,
+  redirects: { "/blog": "/posts/" },
   integrations: [
     mdx(),
     sitemap({
