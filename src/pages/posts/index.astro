@@ -5,6 +5,7 @@ import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Card from "@/components/Card.astro";
+import TagGroups from "@/components/TagGroups.astro";
 import Footer from "@/components/Footer.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
@@ -24,6 +25,12 @@ const t = useTranslations(locale);
 
   <Main pageTitle={t.pages.postsTitle} pageDesc={t.pages.postsDesc}>
     <p class="text-muted-foreground mb-4 text-sm">{t.pages.tagFilterHint}</p>
+    <details class="mb-4 xl:hidden">
+      <summary class="hover:text-accent cursor-pointer font-mono text-sm font-semibold">
+        Filter by tag
+      </summary>
+      <TagGroups />
+    </details>
     <div data-selected-tags class="mb-6 hidden flex-wrap gap-2"></div>
     <ul data-post-list>
       {posts.map(data => <Card {...data} />)}

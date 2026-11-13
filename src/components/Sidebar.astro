@@ -1,50 +1,16 @@
 ---
-import { getCollection } from "astro:content";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import { postFilter } from "@/utils/postFilter";
+import TagGroups from "@/components/TagGroups.astro";
 import { slugifyStr } from "@/utils/slugify";
-import { stripBase, stripLocale } from "@/utils/withBase";
 import config from "@/config";
-
-const locale = Astro.currentLocale ?? config.site.lang;
-
-const posts = await getCollection("posts", ({ data }) => !data.draft);
-const published = posts.filter(postFilter).filter(({ data }) => !data.unlisted);
-
-const counts = new Map<string, number>();
-for (const post of published) {
-  for (const tagName of post.data.tags) {
-    const slug = slugifyStr(tagName);
-    counts.set(slug, (counts.get(slug) ?? 0) + 1);
-  }
-}
-
-// Groups = named tag groups from config. Ungrouped tags are not shown here.
-const groups = config.nav.tagGroups.map(group => ({
-  name: group.name,
-  tags: group.tags.map(tagName => ({ tag: slugifyStr(tagName), tagName })),
-}));
-// Legacy single-tag pins still act as one-tag groups.
-for (const tagName of config.nav.pinnedTags) {
-  groups.push({
-    name: tagName,
-    tags: [{ tag: slugifyStr(tagName), tagName }],
-  });
-}
 
 // Slug -> display name for every selectable tag, read by the filter script
 // to render the "selected tags" chip bar at the top of the content area.
 const tagNameBySlug = Object.fromEntries(
-  groups.flatMap(g => g.tags.map(({ tag, tagName }) => [tag, tagName]))
+  [...config.nav.tagGroups.flatMap(g => g.tags), ...config.nav.pinnedTags].map(
+    tagName => [slugifyStr(tagName), tagName]
+  )
 );
-
-const currentPath = stripLocale(stripBase(Astro.url.pathname), locale).replace(
-  /\/+$/,
-  ""
-);
-
-const tagUrl = (slug: string) => getRelativeLocaleUrl(locale, `tags/${slug}/`);
-const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
+const hasGroups = Object.keys(tagNameBySlug).length > 0;
 ---
 
 <aside
@@ -57,54 +23,12 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
 >
   <nav class="flex flex-col gap-6">
     {
-      groups.length > 0 && (
+      hasGroups && (
         <section>
           <h2 class="text-muted-foreground font-mono text-xs font-semibold tracking-widest uppercase">
             Groups
           </h2>
-          <div class="mt-2 flex flex-col">
-            {groups.map(group => {
-              const groupActive = group.tags.some(t => isTagActive(t.tag));
-              return (
-                <details class="group/accordion" open={groupActive}>
-                  <summary
-                    class:list={[
-                      "hover:text-accent marker:text-muted-foreground flex cursor-pointer items-center justify-between gap-2 py-1 font-medium",
-                      groupActive ? "text-accent" : "text-foreground",
-                    ]}
-                  >
-                    <span>{group.name}</span>
-                    <span class="text-muted-foreground font-mono text-xs transition-transform group-open/accordion:rotate-90">
-                      ›
-                    </span>
-                  </summary>
-                  <ul class="mt-1 mb-2 hidden flex-col gap-1 ps-3 group-open/accordion:flex">
-                    {group.tags.map(({ tag, tagName }) => (
-                      <li>
-                        <a
-                          href={tagUrl(tag)}
-                          data-tag={tag}
-                          aria-pressed="false"
-                          class:list={[
-                            "hover:text-accent flex items-baseline justify-between gap-2 py-1",
-                            "aria-pressed:text-accent aria-pressed:font-semibold",
-                            isTagActive(tag)
-                              ? "text-accent"
-                              : "text-muted-foreground hover:text-accent",
-                          ]}
-                        >
-                          <span class="truncate">{tagName}</span>
-                          <span class="font-mono text-xs">
-                            {counts.get(tag) ?? 0}
-                          </span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              );
-            })}
-          </div>
+          <TagGroups />
         </section>
       )
     }
@@ -145,7 +69,7 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
 
   function markSelected(selected: Set<string>) {
     document
-      .querySelectorAll<HTMLAnchorElement>("aside a[data-tag]")
+      .querySelectorAll<HTMLAnchorElement>("a[data-tag]")
       .forEach(link => {
         const tag = link.dataset.tag;
         const pressed = !!tag && selected.has(tag);
@@ -217,7 +141,7 @@ const isTagActive = (slug: string) => currentPath === `/tags/${slug}`;
     refresh();
 
     document
-      .querySelectorAll<HTMLAnchorElement>("aside a[data-tag]")
+      .querySelectorAll<HTMLAnchorElement>("a[data-tag]")
       .forEach(link => {
         if (link.dataset.filterBound) return;
         link.dataset.filterBound = "true";
