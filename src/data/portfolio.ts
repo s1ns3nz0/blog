@@ -92,7 +92,7 @@ export const identity = {
   handle: "s1ns3nz0",
   headline: "Launch your product securely.",
   /** The one claim the summary makes; everything else is evidence. */
-  claim: "I turn security frameworks and compliance into platform code.",
+  claim: "I secure AWS and Kubernetes infrastructure, and turn the controls into code.",
   /** The summary's closing line: what the trip through the stages showed. */
   closing: "Security controls you can read, run, and prove.",
   /** Full-screen quote after Operate: the question the summary then answers. */
@@ -105,11 +105,11 @@ export const identity = {
   },
   /** Painted on the rocket fairing: the thing that actually reaches orbit. */
   fairing: "PRODUCT",
-  subline: "I turn security frameworks and compliance into platform code.",
+  subline: "I secure AWS and Kubernetes infrastructure, and turn the controls into code.",
   roles: ["Platform Engineer", "DevSecOps Engineer", "Security Engineer"],
   /** The one title a recruiter sees; audiences can swap it. */
-  title: "DevSecOps Engineer",
-  openTo: "Open to remote and overseas DevSecOps roles",
+  title: "Cloud Security Engineer",
+  openTo: "Open to cloud security roles in Seoul and remote",
   available: "Available now",
 };
 
@@ -270,7 +270,29 @@ const GH = "https://github.com/s1ns3nz0";
 export const COMPLIANCE_OPS_LIVE: string | undefined = "https://compliance-ops.miata.cloud";
 
 export const cards: Card[] = [
-  // ---------- Design ----------
+  {
+    id: "aws-saas-design-review",
+    stage: "design",
+    zone: "test",
+    title: "AWS SaaS Security Design Review",
+    hook: "One requirement set doesn't fit every AWS deployment model",
+    summary: "3 architectures, 31 threats; ECS and EKS broke at different boundaries",
+    story: {
+      problem:
+        `A requirements plugin is only as good as the architectures it has been run on. I needed to see it handle three different deployment models end to end, not one demo.`,
+      solution:
+        `Ran the Security Requirements plugin through its whole lifecycle on three AWS reference architectures (ECS SaaS, EKS SaaS, and a serverless movie-voting API): impact, threats, blast radius, responsibility, requirements, refresh, evidence, CI/CD verification, and regulatory overlays.`,
+      result:
+        `Three reviews in 29 posts, with threat models of 13 (ECS), 10 (EKS), and 8 (serverless). In the serverless review, a route-dispatch mismatch surfaced as a threat-only requirement the 800-53 baseline doesn't express.`,
+      lesson:
+        `The deployment model changes the threat model, even between two container platforms. On ECS, tenant isolation broke at the routing layer: a shared mapping Lambda that could rewrite any tenant's routes, and services trusting a forged tenant header. On EKS, it broke at boundaries ECS didn't have: ingress rules routing into another tenant's namespace, namespace isolation without NetworkPolicy, and a service account picking up the wrong AWS role. One requirement set copied across all three would have missed each of these.`,
+    },
+    evidence: [
+      { label: "ECS SaaS series", url: "/tags/ecs-saas/" },
+      { label: "EKS SaaS series", url: "/tags/eks-saas/" },
+      { label: "Serverless series", url: "/tags/serverless/" },
+    ],
+  },
   {
     id: "security-requirements",
     stage: "design",
@@ -296,45 +318,10 @@ export const cards: Card[] = [
     ],
   },
   {
-    id: "aws-saas-design-review",
-    stage: "design",
-    zone: "test",
-    title: "AWS SaaS Security Design Review",
-    hook: "One requirement set doesn't fit every AWS deployment model",
-    summary: "3 architectures, 31 threats; ECS and EKS broke at different boundaries",
-    story: {
-      problem:
-        `A requirements plugin is only as good as the architectures it has been run on. I needed to see it handle three different deployment models end to end, not one demo.`,
-      solution:
-        `Ran the Security Requirements plugin through its whole lifecycle on three AWS reference architectures (ECS SaaS, EKS SaaS, and a serverless movie-voting API): impact, threats, blast radius, responsibility, requirements, refresh, evidence, CI/CD verification, and regulatory overlays.`,
-      result:
-        `Three reviews in 29 posts, with threat models of 13 (ECS), 10 (EKS), and 8 (serverless). In the serverless review, a route-dispatch mismatch surfaced as a threat-only requirement the 800-53 baseline doesn't express.`,
-      lesson:
-        `The deployment model changes the threat model, even between two container platforms. On ECS, tenant isolation broke at the routing layer: a shared mapping Lambda that could rewrite any tenant's routes, and services trusting a forged tenant header. On EKS, it broke at boundaries ECS didn't have: ingress rules routing into another tenant's namespace, namespace isolation without NetworkPolicy, and a service account picking up the wrong AWS role. One requirement set copied across all three would have missed each of these.`,
-    },
-    evidence: [
-      { label: "ECS SaaS series", url: "/tags/ecs-saas/" },
-      { label: "EKS SaaS series", url: "/tags/eks-saas/" },
-      { label: "Serverless series", url: "/tags/serverless/" },
-    ],
-  },
-
-  // ---------- Build ----------
-  {
-    id: "hoodi-local",
-    stage: "build",
-    zone: "test",
-    title: "Ethereum Hoodi Validator, running locally",
-    summary: "Validator 1645272 on a local Kubernetes cluster: Besu, Teku, and Web3Signer, watched in Grafana.",
-    href: "https://hoodi.beaconcha.in/validator/1645272",
-    evidence: [],
-  },
-  {
     id: "private-eks",
     stage: "build",
     zone: "test",
-    titleFor: { "lightning-labs": "Stateful validator workload on private EKS" },
-    title: "Ethereum Hoodi Validator on Private EKS (earlier build)",
+    title: "Private EKS: Vault, KMS, private ECR",
     hook: "Public client images run right next to a slashable signing key",
     summary: "Validator active on Hoodi; revoking the signer's role stopped signing at once",
     story: {
@@ -352,30 +339,6 @@ export const cards: Card[] = [
       { label: "node-operator-public on GitHub", url: `${GH}/node-operator-public` },
       "private-ecr-delivery-architecture-for-private-eks",
       "prioritizing-security-controls-hoodi-validator-lessons",
-    ],
-  },
-  {
-    id: "lnd-kubernetes",
-    stage: "build",
-    zone: "test",
-    title: "LND node on Kubernetes",
-    hook: "A Running Pod can come back as a different Lightning node",
-    badge: "learning",
-    summary: "Same identity, channels, and backups after Pod replacement and Helm upgrade",
-    story: {
-      problem:
-        `A learning project: I wanted to see what Kubernetes actually guarantees for a stateful node, and what it doesn't. A Lightning node is its wallet, channel database, and static channel backups, so a Pod that restarts successfully can still come back as a different node.`,
-      solution:
-        `Packaged LND as a Helm chart: a StatefulSet with per-node volumes, default-deny NetworkPolicy, RPC kept apart from P2P, wallet unlock left as an operator step, and optional monitoring sidecars. Then wrote a test for every claim the chart makes.`,
-      result:
-        `After a forced Pod replacement and a helm upgrade, the same node identity, channels, volumes, and SCB hash came back. Reproduced on macOS arm64 and WSL amd64 from the same revision, with a synced testnet node, an active public channel, and payments both ways.`,
-      lesson:
-        `For stateful workloads, Running is only where testing starts. Kubernetes gives scheduling and storage; LND still owns identity and channel state, and the operator still owns the seed.`,
-    },
-    tag: "LND on Kubernetes",
-    evidence: [
-      "running-an-lnd-lightning-node-on-local-kubernetes",
-      "metrics-collector-prometheus-on-lnd",
     ],
   },
   {
@@ -406,12 +369,10 @@ export const cards: Card[] = [
     id: "lightning-disclosures",
     stage: "build",
     zone: "oss",
-    title: "3 security reports submitted to blockchain companies",
+    title: "3 vulnerability reports, 2 confirmed by vendors",
     summary: "2 confirmed by the vendor with fixes scheduled for the next release; 1 submitted and under review. Product names and details stay private until fixes ship.",
     evidence: [],
   },
-
-  // ---------- Deploy ----------
   {
     id: "pipeline-controls",
     stage: "ship",
@@ -450,48 +411,25 @@ export const cards: Card[] = [
     ],
   },
   {
-    id: "aperture-flake",
-    stage: "ship",
+    id: "prowler",
+    stage: "operate",
     zone: "oss",
-    title: "Aperture: flaky L402 test fix",
-    summary: "Fixed a rare (1 in 256) flake in TestTamperedL402 that could fail CI at random. Merged with authorship kept via #292.",
+    title: "Prowler: 28 Azure and GCP checks",
+    summary: "Posture checks for AKS, Cosmos DB, Databricks, Entra ID, Cloud SQL, Secret Manager, and more.",
     evidence: [
-      { label: "PR #285", url: "https://github.com/lightninglabs/aperture/pull/285" },
-      { label: "Merged via PR #292", url: "https://github.com/lightninglabs/aperture/pull/292" },
+      {
+        label: "Pull requests",
+        url: "https://github.com/prowler-cloud/prowler/pulls?q=is%3Apr+state%3Aclosed+involves%3As1ns3nz0",
+      },
+      "adding-azure-aks-defender-check-to-prowler",
+      "adding-gcp-secret-manager-rotation-check-to-prowler",
     ],
   },
-  {
-    id: "gosentry",
-    stage: "ship",
-    zone: "oss",
-    title: "Gosentry: a fuzzer that died silently",
-    summary:
-      "Reported a LibAFL corpus bug in Trail of Bits' Gosentry where fuzzing stopped but go test still passed; fixed the same day.",
-    evidence: [
-      "reporting-a-libafl-corpus-id-bug-in-gosentry",
-      { label: "Issue #210", url: "https://github.com/trailofbits/gosentry/issues/210" },
-    ],
-  },
-  {
-    id: "lnd-short-reads",
-    stage: "ship",
-    zone: "oss",
-    title: "LND: short reads in address decoders, fixed",
-    summary:
-      "Reported that NodeAnnouncement2's fixed-width address decoders accept short reads. Fixed upstream in PR #11219 for LND 0.22.0, with a co-author credit on the fix.",
-    evidence: [
-      { label: "Issue #11211", url: "https://github.com/lightningnetwork/lnd/issues/11211" },
-      { label: "PR #11219 (merged)", url: "https://github.com/lightningnetwork/lnd/pull/11219" },
-      "lnd-node-announcement-2-address-short-reads",
-    ],
-  },
-
-  // ---------- Operate ----------
   {
     id: "lineth-l2",
     stage: "operate",
     zone: "test",
-    title: "Lineth L2: a full rollup I run and watch",
+    title: "Kubernetes monitoring and incident response: an L2 rollup",
     summary: "A local L1 and a zk-rollup L2 on one Kubernetes node, how a transaction moves through it, and five postmortems.",
     tag: "Layer 2",
     evidence: [],
@@ -521,62 +459,6 @@ export const cards: Card[] = [
           "lineth-l2-postmortem-l1-engine-api-deadlock",
         ],
       },
-    ],
-  },
-  {
-    id: "sre-ops",
-    stage: "operate",
-    zone: "test",
-    title: "AI SRE Ops: incident console for an L2 rollup",
-    summary: "One console for the on-call problems that came back every shift, from alert to postmortem.",
-    href: "/sre",
-    evidence: [],
-  },
-  {
-    id: "lineth-postman",
-    stage: "operate",
-    zone: "oss",
-    title: "Lineth: stuck-claim recovery fix in the bridge postman",
-    summary: "The postman's cancel path for stuck claims crashed on Postgres fees read as strings, leaving deposits unclaimed. Reported and fixed; the PR is in review.",
-    evidence: [
-      "lineth-postman-stuck-claim-cancel-bigint",
-      { label: "Issue #4200", url: "https://github.com/LFDT-Lineth/lineth-monorepo/issues/4200" },
-      { label: "PR #4201", url: "https://github.com/LFDT-Lineth/lineth-monorepo/pull/4201" },
-    ],
-  },
-  {
-    id: "aperture-metrics",
-    stage: "operate",
-    zone: "oss",
-    title: "Aperture: L402 metrics",
-    summary: "Per-outcome Prometheus counters for Aperture's L402 mint and verify paths. A maintainer reviewed the proposal and asked for a PR; it's open as #297.",
-    evidence: [
-      "aperture-l402-metrics-before-and-after",
-      { label: "Issue #286", url: "https://github.com/lightninglabs/aperture/issues/286" },
-      { label: "PR #297", url: "https://github.com/lightninglabs/aperture/pull/297" },
-    ],
-  },
-  {
-    id: "aperture-events",
-    stage: "operate",
-    zone: "oss",
-    title: "Aperture: security event proposal",
-    summary: "Structured L402 security events that carry HMAC references instead of raw macaroons and preimages.",
-    evidence: ["aperture-l402-security-events-monitoring-proposal"],
-  },
-  {
-    id: "prowler",
-    stage: "operate",
-    zone: "oss",
-    title: "Prowler: 28 Azure and GCP checks",
-    summary: "Posture checks for AKS, Cosmos DB, Databricks, Entra ID, Cloud SQL, Secret Manager, and more.",
-    evidence: [
-      {
-        label: "Pull requests",
-        url: "https://github.com/prowler-cloud/prowler/pulls?q=is%3Apr+state%3Aclosed+involves%3As1ns3nz0",
-      },
-      "adding-azure-aks-defender-check-to-prowler",
-      "adding-gcp-secret-manager-rotation-check-to-prowler",
     ],
   },
 ];
@@ -724,7 +606,7 @@ export const tiles: { id: TileId; title: string; stat: string; label: string }[]
 /** Hero tech stack, one row per area. */
 export const stack = [
   { area: "Languages", items: ["Go", "Python", "Bash"] },
-  { area: "Cloud", items: ["AWS", "Azure", "GCP"] },
+  { area: "Cloud", items: ["AWS", "Azure", "GCP", "Prowler (CSPM)"] },
   { area: "Container", items: ["Kubernetes (EKS)", "Helm", "Docker"] },
   { area: "CI/CD", items: ["GitHub Actions", "ArgoCD", "FluxCD"] },
   { area: "IaC", items: ["Terraform"] },
@@ -750,7 +632,7 @@ export const traits = [
     name: "Fast learner",
     line: "I learn a new stack by running something real on it.",
     proof:
-      "To learn Web3 infrastructure, I built and ran an Ethereum testnet validator on EKS. Picked up 12+ credentials along the way, Kubestronaut included.",
+      "To learn EKS security end to end, I built a private EKS cluster with Vault, KMS, and a private ECR mirror, and ran a real workload on it. Picked up 12+ credentials along the way, Kubestronaut included.",
   },
   {
     name: "Problem solver",
@@ -764,7 +646,7 @@ export const traits = [
 export const highlights = [
   { title: "Kubestronaut", detail: "3 hands-on and 2 knowledge-based Kubernetes certifications." },
   // "{oss}" is replaced with the computed open-source total in the page
-  { title: "Open-source contributor", detail: "{oss} contributions to cloud, compliance, security, and blockchain tooling." },
+  { title: "Open-source contributor", detail: "{oss} contributions to cloud security, compliance, and blockchain tooling." },
   { title: "Top signal platoon leader", detail: "#1 of 24 signal platoons in a corps-level readiness evaluation." },
 ];
 
@@ -1141,15 +1023,4 @@ export const openSource: OpenSourceEntry[] = [
   },
 ];
 
-export const audiences: Audience[] = [
-  {
-    id: "lightning-labs",
-    label: "Lightning Labs",
-    fairing: "LIGHTNING",
-    subline: "I build secure, observable cloud-native platforms.",
-    title: "Platform Engineer",
-    openTo: "Open to remote and overseas Platform Engineering roles",
-    priority: ["private-eks", "aperture-metrics", "aperture-events", "lnd-short-reads", "pipeline-controls", "gosentry"],
-    ossPriority: ["lnd", "aperture", "disclosure"],
-  },
-];
+export const audiences: Audience[] = [];

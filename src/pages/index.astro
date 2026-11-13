@@ -369,7 +369,7 @@ const smokePuffs: [number, number][] = [
         <rect class="arm" x="91" y="103" width="43" height="5" />
         <rect class="arm" x="91" y="223" width="43" height="5" />
       </svg>
-      <p class="pad-label"><span>PAD 01</span><span class="pad-handle"><span data-audience-default>DEVSECOPS</span><span data-audience="lightning-labs" hidden>PLATFORM</span></span></p>
+      <p class="pad-label"><span>PAD 01</span><span class="pad-handle"><span data-audience-default>CLOUD SECURITY</span></span></p>
       {
         smokePuffs.map(([dx, scale]) => (
           <div class="smoke" style={`--dx: calc(${dx} * var(--u)); --s: ${scale}`} />
@@ -433,7 +433,7 @@ const smokePuffs: [number, number][] = [
         >
           {i === 0 && (
             <header id="profile" class="mb-16 flex min-h-[70vh] flex-col justify-center gap-5">
-              <p class="telemetry spaced"><span>Mission <span data-audience-default>DevSecOps</span><span data-audience="lightning-labs" hidden>Platform Engineering</span></span><span>T-00:10</span></p>
+              <p class="telemetry spaced"><span>Mission <span data-audience-default>Cloud Security</span></span><span>T-00:10</span></p>
               <p class="telemetry" data-audience-label hidden />
               <h1 class="hero-title display text-4xl leading-tight font-bold text-white sm:text-6xl">
                 {identity.headline}
@@ -444,9 +444,6 @@ const smokePuffs: [number, number][] = [
               </p>
               <p class="text-base text-slate-200 sm:text-lg" data-subline>
                 {identity.subline}
-              </p>
-              <p class="text-sm text-slate-300 sm:text-base" data-audience="lightning-labs" hidden>
-                Kubernetes, AWS, CI/CD, and observability, with security built into the platform.
               </p>
               <p class="hero-open">
                 <span>
@@ -499,17 +496,6 @@ const smokePuffs: [number, number][] = [
                   ))}
                 </dl>
               </details>
-              <div class="proof-strip" data-audience="lightning-labs" hidden>
-                <p class="telemetry">Proof, not keywords</p>
-                <ul>
-                  <li><a href="https://github.com/lightningnetwork/lnd/pull/11219" target="_blank" rel="noopener noreferrer">LND #11219 merged ↗</a></li>
-                  <li><a href="https://github.com/lightninglabs/aperture/pull/297" target="_blank" rel="noopener noreferrer">Aperture metrics PR #297 ↗</a></li>
-                  <li><a href="https://github.com/lightninglabs/aperture/pull/292" target="_blank" rel="noopener noreferrer">Aperture fix merged via #292 ↗</a></li>
-                  <li><a href="https://github.com/Consensys-Incorporated/web3signer/pull/1260" target="_blank" rel="noopener noreferrer">Web3Signer: 3 hardening reports, PR #1260 ↗</a></li>
-                  <li><span>3 security reports (2 confirmed, 1 under review)</span></li>
-                  <li><a href="https://github.com/s1ns3nz0/node-operator-public" target="_blank" rel="noopener noreferrer">Private EKS validator ↗</a></li>
-                </ul>
-              </div>
               <p class="telemetry mt-6 text-slate-300">Scroll to launch ↓</p>
             </header>
           )}
@@ -702,11 +688,6 @@ const smokePuffs: [number, number][] = [
                 <span class="sun-tzu-byline">{identity.quote.byline}</span>
               </figcaption>
               <p class="sun-tzu-q">{identity.quote.question}</p>
-            </figure>
-          )}
-          {stage.id === "operate" && (
-            <figure class="sun-tzu" data-reveal data-audience="lightning-labs" hidden>
-              <blockquote>Design for failure.<br />Automate the recovery.<br />Prove the control.</blockquote>
             </figure>
           )}
         </section>

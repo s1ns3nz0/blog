@@ -41,7 +41,7 @@ export const chips: Chip[] = [
   },
   {
     id: "open-source",
-    audiences: ["default", "lightning-labs"],
+    audiences: ["default"],
     question: "What open source has he contributed to?",
     answer:
       "28 Azure and GCP checks for Prowler, Policy as Code and private-registry guidance for the SEAL frameworks, a fuzzer bug report in Trail of Bits' Gosentry (fixed the same day), and for Lightning Labs: per-outcome L402 metrics and a flaky-test fix in Aperture, plus a short-read report in LND's address decoders.",
@@ -88,41 +88,6 @@ export const chips: Chip[] = [
     ],
   },
 
-  // lightning-labs
-  {
-    id: "kubernetes",
-    audiences: ["lightning-labs"],
-    question: "How has he run Kubernetes?",
-    answer:
-      "He designed and operated a private EKS cluster for a validator: namespace boundaries per workload, workload identity instead of static credentials, and images pulled only from a private registry.",
-    sources: [
-      "securing-a-hoodi-ethereum-testnet-validator-on-aws-eks",
-      "kubernetes-namespace-design-for-a-hoodi-validator",
-      "private-ecr-delivery-architecture-for-private-eks",
-    ],
-  },
-  {
-    id: "aperture",
-    audiences: ["lightning-labs"],
-    question: "What has he done with Aperture and L402?",
-    answer:
-      "He proposed per-outcome Prometheus counters for Aperture's L402 mint and verify paths (issue #286). A maintainer reviewed the write-up and asked for a pull request, so the counters are now in PR #297 with the review's design changes. He also proposed structured security events that keep raw macaroons and preimages out of logs.",
-    sources: [
-      "aperture-l402-metrics-before-and-after",
-      "aperture-l402-security-events-monitoring-proposal",
-    ],
-  },
-  {
-    id: "observability",
-    audiences: ["lightning-labs"],
-    question: "How does he approach observability?",
-    answer:
-      "Count outcomes by cause so operators can act without grepping DEBUG logs, and keep audit evidence tamper-resistant: CloudTrail, AWS Config, Fluent Bit, and Vault audit feeding a KMS-protected archive.",
-    sources: [
-      "aperture-l402-metrics-before-and-after",
-      "audit-and-logging-architecture-for-hoodi-node-validator",
-    ],
-  },
 ];
 
 export const privacyNote = "Typed questions go to Claude and aren't stored. No personal info, please.";
