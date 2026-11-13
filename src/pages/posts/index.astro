@@ -8,11 +8,32 @@ import Card from "@/components/Card.astro";
 import TagGroups from "@/components/TagGroups.astro";
 import Footer from "@/components/Footer.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
+import { TAG_GROUPS } from "@/utils/tagGroups";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
 const allPosts = await getCollection("posts", ({ data }) => !data.draft);
-const posts = getSortedPosts(allPosts).filter(({ data }) => !data.unlisted);
+
+// AWS and Kubernetes posts first (newest first), then the rest by date.
+// Blockchain, Lightning, and postmortem series stay in date order even when
+// they carry a Kubernetes tag.
+const cloudTags = new Set(
+  TAG_GROUPS.filter(g => g.name === "AWS" || g.name === "Kubernetes").flatMap(g => g.tags)
+);
+const notPinned = new Set([
+  "Layer 2", "Lightning Network", "lnd", "Kagent", "SRE Postmortem",
+  "Lineth L2 Lifecycle", "LND on Kubernetes",
+]);
+const pinned = ({ data }: (typeof allPosts)[number]) =>
+  data.tags.some(t => cloudTags.has(t)) && !data.tags.some(t => notPinned.has(t));
+const sorted = getSortedPosts(allPosts).filter(({ data }) => !data.unlisted);
+// Within the pinned set, the Hoodi validator posts come after the rest.
+const hoodi = ({ data }: (typeof allPosts)[number]) => data.tags.includes("Hoodi");
+const posts = [
+  ...sorted.filter(p => pinned(p) && !hoodi(p)),
+  ...sorted.filter(p => pinned(p) && hoodi(p)),
+  ...sorted.filter(p => !pinned(p)),
+];
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
