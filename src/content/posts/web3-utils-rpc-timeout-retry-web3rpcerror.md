@@ -11,6 +11,8 @@ tags:
 
 I reproduced and fixed an RPC timeout retry bug in [`stakefish/web3-utils.py`](https://github.com/stakefish/web3-utils.py), in [PR #52](https://github.com/stakefish/web3-utils.py/pull/52). The existing test passed, yet the retry never handled the exception web3 actually raises.
 
+*Update (2026-11-05): the maintainer folded this fix into [PR #51](https://github.com/stakefish/web3-utils.py/pull/51), rebased on main with review fixes, and closed #52 in its favour. #51 is under review.*
+
 The cause was a change in exception types between web3 versions. Along the way I learned how much a test's trustworthiness depends on where the mock goes.
 
 ## web3 changed the exception

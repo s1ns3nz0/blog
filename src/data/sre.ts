@@ -174,7 +174,7 @@ export const alsoRunning: {
     where: "Kubernetes on WSL",
     stack: ["Besu", "Teku", "Web3Signer", "Grafana"],
     proofs: [
-      { text: "Validator 1645272 active on Hoodi", url: "https://hoodi.beaconcha.in/validator/1645272" },
+      { text: "Validator 1645272 active on Hoodi" },
       { text: "Besu and Teku, signing through Web3Signer, watched in Grafana" },
       // more to come: uptime, attestation effectiveness, drills
     ],
